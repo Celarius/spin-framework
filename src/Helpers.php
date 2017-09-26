@@ -326,7 +326,7 @@ if (!function_exists('response')) {
    *
    * @return object
    */
-  function response(string $body='', int $code=200, array $headers=[]))
+  function response(string $body='', int $code=200, array $headers=[])
   {
     global $app;
 

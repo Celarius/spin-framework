@@ -108,7 +108,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->beforeMiddleware = array();
       $this->afterMiddleware = array();
 
-    } catch \Exception $ {
+    } catch (\Exception $e) {
       log()->critical('Failed to create core objectes',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
       die;
     }
@@ -136,7 +136,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->cacheFactory = $this->loadFactory( $this->config->get('factories.cache') );
       $this->cache = $this->cacheFactory->createCache();
 
-    } catch \Exception $ {
+    } catch (\Exception $e) {
       log()->critical('Failed to load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
       die;
     }

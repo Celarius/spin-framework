@@ -6,7 +6,7 @@
  * Constructor will auto-configure based on configuration options
  */
 
-namespace Spin\Logger;
+namespace Spin\Core;
 
 use \Monolog\Handler\StreamHandler;
 use \Monolog\Handler\ErrorLogHandler;

@@ -9,8 +9,8 @@
 
 namespace Spin\Core;
 
-use \Spin\Psr\Hug\Huggable;
-use \Spin\Psr\Hug\GroupHuggable;
+use \Psr\Hug\Huggable;
+use \Psr\Hug\GroupHuggable;
 
 /**
  *
@@ -45,7 +45,7 @@ abstract class AbstractBaseClass implements Huggable, GroupHuggable
    *
    * @return self
    */
-  public function hug(Huggable $h);
+  public function hug(Huggable $h)
   {
     // Do not self-hug
     // Check if we are already hugging
