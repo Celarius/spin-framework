@@ -53,7 +53,8 @@
     "psr-4": {
       "Spin\\": "src/",
       "Psr\\Hug\\" : "src/",
-      "Psr\\EventManager\\" : "src/"
+      "Psr\\EventManager\\" : "src/",
+      "Psr\\Http\\Message\\" : "src/"
     }
   },
 
