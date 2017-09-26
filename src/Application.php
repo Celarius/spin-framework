@@ -38,7 +38,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   protected $routeGroups;
 
   /** @var array List of Global Before Middleware */
-  protected $beforeMiddleware
+  protected $beforeMiddleware;
 
   /** @var array List of Global After Middleware */
   protected $afterMiddleware;
