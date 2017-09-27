@@ -2,6 +2,6 @@
 
 namespace Spin\Exception;
 
-class Exception extends \Exception
+class RunTimeException extends \RunTimeException
 {
 }

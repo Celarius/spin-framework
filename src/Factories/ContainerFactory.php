@@ -38,7 +38,7 @@ class ContainerFactory extends AbstractFactory
       $container->delegate( new ReflectionContainer );
     }
 
-    log()->debug('Created PSR-11 Container (The Leauge Container)');
+    logger()->debug('Created PSR-11 Container (The Leauge Container)');
 
     return $container;
   }

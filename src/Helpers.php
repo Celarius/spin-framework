@@ -140,7 +140,7 @@ if (!function_exists('container')) {
   {
     global $app;
 
-    if (is_null($key)) {
+    if (is_null($id)) {
       # Return the container
       return $app->getContainer();
 
@@ -150,19 +150,19 @@ if (!function_exists('container')) {
 
     } else {
       # set $id in container to $value
-      return $app->getContainer()->shared($id,$value);
+      return $app->getContainer()->share($id,$value);
 
     }
   }
 }
 
-if (!function_exists('log')) {
+if (!function_exists('logger')) {
   /**
    * Get the Logger object
    *
    * @return object
    */
-  function log()
+  function logger()
   {
     global $app;
 
@@ -304,8 +304,8 @@ if (!function_exists('redirect')) {
   function redirect($to = null, $status = 302, $headers = [])
   {
     # Build response object
-    $response = response()
-                ->withCode($status)
+    $response = getResponse()
+                ->withStatus($status)
                 ->withHeader('Location',$to);
 
     # Set all the headers the user sent
@@ -330,11 +330,12 @@ if (!function_exists('response')) {
   {
     global $app;
 
+    $bStream = app('httpFactory')->createStream($body);
+
     # Build response object
-    $response = response()
-                ->withCode($code)
-                ->withHeader('Location',$to)
-                ->withBody($body);
+    $response = getResponse()
+                ->withStatus($code)
+                ->withBody($bStream);
 
     # Set all the headers the user sent
     foreach($headers as $header => $values) {
@@ -356,17 +357,17 @@ if (!function_exists('responseJson')) {
    * Send a JSON response with $code and $a content.
    * Also sets the content-type header to "application/json"
    *
-   * @param   $ar       Array to encode
+   * @param   $data     Array to encode
    * @param   $code     HTTP Code
    * @param   $options  JSON encoding options
    *
    * @return  object
    */
-  function responseJson(array $ar=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK)
+  function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK)
   {
     global $app;
 
-    $body = json_encode($a,$options);
+    $body = json_encode($data, $options);
     $headers = ['Content-Type'=>'application/json'];
 
     return response($body,$code,$headers);

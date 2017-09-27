@@ -1,25 +1,19 @@
 <?php declare(strict_types=1);
 
-/**
- * Spin Framework
- *
- * @package   Spin
- */
-
 namespace Spin;
 
+use \Spin\Exception\Exception;
 use \Spin\Core\AbstractBaseClass;
 use \Spin\ApplicationInterface;
 use \Spin\Core\Config;
 use \Spin\Core\Logger;
+use \Spin\Core\RouteGroup;
 
 use Psr\Http\Message\Response;
 
-/**
- * Spin Application
- */
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
+  /** @const string Application version */
   const VERSION = '0.0.1';
 
   /** @var string Application Environment (from ENV vars) */
@@ -115,11 +109,12 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       die;
     }
 
-    # Initialize the properties
+    # Initialize properties
     $this->routeGroups = array();
     $this->beforeMiddleware = array();
     $this->afterMiddleware = array();
 
+    # Initialie Objects
     $this->httpFactory = null;;
     $this->request = null;
     $this->response = null;
@@ -252,9 +247,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
       $exception->getTrace()
     );
-
-    # Output a response
-    $this->getResponse()->send();
   }
 
 
@@ -267,13 +259,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   {
     # Modules
     try {
-      $this->httpFactory = null;;
+      $this->httpFactory = null;
       $this->request = null;
       $this->response = null;
-      $this->containerFactory = null;;
-      $this->container = null;;
-      $this->cacheFactory = null;;
-      $this->cache = null;;
+      $this->containerFactory = null;
+      $this->container = null;
+      $this->cacheFactory = null;
+      $this->cache = null;
 
       # HTTP Factory
       $this->httpFactory = $this->loadFactory( $this->config->get('factories.http') );
@@ -283,15 +275,27 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Container
       $this->containerFactory = $this->loadFactory( $this->config->get('factories.container') );
       $this->container = $this->containerFactory->createContainer();
+      container('requestId', md5((string)microtime(true)));
 
       # Cache
       $this->cacheFactory = $this->loadFactory( $this->config->get('factories.cache') );
       $this->cache = $this->cacheFactory->createCache();
 
     } catch (\Exception $e) {
-      $this->getLogger()->critical('Failed to load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
+      logger()->critical('Failed to load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
+
       die;
     }
+
+    # Load Routes
+    $ok = $this->loadRoutes();
+
+    if ( $ok ) {
+      # Match & Run
+      $ok = $this->runRoute();
+    }
+logger()->debug('Done running route ..');
+    return $ok;
 
     // 1. Run OnBeforeRequest hooks
     //
@@ -305,11 +309,204 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
+   * Load the $filename routes file and create all RouteGroups
+   *
+   * @param   string $filename   [description]
+   * @return  bool
+   */
+  protected function loadRoutes(string $filename='')
+  {
+    # If no filename given, default to "app/Config/routes.json"
+    if (empty($filename)) {
+      $filename = $this->appPath.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.'routes-'.$this->environment.'.json';
+    }
+
+    if ( file_exists($filename) ) {
+      $routesFile = json_decode( file_get_contents($filename), true );
+
+      if ($routesFile) {
+        $routeGroups = $routesFile['groups'] ?? [];
+
+        # Add each RouteGroup
+        foreach ($routeGroups as $routeGroupDef)
+        {
+          # Create new Route Group
+          $routeGroup = new RouteGroup($routeGroupDef);
+
+          # Add to list
+          $this->routeGroups[] = $routeGroup;
+        }
+
+        # Common Middlewares
+        $this->beforeMiddleware = ($routesFile['common']['before'] ?? []);
+        $this->afterMiddleware = ($routesFile['common']['after'] ?? []);
+
+      } else {
+        throw new Exception('Invalid JSON file "'.$filename.'"');
+
+      }
+
+      # Debug log
+      $this->getLogger()->debug('Loaded routes',['file'=>$filename]);
+
+      return true; // routes added
+
+    } else {
+      # Log
+      logger()->error('Routes file not found',['file'=>$filename]);
+
+    }
+
+    return false; // file not found
+  }
+
+  /**
+   * Matches & runs route handler matching the Server Request
+   *
+   * @return  array  The matching route group
+   */
+  protected function runRoute()
+  {
+    # Get Method and URI
+    $httpMethod = $this->getRequest()->getMethod();
+    $path = $this->getRequest()->getUri()->getPath();
+    $routeInfo = null;
+
+    # Find route match in groups
+    foreach ($this->getRouteGroups() as $routeGroup)
+    {
+      # Match the METHOD and URI to the routes in this group
+      $routeInfo = $routeGroup->matchRoute($httpMethod,$path);
+
+      if ( count($routeInfo)>0 ) {
+        # Debug log
+        logger()->debug('Route matched ',['path'=>$path,'handler'=>$routeInfo['handler']]);
+
+        # Run Before Hooks
+        // $ok = $this->runHooks('OnBeforeRequest');
+
+        $beforeResult = true; // assume all before handlers succeed
+        $routeResult = false;
+        $afterResult = true; // assume all after handlers succeed
+
+        #
+        # Run the Common AND Groups Before Middlewares (ServerRequestInterface)
+        #
+        $beforeMiddleware = array_merge($this->beforeMiddleware, $routeGroup->getBeforeMiddleware());
+
+        foreach ($beforeMiddleware as $middleware)
+        {
+          if (class_exists($middleware) ) {
+            $beforeHandler = new $middleware($routeInfo['args']);
+
+            # Debug log
+            logger()->debug('Initialize Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+
+            # Initialize
+            $beforeHandler->initialize($routeInfo['args']);
+
+            # Debug log
+            logger()->debug('Running Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+
+            if (!$beforeHandler->handle($routeInfo['args'])) {
+              # Record outcome
+              $beforeResult = false;
+
+              # Stop processing more middleware
+              break;
+            }
+          } else {
+            # Log
+            logger()->warning('Before Middleware not found',['rid'=>container('requestId'),'middleware'=>$middleware]);
+          }
+        }
+
+        #
+        # Create & Run the Handler Class - If the Before Middlewares where ok!
+        #
+        if ($beforeResult) {
+          # Extract class & method
+          $arr = explode('@',$routeInfo['handler']);
+          $handlerClass = $arr[0];
+          $handlerMethod = ($arr[1] ?? 'handle');
+
+logger()->debug('Handler class: '.$handlerClass);
+          // $x = new $handlerClass( $routeInfo['args'] );;
+
+          # Check existance of handler class
+          if (class_exists($handlerClass))
+          {
+            # Create the class
+            $routeHandler = new $handlerClass( $routeInfo['args'] );
+
+            # Check method existance
+            if ($routeHandler && method_exists($routeHandler,'initialize') && method_exists($routeHandler,$handlerMethod))
+            {
+              # Debug log
+              logger()->debug('Running controller->initialize()',['rid'=>container('requestId'),'controller'=>$handlerClass]);
+
+              # Initialize
+              $routeHandler->initialize($routeInfo['args']);
+
+              # Debug log
+              logger()->debug('Running controller->handle()',['rid'=>container('requestId'),'method'=>$handlerMethod]);
+
+              # Run handler
+              $routeResult = $routeHandler->$handlerMethod($routeInfo['args']);
+            } else {
+              # Log
+              logger()->error('Method not found in controller ',['rid'=>container('requestId'),'controller'=>$handlerClass,'method'=>$handlerMethod]);
+            }
+          } else {
+            # Debug log
+            logger()->error('Controller not found ',['rid'=>container('requestId'),'controller'=>$handlerClass]);
+          }
+        }
+
+        #
+        # Run the After Middlewares (ServerRequestInterface)
+        #
+        $afterMiddleware = array_merge($this->afterMiddleware,$routeGroup->getAfterMiddleware());
+        foreach ($afterMiddleware as $middleware)
+        {
+          if (class_exists($middleware) ) {
+            $afterHandler = new $middleware($routeInfo['args']);
+
+            # Debug log
+            logger()->debug('Initialize Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+
+            # Initialize
+            $afterHandler->initialize($routeInfo['args']);
+
+            # Debug log
+            logger()->debug('Running After middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+
+            if (!$afterHandler->handle($routeInfo['args'])) {
+              return false;
+            }
+          } else {
+            # Log
+            logger()->warning('After Middleware not found',['rid'=>container('requestId'),'middleware'=>$middleware]);
+          }
+        }
+
+        # Run After Hooks
+        // $ok = $this->runHooks('OnAfterRequest');
+
+        return $routeResult;
+      }
+
+    } // foreach routeGroup
+
+    return false;
+  }
+
+  /**
    * getBasePath returns the full path to the application folder
    *
    * @return string
    */
-  public function getBasePath() : string
+  public function getBasePath(): string
   {
     return $this->basePath;
   }
@@ -319,7 +516,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return string
    */
-  public function getAppPath() : string
+  public function getAppPath(): string
   {
     return $this->appPath;
   }
@@ -329,7 +526,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return string
    */
-  public function getStoragePath() : string
+  public function getStoragePath(): string
   {
     return $this->storagePath;
   }
@@ -434,6 +631,16 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
+   * Get the PSR-11 Container object
+   *
+   * @return object
+   */
+  public function getContainer()
+  {
+    return $this->container;
+  }
+
+  /**
    * Get the DB Manager
    *
    * @return object
@@ -461,6 +668,34 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   public function getEnvironment(): string
   {
     return $this->environment;
+  }
+
+  /**
+   * Get a RouteGroup by Name
+   *
+   * @param  string $groupName [description]
+   * @return null | RouteGroup
+   */
+  public function getRouteGroup(string $groupName)
+  {
+    foreach ($this->routeGroups as $routeGroup)
+    {
+      if ( strcasecmp($routeGroup->getName(),$groupName)==0 ) {
+        return $routeGroup;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Get all RouteGroups
+   *
+   * @return null | array
+   */
+  public function getRouteGroups()
+  {
+    return $this->routeGroups;
   }
 
   /**
@@ -509,6 +744,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     # Set HTTP Response Code
     http_response_code($this->response->getStatusCode());
 
+    # Debug log
+    logger()->debug('Sending headers',$this->response->getHeaders());
+
     # Set All HTTP headers from Response Object
     foreach ($this->response->getHeaders() as $header => $value) {
       if (is_array($value)) {
@@ -526,18 +764,38 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     //   setCookie( $cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'] );
     // }
 
-    # Send Response Body -- if we have something in the $body param
-    $body = (string)$this->response->getBody();
+    ##
+    ## Send a file or a body?
+    ##
+    if ( !empty($this->responseFile) ) {
 
-    if ( !empty() ) {
-    } else
-    if ( !empty($this->getFileBody()) ) {
-      readfile($this->getFileBody());
+      if (file_exists($this->responseFile)) {
+        # Debug log
+        logger()->debug('Sending file',['file'=>$this->responseFile]);
+
+        # Send the file
+        readfile($this->responseFile);
+      } else {
+        # Log warning
+        logger()->warning('File not found',['file'=>$this->responseFile]);
+
+        # Fake a response
+        response('',404);
+
+        # Set HTTP Response Code
+        http_response_code(404);
+      }
+
+    } else {
+      # Debug log
+      logger()->debug('Sending body',[]);
+
+      # Send the Body
+      $body = (string)$this->response->getBody();
+      echo $body;
+
     }
 
-    # Results
     return $this;
-
-     return true;
   }
 }

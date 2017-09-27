@@ -25,14 +25,14 @@ class CacheFactory extends AbstractFactory
    */
   public function createCache()
   {
-    $cache = new SimpleCache();
+    $cache = new Apcu();
 
     # Cache Options
     // if (($this->options[''] ?? false)) {
     //   $cache->?;
     // }
 
-    log()->debug('Created PSR-16 Cache: '.$cache->getDriver().' v'.$cache->getVersion());
+    logger()->debug('Created PSR-16 Cache: '.$cache->getDriver().' v'.$cache->getVersion());
 
     return $cache;
   }

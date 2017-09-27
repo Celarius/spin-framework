@@ -131,10 +131,10 @@ class HttpFactory
     logger()->debug('Created PSR-7 ServerRequest from array (Guzzle)');
 
     return $serverRequest
-        ->withCookieParams($_COOKIE)
-        ->withQueryParams($_GET)
-        ->withParsedBody($_POST)
-        ->withUploadedFiles(\GuzzleHttp\Psr7\ServerRequest::normalizeFiles($_FILES));
+           ->withCookieParams($_COOKIE)
+           ->withQueryParams($_GET)
+           ->withParsedBody($_POST)
+           ->withUploadedFiles(\GuzzleHttp\Psr7\ServerRequest::normalizeFiles($_FILES));
   }
 
   /**
@@ -146,7 +146,7 @@ class HttpFactory
    */
   public function createStream(string $for)
   {
-    return \GuzzleHttp\Psr7\stream_for('foo');
+    return \GuzzleHttp\Psr7\stream_for($for);
   }
 
 }
