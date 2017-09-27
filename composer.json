@@ -44,17 +44,17 @@
   "autoload": {
     "psr-4": {
       "Spin\\": "src/",
-      "Psr\\Hug\\" : "src/Psr/",
-      "Psr\\EventManager\\" : "src/Psr/",
-      "Psr\\Http\\Message\\" : "src/Psr/"
+      "Psr\\Hug\\" : "src/",
+      "Psr\\EventManager\\" : "src/",
+      "Psr\\Http\\Message\\" : "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
       "Spin\\": "src/",
-      "Psr\\Hug\\" : "src/Psr/",
-      "Psr\\EventManager\\" : "src/Psr/",
-      "Psr\\Http\\Message\\" : "src/Psr/"
+      "Psr\\Hug\\" : "src/",
+      "Psr\\EventManager\\" : "src/",
+      "Psr\\Http\\Message\\" : "src/"
     }
   },
 
