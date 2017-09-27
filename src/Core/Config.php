@@ -35,7 +35,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
     $this->clear();
 
     # Build $filename based on $appPath and $environment
-    $filename = $appPath . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'config-' . $environment;
+    $filename = $appPath . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'config-' . $environment.'.json';
 
     # Load the config
     $this->load($filename);
@@ -79,7 +79,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
         # Merge the Config with existing config
         // $this->confValues = array_replace_recursive($this->confValues, $configArray);
         $this->confValues = $configArray;
-
       } else {
         throw new Exception('Invalid JSON file "'.$filename.'"');
 

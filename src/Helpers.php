@@ -341,6 +341,9 @@ if (!function_exists('response')) {
       $response = $response->withHeader($header,$values);
     }
 
+    # Set file to respond with
+    $app->setFileResponse('');
+
     # Set it
     $app->setResponse($response);
 
@@ -367,6 +370,27 @@ if (!function_exists('responseJson')) {
     $headers = ['Content-Type'=>'application/json'];
 
     return response($body,$code,$headers);
+  }
+}
+
+if (!function_exists('responseFile')) {
+  /**
+   * Send a FILE as a response with $code.
+   *
+   * @param   $ar       Array to encode
+   * @param   $code     HTTP Code
+   * @param   $options  JSON encoding options
+   *
+   * @return  object
+   */
+  function responseFile(string $filename, int $code=200, array $headers=[])
+  {
+    global $app;
+
+    # Set file to respond with
+    $app->setFileResponse($filename);
+
+    return response('',$code,$headers);
   }
 }
 

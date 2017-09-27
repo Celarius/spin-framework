@@ -20,7 +20,7 @@ class Logger extends \Monolog\Logger
    * @param string $loggerName   Name of the Logger
    * @param array  $options      Array with options from config
    */
-  public function __construct(string $loggerName, array $options=[])
+  public function __construct(string $loggerName, ?array $options=[])
   {
     parent::__construct($loggerName);
 
@@ -42,11 +42,11 @@ class Logger extends \Monolog\Logger
       $handler = new StreamHandler( $logFilePath . DIRECTORY_SEPARATOR . date($logFileFormat) . '.log',
                                     $this->toMonologLevel($logLevel) );
 
-    } else if ( strcasecmp($logDriver,"php")==0 ) {
+    } elseif ( strcasecmp($logDriver,"php")==0 ) {
       # Create the Log Handler
       $handler = new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM,
                                       $this->toMonologLevel($logLevel) );
-    } else
+    } else {
       # Fallback handler is PHP own logfile
       $handler = new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM,
                                       $this->toMonologLevel($logLevel) );

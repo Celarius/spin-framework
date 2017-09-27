@@ -19,6 +19,7 @@ use \Spin\Factories\AbstractFactory;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\LazyOpenStream;
 
 // PSR-7
 use Psr\Http\Message\ServerRequestInterface;
@@ -53,7 +54,7 @@ class HttpFactory
   {
     $request = new Request($method, $uri);
 
-    log()->debug('Created PSR-7 Request (Guzzle)';
+    logger()->debug('Created PSR-7 Request (Guzzle)');
 
     return $request;
   }
@@ -69,7 +70,7 @@ class HttpFactory
   {
     $response = new Response($code);
 
-    log()->debug('Created PSR-7 Response (Guzzle)';
+    logger()->debug('Created PSR-7 Response (Guzzle)');
 
     return $response;
   }
@@ -95,7 +96,7 @@ class HttpFactory
 
     $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $server);
 
-    log()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$url.'") (Guzzle)');
+    logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$url.'") (Guzzle)');
 
     return $serverRequest
         ->withCookieParams($_COOKIE)
@@ -114,7 +115,7 @@ class HttpFactory
    * @throws \InvalidArgumentException
    *  If no valid method or URI can be determined.
    */
-  public function createServerRequestFromArray(array $server)
+  public function createServerRequestFromArray(?array $server)
   {
     # Copied from Guzzles ::fromGlobals(), but we need to support the $server array as
     # paramter, so we use that instead of the $_SERVER array guzzle uses by default
@@ -127,13 +128,25 @@ class HttpFactory
 
     $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $server);
 
-    log()->debug('Created PSR-7 ServerRequest from array (Guzzle)');
+    logger()->debug('Created PSR-7 ServerRequest from array (Guzzle)');
 
     return $serverRequest
         ->withCookieParams($_COOKIE)
         ->withQueryParams($_GET)
         ->withParsedBody($_POST)
         ->withUploadedFiles(\GuzzleHttp\Psr7\ServerRequest::normalizeFiles($_FILES));
+  }
+
+  /**
+   * Return a StreamObject for a string
+   *
+   * @param  string $for [description]
+   *
+   * @return object
+   */
+  public function createStream(string $for)
+  {
+    return \GuzzleHttp\Psr7\stream_for('foo');
   }
 
 }
