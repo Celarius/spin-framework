@@ -77,7 +77,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   protected $connectionManager;
 
 
-
   /**
    * Constructor
    */
@@ -103,6 +102,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       # Set error handlers to use Logger component
       $this->setErrorHandlers();
+
+      # Set Timezone - default to UTC
+      $timeZone = $this->getConfig()->get('application.global.timezone', 'UTC');
+      date_default_timezone_set($timeZone);
 
     } catch (\Exception $e) {
       $this->getLogger()->critical('Failed to create core objectes',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
@@ -239,11 +242,20 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function exceptionHandler($exception)
   {
-    # Set 500 error code as well as something unexpected happened
-    // $this->getResponse()->withStatus(500);
+    if (!is_null($this->response)) {
+      # Set 500 error code as well as something unexpected happened
+      $response = $this->getResponse()->withStatus(500);
+
+      # Set the error response
+      $this->setResponse($response);
+    } else {
+      # Set HTTP Response Code - we dont even have a response object yet ..
+      http_response_code(404);
+
+    }
 
     # Log the exception
-    $this->getLogger()->critical(
+    logger()->critical(
       $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
       $exception->getTrace()
     );
