@@ -44,7 +44,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handle(array $args)
   {
-    switch ( strtoupper(request()->getMethod()) ) {
+    switch ( strtoupper(getRequest()->getMethod()) ) {
       case "GET"    : return $this->handleGET($args); break;
       case "POST"   : return $this->handlePOST($args); break;
       case "PUT"    : return $this->handlePUT($args); break;
