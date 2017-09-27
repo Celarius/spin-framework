@@ -9,7 +9,7 @@
  * @package  Spin
  */
 
-namespace Spin\Helper;
+namespace Spin\Helpers;
 
 use \Firebase\JWT\JWT;
 use \Spin\Helper\JWTInterface;

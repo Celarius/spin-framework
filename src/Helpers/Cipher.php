@@ -7,13 +7,13 @@
  *   Note: Uses the Configuration setting "application.secret" as the default password.
  *
  * Example:
- *   $encryptedValue = \Nofuzz\Helper\Cipher::encrypt( $plain );
- *   $plain = \Nofuzz\Helper\Cipher::decrypt( $encryptedValue );
+ *   $encryptedValue = \Spin\Helper\Cipher::encrypt( $plain );
+ *   $plain = \Spin\Helper\Cipher::decrypt( $encryptedValue );
  *
  * @package  Spin
  */
 
-namespace Spin\Helper;
+namespace Spin\Helpers;
 
 use \Spin\Helper\CipherInterface;
 

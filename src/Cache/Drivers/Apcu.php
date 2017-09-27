@@ -6,7 +6,7 @@
  * @package  Spin
 */
 
-namespace Sping\Cache\Drivers;
+namespace Spin\Cache\Drivers;
 
 use \Psr\SimpleCache\CacheInterface;
 

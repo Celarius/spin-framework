@@ -6,7 +6,7 @@
  * @package  Spin
  */
 
-namespace Spin\Helper;
+namespace Spin\Helpers;
 
 interface EWTInterface
 {

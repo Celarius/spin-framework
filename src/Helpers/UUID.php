@@ -12,7 +12,7 @@
  * @package  Spin
  */
 
-namespace Spin\Helper;
+namespace Spin\Helpers;
 
 use \Spin\Helper\UUIDInterface;
 

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * Nofuzz Spin Framework
+ * Spin Framework
  *
  * @package   Spin
  */

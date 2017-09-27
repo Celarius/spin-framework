@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * Nofuzz Spin Framework
+ * Spin Framework
  *
  * Based on Hug code from https://github.com/dave1010/php-fig-psr-8
  *

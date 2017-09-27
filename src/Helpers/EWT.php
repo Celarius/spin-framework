@@ -65,7 +65,7 @@ signature
 
 
 */
-namespace Spin\Helper;
+namespace Spin\Helpers;
 
 Use \Spin\Helper\EWTInterface;
 

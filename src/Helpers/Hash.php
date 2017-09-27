@@ -11,7 +11,7 @@
  * @package  Spin
  */
 
-namespace Spin\Helper;
+namespace Spin\Helpers;
 
 class Hash implements \Spin\Helper\HashInterface
 {
