@@ -286,6 +286,20 @@ if (!function_exists('cookieParam')) {
   }
 }
 
+if (!function_exists('cookieParams')) {
+  /**
+   * Get all Cookie Params ($_COOKIE variable)
+   *
+   * @return array
+   */
+  function cookieParams()
+  {
+    global $app;
+
+    return $app->getRequest()->getCookieParams() ?? [];
+  }
+}
+
 
 ##
 ## Global Functions for returning responses
