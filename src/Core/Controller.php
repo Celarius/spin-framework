@@ -31,7 +31,6 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function initialize(array $args)
   {
-    // no code in abstract class
   }
 
   /**
@@ -64,9 +63,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleGET(array $args)
   {
-    response('',405);
-
-    return false;
+    return response('',405);
   }
 
   /**
@@ -77,9 +74,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handlePOST(array $args)
   {
-    response('',405);
-
-    return false;
+    return response('',405);
   }
 
   /**
@@ -90,9 +85,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handlePUT(array $args)
   {
-    response('',405);
-
-    return false;
+    return response('',405);
   }
 
   /**
@@ -103,9 +96,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handlePATCH(array $args)
   {
-    response('',405);
-
-    return false;
+    return response('',405);
   }
 
   /**
@@ -116,9 +107,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleDELETE(array $args)
   {
-    response('',405);
-
-    return false;
+    return response('',405);
   }
 
   /**
@@ -129,9 +118,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleHEAD(array $args)
   {
-    response('',405);
-
-    return false;
+    return response('',405);
   }
 
   /**
@@ -142,9 +129,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleOPTIONS(array $args)
   {
-    response('',405);
-
-    return false;
+    return response('',405);
   }
 
   /**
@@ -155,9 +140,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleCUSTOM(array $args)
   {
-    response('',405);
-
-    return false;
+    return response('',405);
   }
 
   /**

@@ -305,8 +305,18 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $ok = $this->loadRoutes();
 
     if ( $ok ) {
-      # Match & Run
-      $ok = $this->runRoute();
+      # Match Route & Run
+      $response = $this->runRoute();
+
+      if ( is_object($value) ) {
+        # Response Object
+        return true;
+      }
+
+      if (is_bool($value)){
+        return $value;
+      }
+
     }
 
     return $ok;
@@ -384,7 +394,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       if ( count($routeInfo)>0 ) {
         # Debug log
-        logger()->debug('Route matched ',['path'=>$path,'handler'=>$routeInfo['handler']]);
+        $this->getLogger()->debug('Route matched ',['path'=>$path,'handler'=>$routeInfo['handler']]);
 
         # Run Before Hooks
         // $ok = $this->runHooks('OnBeforeRequest');
@@ -404,13 +414,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             $beforeHandler = new $middleware($routeInfo['args']);
 
             # Debug log
-            logger()->debug('Initialize Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->debug('Initialize Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
 
             # Initialize
             $beforeHandler->initialize($routeInfo['args']);
 
             # Debug log
-            logger()->debug('Running Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->debug('Running Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
 
             if (!$beforeHandler->handle($routeInfo['args'])) {
               # Record outcome
@@ -421,7 +431,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             }
           } else {
             # Log
-            logger()->warning('Before Middleware not found',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->warning('Before Middleware not found',['rid'=>container('requestId'),'middleware'=>$middleware]);
           }
         }
 
@@ -444,23 +454,24 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             if ($routeHandler && method_exists($routeHandler,'initialize') && method_exists($routeHandler,$handlerMethod))
             {
               # Debug log
-              logger()->debug('Running controller->initialize()',['rid'=>container('requestId'),'controller'=>$handlerClass]);
+              $this->getLogger()->debug('Running controller->initialize()',['rid'=>container('requestId'),'controller'=>$handlerClass]);
 
               # Initialize
               $routeHandler->initialize($routeInfo['args']);
 
               # Debug log
-              logger()->debug('Running controller->handle()',['rid'=>container('requestId'),'method'=>$handlerMethod]);
+              $this->getLogger()->debug('Running controller->handle()',['rid'=>container('requestId'),'method'=>$handlerMethod]);
 
-              # Run handler
-              $routeResult = $routeHandler->$handlerMethod($routeInfo['args']);
+              # Run Controller's method
+              $result = $routeHandler->$handlerMethod($routeInfo['args']);
+
             } else {
               # Log
-              logger()->error('Method not found in controller ',['rid'=>container('requestId'),'controller'=>$handlerClass,'method'=>$handlerMethod]);
+              $this->getLogger()->error('Method not found in controller ',['rid'=>container('requestId'),'controller'=>$handlerClass,'method'=>$handlerMethod]);
             }
           } else {
             # Debug log
-            logger()->error('Controller not found ',['rid'=>container('requestId'),'controller'=>$handlerClass]);
+            $this->getLogger()->error('Controller not found ',['rid'=>container('requestId'),'controller'=>$handlerClass]);
           }
         }
 
@@ -474,27 +485,27 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             $afterHandler = new $middleware($routeInfo['args']);
 
             # Debug log
-            logger()->debug('Initialize Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->debug('Initialize Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
 
             # Initialize
             $afterHandler->initialize($routeInfo['args']);
 
             # Debug log
-            logger()->debug('Running After middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->debug('Running After middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
 
             if (!$afterHandler->handle($routeInfo['args'])) {
               return false;
             }
           } else {
             # Log
-            logger()->warning('After Middleware not found',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->warning('After Middleware not found',['rid'=>container('requestId'),'middleware'=>$middleware]);
           }
         }
 
         # Run After Hooks
         // $ok = $this->runHooks('OnAfterRequest');
 
-        return $routeResult;
+        return $result;
       }
 
     } // foreach routeGroup
