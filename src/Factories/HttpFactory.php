@@ -149,4 +149,17 @@ class HttpFactory
     return \GuzzleHttp\Psr7\stream_for($for);
   }
 
+  /**
+   * Create a Cookie object
+   *
+   * @param  string $name  [description]
+   * @param  string $value [description]
+   *
+   * @return object
+   */
+  public function createCookie(string $name, string $value='')
+  {
+    return null;
+  }
+
 }

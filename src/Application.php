@@ -163,7 +163,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return true;
   }
 
-
   /**
    * Error Handler
    *
@@ -222,6 +221,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       case E_USER_DEPRECATED:
         $this->getLogger()->info("$errStr in file $errFile on line $errLine",$errContext);
         break;
+
       default:
         $this->getLogger()->emergency("$errStr in file $errFile on line $errLine",$errContext);
         break;
@@ -255,10 +255,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     }
 
     # Log the exception
-    logger()->critical(
-      $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
-      $exception->getTrace()
-    );
+    $this->getLogger()
+         ->critical(
+            $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
+            $exception->getTrace()
+          );
   }
 
 
@@ -294,7 +295,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->cache = $this->cacheFactory->createCache();
 
     } catch (\Exception $e) {
-      logger()->critical('Failed to load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
+      $this->getLogger()
+           ->critical('Failed to load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
 
       die;
     }
@@ -306,18 +308,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Match & Run
       $ok = $this->runRoute();
     }
-logger()->debug('Done running route ..');
-    return $ok;
 
-    // 1. Run OnBeforeRequest hooks
-    //
-    // 2. Process Request
-    //    a. match route
-    //    b. run OnBeforeMiddleware
-    //    c. call controller->handle()
-    //    d. run OnAfterMiddleware
-    //
-    // 3. Run OnAfterRequest hooks
+    return $ok;
   }
 
   /**
@@ -365,11 +357,11 @@ logger()->debug('Done running route ..');
 
     } else {
       # Log
-      logger()->error('Routes file not found',['file'=>$filename]);
+      $this->getLogger()->error('Routes file not found',['file'=>$filename]);
 
     }
 
-    return false; // file not found
+    return false;
   }
 
   /**
@@ -441,9 +433,6 @@ logger()->debug('Done running route ..');
           $arr = explode('@',$routeInfo['handler']);
           $handlerClass = $arr[0];
           $handlerMethod = ($arr[1] ?? 'handle');
-
-logger()->debug('Handler class: '.$handlerClass);
-          // $x = new $handlerClass( $routeInfo['args'] );;
 
           # Check existance of handler class
           if (class_exists($handlerClass))
@@ -783,13 +772,13 @@ logger()->debug('Handler class: '.$handlerClass);
 
       if (file_exists($this->responseFile)) {
         # Debug log
-        logger()->debug('Sending file',['file'=>$this->responseFile]);
+        $this->getLogger()->debug('Sending file',['file'=>$this->responseFile]);
 
         # Send the file
         readfile($this->responseFile);
       } else {
         # Log warning
-        logger()->warning('File not found',['file'=>$this->responseFile]);
+        $this->getLogger()->warning('File not found',['file'=>$this->responseFile]);
 
         # Fake a response
         response('',404);
@@ -800,7 +789,7 @@ logger()->debug('Handler class: '.$handlerClass);
 
     } else {
       # Debug log
-      logger()->debug('Sending body',[]);
+      $this->getLogger()->debug('Sending body',[]);
 
       # Send the Body
       $body = (string)$this->response->getBody();
@@ -810,4 +799,5 @@ logger()->debug('Handler class: '.$handlerClass);
 
     return $this;
   }
+
 }
