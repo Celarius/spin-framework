@@ -308,18 +308,18 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Match Route & Run
       $response = $this->runRoute();
 
-      if ( is_object($value) ) {
+      if ( is_object($response) ) {
         # Response Object
         return true;
       }
 
-      if (is_bool($value)){
-        return $value;
+      if (is_bool($response)){
+        return $response;
       }
 
     }
 
-    return $ok;
+    return false;
   }
 
   /**
