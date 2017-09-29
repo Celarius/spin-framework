@@ -1,5 +1,4 @@
-/src/storage/
-/src/vendor/
-/src/composer.phar
-/src/composer.lock
+/vendor/
+/composer.phar
+/composer.lock
 desktop.ini

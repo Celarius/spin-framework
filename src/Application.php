@@ -309,7 +309,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $response = $this->runRoute();
 
       if ( is_object($response) ) {
-        # Response Object
+
+        # Set the returned response
+        $this->setResponse($response);
+
         return true;
       }
 
