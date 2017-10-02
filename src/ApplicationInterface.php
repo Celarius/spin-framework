@@ -47,13 +47,6 @@ interface ApplicationInterface
   function exceptionHandler($exception);
 
   /**
-   * Run the application
-   *
-   * @return bool
-   */
-  function run(): bool;
-
-  /**
    * getBasePath returns the full path to the application folder
    *
    * @return string
