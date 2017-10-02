@@ -95,7 +95,7 @@ for most things, and allows for plugging in almost any PSR compatible component,
   /tests
 ```
 
-# Using Templates
+# Using Template Engines
 ## Twig
 
   https://twig.symfony.com/doc/2.x/api.html
@@ -123,19 +123,21 @@ for most things, and allows for plugging in almost any PSR compatible component,
 
 ## Plates
 
-If the example controller is used it initializes the [Plates](http://platesphp.com/) template engine with necessary basics,
-and enables the user to use it very easily:
+If the users controller extends from the `AbstractController` in the skeleton then the [Plates](http://platesphp.com/) template engine is initialized
+with necessary basics, and enables the user to use it very easily:
 
 ```php
-  # Create pageData array
-  $pageData['app'] = $app;
-  $pageData['var1'] = "value1";
-  $pageData['var2'] = "value2";
+  public function handleGET(array $args)
+  {
+    # Model to send to view
+    $model = ['title'=>'PageTitle', 'user'=>'Kim'];
 
-  # Render a template
-  $html = $engine->render('TheFileName', $pageData );  // loads "/Views/Pages/TheFileName.html"
+    # Render view
+    $html = $this->engine->render('pages::index', $model); // renders /Views/Pages/index.html
 
-  # Send response
-  response($html);
+    # Send the generated html
+    return response($html);
+  }
+
 ```
 
