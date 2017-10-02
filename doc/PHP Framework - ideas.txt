@@ -117,7 +117,7 @@ Folder structure (skeleton)
       /logs
       /cache
     /vendor
-      /Nofuzz/spin-framework
+      /Celarius/spin-framework
     composer.json
   /tests
 
