@@ -25,7 +25,7 @@ use Psr\Http\Message\RequestInterface;
 // PSR-17
 use Psr\Http\Message\RequestFactoryInterface;
 
-class HttpFactory extends AbstractFactory implements RequestFactoryInterface
+class RequestFactory extends AbstractFactory implements RequestFactoryInterface
 {
   /**
    * Create a new request.

@@ -21,7 +21,7 @@ use GuzzleHttp\Psr7\LazyOpenStream;
 // PSR-7
 use Psr\Http\Message\UriInterface;
 
-class HttpFactory extends AbstractFactory implements UriFactoryInterface
+class UriFactory extends AbstractFactory implements UriFactoryInterface
 {
   /**
    * Create a new URI.

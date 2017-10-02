@@ -21,7 +21,7 @@ use GuzzleHttp\Psr7\LazyOpenStream;
 // PSR-17
 use Psr\Http\Message\UploadedFileFactoryInterface;
 
-class HttpFactory extends AbstractFactory implements UploadedFileFactoryInterface
+class UploadedFileFactory extends AbstractFactory implements UploadedFileFactoryInterface
 {
   /**
    * Create a new uploaded file.

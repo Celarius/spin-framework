@@ -4,6 +4,9 @@ Spin is a application framework for making Web UI's and REST API's quickly and e
 for most things, and allows for plugging in almost any PSR compatible component, such as loggers, HTTP libraries etc.
 
 # Features
+* PHP 7.1+
+* Composer driven in all components
+* Controller->Model->View support (template engines, [Plates](http://platesphp.com/) by default)
 * PDO based DB connections
 * DAO classes for DB Entity representation
 
@@ -15,3 +18,4 @@ for most things, and allows for plugging in almost any PSR compatible component,
 * Events (PSR-14).
 * SimpleCache (PSR-16). Defaults to APCu SimpleCache (in memory)
 * HTTP Factories (PSR-17)
+

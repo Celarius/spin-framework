@@ -24,7 +24,7 @@ use Psr\Http\Message\StreamInterface;
 // PSR-17
 use Psr\Http\Message\StreamFactoryInterface;
 
-class HttpFactory extends AbstractFactory implements StreamFactoryInterface
+class StreamFactory extends AbstractFactory implements StreamFactoryInterface
 {
   /**
    * Return a StreamObject for a string
