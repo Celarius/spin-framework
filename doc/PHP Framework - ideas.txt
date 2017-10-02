@@ -24,6 +24,25 @@ TODO
 
 ##############################################################################################################################
 
+Typical session application
+===========================
+  Create App
+  Run App
+  * Decode Request
+  * Run Hooks
+  * Run Middlewares
+    > SessionBeforeMiddleware:
+      - Decode session from cookies :: Place in container('session')
+      - Authenticate request :: place in container('account')
+  * Run Controller
+  * Run Middlewares
+  * Run Hooks
+
+
+
+##############################################################################################################################
+
+
 Request Lifecycle
 =================
 

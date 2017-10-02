@@ -8,6 +8,7 @@ use \Spin\ApplicationInterface;
 use \Spin\Core\Config;
 use \Spin\Core\Logger;
 use \Spin\Core\RouteGroup;
+use \Spin\Core\ConnectionManager;
 
 use Psr\Http\Message\Response;
 
@@ -293,6 +294,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Cache
       $this->cacheFactory = $this->loadFactory( $this->config->get('factories.cache') );
       $this->cache = $this->cacheFactory->createCache();
+
+      # Create Connection Manager, send all configured connections to it
+      $this->connectionManager = new ConnectionManager();
 
     } catch (\Exception $e) {
       $this->getLogger()
