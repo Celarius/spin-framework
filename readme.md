@@ -8,9 +8,10 @@ for most things, and allows for plugging in almost any PSR compatible component,
 * DAO classes for DB Entity representation
 
 ## PSR based integrations
+* Logger (PSR-3) Defaults to Monolog.
 * Huggable (PSR-8)
-* HTTP Message (PSR-7)
-* Container (PSR-11)
-* Events (PSR-14)
-* SimpleCache (PSR-16)
+* HTTP Message (PSR-7). Defaults to Guzzle
+* Container (PSR-11). Defaults to The Leauge Container
+* Events (PSR-14).
+* SimpleCache (PSR-16). Defaults to APCu SimpleCache (in memory)
 * HTTP Factories (PSR-17)
