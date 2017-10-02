@@ -54,6 +54,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var Object HTTP Factory */
   protected $httpResponseFactory;
 
+  /** @var Object HTTP Factory */
+  protected $httpStreamFactory;
+
   /** @var Object Container Factory */
   protected $containerFactory;
 
@@ -122,8 +125,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->afterMiddleware = array();
 
     # Initialize Objects
-    $this->httpServerRequestFactory = null;;
-    $this->httpResponseFactory = null;
+    $this->httpServerRequestFactory = $this->loadFactory( $this->config->get('factories.http.serverRequest') );
+    $this->httpResponseFactory = $this->loadFactory( $this->config->get('factories.http.response') );
+    $this->httpStreamFactory = $this->loadFactory( $this->config->get('factories.http.stream') );
     $this->request = null;
     $this->response = null;
     $this->responseFile = '';
@@ -145,8 +149,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     # Modules
     try {
       # HTTP Factories
-      $this->httpServerRequestFactory = $this->loadFactory( $this->config->get('factories.http.serverRequest') );
-      $this->httpResponseFactory = $this->loadFactory( $this->config->get('factories.http.response') );
       $this->request = $this->httpServerRequestFactory->createServerRequestFromArray($serverRequest ?? $_SERVER);
       $this->response = $this->httpResponseFactory->createResponse(404);
 
@@ -728,11 +730,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     # Getting or Setting the value?
     if (is_null($value)) {
       # Return what $name has stored in $container array
-      $value = $this->container[$name] ?? null;
+      $value = $this->container->get($name) ?? null;
 
     } else {
       # Setting the container value $name to $value
-      $this->container[$name] = $value;
+      $this->container->set($name,$value);
 
     }
 

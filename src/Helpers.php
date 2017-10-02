@@ -344,7 +344,7 @@ if (!function_exists('response')) {
   {
     global $app;
 
-    $bStream = app('httpFactory')->createStream($body);
+    $bStream = app('httpStreamFactory')->createStream($body);
 
     # Build response object
     $response = getResponse()
