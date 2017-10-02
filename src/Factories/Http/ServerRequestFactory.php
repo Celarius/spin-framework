@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 /**
- * HTTP Factory
+ * HTTP ServerRequest Factory
  *
  * This factory produces PSR-7 compliant objects using
  * the Guzzle framework.
@@ -10,73 +10,27 @@
  * @package  Spin
  */
 
-namespace Spin\Factories;
+namespace Spin\Factories\Http;
 
 use \InvalidArgumentException;
 use \Spin\Factories\AbstractFactory;
 
 // Guzzle
-use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\LazyOpenStream;
 
 // PSR-7
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 // PSR-17
 use Psr\Http\Message\ServerRequestFactoryInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 
-class HttpFactory
-  extends
-    AbstractFactory
-  implements
-    ServerRequestFactoryInterface,
-    RequestFactoryInterface,
-    ResponseFactoryInterface
+class HttpFactory extends AbstractFactory implements ServerRequestFactoryInterface
 {
   /**
-   * Create a new request.
-   *
-   * @param string $method
-   * @param UriInterface|string $uri
-   *
-   * @return RequestInterface
-   */
-  public function createRequest($method, $uri)
-  {
-    $request = new Request($method, $uri);
-
-    logger()->debug('Created PSR-7 Request (Guzzle)');
-
-    return $request;
-  }
-
-  /**
-   * Create a new response.
-   *
-   * @param integer $code HTTP status code
-   *
-   * @return ResponseInterface
-   */
-  public function createResponse($code = 200)
-  {
-    $response = new Response($code);
-
-    logger()->debug('Created PSR-7 Response (Guzzle)');
-
-    return $response;
-  }
-
-  /**
-   * Create a new server request.
+   * Create a new server request
    *
    * @param string $method
    * @param UriInterface|string $uri
@@ -102,18 +56,17 @@ class HttpFactory
         ->withCookieParams($_COOKIE)
         ->withQueryParams($_GET)
         ->withParsedBody($_POST)
-        ->withUploadedFiles(\GuzzleHttp\Psr7\ServerRequest::normalizeFiles($_FILES));
+        ->withUploadedFiles(ServerRequest::normalizeFiles($_FILES));
   }
 
   /**
-   * Create a new server request from server variables.
+   * Create a new server request from server variables array
    *
-   * @param array $server Typically $_SERVER or similar structure.
+   * @param array $server                Typically $_SERVER or similar array
    *
    * @return ServerRequestInterface
    *
-   * @throws \InvalidArgumentException
-   *  If no valid method or URI can be determined.
+   * @throws \InvalidArgumentException   If no valid method or URI can be determined.
    */
   public function createServerRequestFromArray(?array $server)
   {
@@ -122,44 +75,19 @@ class HttpFactory
 
     $method = isset($server['REQUEST_METHOD']) ? $server['REQUEST_METHOD'] : 'GET';
     $headers = function_exists('getallheaders') ? getallheaders() : [];
-    $uri = \GuzzleHttp\Psr7\ServerRequest::getUriFromGlobals();
+    $uri = ServerRequest::getUriFromGlobals();
     $body = new LazyOpenStream('php://input', 'r+');
     $protocol = isset($server['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $server['SERVER_PROTOCOL']) : '1.1';
 
     $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $server);
 
-    logger()->debug('Created PSR-7 ServerRequest from array (Guzzle)');
+    logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$url.'") from array (Guzzle)');
 
     return $serverRequest
            ->withCookieParams($_COOKIE)
            ->withQueryParams($_GET)
            ->withParsedBody($_POST)
-           ->withUploadedFiles(\GuzzleHttp\Psr7\ServerRequest::normalizeFiles($_FILES));
-  }
-
-  /**
-   * Return a StreamObject for a string
-   *
-   * @param  string $for [description]
-   *
-   * @return object
-   */
-  public function createStream(string $for)
-  {
-    return \GuzzleHttp\Psr7\stream_for($for);
-  }
-
-  /**
-   * Create a Cookie object
-   *
-   * @param  string $name  [description]
-   * @param  string $value [description]
-   *
-   * @return object
-   */
-  public function createCookie(string $name, string $value='')
-  {
-    return null;
+           ->withUploadedFiles(ServerRequest::normalizeFiles($_FILES));
   }
 
 }

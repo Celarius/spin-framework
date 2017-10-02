@@ -49,7 +49,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   protected $logger;
 
   /** @var Object HTTP Factory */
-  protected $httpFactory;
+  protected $httpServerRequestFactory;
+
+  /** @var Object HTTP Factory */
+  protected $httpResponseFactory;
 
   /** @var Object Container Factory */
   protected $containerFactory;
@@ -118,8 +121,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->beforeMiddleware = array();
     $this->afterMiddleware = array();
 
-    # Initialie Objects
-    $this->httpFactory = null;;
+    # Initialize Objects
+    $this->httpServerRequestFactory = null;;
+    $this->httpResponseFactory = null;
     $this->request = null;
     $this->response = null;
     $this->responseFile = '';
@@ -130,172 +134,33 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
-   * Loads a Factory class
-   *
-   * @param   string $params     The params found in the config file under the factory
-   *
-   * @throws  Exception
-   *
-   * @return  object | null
-   */
-  private function loadFactory(?array $params=[])
-  {
-    if (is_array($params) && !empty($params['class']) && class_exists($params['class'])) {
-      return new $params['class']($params['options'] ?? array());
-    }
-
-    return null;
-  }
-
-  /**
-   * Set the Error Handler
-   *
-   * @return bool
-   */
-  private function setErrorHandlers()
-  {
-    # Report all PHP errors (see changelog)
-    $this->errorLevel = error_reporting( E_ALL | E_STRICT);
-
-    # set to the user defined error handler
-    $old_error_handler = set_error_handler(array($this,'errorHandler'), E_ALL);
-    $old_exception_handler = set_exception_handler(array($this,'exceptionHandler'));
-
-    return true;
-  }
-
-  /**
-   * Error Handler
-   *
-   * Handles all errors from the code. This is set as the default
-   * error handler.
-   *
-   * @param  [type] $errNo       [description]
-   * @param  [type] $errStr      [description]
-   * @param  [type] $errFile     [description]
-   * @param  [type] $errLine     [description]
-   * @param  array  $errContext  [description]
-   * @return bool
-   */
-  public function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext)
-  {
-    if (!(error_reporting() & $errNo)) {
-        // This error code is not included in error_reporting, so let it fall
-        // through to the standard PHP error handler
-        // Example all @ prefixed functions
-        return false;
-    }
-
-    switch ($errNo) {
-      # Emergency
-
-      # Alert
-
-      # Critical
-      case E_STRICT:
-        $this->getLogger()->critical("$errStr in file $errFile on line $errLine",$errContext);
-        exit(1);
-        break;
-
-      # Error
-      case E_ERROR:
-      case E_USER_ERROR:
-        $this->getLogger()->error("$errStr in file $errFile on line $errLine",$errContext);
-          exit(1);
-          break;
-
-      # Warning
-      case E_WARNING:
-      case E_USER_WARNING:
-        $this->getLogger()->warning("$errStr in file $errFile on line $errLine",$errContext);
-        break;
-
-      # Notice
-      case E_NOTICE:
-      case E_USER_NOTICE:
-        $this->getLogger()->notice("$errStr in file $errFile on line $errLine",$errContext);
-        break;
-
-      # Info
-      case E_RECOVERABLE_ERROR:
-      case E_DEPRECATED:
-      case E_USER_DEPRECATED:
-        $this->getLogger()->info("$errStr in file $errFile on line $errLine",$errContext);
-        break;
-
-      default:
-        $this->getLogger()->emergency("$errStr in file $errFile on line $errLine",$errContext);
-        break;
-    }
-
-    # Don't execute PHP internal error handler
-    return true;
-  }
-
-  /**
-   * Exception Handler
-   *
-   * Handles any Exceptions from the application. This is set as the
-   * default exception handler for all exceptions.
-   *
-   * @param  [type] $exception [description]
-   * @return [type]            [description]
-   */
-  public function exceptionHandler($exception)
-  {
-    if (!is_null($this->response)) {
-      # Set 500 error code as well as something unexpected happened
-      $response = $this->getResponse()->withStatus(500);
-
-      # Set the error response
-      $this->setResponse($response);
-    } else {
-      # Set HTTP Response Code - we dont even have a response object yet ..
-      http_response_code(404);
-
-    }
-
-    # Log the exception
-    $this->getLogger()
-         ->critical(
-            $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
-            $exception->getTrace()
-          );
-  }
-
-
-  /**
    * Run the application
    *
+   * @param  array $serverRequest     Optional array with server request variables
+   *
    * @return bool
    */
-  public function run(): bool
+  public function run(array $serverRequest=null): bool
   {
     # Modules
     try {
-      $this->httpFactory = null;
-      $this->request = null;
-      $this->response = null;
-      $this->containerFactory = null;
-      $this->container = null;
-      $this->cacheFactory = null;
-      $this->cache = null;
-
-      # HTTP Factory
-      $this->httpFactory = $this->loadFactory( $this->config->get('factories.http') );
-      $this->request = $this->httpFactory->createServerRequestFromArray($_SERVER);
-      $this->response = $this->httpFactory->createResponse(404);
+      # HTTP Factories
+      $this->httpServerRequestFactory = $this->loadFactory( $this->config->get('factories.http.serverRequest') );
+      $this->httpResponseFactory = $this->loadFactory( $this->config->get('factories.http.response') );
+      $this->request = $this->httpServerRequestFactory->createServerRequestFromArray($serverRequest ?? $_SERVER);
+      $this->response = $this->httpResponseFactory->createResponse(404);
 
       # Container
       $this->containerFactory = $this->loadFactory( $this->config->get('factories.container') );
       $this->container = $this->containerFactory->createContainer();
+      # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
       container('requestId', md5((string)microtime(true)));
 
       # Cache
       $this->cacheFactory = $this->loadFactory( $this->config->get('factories.cache') );
       $this->cache = $this->cacheFactory->createCache();
 
-      # Create Connection Manager, send all configured connections to it
+      # Create Connection Manager
       $this->connectionManager = new ConnectionManager();
 
     } catch (\Exception $e) {
@@ -312,14 +177,14 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Match Route & Run
       $response = $this->runRoute();
 
+      # Set the returned response (Controllers should return Response objects)
       if ( is_object($response) ) {
-
-        # Set the returned response
         $this->setResponse($response);
 
         return true;
       }
 
+      # Set the boolean response (old style)
       if (is_bool($response)){
         return $response;
       }
@@ -518,6 +383,140 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     } // foreach routeGroup
 
     return false;
+  }
+
+  /**
+   * Loads a Factory class
+   *
+   * @param   string $params     The params found in the config file under the factory
+   *
+   * @throws  Exception
+   *
+   * @return  object | null
+   */
+  protected function loadFactory(?array $params=[])
+  {
+    if (is_array($params) && !empty($params['class']) && class_exists($params['class'])) {
+      return new $params['class']($params['options'] ?? array());
+    }
+
+    return null;
+  }
+
+  /**
+   * Set the Error Handler
+   *
+   * @return bool
+   */
+  protected function setErrorHandlers()
+  {
+    # Report all PHP errors (see changelog)
+    $this->errorLevel = error_reporting( E_ALL | E_STRICT);
+
+    # set to the user defined error handler
+    $old_error_handler = set_error_handler(array($this,'errorHandler'), E_ALL);
+    $old_exception_handler = set_exception_handler(array($this,'exceptionHandler'));
+
+    return true;
+  }
+
+  /**
+   * Error Handler
+   *
+   * Handles all errors from the code. This is set as the default
+   * error handler.
+   *
+   * @param  [type] $errNo       [description]
+   * @param  [type] $errStr      [description]
+   * @param  [type] $errFile     [description]
+   * @param  [type] $errLine     [description]
+   * @param  array  $errContext  [description]
+   * @return bool
+   */
+  public function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext)
+  {
+    if (!(error_reporting() & $errNo)) {
+        // This error code is not included in error_reporting, so let it fall
+        // through to the standard PHP error handler
+        // Example all @ prefixed functions
+        return false;
+    }
+
+    switch ($errNo) {
+      # Emergency
+
+      # Alert
+
+      # Critical
+      case E_STRICT:
+        $this->getLogger()->critical("$errStr in file $errFile on line $errLine",$errContext);
+        exit(1);
+        break;
+
+      # Error
+      case E_ERROR:
+      case E_USER_ERROR:
+        $this->getLogger()->error("$errStr in file $errFile on line $errLine",$errContext);
+          exit(1);
+          break;
+
+      # Warning
+      case E_WARNING:
+      case E_USER_WARNING:
+        $this->getLogger()->warning("$errStr in file $errFile on line $errLine",$errContext);
+        break;
+
+      # Notice
+      case E_NOTICE:
+      case E_USER_NOTICE:
+        $this->getLogger()->notice("$errStr in file $errFile on line $errLine",$errContext);
+        break;
+
+      # Info
+      case E_RECOVERABLE_ERROR:
+      case E_DEPRECATED:
+      case E_USER_DEPRECATED:
+        $this->getLogger()->info("$errStr in file $errFile on line $errLine",$errContext);
+        break;
+
+      default:
+        $this->getLogger()->emergency("$errStr in file $errFile on line $errLine",$errContext);
+        break;
+    }
+
+    # Don't execute PHP internal error handler
+    return true;
+  }
+
+  /**
+   * Exception Handler
+   *
+   * Handles any Exceptions from the application. This is set as the
+   * default exception handler for all exceptions.
+   *
+   * @param  [type] $exception [description]
+   * @return [type]            [description]
+   */
+  public function exceptionHandler($exception)
+  {
+    if (!is_null($this->response)) {
+      # Set 500 error code as well as something unexpected happened
+      $response = $this->getResponse()->withStatus(500);
+
+      # Set the error response
+      $this->setResponse($response);
+    } else {
+      # Set HTTP Response Code - we dont even have a response object yet ..
+      http_response_code(404);
+
+    }
+
+    # Log the exception
+    $this->getLogger()
+         ->critical(
+            $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
+            $exception->getTrace()
+          );
   }
 
   /**

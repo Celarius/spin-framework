@@ -10,6 +10,16 @@ namespace Spin;
 
 interface ApplicationInterface
 {
+
+  /**
+   * Run the application
+   *
+   * @param  array $serverRequest     Optional array with server request variables
+   *
+   * @return bool
+   */
+  function run(array $serverRequest=null): bool;
+
   /**
    * Error Handler
    *
