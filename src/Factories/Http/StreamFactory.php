@@ -33,9 +33,9 @@ class StreamFactory extends AbstractFactory implements StreamFactoryInterface
    *
    * @return object
    */
-  public function createStream(string $for)
+  public function createStream($content = '')
   {
-    return \GuzzleHttp\Psr7\stream_for($for);
+    return \GuzzleHttp\Psr7\stream_for($content);
   }
 
   /**
