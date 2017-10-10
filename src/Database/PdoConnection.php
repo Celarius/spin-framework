@@ -22,9 +22,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   protected $password = '';
   protected $charset = '';
   /** @var array PDO options array */
-  protected $pdo_options = array();
+  protected $options = array();
   /** @var string Full DSN of PDO connection */
-  protected $pdo_dsn = '';
+  protected $dsn = '';
   /** @var string Database Engine Version we connect to */
   protected $serverVersion = '';
   /** @var string Client Driver Version we connect to */
@@ -171,7 +171,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     # Set it
     $this->setDsn($_dsn);
 
-    return $this->pdo_dsn;
+    return $this->dsn;
   }
 
   /**
@@ -271,7 +271,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    */
   public function getOptions(): array
   {
-    return $this->pdo_options;
+    return $this->options;
   }
 
   /**
@@ -301,7 +301,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    */
   public function setDsn(?string $dsn)
   {
-    $this->pdo_dsn = $dsn;
+    $this->dsn = $dsn;
 
     return $this;
   }
@@ -427,7 +427,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    */
   public function setOptions(array $options)
   {
-    $this->pdo_options = $options;
+    $this->options = $options;
 
     return $this;
   }
