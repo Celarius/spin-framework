@@ -43,7 +43,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     # Extract the needed parameters
     $this->setName($connectionName);
     $this->setType($params['type'] ?? '');
-    $this->setDriver($params['driver'] ?? '');
+    if (isset($params['driver'])) $this->setDriver($params['driver']);
     $this->setHost($params['host'] ?? '');
     $this->setPort($params['port'] ?? '');
     $this->setSchema($params['schema'] ?? '');
@@ -163,10 +163,11 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string       [description]
    */
-  public function getDsn(): string
+  public function getDsn(): ?string
   {
     # Build the DSN
     $_dsn = $this->driver.':host='.$this->host.';port='.$this->port.';dbname='.$this->schema.';charset='.$this->charset;
+
     # Set it
     $this->setDsn($_dsn);
 
@@ -178,7 +179,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string
    */
-  public function getName(): string
+  public function getName(): ?string
   {
     return $this->name;
   }
@@ -188,7 +189,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string
    */
-  public function getType(): string
+  public function getType(): ?string
   {
     return $this->type;
   }
@@ -198,7 +199,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string
    */
-  public function getDriver(): string
+  public function getDriver(): ?string
   {
     return $this->driver;
   }
@@ -208,7 +209,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string
    */
-  public function getSchema(): string
+  public function getSchema(): ?string
   {
     return $this->schema;
   }
@@ -218,7 +219,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string
    */
-  public function getHost(): string
+  public function getHost(): ?string
   {
     return $this->host;
   }
@@ -228,7 +229,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string
    */
-  public function getPort(): int
+  public function getPort(): ?int
   {
     return $this->port;
   }
@@ -238,7 +239,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string
    */
-  public function getUsername(): string
+  public function getUsername(): ?string
   {
     return $this->username;
   }
@@ -248,7 +249,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string
    */
-  public function getPassword(): string
+  public function getPassword(): ?string
   {
     return $this->password;
   }
@@ -258,7 +259,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return string
    */
-  public function getCharset(): string
+  public function getCharset(): ?string
   {
     return $this->charset;
   }
@@ -278,7 +279,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return array
    */
-  public function getServerVersion(): string
+  public function getServerVersion(): ?string
   {
     return $this->serverVersion;
   }
@@ -288,19 +289,17 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @return array
    */
-  public function getClientVersion(): string
+  public function getClientVersion(): ?string
   {
     return $this->clientVersion;
   }
-
-
 
   /**
    * Set DSN connection string
    *
    * @param [type] $dsn           [description]
    */
-  public function setDsn(string $dsn)
+  public function setDsn(?string $dsn)
   {
     $this->pdo_dsn = $dsn;
 
@@ -313,7 +312,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    * @param   string $name
    * @return  self
    */
-  public function setName(string $name)
+  public function setName(?string $name)
   {
     $this->name = $name;
 
@@ -326,7 +325,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    * @param   string $type
    * @return  self
    */
-  public function setType(string $type)
+  public function setType(?string $type)
   {
     $this->type = $type;
 
@@ -339,7 +338,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    * @param   string $host
    * @return  self
    */
-  public function setHost(string $host)
+  public function setHost(?string $host)
   {
     $this->host = $host;
 
@@ -365,7 +364,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    * @param   string $driver
    * @return  self
    */
-  public function setDriver(string $driver)
+  public function setDriver(?string $driver)
   {
     $this->driver = $driver;
 
@@ -378,7 +377,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    * @param   string $schema
    * @return  self
    */
-  public function setSchema(string $schema)
+  public function setSchema(?string $schema)
   {
     $this->schema = $schema;
 
@@ -390,7 +389,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @param string $username      [description]
    */
-  public function setUsername(string $username)
+  public function setUsername(?string $username)
   {
     $this->username = $username;
 
@@ -402,7 +401,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @param string $password      [description]
    */
-  public function setPassword(string $password)
+  public function setPassword(?string $password)
   {
     $this->password = $password;
 
@@ -414,7 +413,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @param string $charset       Charset to use
    */
-  public function setCharset(string $charset)
+  public function setCharset(?string $charset)
   {
     $this->charset = $charset;
 
