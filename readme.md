@@ -26,18 +26,18 @@ NOTE: This framework is in ALPHA stage - Not ready for production
   1.  Receive request from Client browser to Apache
   2.  Apache loads PHP and runs "bootstrap.php"
   3.  "bootstrap.php" creates $app = new Spin();
-        BOOTSTRAP PHASE:
-          - Register Framework Global Helper Functions
-          - Load Config
-          - Load Factories
-            - Cache Factory
-            - HTTP Factory
-            - Container Factory
-            - Event Factory
-            - Connections Factory
-          - Load Hook Manager
-          - Create HTTP Server Request, Response
-            > Populate Server Request with data
+      * BOOTSTRAP PHASE:
+        - Register Framework Global Helper Functions
+        - Load Config
+        - Load Factories
+          * Cache Factory
+          * HTTP Factory
+          * Container Factory
+          * Event Factory
+          * Connections Factory
+        - Load Hook Manager
+        - Create HTTP Server Request, Response
+          * Populate Server Request with data
 
   4.  "bootstrap.php" code:
         - Register "User" Global Functions        
