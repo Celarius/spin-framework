@@ -24,53 +24,44 @@ NOTE: This framework is in ALPHA stage - Not ready for production
 # Request lifecycle
 
   1.  Receive request from Client browser to Apache
-  2.  Apache loads "bootstrap.php" file and starts PHP processing
-  3.  Bootstrap initializes Framework, and starts to process the request
-      - Create $app class (PSR-8 :: extends \Psr\Hug\Huggable)
+  2.  Apache loads PHP and runs "bootstrap.php"
+  3.  "bootstrap.php" creates $app = new Spin();
         BOOTSTRAP PHASE:
           - Register Framework Global Helper Functions
           - Load Config
-
           - Load Factories
-            - Cache Factory        - Cache Manager (PSR-6 / PSR-16)
-            - HTTP Factory         - HTTP Manager (PSR-17 :: guzzle)
-            - Container Factory    - Container Manager (PSR-11 :: http://container.thephpleague.com/)
-            - Event Factory        - Event Manager (PSR-14)
-            - ? Database Factory     - Database Manager
-
-          - Register "User" Global Functions
-
-          - Load Template Engine driver
+            - Cache Factory
+            - HTTP Factory
+            - Container Factory
+            - Event Factory
+            - Connections Factory
           - Load Hook Manager
-
-          - Create HTTP Server Request, Response              (PSR-7                Guzzle )
+          - Create HTTP Server Request, Response
             > Populate Server Request with data
 
+  4.  "bootstrap.php" code:
+        - Register "User" Global Functions        
+
+  5.  "bootstrap.php" calls $app->run();
         PRE-PROCESS PHASE:
           - Framework Hooks (onBeforeRequest)
             - Load & Create Hooks one by one
-            - Foreach Hook call $hook->run(); if == false, terminate running hooks
+            - Foreach Hook call $hook->run(); if == false, terminate
 
         PROCESS PHASE:
-          - Execute Global Before Middlewares
           - Match Route
-            - Execute Routes Before Middlewares
-            - If Cached version
-              Y: Serve cached data
-              N: Load Contreoller
-                 - Call Controller->handle()
-                   - Load Model
-                   - Process data ...
-                   - Load View
-            - Execute Routes After Middlewares
-          - Execute all After Middlewares
+            - Execute Global Before Middlewares
+            - Execute Route Specific Before Middlewares
+            - Load & Call Controller->handle()
+            - Execute Route Specific After Middlewares
+            - Execute Global After Middlewares
 
         POST-PROCESS PHASE:
           - Framework Hooks (onAfterRequest)
             - Load & Create Hooks one by one
-            - Foreach Hook call $hook->run(); if == false, terminate running hooks
+            - Foreach Hook call $hook->run(); if == false, terminate
 
-  4.  Send response to Client
+  6.  Send response to Client
 
 # Skeleton application folder structure
 
