@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spin\Core;
 
-use \Spin\Core\Database\PdoConnection;
-use \Spin\Core\Database\PdoConnectionInterface;
+use \Spin\Database\PdoConnection;
+use \Spin\Database\PdoConnectionInterface;
 
 interface ConnectionManagerInterface
 {

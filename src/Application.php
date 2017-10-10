@@ -128,13 +128,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->httpServerRequestFactory = $this->loadFactory( $this->config->get('factories.http.serverRequest') );
     $this->httpResponseFactory = $this->loadFactory( $this->config->get('factories.http.response') );
     $this->httpStreamFactory = $this->loadFactory( $this->config->get('factories.http.stream') );
+    $this->containerFactory = null;
+    $this->cacheFactory = null;
     $this->request = null;
     $this->response = null;
     $this->responseFile = '';
-    $this->containerFactory = null;;
-    $this->container = null;;
-    $this->cacheFactory = null;;
-    $this->cache = null;;
+    $this->container = null;
+    $this->cache = null;
   }
 
   /**

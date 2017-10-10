@@ -23,9 +23,8 @@ namespace Spin\Core;
 use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\ConnectionManager;
 use \Spin\Core\ConnectionManagerInterface;
-use \Spin\Core\Database\PdoConnection;
-use \Spin\Core\Database\PdoConnectionInterface;
-
+use \Spin\Database\PdoConnection;
+use \Spin\Database\PdoConnectionInterface;
 
 class ConnectionManager extends AbstractBaseClass implements ConnectionManagerInterface
 {

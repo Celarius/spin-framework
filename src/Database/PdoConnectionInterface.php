@@ -1,25 +1,9 @@
-<?php
-/**
- * Generic PDO Database Connection
- *
- * @package     Nofuzz
- * @copyright   Copyright (c) 2016, Winwap Technologies
- * @author      Kim Sandell <sandell@celarius.com>
-*/
+<?php declare(strict_types=1);
 
-################################################################################################################################
+namespace Spin\Core\Database;
 
-namespace Nofuzz\Database;
-
-/**
- * Interface for Abstract generic Dabase Engine
- */
 interface PdoConnectionInterface
 {
-  # Custom additions
-  function connect(): bool;
-  function disconnect(): bool;
-
   # PDO Class Interface
   // function __construct ( string $dsn [, string $username [, string $password [, array $options ]]] )
   // function beginTransaction(): bool;
@@ -37,22 +21,34 @@ interface PdoConnectionInterface
   // function rollBack(): bool;
   // function setAttribute(int $attribute , mixed $value): bool;
 
+  # Custom additions
+  function connect(): bool;
+  function disconnect(): bool;
+
   # Getters
   function connected(): bool;
-  function getVersion(): string;
+  function getDsn(): string;
+  function getName(): string;
+  function getType(): string;
   function getDriver(): string;
+  function getSchema(): string;
   function getHost(): string;
   function getPort(): int;
-  function getName(): string;
   function getUsername(): string;
   function getPassword(): string;
   function getCharset(): string;
   function getOptions(): array;
-  function getDsn(): string;
+  function getServerVersion(): string;
+  function getClientVersion(): string;
 
   # Setters
-  function setType(string $type);
   function setDsn(string $dsn);
+  function setName(string $name);
+  function setType(string $type);
+  function setHost(string $host);
+  function setPort($port);
+  function setDriver(string $driver);
+  function setSchema(string $schema);
   function setUsername(string $username);
   function setPassword(string $password);
   function setCharset(string $charset);

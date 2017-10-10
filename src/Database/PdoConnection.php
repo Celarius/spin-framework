@@ -1,48 +1,36 @@
 <?php declare(strict_types=1);
-
 /**
- * Generic PDO Database Connection
- *
+ * Generic PDO connection
  */
 
 namespace Spin\Core\Database;
 
-use \Spin\Core\Database\PdoConnectionInterface;
-
-/*
-POSTGRESQL:
-  // host=localhost
-  // port=5432
-  // dbname=C:\db\banco.gdb
-  $connection = new PDO("pgsql:host=192.168.137.1;port=5432;dbname=anydb", $user, $pass,
-    array(
-      PDO::ATTR_PERSISTENT => true
-      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-      PDO::ATTR_AUTOCOMMIT => false
-    )
-  );
-*/
+use \Spin\Database\PdoConnectionInterface;
 
 abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 {
-  protected $name = ''; // Connection name
-  protected $type = ''; // Connection Type
-  protected $driver = ''; // Connection Driver ('MySql','Firebird','Sqlite'...)
-
+  /** @var string Connection name */
+  protected $name = '';
+  /** @var string Connection type */
+  protected $type = '';
+  /** @var string Connection driver ('MySql','Firebird','Sqlite'...) */
+  protected $driver = '';
   protected $schema = '';
   protected $host = '';
   protected $port = 0;
   protected $username = '';
   protected $password = '';
   protected $charset = '';
-  protected $pdo_options = array(); // PDO options array
-
+  /** @var array PDO options array */
+  protected $pdo_options = array();
+  /** @var string Full DSN of PDO connection */
   protected $pdo_dsn = '';
-  protected $version = ''; // Database Version we connect to
-
-  /** @var boolean True=Connected, False=Not connected */
+  /** @var string Database Engine Version we connect to */
+  protected $serverVersion = '';
+  /** @var string Client Driver Version we connect to */
+  protected $clientVersion = '';
+  /** @var boolean Connection state. */
   protected $connected = false;
-
 
   /**
    * Constructor
@@ -56,8 +44,8 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     $this->setName($connectionName);
     $this->setType($params['type'] ?? '');
     $this->setDriver($params['driver'] ?? '');
-    $this->host = ($params['host'] ?? '');
-    $this->port = ($params['port'] ?? '');
+    $this->setHost($params['host'] ?? '');
+    $this->setPort($params['port'] ?? '');
     $this->setSchema($params['schema'] ?? '');
     $this->setUsername($params['username'] ?? '');
     $this->setPassword($params['password'] ?? '');
@@ -104,8 +92,19 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     # Parent Constructor (PDO Class)
     parent::__construct($this->getDsn(),$this->getUsername(),$this->getPassword(),$this->getOptions());
 
-    # Retreive the DB Engine Version (if supported)
-    $this->version = $this->getAttribute(\PDO::ATTR_SERVER_VERSION);
+    try {
+      # Retreive the Client Library Version (if supported)
+      $this->setClientVersion($this->getAttribute(\PDO::ATTR_CLIENT_VERSION));
+    } catch (\Exception $e) {
+      // error_log($e->getMessage().' | '.$e->getTraceAsString());
+    }
+
+    try {
+      # Retreive the DB Server Version (if supported)
+      $this->setServerVersion($this->getAttribute(\PDO::ATTR_SERVER_VERSION));
+    } catch (\Exception $e) {
+      // error_log($e->getMessage().' | '.$e->getTraceAsString());
+    }
 
     # Set connected
     $this->connected = true;
@@ -160,7 +159,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get DSN - Return the default formatted DSN
    *
-   * This method needs to be overridden in DB Driver specific files
+   * This method needs to be overridden in DB specific driver
    *
    * @return string       [description]
    */
@@ -234,7 +233,6 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     return $this->port;
   }
 
-
   /**
    * Get Username
    *
@@ -276,13 +274,37 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get Version
+   * Get Server Version
    *
    * @return array
    */
-  public function getVersion(): string
+  public function getServerVersion(): string
   {
-    return $this->version;
+    return $this->serverVersion;
+  }
+
+  /**
+   * Get Client Version
+   *
+   * @return array
+   */
+  public function getClientVersion(): string
+  {
+    return $this->clientVersion;
+  }
+
+
+
+  /**
+   * Set DSN connection string
+   *
+   * @param [type] $dsn           [description]
+   */
+  public function setDsn(string $dsn)
+  {
+    $this->pdo_dsn = $dsn;
+
+    return $this;
   }
 
   /**
@@ -312,6 +334,32 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
+   * Set Connection host
+   *
+   * @param   string $host
+   * @return  self
+   */
+  public function setHost(string $host)
+  {
+    $this->host = $host;
+
+    return $this;
+  }
+
+  /**
+   * Set port
+   *
+   * @param   string $port
+   * @return  self
+   */
+  public function setPort($port)
+  {
+    $this->port = $port;
+
+    return $this;
+  }
+
+  /**
    * Set Driver
    *
    * @param   string $driver
@@ -333,18 +381,6 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   public function setSchema(string $schema)
   {
     $this->schema = $schema;
-
-    return $this;
-  }
-
-  /**
-   * Set DSN connection string
-   *
-   * @param [type] $dsn           [description]
-   */
-  public function setDsn(string $dsn)
-  {
-    $this->pdo_dsn = $dsn;
 
     return $this;
   }
