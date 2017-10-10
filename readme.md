@@ -43,21 +43,19 @@ NOTE: This framework is in ALPHA stage - Not ready for production
         - Register "User" Global Functions        
 
   5.  "bootstrap.php" calls $app->run();
-        PRE-PROCESS PHASE:
-          - Framework Hooks (onBeforeRequest)
-            - Load & Create Hooks one by one
-            - Foreach Hook call $hook->run(); if == false, terminate
-
-        PROCESS PHASE:
-          - Match Route
+      * PRE-PROCESS PHASE:
+        - Framework Hooks (onBeforeRequest)
+          * Load & Create Hooks one by one
+          * Foreach Hook call $hook->run(); if == false, terminate
+        - PROCESS PHASE:
+          * Match Route
             - Execute Global Before Middlewares
             - Execute Route Specific Before Middlewares
             - Load & Call Controller->handle()
             - Execute Route Specific After Middlewares
             - Execute Global After Middlewares
-
-        POST-PROCESS PHASE:
-          - Framework Hooks (onAfterRequest)
+        - POST-PROCESS PHASE:
+          * Framework Hooks (onAfterRequest)
             - Load & Create Hooks one by one
             - Foreach Hook call $hook->run(); if == false, terminate
 
