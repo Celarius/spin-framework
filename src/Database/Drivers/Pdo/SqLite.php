@@ -1,14 +1,16 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
- * MySQL Database Connection (extends PDO)
+ * PDO MySql Connection driver
  *
- * @package     NOFUZZ
+ * https://www.mysql.com/
 */
-################################################################################################################################
 
-namespace Nofuzz\Database\Drivers\Pdo;
+namespace Spin\Database\Drivers\Pdo;
 
-class SqLite extends \Nofuzz\Database\PdoConnection
+use \Spin\Database\PdoConnection;
+
+class SqLite extends PdoConnection
 {
   /** @var string SQLite DB Filename */
   protected $filename;
