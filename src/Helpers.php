@@ -336,9 +336,9 @@ if (!function_exists('redirect')) {
 
 if (!function_exists('response')) {
   /**
-   * Send a Response to the client
+   * Get/Set the Response to send to the client
    *
-   * @return object
+   * @return \Psr\Http\ResponseInterface
    */
   function response(string $body='', int $code=200, array $headers=[])
   {
