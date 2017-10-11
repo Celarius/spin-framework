@@ -3,8 +3,7 @@
 /**
  * Cache Factory
  *
- * This factory produces SimpleCache PSR-16 compliant
- * APCu caches.
+ * This factory produces PSR-16 compliant APCu caches.
  *
  * @package  Spin
  */
@@ -25,12 +24,7 @@ class CacheFactory extends AbstractFactory
    */
   public function createCache()
   {
-    $cache = new Apcu();
-
-    # Cache Options
-    // if (($this->options[''] ?? false)) {
-    //   $cache->?;
-    // }
+    $cache = new Apcu( $this->getOptions() );
 
     logger()->debug('Created PSR-16 Cache: '.$cache->getDriver().' v'.$cache->getVersion());
 

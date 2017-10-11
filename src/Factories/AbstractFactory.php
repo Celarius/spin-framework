@@ -24,4 +24,24 @@ abstract class AbstractFactory extends AbstractBaseClass
 
     $this->options = $options;
   }
+
+  /**
+   * @return mixed
+   */
+  public function getOptions()
+  {
+      return $this->options;
+  }
+
+  /**
+   * @param mixed $options
+   *
+   * @return self
+   */
+  public function setOptions($options)
+  {
+      $this->options = $options;
+
+      return $this;
+  }
 }

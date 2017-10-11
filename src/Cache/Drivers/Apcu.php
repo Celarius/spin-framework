@@ -8,24 +8,30 @@
 
 namespace Spin\Cache\Drivers;
 
+use \Spin\Cache\AbstractCacheDriver;
 use \Psr\SimpleCache\CacheInterface;
 
-class Apcu implements CacheInterface
+class Apcu extends AbstractCacheDriver implements CacheInterface
 {
   /**
    * Constructor
    *
    * @throws  Exception
    */
-  public function __construct(array $options=null)
+  public function __construct(array $options=[])
   {
+    # Set $driver and $options
+    parent::__construct('APCu',$options);
+
     # Check if APCu extension is loaded and available
     if ( ( extension_loaded('apcu') == false ) ||
          ( ini_get('apc.enabled') != '1' ) )
     {
-      // APCu is NOT enabled/loaded
-      throw new Exception('APCu extension not available');
+      throw new \Exception('Cache driver '.$this->getDriver().' not available');
     }
+
+    # Set the version of the APCu library
+    $this->setVersion( phpversion('apcu') );
   }
 
   /**
@@ -170,26 +176,6 @@ class Apcu implements CacheInterface
     $value = apcu_dec( $key, $amount, $success);
 
     return ( $success ? $value : false );
-  }
-
-  /**
-   * Get Driver Name
-   *
-   * @return string
-   */
-  public function getDriver(): string
-  {
-    return 'APCu';
-  }
-
-  /**
-   * Get Cache Client Version
-   *
-   * @return string
-   */
-  public function getVersion(): string
-  {
-    return phpversion("apcu");
   }
 
 }
