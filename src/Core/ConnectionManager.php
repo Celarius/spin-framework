@@ -5,16 +5,16 @@
  *
  * Manages all Database Connections
  *
- * When we 1st need a DB connection, it is created.
+ * When we 1st need a DB connection, it is created via the ConnectionFactory
  */
 
 /*
 Example:
 
   # Get a Connection by Name
-  $dbCon = db('name1'); // Gives you back a PDO Object connected to the Database
+  $dbCon = db('name1'); // Gives you back a PdoConnection object
 
-  # Get 1st available Connection
+  # Get 1st available Connection in connections list
   $dbCon = db('');
 */
 
@@ -31,12 +31,38 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   protected $connections = [];
 
   /**
-   * Find a connection based on name
+   * Get or Create a connection
    *
-   * @param  string   $connectionName       Name of the connection (from Config)
+   * @param  string $connectionName         Name of the connection (from Config)
    * @return null | object
    */
-  public function findConnection(string $connectionName)
+  public function getConnection(string $connectionName)
+  {
+    # Find the connection (if we already have it created)
+    $connection = $this->findConnection($connectionName);
+
+    if (is_null($connection)) {
+      # Attempt to create the connection
+      $connection = $this->createConnection($connectionName);
+
+      if (!is_null($connection)) {
+        $this->addConnection($connection);
+      }
+    }
+
+    return $connection;
+  }
+
+  /**
+   * Find a connection based on name
+   *
+   * If the $connectionName is empty/null we'll return the 1st
+   * connection in the internal connection list (if there is one)
+   *
+   * @param  string   $connectionName       Name of the connection (from Config)
+   * @return null | PdoConnection
+   */
+  public function findConnection(string $connectionName=null)
   {
     if ( empty($connectionName) ) {
       # Take first available connection
@@ -46,27 +72,6 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
     } else {
       # Attempt to find the connection from the pool
       $connection = ( $this->connections[strtolower($connectionName)] ?? null);
-    }
-
-    return $connection;
-  }
-
-  /**
-   * Get or Create a connection
-   *
-   * @param  string $connectionName         Name of the connection (from Config)
-   * @return null | object
-   */
-  public function getConnection(string $connectionName)
-  {
-    $connection = $this->findConnection($connectionName);
-
-    if (is_null($connection)) {
-      $connection = $this->createConnection($connectionName);
-
-      if (!is_null($connection)) {
-        $this->addConnection($connection);
-      }
     }
 
     return $connection;
@@ -113,39 +118,40 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
    * the 1st available record in the Connections list.
    *
    * @param  string $connectionName [description]
-   * @return [type]                 [description]
+   * @return null | PdoConnection
    */
   protected function createConnection(string $connectionName)
   {
-    # Get the connection form the connections array
+    # Try to find the connection in the internal list, if it was created already
     $connection = $this->connections[strtolower($connectionName)] ?? null;
 
-    # If no connection found, and the list is empty, read in 1st one
-    if (is_null($connection) && count($this->connections)==0 ) {
-      # Get connections configuration
+    # If no connection found, and the $connectionName is empty, read in 1st one
+    if (is_null($connection) && empty($connectionName)) {
+      # Get connections from conf
       $arr = config()->get('connections');
       reset($arr);
+      # Take the 1st connections name
       $connectionName = key($arr);
     }
 
     if (is_null($connection)) {
-      # Get connection configuration
+      # Get connection's params from conf
       $connConf = config()->get('connections.'.$connectionName);
 
       # Type="PDO"
       if ( strcasecmp($connConf['type'] ?? '','PDO')==0 ) {
-        $className = '\\Nofuzz\\Database\\Drivers\\'.ucfirst($connConf['type']).'\\'.ucfirst($connConf['driver']) ;
+        $className = '\\Spin\\Database\\Drivers\\'.ucfirst($connConf['type']).'\\'.ucfirst($connConf['driver']) ;
 
         try {
-          # Create the Connection (PdoConnection)
+          # Create the PdoConnection
           $connection = new $className($connectionName, $connConf);
+          logger()->debug( 'Created Connection', ['connection'=>$connection] );
+
         } catch (\Exception $e) {
-          logger()->critical(
-            $e->getMessage(),
-            ['trace'=>$e->getTraceAsString()]
-          );
+          logger()->critical( $e->getMessage(), ['trace'=>$e->getTraceAsString()] );
         }
       }
+
     }
 
     return $connection;

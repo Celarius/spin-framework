@@ -144,7 +144,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
    *
    * Example: get('application.code')
    *
-   * @param   string $key          "." notationed key to retreive
+   * @param   string $key          "." notation key to retreive
    * @param   string $default      Optional Default value if group::section::key not found
    *
    * @return  mixed

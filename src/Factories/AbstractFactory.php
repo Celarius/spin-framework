@@ -1,11 +1,7 @@
 <?php declare(strict_types=1);
 
 /**
- * HTTP Factory
- *
- * Produces HTTP Objects with the Guzzle framework
- *
- * @package  Spin
+ * Abstract Factory
  */
 
 namespace Spin\Factories;
