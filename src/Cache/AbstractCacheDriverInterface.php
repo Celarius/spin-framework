@@ -5,14 +5,6 @@ namespace Spin\Cache;
 interface AbstractCacheDriver
 {
   /**
-   * Constructor
-   *
-   * @param string $driver  [description]
-   * @param array  $options [description]
-   */
-  function __construct(string $driver, array $options=[]);
-
-  /**
    * @return mixed
    */
   function getOptions(): array;
