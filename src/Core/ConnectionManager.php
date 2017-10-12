@@ -21,13 +21,13 @@ Example:
 namespace Spin\Core;
 
 use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\ConnectionManager;
 use \Spin\Core\ConnectionManagerInterface;
 use \Spin\Database\PdoConnection;
 use \Spin\Database\PdoConnectionInterface;
 
 class ConnectionManager extends AbstractBaseClass implements ConnectionManagerInterface
 {
+  /** @var array List of Instantiated Connections */
   protected $connections = [];
 
   /**
@@ -96,9 +96,12 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
    * @param  [type] $connection [description]
    * @return bool
    */
-  public function removeConnection(PdoConnectionInterface $connection)
+  public function removeConnection(string $name)
   {
-    $connection = $this->findConnection($connectionName);
+    # Sanity check
+    if (empty($name)) return false;
+
+    $connection = $this->findConnection($name);
 
     if ($connection) {
       $connection->disconnect();

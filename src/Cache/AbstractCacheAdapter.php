@@ -1,10 +1,16 @@
 <?php declare(strict_types=1);
 
+/**
+ * AbstractCacheAdapter base class
+ *
+ * Extend this for PSR-16 or PSR-6 Caches
+ */
+
 namespace Spin\Cache;
 
-use \Spin\Cache\AbstractCacheDriverInterface;
+use \Spin\Cache\AbstractCacheAdapterInterface;
 
-abstract class AbstractCacheDriver implements AbstractCacheDriverInterface
+abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
 {
   /** @var array Driver Options from Config */
   protected $options = [];

@@ -2,7 +2,7 @@
 
 namespace Spin\Cache;
 
-interface AbstractCacheDriver
+interface AbstractCacheAdapterInterface
 {
   /**
    * @return mixed

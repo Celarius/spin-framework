@@ -60,10 +60,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var Object Container Factory */
   protected $containerFactory;
 
-  /** @var Object PSR-16 or PSR-6 compatible Cache */
-  protected $cacheFactory;
-
-
 
   /** @var Object PSR-7 compatible HTTP Server Request */
   protected $request;
@@ -77,8 +73,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var array PSR-11 compatible Container for Dependencies */
   protected $container;
 
-  /** @var Object PSR-16 or PSR-6 compatible Cache */
-  protected $cache;
+  /** @var Object Manager that handles all caches */
+  protected $cacheManager;
 
   /** @var Object DB Connections manager */
   protected $connectionManager;
@@ -129,12 +125,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->httpResponseFactory = $this->loadFactory( $this->config->get('factories.http.response') );
     $this->httpStreamFactory = $this->loadFactory( $this->config->get('factories.http.stream') );
     $this->containerFactory = null;
-    $this->cacheFactory = null;
     $this->request = null;
     $this->response = null;
     $this->responseFile = '';
     $this->container = null;
-    $this->cache = null;
   }
 
   /**
@@ -146,8 +140,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function run(array $serverRequest=null): bool
   {
-    # Modules
     try {
+      # Create Cache Manager
+      $this->cacheManager = new CacheManager();
+
+      # Create Connection Manager
+      $this->connectionManager = new ConnectionManager();
+
       # HTTP Factories
       $this->request = $this->httpServerRequestFactory->createServerRequestFromArray($serverRequest ?? $_SERVER);
       $this->response = $this->httpResponseFactory->createResponse(404);
@@ -158,16 +157,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
       container('requestId', md5((string)microtime(true)));
 
-      # Cache
-      $this->cacheFactory = $this->loadFactory( $this->config->get('factories.cache') );
-      $this->cache = $this->cacheFactory->createCache();
-
-      # Create Connection Manager
-      $this->connectionManager = new ConnectionManager();
-
     } catch (\Exception $e) {
       $this->getLogger()
-           ->critical('Failed to load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
+           ->critical('Failed to create/load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
 
       die;
     }
