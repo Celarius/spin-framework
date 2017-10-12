@@ -81,7 +81,7 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
 
     $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $server);
 
-    logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$url.'") from array (Guzzle)');
+    logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$uri.'") from array (Guzzle)');
 
     return $serverRequest
            ->withCookieParams($_COOKIE)

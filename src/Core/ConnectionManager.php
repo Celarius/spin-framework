@@ -33,17 +33,17 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   /**
    * Get or Create a connection
    *
-   * @param  string $connectionName         Name of the connection (from Config)
+   * @param  string $name         Name of the connection (from Config)
    * @return null | object
    */
-  public function getConnection(string $connectionName)
+  public function getConnection(string $name=null)
   {
     # Find the connection (if we already have it created)
-    $connection = $this->findConnection($connectionName);
+    $connection = $this->findConnection($name);
 
     if (is_null($connection)) {
       # Attempt to create the connection
-      $connection = $this->createConnection($connectionName);
+      $connection = $this->createConnection($name);
 
       if (!is_null($connection)) {
         $this->addConnection($connection);
@@ -56,22 +56,22 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   /**
    * Find a connection based on name
    *
-   * If the $connectionName is empty/null we'll return the 1st
+   * If the $name is empty/null we'll return the 1st
    * connection in the internal connection list (if there is one)
    *
-   * @param  string   $connectionName       Name of the connection (from Config)
+   * @param  string   $name       Name of the connection (from Config)
    * @return null | PdoConnection
    */
-  public function findConnection(string $connectionName=null)
+  public function findConnection(string $name=null)
   {
-    if ( empty($connectionName) ) {
+    if ( empty($name) ) {
       # Take first available connection
       $connection = reset($this->connections);
       if ($connection === false)
         return null;
     } else {
       # Attempt to find the connection from the pool
-      $connection = ( $this->connections[strtolower($connectionName)] ?? null);
+      $connection = ( $this->connections[strtolower($name)] ?? null);
     }
 
     return $connection;
@@ -93,7 +93,7 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   /**
    * Remove a connection from the pool
    *
-   * @param  [type] $connection [description]
+   * @param  [type] $name Name of connection to remove
    * @return bool
    */
   public function removeConnection(string $name)

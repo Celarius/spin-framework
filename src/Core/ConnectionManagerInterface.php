@@ -10,18 +10,18 @@ interface ConnectionManagerInterface
   /**
    * Find a connection based on name
    *
-   * @param  string   $connectionName Name of the connection (from Config)
+   * @param  string   $name Name of the connection (from Config)
    * @return null | object
    */
-  function findConnection(string $connectionName);
+  function findConnection(string $name);
 
   /**
    * Get or Create a connection
    *
-   * @param  string $connectionName Name of the connection (from Config)
+   * @param  string $name Name of the connection (from Config)
    * @return null | object
    */
-  function getConnection(string $connectionName);
+  function getConnection(string $name=null);
 
   /**
    * Adds the Connection to the Pool
@@ -34,10 +34,10 @@ interface ConnectionManagerInterface
   /**
    * Remove a connection from the pool
    *
-   * @param  [type] $connection [description]
+   * @param  [type] $name Name of connection to remove
    * @return bool
    */
-  function removeConnection(PdoConnectionInterface $connection);
+  function removeConnection(string $name);
 
   /**
    * Get array of containers

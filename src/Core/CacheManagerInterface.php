@@ -2,6 +2,9 @@
 
 namespace Spin\Core;
 
+use \Spin\Cache\AbstractCacheAdapter;
+use \Spin\Cache\AbstractCacheAdapterInterface;
+
 interface CacheManagerInterface
 {
   /**
@@ -29,7 +32,7 @@ interface CacheManagerInterface
    * @param [type] $cache [description]
    * @return  connection
    */
-  public function addCache(AbstractCacheDriverInterface $cache);
+  public function addCache(AbstractCacheAdapterInterface $cache);
 
   /**
    * Remove a cache from the pool

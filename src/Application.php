@@ -9,6 +9,7 @@ use \Spin\Core\Config;
 use \Spin\Core\Logger;
 use \Spin\Core\RouteGroup;
 use \Spin\Core\ConnectionManager;
+use \Spin\Core\CacheManager;
 
 use Psr\Http\Message\Response;
 
@@ -99,16 +100,18 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->appPath = $this->basePath . DIRECTORY_SEPARATOR . 'app';
       $this->storagePath = $this->basePath . DIRECTORY_SEPARATOR . 'storage';
 
-      # Create objects
+      # Create confog
       $this->config = new Config( $this->appPath, $this->environment );
-      $this->logger = new Logger( $this->getAppCode(), $this->config->get('logger') );
-
-      # Set error handlers to use Logger component
-      $this->setErrorHandlers();
 
       # Set Timezone - default to UTC
       $timeZone = $this->getConfig()->get('application.global.timezone', 'UTC');
       date_default_timezone_set($timeZone);
+
+      # Create logger
+      $this->logger = new Logger( $this->getAppCode(), $this->config->get('logger') );
+
+      # Set error handlers to use Logger component
+      $this->setErrorHandlers();
 
     } catch (\Exception $e) {
       $this->getLogger()->critical('Failed to create core objectes',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
@@ -143,9 +146,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     try {
       # Create Cache Manager
       $this->cacheManager = new CacheManager();
+      $this->getLogger()->debug('CacheManager created',['manager'=>$this->cacheManager]);
 
       # Create Connection Manager
       $this->connectionManager = new ConnectionManager();
+      $this->getLogger()->debug('ConnectionManager created',['manager'=>$this->connectionManager]);
 
       # HTTP Factories
       $this->request = $this->httpServerRequestFactory->createServerRequestFromArray($serverRequest ?? $_SERVER);
@@ -154,6 +159,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Container
       $this->containerFactory = $this->loadFactory( $this->config->get('factories.container') );
       $this->container = $this->containerFactory->createContainer();
+
       # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
       container('requestId', md5((string)microtime(true)));
 
@@ -222,14 +228,14 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         $this->afterMiddleware = ($routesFile['common']['after'] ?? []);
 
       } else {
-        throw new Exception('Invalid JSON file "'.$filename.'"');
+        throw new \Exception('Invalid routes file',['file'=>$filename]);
 
       }
 
       # Debug log
       $this->getLogger()->debug('Loaded routes',['file'=>$filename]);
 
-      return true; // routes added
+      return true; // routes loaded
 
     } else {
       # Log
@@ -372,11 +378,17 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         // $ok = $this->runHooks('OnAfterRequest');
 
         return $result;
-      }
+
+      } // if count() ...
 
     } // foreach routeGroup
 
-    return false;
+    ##
+    ## No route matched the request ?!
+    ##
+    $this->getLogger()->notice('No route matched the request',['path'=>$path]);
+
+    return response('',404);
   }
 
   /**
@@ -391,7 +403,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   protected function loadFactory(?array $params=[])
   {
     if (is_array($params) && !empty($params['class']) && class_exists($params['class'])) {
-      return new $params['class']($params['options'] ?? array());
+      $factory = new $params['class']($params['options'] ?? array());
+      $this->getLogger()->debug('Factory created',['factory'=>$factory]);
+
+      return $factory;
+    } else {
+      $this->getLogger()->error('Factory not found',['params'=>$params]);
+
     }
 
     return null;
@@ -410,6 +428,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     # set to the user defined error handler
     $old_error_handler = set_error_handler(array($this,'errorHandler'), E_ALL);
     $old_exception_handler = set_exception_handler(array($this,'exceptionHandler'));
+
+    $this->getLogger()->debug('Error handlers set');
 
     return true;
   }
@@ -493,7 +513,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function exceptionHandler($exception)
   {
-    if (!is_null($this->response)) {
+    if (!is_null($this->getResponse())) {
       # Set 500 error code as well as something unexpected happened
       $response = $this->getResponse()->withStatus(500);
 
@@ -754,13 +774,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   public function sendResponse()
   {
     # Set HTTP Response Code
-    http_response_code($this->response->getStatusCode());
-
-    # Debug log
-    logger()->debug('Sending headers',$this->response->getHeaders());
+    http_response_code($this->getResponse()->getStatusCode());
 
     # Set All HTTP headers from Response Object
-    foreach ($this->response->getHeaders() as $header => $value) {
+    foreach ($this->getResponse()->getHeaders() as $header => $value) {
       if (is_array($value)) {
         $values = implode(';',$value);
       } else {
@@ -783,7 +800,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       if (file_exists($this->responseFile)) {
         # Debug log
-        $this->getLogger()->debug('Sending file',['file'=>$this->responseFile]);
+        $this->getLogger()->debug('Sending file',[
+          'code'=>$this->getResponse()->getStatusCode(),
+          'headers'=>$this->getResponse()->getHeaders(),
+          'file'=>$this->responseFile
+        ]);
 
         # Send the file
         readfile($this->responseFile);
@@ -799,13 +820,18 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       }
 
     } else {
+      # Get body
+      $body = (string)$this->response->getBody();
+
       # Debug log
-      $this->getLogger()->debug('Sending body',[]);
+      $this->getLogger()->debug('Sending body',[
+        'code'=>$this->getResponse()->getStatusCode(),
+        'headers'=>$this->getResponse()->getHeaders(),
+        'size'=>strlen($body)
+      ]);
 
       # Send the Body
-      $body = (string)$this->response->getBody();
       echo $body;
-
     }
 
     return $this;
