@@ -3,15 +3,15 @@
 /**
  * CacheManager
  *
- * Manages all Cache integrations
+ * Manager for Cache integrations
  */
 
 /*
 Example:
-  # Get 1st available Cache listed, and get 'key' from it
+  # Use 1st available Cache listed, and get 'key' from it
   $value = cache()->get('key');
 
-  # Get 'remote.redis' cache, and get 'key' from it
+  # Use 'remote.redis' cache, and get 'key' from it
   $value = cache('remote.redis')->get('key');
 */
 
@@ -19,8 +19,8 @@ namespace Spin\Core;
 
 use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\CacheManagerInterface;
-use \Spin\Cache\AbstractCacheDriver;
-use \Spin\Cache\AbstractCacheDriverInterface;
+use \Spin\Cache\AbstractCacheAdapter;
+use \Spin\Cache\AbstractCacheAdapterInterface;
 
 class CacheManager extends AbstractBaseClass implements CacheManagerInterface
 {
@@ -35,19 +35,19 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    */
   public function getCache(string $name=null)
   {
-    # Find the connection (if we already have it created)
-    $connection = $this->findCache($name);
+    # Find the cache (if we already have it created)
+    $cache = $this->findCache($name);
 
-    if (is_null($connection)) {
-      # Attempt to create the connection
-      $connection = $this->createCache($name);
+    if (is_null($cache)) {
+      # Attempt to create the cache
+      $cache = $this->createCache($name);
 
-      if (!is_null($connection)) {
-        $this->addCache($connection);
+      if (!is_null($cache)) {
+        $this->addCache($cache);
       }
     }
 
-    return $connection;
+    return $cache;
   }
 
   /**
@@ -80,7 +80,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    * @param [type] $cache [description]
    * @return  connection
    */
-  public function addCache(AbstractCacheDriverInterface $cache)
+  public function addCache(AbstractCacheAdapterInterface $cache)
   {
     $this->caches[strtolower($cache->getName())] = $cache;
 
@@ -110,14 +110,14 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
   }
 
   /**
-   * Creates a cahce based on the $name
+   * Creates a cache based on the $name
    *
    * Finds the corresponding name in the config and uses it
-   * to instanciate a cache. If the £name is empty, we will use
-   * the 1st available record in the caches list.
+   * to instanciate a cache. If the $name is empty, we will use
+   * the 1st available in the caches list.
    *
    * @param  string $name [description]
-   * @return null | PdoConnection
+   * @return null | AbstractCacheAdapter
    */
   protected function createCache(string $name)
   {
