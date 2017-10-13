@@ -3,14 +3,17 @@
 Spin is a application framework for making Web UI's and REST API's quickly and effectively with PHP. It uses [PSR standards](http://www.php-fig.org/psr/)
 for most things, and allows for plugging in almost any PSR compatible component, such as loggers, HTTP libraries etc.
 
-NOTE: This framework is in ALPHA stage - Not ready for production
+```txt
+    NOTE: This framework is in ALPHA stage - Not ready for production
+```
 
 # Features
 * PHP 7.1+
-* Composer driven in all components
-* Controller->Model->View support (template engines, [Plates](http://platesphp.com/) by default)
-* PDO based DB connections
-* DAO classes for DB Entity representation
+* Platform agnostic. (Tested: Windows, Linux, Unix)
+* Composer driven in all packages/extensions
+* Template Engine support (skeleton uses [Plates](http://platesphp.com/) by default)
+* PDO based DB connections (MySql,Oracle,CockroachDb,Firebird,Sqlite ...)
+* DAO base classes for DB Entity representation
 
 ## PSR based integrations
 * Logger (PSR-3) Defaults to [Monolog](https://github.com/Seldaek/monolog).
