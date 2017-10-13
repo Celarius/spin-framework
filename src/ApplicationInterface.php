@@ -21,6 +21,17 @@ interface ApplicationInterface
   function run(array $serverRequest=null): bool;
 
   /**
+   * Execute the HandlerMethod of one of the Error Controllers
+   * defined in rotues-{env].json}
+   *
+   * @param  string      $body     An optional body to send if $httpCode handler not found
+   * @param  int|integer $httpCode HTTP response code to run controller for
+   *
+   * @return Response
+   */
+  function runErrorController(string $body, int $httpCode=400);
+
+  /**
    * Error Handler
    *
    * Handles all errors from the code. This is set as the default

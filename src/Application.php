@@ -80,6 +80,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var Object DB Connections manager */
   protected $connectionManager;
 
+  /** @var array Error Controllers, key=http code, value=Controller class[@handler] */
+  protected $errorControllers;
 
   /**
    * Constructor
@@ -211,6 +213,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $routesFile = json_decode( file_get_contents($filename), true );
 
       if ($routesFile) {
+
+        # Take the GROUPS section
         $routeGroups = $routesFile['groups'] ?? [];
 
         # Add each RouteGroup
@@ -226,6 +230,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         # Common Middlewares
         $this->beforeMiddleware = ($routesFile['common']['before'] ?? []);
         $this->afterMiddleware = ($routesFile['common']['after'] ?? []);
+
+        # Error controllers
+        $this->errorControllers = $routesFile['errors'];
+
 
       } else {
         throw new \Exception('Invalid routes file',['file'=>$filename]);
@@ -308,7 +316,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         }
 
         #
-        # Create & Run the Handler Class - If the Before Middlewares where ok!
+        # Create & Run the Controller Class - If the Before Middlewares where ok!
         #
         if ($beforeResult) {
           # Extract class & method
@@ -388,7 +396,68 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     ##
     $this->getLogger()->notice('No route matched the request',['path'=>$path]);
 
-    return response('',404);
+    ##
+    ## Try to load the "errors" controllers in the routes-{env}.json file
+    ## and run the appropriate HTTP Code controller. If not found
+    #W we will try to load the 4xx or 5xx generic controller (if defined)
+    ##
+
+    return $this->runErrorController('', 404);
+  }
+
+  /**
+   * Execute the HandlerMethod of one of the Error Controllers
+   * defined in rotues-{env].json}
+   *
+   * @param  string      $body     An optional body to send if $httpCode handler not found
+   * @param  int|integer $httpCode HTTP response code to run controller for
+   *
+   * @return Response
+   */
+  public function runErrorController(string $body, int $httpCode=400)
+  {
+    $class = '';
+
+    # Determine the Controller Class to run
+    if (array_key_exists($httpCode, $this->errorControllers)) {
+      $class = $this->errorControllers[$httpCode];
+    } else {
+      if ($httpCode>=400 && $httpCode<500) {
+        $class = $this->errorControllers['4xx'] ?? '';
+      } else
+      if ($httpCode>=400 && $httpCode<500) {
+        $class = $this->errorControllers['5xx'] ?? '';
+      }
+    }
+
+    if (!empty($class)) {
+      # Extract class & method
+      $arr = explode('@',$class);
+      $handlerClass = $arr[0];
+      $handlerMethod = ($arr[1] ?? 'handle');
+
+      if (class_exists($handlerClass)) {
+        # Create the class
+        $routeHandler = new $class();
+
+        if ($routeHandler) {
+          # Initialize
+          $routeHandler->initialize();
+
+          # Run Controller's method
+          return $routeHandler->$handlerMethod();
+
+        } else {
+          logger()->error('Failed to create error controller',['class'=>$handlerClass]);
+        }
+
+      } else {
+        logger()->error('Error controller class does not exist',['class'=>$handlerClass]);
+      }
+    }
+
+    # Return a generic empty HTTP response with the $httpCode
+    return response('',$httpCode);
   }
 
   /**
