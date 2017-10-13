@@ -5,7 +5,7 @@
 
 # Spin - A super lightweight PHP UI/REST framework
 [![Latest Unstable Version](https://poser.pugx.org/celarius/spin-framework/v/unstable)](https://packagist.org/packages/celarius/spin-framework)
-[![Build Status](https://travis-ci.org/Celarius/nofuzz-framework.svg)](https://travis-ci.org/celarius/spin-framework)
+[![Build Status](https://travis-ci.org/Celarius/spin-framework.svg)](https://travis-ci.org/celarius/spin-framework)
 
 Spin is a application framework for making Web UI's and REST API's quickly and effectively with PHP. It uses [PSR standards](http://www.php-fig.org/psr/)
 for most things, and allows for plugging in almost any PSR compatible component, such as loggers, HTTP libraries etc.
