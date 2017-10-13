@@ -22,10 +22,14 @@ NOTE: This framework is in ALPHA stage - Not ready for production
 * HTTP Factories (PSR-17)
 
 # Installation
-To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in tha created folder.
-
 Installing spin-framework as standalone with composer:
-`composer require celarius/spin-framework`
+```bash
+$ composer require celarius/spin-framework
+```
+
+## Using the "spin-skeleton"
+To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example configs, routes, controllers and many other things.
+
 
 # Request lifecycle
 
