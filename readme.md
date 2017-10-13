@@ -13,13 +13,19 @@ NOTE: This framework is in ALPHA stage - Not ready for production
 * DAO classes for DB Entity representation
 
 ## PSR based integrations
-* Logger (PSR-3) Defaults to Monolog.
+* Logger (PSR-3) Defaults to [Monolog](https://github.com/Seldaek/monolog).
 * Huggable (PSR-8)
-* HTTP Message (PSR-7). Defaults to Guzzle
-* Container (PSR-11). Defaults to The Leauge Container
+* HTTP Message (PSR-7). Defaults to [Guzzle](https://github.com/guzzle/guzzle)
+* Container (PSR-11). Defaults to [The Leauge Container](http://container.thephpleague.com/)
 * Events (PSR-14).
-* SimpleCache (PSR-16). Defaults to APCu SimpleCache (in memory)
+* SimpleCache (PSR-16). Defaults to APCu SimpleCache
 * HTTP Factories (PSR-17)
+
+# Installation
+To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in tha created folder.
+
+Installing spin-framework as standalone with composer:
+`composer require celarius/spin-framework`
 
 # Request lifecycle
 
