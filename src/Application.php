@@ -124,9 +124,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->afterMiddleware = array();
 
     # Initialize Objects
-    $this->httpServerRequestFactory = $this->loadFactory( $this->config->get('factories.http.serverRequest') );
-    $this->httpResponseFactory = $this->loadFactory( $this->config->get('factories.http.response') );
-    $this->httpStreamFactory = $this->loadFactory( $this->config->get('factories.http.stream') );
+    $this->httpServerRequestFactory = $this->loadFactory( ($this->config->get('factories.http.serverRequest') ?? '\\Spin\\Factories\\Http\\ServerRequestFactory') );
+    $this->httpResponseFactory = $this->loadFactory( ($this->config->get('factories.http.response') ?? '\\Spin\\Factories\\Http\\ResponseFactory') );
+    $this->httpStreamFactory = $this->loadFactory( ($this->config->get('factories.http.stream') ?? '\\Spin\\Factories\\Http\\StreamFactory') );
     $this->containerFactory = null;
     $this->request = null;
     $this->response = null;
@@ -157,7 +157,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->response = $this->httpResponseFactory->createResponse(404);
 
       # Container
-      $this->containerFactory = $this->loadFactory( $this->config->get('factories.container') );
+      $this->containerFactory = $this->loadFactory( ($this->config->get('factories.container') ?? '\\Spin\\Factories\\ContainerFactory') );
       $this->container = $this->containerFactory->createContainer();
 
       # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
@@ -403,7 +403,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   protected function loadFactory(?array $params=[])
   {
     if (is_array($params) && !empty($params['class']) && class_exists($params['class'])) {
-      $factory = new $params['class']($params['options'] ?? array());
+      $factory = new $params['class']($params['options'] ?? []);
       $this->getLogger()->debug('Factory created',['factory'=>$factory]);
 
       return $factory;
