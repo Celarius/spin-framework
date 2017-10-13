@@ -1,4 +1,10 @@
-# Spin - A PHP UI/REST framework
+# Spin - A super lightweight PHP UI/REST framework
+
+
+[![Total Downloads](https://poser.pugx.org/nofuzz/framework/downloads)](https://packagist.org/packages/celarius/spin-framework)
+[![License](https://poser.pugx.org/nofuzz/framework/license)](https://packagist.org/packages/celarius/spin-framework)
+[![Build Status](https://travis-ci.org/Celarius/nofuzz-framework.svg)](https://travis-ci.org/celarius/spin-framework)
+[![PHP7 Ready](https://img.shields.io/badge/PHP7-ready-green.svg)](https://packagist.org/packages/celarius/spin-framework)
 
 Spin is a application framework for making Web UI's and REST API's quickly and effectively with PHP. It uses [PSR standards](http://www.php-fig.org/psr/)
 for most things, and allows for plugging in almost any PSR compatible component, such as loggers, HTTP libraries etc.
@@ -27,7 +33,7 @@ for most things, and allows for plugging in almost any PSR compatible component,
 # Installation
 Installing spin-framework as standalone with composer:
 ```bash
-$ composer require celarius/spin-framework
+> composer require celarius/spin-framework
 ```
 
 ## Using the "spin-skeleton"
