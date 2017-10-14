@@ -232,7 +232,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         $this->afterMiddleware = ($routesFile['common']['after'] ?? []);
 
         # Error controllers
-        $this->errorControllers = $routesFile['errors'];
+        $this->errorControllers = $routesFile['errors'] ?? [];
 
 
       } else {
