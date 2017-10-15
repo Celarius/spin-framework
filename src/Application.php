@@ -234,9 +234,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         # Error controllers
         $this->errorControllers = $routesFile['errors'] ?? [];
 
-
       } else {
-        throw new \Exception('Invalid routes file',['file'=>$filename]);
+        throw new Exception('Invalid routes file',['file'=>$filename]);
 
       }
 
@@ -577,20 +576,20 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * Handles any Exceptions from the application. This is set as the
    * default exception handler for all exceptions.
    *
-   * @param  [type] $exception [description]
-   * @return [type]            [description]
+   * @param   Object $exception [description]
+   * @return  null
    */
   public function exceptionHandler($exception)
   {
     if (!is_null($this->getResponse())) {
-      # Set 500 error code as well as something unexpected happened
-      $response = $this->getResponse()->withStatus(500);
+      # Run the Error Controller
+      $response = runErrorController(string $body, int $httpCode=500);
 
       # Set the error response
       $this->setResponse($response);
     } else {
       # Set HTTP Response Code - we dont even have a response object yet ..
-      http_response_code(404);
+      http_response_code(500);
 
     }
 
@@ -600,6 +599,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
             $exception->getTrace()
           );
+
+    return null;
   }
 
   /**
