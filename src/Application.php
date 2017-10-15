@@ -583,7 +583,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   {
     if (!is_null($this->getResponse())) {
       # Run the Error Controller
-      $response = $this->runErrorController(string $body, int $httpCode=500);
+      $response = $this->runErrorController('',500);
 
       # Set the error response
       $this->setResponse($response);
