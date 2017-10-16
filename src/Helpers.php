@@ -300,7 +300,7 @@ if (!function_exists('cookieParams')) {
   }
 }
 
-if (!function_exists('cookieParams')) {
+if (!function_exists('cookie')) {
   /**
    * Get/Set Cookies depending on values
    *
