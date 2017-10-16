@@ -15,22 +15,21 @@ for most things, and allows for plugging in almost any PSR compatible component,
 ```
 
 # Table of Contents
-<!-- MarkdownTOC bracket="round" lowercase="true" autolink="true" -->
+<!-- MarkdownTOC list_bullets=" " bracket="round" lowercase="true" autolink="true" indent="" -->
 
-- [1. Features](#1-features)
-  - [1.1. PSR based integrations](#11-psr-based-integrations)
-- [2. Installation](#2-installation)
-  - [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
-- [2.2. folder structure](#22-folder-structure)
-- [3. Technical Details](#3-technical-details)
-  - [3.1. Helper functions](#31-helper-functions)
-  - [3.2. Request lifecycle](#32-request-lifecycle)
-- [4. Using Template Engines](#4-using-template-engines)
-  - [4.1. Twig](#41-twig)
-  - [4.2. Plates](#42-plates)
+  [1. Features](#1-features)
+  [1.1. PSR based integrations](#11-psr-based-integrations)
+  [2. Installation](#2-installation)
+  [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
+  [2.2. Folder structure](#22-folder-structure)
+  [3. Technical Details](#3-technical-details)
+  [3.1. Helper functions](#31-helper-functions)
+  [3.2. Request lifecycle](#32-request-lifecycle)
+  [4. Using Template Engines](#4-using-template-engines)
+  [4.1. Twig](#41-twig)
+  [4.2. Plates](#42-plates)
 
 <!-- /MarkdownTOC -->
-
 
 # 1. Features
 * PHP 7.1+
@@ -58,7 +57,7 @@ Installing spin-framework as standalone with composer:
 ## 2.1. Using the spin-skeleton
 To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example configs, routes, controllers and many other things.
 
-# 2.2. folder structure
+# 2.2. Folder structure
 ```txt
 /<AppName>
   /src
