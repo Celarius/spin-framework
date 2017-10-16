@@ -15,17 +15,17 @@ for most things, and allows for plugging in almost any PSR compatible component,
 ```
 
 # Table of Contents
-- 1. [Features](#1-features)
-  - 1.1. [PSR based integrations](#1-1psr-based-integrations)
-- 2. [Installation](#2-installation)
-  - 2.1. [Using the "spin-skeleton"](#using-the-"spin-skeleton")
-- 3. [Technical Details](#technical-details)
-  - 3.1. [Helper functions](#helper-functions)
-  - 3.2. [Request lifecycle](#request-lifecycle)
-- 4. [Skeleton application folder structure](#skeleton-application-folder structure)
-- 5. [Using Template Engines](#using-template-engines)
-  - 5.1. [Twig](#twig)
-  - 5.2. [Plates](#plates)
+- [1. Features](#1-features)
+  - [1.1 PSR based integrations](#1-1-psr-based-integrations)
+- [2. Installation](#2-installation)
+  - [2.1. Using the "spin-skeleton"](#2-1-using-the-spin-skeleton)
+- [3. Technical Details](#3-technical-details)
+  - [3.1. Helper functions](#3-1-helper-functions)
+  - [3.2. Request lifecycle](#3-2-request-lifecycle)
+- [4. Skeleton application folder structure](#4-skeleton-application-folder structure)
+- [5. Using Template Engines](#5-using-template-engines)
+  - [5.1. Twig](#5-1-twig)
+  - [5.2. Plates](#5-2-plates)
 
 # 1. Features
 * PHP 7.1+
