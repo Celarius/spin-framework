@@ -8,11 +8,11 @@ use \Spin\Core\Hook;
 
 class HookManager extends AbstractBaseClass implements HookManagerInterface
 {
-  /** List of HOOK NAME constants */
+  /** List of HOOK constants */
   const ON_BEFORE_REQUEST = 1;
   const ON_AFTER_REQUEST = 2;
 
-  /** @var array      List of installed Hook objects */
+  /** @var array      List of loaded Hook objects */
   protected $hooks;
 
   /** Constructor */
@@ -21,7 +21,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
     parent::__construct();
 
     # Create list for hook objects
-    $this->hooks = new \SplObjectStorage();
+    $this->hooks = [];
   }
 
   /**
@@ -32,11 +32,8 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
    */
   public function getHook(string $name): Hook
   {
-    $this->hooks->rewind();
-
-    while($this->hooks->valid()) {
-      $hook = $this->hooks->current();
-
+    foreach ($this->hooks as $hook)
+    {
       if (strcasecmp($name,$hook->getName()==0)) {
         return $hook;
       }
@@ -49,17 +46,43 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
    * Add a Hook by $name
    *
    * @param  mixed  $hook
-   * @return bool
+   * @return self
    */
-  public function addHook(Hook $hook): bool
+  public function addHook(Hook $hook)
   {
+    # Attempt to find it first
     $exists = $this->getHook($hook->getName());
 
+    # If it exists, return with null
     if (!is_null($exists)) {
       return false;
     }
 
-    $this->hooks->attach($)
+    # Add it to the list
+    $this->hooks[$hook];
+
+    return $this;
+  }
+
+  /**
+   * Remove a Hook by $name
+   *
+   * @param  string $name Hook Name
+   * @return bool
+   */
+  public function removeHook(string $name): bool
+  {
+    foreach ($this->hooks as $idx => $hook)
+    {
+      if (strcasecmp($name,$hook->getName()==0)) {
+        # Remove it
+        unset( $this->hooks[$idx] );
+
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }
