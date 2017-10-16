@@ -112,7 +112,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       date_default_timezone_set($timeZone);
 
       # Create logger
-      $this->logger = new Logger( $this->getAppCode(), $this->config->get('logger') );
+      $this->logger = new Logger( $this->getAppCode(), $this->getConfig()->get('logger') );
 
       # Set error handlers to use Logger component
       $this->setErrorHandlers();
@@ -128,9 +128,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->afterMiddleware = array();
 
     # Initialize Objects
-    $this->httpServerRequestFactory = $this->loadFactory( ($this->config->get('factories.http.serverRequest') ?? '\\Spin\\Factories\\Http\\ServerRequestFactory') );
-    $this->httpResponseFactory = $this->loadFactory( ($this->config->get('factories.http.response') ?? '\\Spin\\Factories\\Http\\ResponseFactory') );
-    $this->httpStreamFactory = $this->loadFactory( ($this->config->get('factories.http.stream') ?? '\\Spin\\Factories\\Http\\StreamFactory') );
+    $this->httpServerRequestFactory = $this->loadFactory( ($this->getConfig()->get('factories.http.serverRequest') ?? '\\Spin\\Factories\\Http\\ServerRequestFactory') );
+    $this->httpResponseFactory = $this->loadFactory( ($this->getConfig()->get('factories.http.response') ?? '\\Spin\\Factories\\Http\\ResponseFactory') );
+    $this->httpStreamFactory = $this->loadFactory( ($this->getConfig()->get('factories.http.stream') ?? '\\Spin\\Factories\\Http\\StreamFactory') );
     $this->containerFactory = null;
     $this->request = null;
     $this->response = null;
@@ -161,7 +161,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->response = $this->httpResponseFactory->createResponse(404);
 
       # Container
-      $this->containerFactory = $this->loadFactory( ($this->config->get('factories.container') ?? '\\Spin\\Factories\\ContainerFactory') );
+      $this->containerFactory = $this->loadFactory( ($this->getConfig()->get('factories.container') ?? '\\Spin\\Factories\\ContainerFactory') );
       $this->container = $this->containerFactory->createContainer();
 
       # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
@@ -690,7 +690,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function getAppName(): string
   {
-    return $this->config->get('application.name','');
+    return $this->getConfig()->get('application.name','');
   }
 
   /**
@@ -700,7 +700,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function getAppCode(): string
   {
-    return $this->config->get('application.code','');
+    return $this->getConfig()->get('application.code','');
   }
 
   /**
@@ -710,7 +710,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function getAppVersion(): string
   {
-    return $this->config->get('application.version','');
+    return $this->getConfig()->get('application.version','');
   }
 
   /**

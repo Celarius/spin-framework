@@ -66,7 +66,7 @@ $val = app('code'); // retreive the Application code
 ```
 
 ### config()
-The `config()` function is used to retreive the currently loaded config, or a specific config key (or array). If the additional `$value` parameter is given the config `$key` is set to that value.
+The `config()` function is used to retreive the config object, or to get/set a specific config key (or array). If the additional `$value` parameter is given the config `$key` is set to that value.
 *Note that the key name is a dot notation. Example: "application.maintenance" gives maintenance key in application array*
 ```php
 function config(string $key=null, string $value=null)
