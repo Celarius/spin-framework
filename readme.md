@@ -14,7 +14,24 @@ for most things, and allows for plugging in almost any PSR compatible component,
     NOTE: This framework is in ALPHA stage - Not ready for production
 ```
 
-# Features
+# Table of Contents
+<!-- MarkdownTOC -->
+
+- 1. Features
+  - 1-1. PSR based integrations
+- 2. Installation
+  - 2-1. Using the "spin-skeleton"
+- 3. Technical Details
+  - 3-1. Helper functions
+  - 3-2. Request lifecycle
+- 4. Skeleton application folder structure
+- 5. Using Template Engines
+  - 5-1. Twig
+  - 5-2. Plates
+
+<!-- /MarkdownTOC -->
+
+# 1. Features
 * PHP 7.1+
 * Platform agnostic. (Tested: Windows, Linux, Unix)
 * Composer driven in all packages/extensions
@@ -22,7 +39,7 @@ for most things, and allows for plugging in almost any PSR compatible component,
 * PDO based DB connections (MySql,Oracle,CockroachDb,Firebird,Sqlite ...)
 * DAO base classes for DB Entity representation
 
-## PSR based integrations
+## 1-1. PSR based integrations
 * Logger (PSR-3) Defaults to [Monolog](https://github.com/Seldaek/monolog).
 * Huggable (PSR-8)
 * HTTP Message (PSR-7). Defaults to [Guzzle](https://github.com/guzzle/guzzle)
@@ -31,23 +48,23 @@ for most things, and allows for plugging in almost any PSR compatible component,
 * SimpleCache (PSR-16). Defaults to APCu SimpleCache
 * HTTP Factories (PSR-17)
 
-# Installation
+# 2. Installation
 Installing spin-framework as standalone with composer:
 ```bash
 > composer require celarius/spin-framework
 ```
 
-## Using the "spin-skeleton"
+## 2-1. Using the "spin-skeleton"
 To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example configs, routes, controllers and many other things.
 
 
 
 
-# Technical Details
-## Helper functions
+# 3. Technical Details
+## 3-1. Helper functions
 The following is a list of helper functions available as global functions.
 
-### env()
+### 3-1-1. env()
 The `env()` function is used to retreive an environment variable from the underlaying OS.
 ```php
 function env(string $var, $default=null)
@@ -56,7 +73,7 @@ function env(string $var, $default=null)
 $var = env('ENVIRONMENT');
 ```
 
-### app()
+### 3-1-2. app()
 The `app()` function is used to retreive the instance of the global application variable. The optional `$property` parameter is used to retreive an application property from the $app object.
 ```php
 function app(string $property=null)
@@ -65,7 +82,7 @@ function app(string $property=null)
 $val = app('code');
 ```
 
-### config()
+### 3-1-3. config()
 The `config()` function is used to retreive the config object, or to get/set a specific config key (or array). If the additional `$value` parameter is given the config `$key` is set to that value.
 
 *Note that the key name is a dot notation. Example: "application.maintenance" gives maintenance key in application array*
@@ -76,7 +93,7 @@ function config(string $key=null, string $value=null)
 $val = config('application.maintenance');
 ```
 
-### container()
+### 3-1-4. container()
 The `container()` function is used to retreive the container object, or to get/set a specific container key. 
 
 If the additional `$id` parameter is given the container item with `$key` is returned.
@@ -95,7 +112,7 @@ container('MySuperFunc', function() {
 container('MySuperFunc');
 ```
 
-### logger()
+### 3-1-5. logger()
 The `logger()` function is used to access the (PSR-3)[http://www.php-fig.org/psr/psr-3/] logger object.
 ```php
 function logger()
@@ -104,7 +121,7 @@ function logger()
 logger()->critical('Something bad has happened', ['details'=>'Encountered mystic radiation']);
 ```
 
-### db()
+### 3-1-6. db()
 The `db()` function is used to access one of the defined connections.
 
 *Note: If the $connectionName is not given, the 1st connection in the list of connections is used*
@@ -115,7 +132,7 @@ function db(string $connectionName='')
 $rows = db()->rawQuery('SELECT * FROM table WHERE field = :value',['value'=>123]);
 ```
 
-### cache()
+### 3-1-7. cache()
 The `cache()` function is used to access one of the defined caches. The caches are shared between connections, regardless of the driver.
 
 *Note: If the $driverName is not given, the 1st connection in the list of connections is used*
@@ -130,7 +147,7 @@ cache('APCU')->set('key1',1234);
 $value = cache('APCU')->get('key1');
 ```
 
-### getRequest()
+### 3-1-8. getRequest()
 The `getRequest()` function is used to access the (PSR-7)[http://www.php-fig.org/psr/psr-7/] HTTP ServerRequest object
 
 ```php
@@ -140,7 +157,7 @@ function getRequest()
 $request = getRequest();
 ```
 
-### getResponse()
+### 3-1-9. getResponse()
 The `getResponse()` function is used to access the (PSR-7)[http://www.php-fig.org/psr/psr-7/] HTTP Response object
 
 ```php
@@ -151,7 +168,7 @@ $request = getResponse();
 ```
 
 
-## Request lifecycle
+## 3-2. Request lifecycle
   1.  Receive request from Client browser to Apache
   2.  Apache loads PHP and runs "bootstrap.php"
   3.  "bootstrap.php" creates $app = new Spin();
@@ -190,7 +207,7 @@ $request = getResponse();
 
   6.  Send response to Client
 
-# Skeleton application folder structure
+# 4. Skeleton application folder structure
 
 ```txt
 /<AppName>
@@ -215,8 +232,8 @@ $request = getResponse();
   /tests
 ```
 
-# Using Template Engines
-## Twig
+# 5. Using Template Engines
+## 5-1. Twig
 
   https://twig.symfony.com/doc/2.x/api.html
 
@@ -241,7 +258,7 @@ $request = getResponse();
   response($html);
 ```
 
-## Plates
+## 5-2. Plates
 
 If the users controller extends from the `AbstractController` in the skeleton then the [Plates](http://platesphp.com/) template engine is initialized
 with necessary basics, and enables the user to use it very easily:
