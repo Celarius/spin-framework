@@ -136,6 +136,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->response = null;
     $this->responseFile = '';
     $this->container = null;
+    $this->cookies = [];
   }
 
   /**
@@ -894,7 +895,14 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
     # Set Cookies
     foreach ($this->cookies as $cookie) {
-      setCookie( $cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'] );
+      setCookie( $cookie['name'],
+                 $cookie['value'],
+                 $cookie['expires'],
+                 $cookie['path'],
+                 $cookie['domain'],
+                 $cookie['secure'],
+                 $cookie['httponly']
+               );
     }
 
     ##
