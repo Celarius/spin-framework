@@ -41,8 +41,41 @@ Installing spin-framework as standalone with composer:
 To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example configs, routes, controllers and many other things.
 
 
-# Request lifecycle
 
+
+# Technical Details
+## Helper functions
+The following is a list of helper functions available as global functions.
+
+### env()
+The `env()` function is used to retreive an environment variable from the underlaying OS.
+```php
+function env(string $var, $default=null)
+```
+```php
+$var = env('ENVIRONMENT'); // retreive the ENVIRONMENT variable
+```
+
+### app()
+The `app()` function is used to retreive the instance of the global application variable. The optional `$property` parameter is used to retreive an application property from the $app object.
+```php
+function app(string $property=null)
+```
+```php
+$val = app('code'); // retreive the Application code
+```
+
+### config()
+The `config()` function is used to retreive the currently loaded config, or a specific config key (or array). If the additional `$value` parameter is given the config `$key` is set to that value.
+*Note that the key name is a dot notation. Example: "application.maintenance" gives maintenance key in application array*
+```php
+function config(string $key=null, string $value=null)
+```
+```php
+$val = config('application.maintenance'); // retreive the Application code
+```
+
+## Request lifecycle
   1.  Receive request from Client browser to Apache
   2.  Apache loads PHP and runs "bootstrap.php"
   3.  "bootstrap.php" creates $app = new Spin();
