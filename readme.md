@@ -53,7 +53,7 @@ The `env()` function is used to retreive an environment variable from the underl
 function env(string $var, $default=null)
 ```
 ```php
-$var = env('ENVIRONMENT'); // retreive the ENVIRONMENT variable
+$var = env('ENVIRONMENT');
 ```
 
 ### app()
@@ -62,18 +62,94 @@ The `app()` function is used to retreive the instance of the global application 
 function app(string $property=null)
 ```
 ```php
-$val = app('code'); // retreive the Application code
+$val = app('code');
 ```
 
 ### config()
 The `config()` function is used to retreive the config object, or to get/set a specific config key (or array). If the additional `$value` parameter is given the config `$key` is set to that value.
+
 *Note that the key name is a dot notation. Example: "application.maintenance" gives maintenance key in application array*
 ```php
 function config(string $key=null, string $value=null)
 ```
 ```php
-$val = config('application.maintenance'); // retreive the Application code
+$val = config('application.maintenance');
 ```
+
+## container()
+The `container()` function is used to retreive the container object, or to get/set a specific container key. 
+
+If the additional `$id` parameter is given the container item with `$key` is returned.
+
+If the additional `$value` parameter is given the container item with `$key` is set to the `$value`. This can be any valid variable, even callables.
+```php
+function container(string $id=null, $value=null)
+```
+```php
+container('MySuperFunc', function() {
+  // do something in the Super Function
+}
+);
+
+# Call the defined callable
+container('MySuperFunc');
+```
+
+### logger()
+The `logger()` function is used to access the (PSR-3)[http://www.php-fig.org/psr/psr-3/] logger object.
+```php
+function logger()
+```
+```php
+logger()->critical('Something bad has happened', ['details'=>'Encountered mystic radiation']);
+```
+
+## db()
+The `db()` function is used to access one of the defined connections.
+
+*Note: If the $connectionName is not given, the 1st connection in the list of connections is used*
+```php
+function db(string $connectionName='')
+```
+```php
+$rows = db()->rawQuery('SELECT * FROM table WHERE field = :value',['value'=>123]);
+```
+
+## cache()
+The `cache()` function is used to access one of the defined caches. The caches are shared between connections, regardless of the driver.
+
+*Note: If the $driverName is not given, the 1st connection in the list of connections is used*
+```php
+function cache(string $driverName='')
+```
+```php
+# Set a value
+cache('APCU')->set('key1',1234);
+
+# Get a value
+$value = cache('APCU')->get('key1');
+```
+
+## getRequest()
+The `getRequest()` function is used to access the (PSR-7)[http://www.php-fig.org/psr/psr-7/] HTTP ServerRequest object
+
+```php
+function getRequest()
+```
+```php
+$request = getRequest();
+```
+
+## getResponse()
+The `getResponse()` function is used to access the (PSR-7)[http://www.php-fig.org/psr/psr-7/] HTTP Response object
+
+```php
+function getResponse()
+```
+```php
+$request = getResponse();
+```
+
 
 ## Request lifecycle
   1.  Receive request from Client browser to Apache
