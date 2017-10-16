@@ -19,13 +19,13 @@ for most things, and allows for plugging in almost any PSR compatible component,
   - [1.1 PSR based integrations](#1-1-psr-based-integrations)
 - [2. Installation](#2-installation)
   - [2.1. Using the "spin-skeleton"](#2-1-using-the-spin-skeleton)
+  - [2.2. Folder structure](#2-2-folder structure)
 - [3. Technical Details](#3-technical-details)
   - [3.1. Helper functions](#3-1-helper-functions)
   - [3.2. Request lifecycle](#3-2-request-lifecycle)
-- [4. Skeleton application folder structure](#4-skeleton-application-folder structure)
-- [5. Using Template Engines](#5-using-template-engines)
-  - [5.1. Twig](#5-1-twig)
-  - [5.2. Plates](#5-2-plates)
+- [4. Using Template Engines](#4-using-template-engines)
+  - [4.1. Twig](#4-1-twig)
+  - [4.2. Plates](#4-2-plates)
 
 # 1. Features
 * PHP 7.1+
@@ -53,6 +53,29 @@ Installing spin-framework as standalone with composer:
 ## 2.1. Using the "spin-skeleton"
 To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example configs, routes, controllers and many other things.
 
+# 2.2. folder structure
+```txt
+/<AppName>
+  /src
+    /app
+      /Config
+      /Middlewares
+      /Controllers
+      /Views
+        /Templates
+        /Errors
+        /Pages
+      /Models
+      globals.php
+    /public
+    /storage
+      /logs
+      /cache
+    /vendor
+      /celarius/spin-framework
+    composer.json
+  /tests
+```
 
 
 
@@ -203,33 +226,8 @@ $request = getResponse();
 
   6.  Send response to Client
 
-# 4. Skeleton application folder structure
-
-```txt
-/<AppName>
-  /src
-    /app
-      /Config
-      /Middlewares
-      /Controllers
-      /Views
-        /Templates
-        /Errors
-        /Pages
-      /Models
-      globals.php
-    /public
-    /storage
-      /logs
-      /cache
-    /vendor
-      /celarius/spin-framework
-    composer.json
-  /tests
-```
-
-# 5. Using Template Engines
-## 5.1. Twig
+# 4. Using Template Engines
+## 4.1. Twig
 
   https://twig.symfony.com/doc/2.x/api.html
 
@@ -254,7 +252,7 @@ $request = getResponse();
   response($html);
 ```
 
-## 5.2. Plates
+## 4.2. Plates
 
 If the users controller extends from the `AbstractController` in the skeleton then the [Plates](http://platesphp.com/) template engine is initialized
 with necessary basics, and enables the user to use it very easily:
