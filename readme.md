@@ -76,7 +76,7 @@ function config(string $key=null, string $value=null)
 $val = config('application.maintenance');
 ```
 
-## container()
+### container()
 The `container()` function is used to retreive the container object, or to get/set a specific container key. 
 
 If the additional `$id` parameter is given the container item with `$key` is returned.
@@ -104,7 +104,7 @@ function logger()
 logger()->critical('Something bad has happened', ['details'=>'Encountered mystic radiation']);
 ```
 
-## db()
+### db()
 The `db()` function is used to access one of the defined connections.
 
 *Note: If the $connectionName is not given, the 1st connection in the list of connections is used*
@@ -115,7 +115,7 @@ function db(string $connectionName='')
 $rows = db()->rawQuery('SELECT * FROM table WHERE field = :value',['value'=>123]);
 ```
 
-## cache()
+### cache()
 The `cache()` function is used to access one of the defined caches. The caches are shared between connections, regardless of the driver.
 
 *Note: If the $driverName is not given, the 1st connection in the list of connections is used*
@@ -130,7 +130,7 @@ cache('APCU')->set('key1',1234);
 $value = cache('APCU')->get('key1');
 ```
 
-## getRequest()
+### getRequest()
 The `getRequest()` function is used to access the (PSR-7)[http://www.php-fig.org/psr/psr-7/] HTTP ServerRequest object
 
 ```php
@@ -140,7 +140,7 @@ function getRequest()
 $request = getRequest();
 ```
 
-## getResponse()
+### getResponse()
 The `getResponse()` function is used to access the (PSR-7)[http://www.php-fig.org/psr/psr-7/] HTTP Response object
 
 ```php
