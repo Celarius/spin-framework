@@ -18,7 +18,7 @@ for most things, and allows for plugging in almost any PSR compatible component,
 - [1. Features](#1-features)
   - [1.1 PSR based integrations](#1-1-psr-based-integrations)
 - [2. Installation](#2-installation)
-  - [2.1. Using the "spin-skeleton"](#2-1-using-the-spin-skeleton)
+  - [2.1. Using the spin-skeleton](#2-1-using-the-spin-skeleton)
   - [2.2. Folder structure](#2-2-folder structure)
 - [3. Technical Details](#3-technical-details)
   - [3.1. Helper functions](#3-1-helper-functions)
@@ -50,7 +50,7 @@ Installing spin-framework as standalone with composer:
 > composer require celarius/spin-framework
 ```
 
-## 2.1. Using the "spin-skeleton"
+## 2.1. Using the spin-skeleton
 To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example configs, routes, controllers and many other things.
 
 # 2.2. folder structure
