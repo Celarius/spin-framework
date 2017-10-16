@@ -61,6 +61,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var Object Container Factory */
   protected $containerFactory;
 
+  /** @var array List of cookies to send with response */
+  protected $cookies;
 
   /** @var Object PSR-7 compatible HTTP Server Request */
   protected $request;
@@ -604,6 +606,39 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
+   * Set a cookie for the next response
+   *
+   * @param   string       $name     [description]
+   * @param   string|null  $value    [description]
+   * @param   int|integer  $expire   [description]
+   * @param   string       $path     [description]
+   * @param   string       $domain   [description]
+   * @param   bool|boolean $secure   [description]
+   * @param   bool|boolean $httpOnly [description]
+   *
+   * @return  mixed
+   */
+  public function setCookie(string $name, ?string $value=null, int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httpOnly=false)
+  {
+    if ( array_key_exists($name,$this->cookies) && is_null($value) ) {
+      # Remove the Cookie
+      $this->cookies = array_diff_key($this->cookies,[$name=>'']);
+    } else {
+      # Remove the Cookie
+      $this->cookies[$name] = [
+        'value'=>$value,
+        'expire'=>$expire,
+        'path'=>$path,
+        'domain'=>$domain,
+        'secure'=>$secure,
+        'httpOnly'=>$httpOnly
+      ];
+    }
+
+    return true;
+  }
+
+  /**
    * getBasePath returns the full path to the application folder
    *
    * @return string
@@ -857,11 +892,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       header($header.': '.$values);
     }
 
-    # TODO: Fix cookies
-    // # Set all cookies
-    // foreach ($this->cookies as $idx => $cookie) {
-    //   setCookie( $cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'] );
-    // }
+    # Set Cookies
+    foreach ($this->cookies as $cookie) {
+      setCookie( $cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'] );
+    }
 
     ##
     ## Send a file or a body?

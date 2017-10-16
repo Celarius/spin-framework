@@ -300,6 +300,26 @@ if (!function_exists('cookieParams')) {
   }
 }
 
+if (!function_exists('cookieParams')) {
+  /**
+   * Get/Set Cookies depending on values
+   *
+   * @return mixed
+   */
+  function cookie(string $name, ?string $value=null, int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httpOnly=false)
+  {
+    global $app;
+
+    if (is_null($value)) {
+      # Read the cookie param
+      return cookieParam($name);
+    }
+
+    # Set the cookie
+    return app()->setCookie($name,$value,$expire,$path,$domain,$secure,$httpOnly);
+  }
+}
+
 
 ##
 ## Global Functions for returning responses
