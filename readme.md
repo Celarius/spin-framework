@@ -15,6 +15,8 @@ for most things, and allows for plugging in almost any PSR compatible component,
 ```
 
 # Table of Contents
+<!-- https://github.com/naokazuterada/MarkdownTOC -->
+
 <!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent="" -->
 
 * [1. Features](#1-features)
