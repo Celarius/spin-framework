@@ -84,8 +84,8 @@ To install and use the spin-framework it is highly recommended to start by cloni
 
 
 # 4. Technical Details
-* (Helpers)[doc/helpers.md]
-* (Request lifecycle)[doc/request_lifecycle.md]
+* [Helpers](doc/helpers.md)
+* [Request lifecycle](doc/request_lifecycle.md)
 
 # 5. Using Template Engines
 ## 5.1. Twig
