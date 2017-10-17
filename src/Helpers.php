@@ -28,6 +28,8 @@
   function responseHtml(string $body='', int $code=200, array $headers=[])
  */
 
+use \Spin\helpers\ArrayToXml;
+
 if (!function_exists('env')) {
   /**
    * Gets the value of an environment variable. Supports boolean, empty and null.
@@ -415,10 +417,7 @@ if (!function_exists('responseJson')) {
 
 if (!function_exists('responseXml')) {
   /**
-   * Send a XML response with $code and $a content.
-   * Also sets the content-type header to "application/json"
-   *
-   * @todo    Finish the XML_ENCODE function. WE'd need namespace support etc.
+   * Build a XML response from the $data supplied
    *
    * @param   array  $data      Array to encode in XML
    * @param   string $root      Root element
@@ -434,10 +433,11 @@ if (!function_exists('responseXml')) {
     $body = xml_encode($a,$options);
     $headers = array_merge(['Content-Type'=>'application/xml'],$headers);
 
-    $xml = new SimpleXMLElement('<'.$root.'/>');
-    array_walk_recursive($data, array($xml, 'addChild'));
+    # Build the XML
+    $xmlBuilder = new ArrayToXml();
+    $xml = $xmlBuilder->buildXml($data,$root);
 
-    return response($xml->asXML(),$code,$headers);
+    return response($xml,$code,$headers);
   }
 }
 
@@ -477,6 +477,9 @@ if (!function_exists('responseFile')) {
 
     # Set file to respond with
     $app->setFileResponse($filename);
+
+    # Determine Mime-Type for file
+    $headers = array_merge(['Content-Type'=>mime_content_type($filename)],$headers);
 
     return response('',$code,$headers);
   }
