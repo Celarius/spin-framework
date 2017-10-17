@@ -897,7 +897,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     foreach ($this->cookies as $cookie) {
       setCookie( $cookie['name'],
                  $cookie['value'],
-                 $cookie['expires'],
+                 $cookie['expire'],
                  $cookie['path'],
                  $cookie['domain'],
                  $cookie['secure'],

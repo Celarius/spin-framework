@@ -329,18 +329,18 @@ if (!function_exists('redirect')) {
   /**
    * Redirect the user
    *
-   * @param  string  $to        Where to redirect to. FQDN or relative path
+   * @param  string  $uri       Where to redirect to. FQDN or relative path
    * @param  int     $status    Status code, defaults to 302
    * @param  array   $headers   Additinal headers
    *
    * @return object
    */
-  function redirect($to = null, $status = 302, $headers = [])
+  function redirect(string $uri, $status=302, $headers = [])
   {
     # Build response object
     $response = getResponse()
                 ->withStatus($status)
-                ->withHeader('Location',$to);
+                ->withHeader('Location',$uri);
 
     # Set all the headers the user sent
     foreach($headers as $header => $values) {
@@ -357,6 +357,10 @@ if (!function_exists('redirect')) {
 if (!function_exists('response')) {
   /**
    * Get/Set the Response to send to the client
+   *
+   * @param  string      $body      Body to send
+   * @param  int|integer $code      HTTP Code
+   * @param  array       $headers   Headers to include
    *
    * @return \Psr\Http\ResponseInterface
    */
@@ -391,18 +395,67 @@ if (!function_exists('responseJson')) {
    * Send a JSON response with $code and $a content.
    * Also sets the content-type header to "application/json"
    *
-   * @param   $data     Array to encode
-   * @param   $code     HTTP Code
-   * @param   $options  JSON encoding options
+   * @param   $data            Array to encode
+   * @param   $code            HTTP Code
+   * @param   $options         JSON encoding options
+   * @param   array $headers   Headers to include
    *
-   * @return  object
+   * @return  Response
    */
-  function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK)
+  function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK, array $headers=[])
   {
     global $app;
 
     $body = json_encode($data, $options);
-    $headers = ['Content-Type'=>'application/json'];
+    $headers = array_merge(['Content-Type'=>'application/json'],$headers);
+
+    return response($body,$code,$headers);
+  }
+}
+
+if (!function_exists('responseXml')) {
+  /**
+   * Send a XML response with $code and $a content.
+   * Also sets the content-type header to "application/json"
+   *
+   * @todo    Finish the XML_ENCODE function. WE'd need namespace support etc.
+   *
+   * @param   array  $data      Array to encode in XML
+   * @param   string $root      Root element
+   * @param   int    $code      HTTP Code
+   * @param   array  $headers   Headers to include
+   *
+   * @return  Response
+   */
+  function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
+  {
+    global $app;
+
+    $body = xml_encode($a,$options);
+    $headers = array_merge(['Content-Type'=>'application/xml'],$headers);
+
+    $xml = new SimpleXMLElement('<'.$root.'/>');
+    array_walk_recursive($data, array($xml, 'addChild'));
+
+    return response($xml->asXML(),$code,$headers);
+  }
+}
+
+if (!function_exists('responseHtml')) {
+  /**
+   * Send a HTML response with $code and $body content.
+   *
+   * @param   int    $code     HTTP Code
+   * @param   string $html     Array to encode
+   * @param   array  $headers  Headers to include
+   *
+   * @return  object
+   */
+  function responseHtml(string $body='', int $code=200, array $headers=[])
+  {
+    global $app;
+
+    $headers = array_merge(['Content-Type'=>'text/html'],$headers);
 
     return response($body,$code,$headers);
   }
@@ -429,42 +482,3 @@ if (!function_exists('responseFile')) {
   }
 }
 
-if (!function_exists('responseXml')) {
-  /**
-   * Send a XML response with $code and $a content.
-   * Also sets the content-type header to "application/json"
-   *
-   * @todo    Finish the XML_ENCODE function. WE'd need namespace support etc.
-   *
-   * @param   $ar       Array to encode
-   * @param   $code     HTTP Code
-   *
-   * @return  object
-   */
-  function responseXml(array $ar=[], int $code=200)
-  {
-    global $app;
-
-    $body = xml_encode($a,$options);
-    $headers = ['Content-Type'=>'application/xml'];
-
-    return response($body,$code,$headers);
-  }
-}
-
-if (!function_exists('responseHtml')) {
-  /**
-   * Send a HTML response with $code and $body content.
-   *
-   * @param   int    $code     HTTP Code
-   * @param   string $html     Array to encode
-   *
-   * @return  object
-   */
-  function responseHtml(string $body='', int $code=200, array $headers=[])
-  {
-    global $app;
-
-    return response($body,$code,$headers);
-  }
-}
