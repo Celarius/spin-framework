@@ -1,4 +1,3 @@
-# Table of contents
 <!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent="" -->
 
 * [1. Helpers](#1-helpers)

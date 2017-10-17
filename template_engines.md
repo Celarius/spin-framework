@@ -1,4 +1,3 @@
-# Table of contents
 <!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent="" -->
 
 * [1. Using Template Engines](#1-using-template-engines)

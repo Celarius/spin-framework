@@ -14,7 +14,6 @@ for most things, and allows for plugging in almost any PSR compatible component,
     NOTE: This framework is in ALPHA stage - Not ready for production
 ```
 
-# Table of Contents
 <!-- https://github.com/naokazuterada/MarkdownTOC -->
 
 <!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent="" -->
