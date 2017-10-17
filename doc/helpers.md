@@ -22,6 +22,8 @@
 * [response\(\)](#response)
 * [responseJson\(\)](#responsejson)
 * [responseXml\(\)](#responsexml)
+* [responseHtml\(\)](#responsehtml)
+* [responseFile\(\)](#responsefile)
 
 <!-- /MarkdownTOC -->
 
@@ -248,23 +250,48 @@ return responseJson($data);
 ## responseXml()
 The `responseXml()` sets the $xml document as a response to the user, and also adds `application/xml` as a content-type header.
 
+See [ArrayToXml](http://stackoverflow.com/questions/99350/passing-php-associative-arrays-to-and-from-xml) for details.
+
 ```php
 function responseXml(array $ar=[], int $code=200)
 ```
 ```php
 # In a controller ...
-$data = array (
-  'bla' => 'blub',
-  'foo' => 'bar',
-  'another_array' => array (
-    'data' => 'overload',
-  ),
-);
+$data = [
+  '@id' => 1,
+  'name' => 'Jon Doe',
+  'description' => 'bar',
+  'phones' => [
+    'mobile' => '+358-40-123 1234',
+    'work' => '+358-09-123 1234'
+  ]
+];
 
 return responseXml($data);
 ```
 
+## responseHtml()
+The `responseHtml()` creates a response with the $body, and sets the content-type header to `text/html`.
 
+```php
 function responseHtml(string $body='', int $code=200, array $headers=[])
+```
+```php
+# In a controller ...
+$body = '<html><body><h1>Hi there</h1></body</html>'
+return responseHtml($body);
+```
 
+
+## responseFile()
+The `responseFile()` creates a response with the $filename. Tries to auto-determine the content-type if not supplied in $headers.
+
+```php
 function responseFile(string $filename, int $code=200, array $headers=[])
+```
+```php
+# In a controller ...
+$filename = 'images/image.png'
+return responseFile($filename);
+```
+
