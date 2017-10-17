@@ -11,19 +11,19 @@
 * [1.7. cache\(\)](#17-cache)
 * [1.8. getRequest\(\)](#18-getrequest)
 * [1.9. getResponse\(\)](#19-getresponse)
-* [1.10. queryParams\(\)](#110-queryparams)
-* [1.11. queryParam\(\)](#111-queryparam)
-* [1.12. postParams\(\)](#112-postparams)
-* [1.13. postParam\(\)](#113-postparam)
-* [1.12. cookieParams\(\)](#112-cookieparams)
-* [1.13. cookieParam\(\)](#113-cookieparam)
-* [1.13. cookie\(\)](#113-cookie)
-* [1.14. redirect\(\)](#114-redirect)
-* [response\(\)](#response)
-* [responseJson\(\)](#responsejson)
-* [responseXml\(\)](#responsexml)
-* [responseHtml\(\)](#responsehtml)
-* [responseFile\(\)](#responsefile)
+* [1.10.. queryParams\(\)](#110-queryparams)
+* [1.11.. queryParam\(\)](#111-queryparam)
+* [1.12.. postParams\(\)](#112-postparams)
+* [1.13.. postParam\(\)](#113-postparam)
+* [1.14.. cookieParams\(\)](#114-cookieparams)
+* [1.15.. cookieParam\(\)](#115-cookieparam)
+* [1.16.. cookie\(\)](#116-cookie)
+* [1.17.. redirect\(\)](#117-redirect)
+* [1.18. response\(\)](#118-response)
+* [1.19. responseJson\(\)](#119-responsejson)
+* [1.20. responseXml\(\)](#120-responsexml)
+* [1.21. responseHtml\(\)](#121-responsehtml)
+* [1.22. responseFile\(\)](#122-responsefile)
 
 <!-- /MarkdownTOC -->
 
@@ -133,7 +133,7 @@ function getResponse()
 $request = getResponse();
 ```
 
-## 1.10. queryParams()
+## 1.10.. queryParams()
 The `queryParams()` function returns an array with all query parameters (on the URL).
 
 ```php
@@ -144,7 +144,7 @@ $params = queryParams();
 $value =$params['xyz'] ?? '';
 ```
 
-## 1.11. queryParam()
+## 1.11.. queryParam()
 The `queryParam()` function returns one named query parameter, or null.
 
 ```php
@@ -154,7 +154,7 @@ function queryParam(string $paramName, $default=null)
 $value = queryParam('xyz') ?? '';
 ```
 
-## 1.12. postParams()
+## 1.12.. postParams()
 The `postParams()` function returns an array with all post parameters. The post params are decoded if they are sent in a post request with the content-type `multipart/form-data`.
 
 ```php
@@ -165,7 +165,7 @@ $params = postParams();
 $value =$params['xyz'] ?? '';
 ```
 
-## 1.13. postParam()
+## 1.13.. postParam()
 The `postParam()` function returns one named post parameter, or null.
 
 ```php
@@ -175,7 +175,7 @@ function postParam(string $paramName, $default=null)
 $value = postParam('xyz') ?? '';
 ```
 
-## 1.12. cookieParams()
+## 1.14.. cookieParams()
 The `cookieParams()` function returns an array with all cookies sent in the request
 
 ```php
@@ -186,7 +186,7 @@ $params = cookieParams();
 $value =$params['sessionid'] ?? '';
 ```
 
-## 1.13. cookieParam()
+## 1.15.. cookieParam()
 The `cookieParam()` function returns one named cookie, or null.
 
 ```php
@@ -196,7 +196,7 @@ function cookieParam(string $paramName, $default=null)
 $value = cookieParam('sessionid') ?? '';
 ```
 
-## 1.13. cookie()
+## 1.16.. cookie()
 The `cookie()` function returns one named cookie, or sets a cookie for the next HTTP response.
 
 ```php
@@ -212,7 +212,7 @@ $value = cookie('sessionid',md5(microtime(true)));
 ```
 
 
-## 1.14. redirect()
+## 1.17.. redirect()
 The `redirect()` sends a redirect response to the user.
 
 ```php
@@ -224,7 +224,7 @@ return redirect('/antoherUrl',301);
 ```
 
 
-## response()
+## 1.18. response()
 The `response()` sets the HTTP response to send to the user
 
 ```php
@@ -235,7 +235,7 @@ function response(string $body='', int $code=200, array $headers=[])
 return response('This is a response');
 ```
 
-## responseJson()
+## 1.19. responseJson()
 The `responseJson()` converts the $data array to a JSON document and sets it as the response to the user, and also adds `application/json` as a content-type header if not present.
 
 ```php
@@ -247,7 +247,7 @@ $data['result'] = 'OK';
 return responseJson($data);
 ```
 
-## responseXml()
+## 1.20. responseXml()
 The `responseXml()` sets the $xml document as a response to the user, and also adds `application/xml` as a content-type header.
 
 See [ArrayToXml](http://stackoverflow.com/questions/99350/passing-php-associative-arrays-to-and-from-xml) for details.
@@ -270,7 +270,7 @@ $data = [
 return responseXml($data);
 ```
 
-## responseHtml()
+## 1.21. responseHtml()
 The `responseHtml()` creates a response with the $body, and sets the content-type header to `text/html`.
 
 ```php
@@ -283,7 +283,7 @@ return responseHtml($body);
 ```
 
 
-## responseFile()
+## 1.22. responseFile()
 The `responseFile()` creates a response with the $filename. Tries to auto-determine the content-type if not supplied in $headers.
 
 ```php
