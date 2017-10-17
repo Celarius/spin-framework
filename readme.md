@@ -16,14 +16,14 @@ for most things, and allows for plugging in almost any PSR compatible component,
 
 <!-- https://github.com/naokazuterada/MarkdownTOC -->
 
-<!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent="" -->
+<!-- MarkdownTOC list_bullets="-" bracket="round" lowercase="true" autolink="true" indent="  " -->
 
-* [1. Features](#1-features)
-* [1.1. PSR based integrations](#11-psr-based-integrations)
-* [2. Installation](#2-installation)
-* [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
-* [4. Technical Details](#4-technical-details)
-* [3. Folder structure](#3-folder-structure)
+- [1. Features](#1-features)
+  - [1.1. PSR based integrations](#11-psr-based-integrations)
+- [2. Installation](#2-installation)
+  - [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
+- [4. Technical Details](#4-technical-details)
+- [3. Folder structure](#3-folder-structure)
 
 <!-- /MarkdownTOC -->
 
@@ -36,7 +36,7 @@ for most things, and allows for plugging in almost any PSR compatible component,
 * DAO base classes for DB Entity representation
 
 ## 1.1. PSR based integrations
-* Logger (PSR-3) Defaults to [Monolog](https://github.com/Seldaek/monolog).
+* Logger (PSR-3) Defaults to [Monolog](https://github.com/Seldaek/monolog)
 * Huggable (PSR-8)
 * HTTP Message (PSR-7). Defaults to [Guzzle](https://github.com/guzzle/guzzle)
 * Container (PSR-11). Defaults to [The Leauge Container](http://container.thephpleague.com/)
@@ -55,8 +55,6 @@ To install and use the spin-framework it is highly recommended to start by cloni
 
 # 4. Technical Details
 * [Helpers](doc/helpers.md)
-* [Request lifecycle](doc/request_lifecycle.md)
-* [Template Engines](doc/template_engines.md)
 
 # 3. Folder structure
 ```txt
