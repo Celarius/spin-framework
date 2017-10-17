@@ -15,6 +15,13 @@
 * [1.11. queryParam\(\)](#111-queryparam)
 * [1.12. postParams\(\)](#112-postparams)
 * [1.13. postParam\(\)](#113-postparam)
+* [1.12. cookieParams\(\)](#112-cookieparams)
+* [1.13. cookieParam\(\)](#113-cookieparam)
+* [1.13. cookie\(\)](#113-cookie)
+* [1.14. redirect\(\)](#114-redirect)
+* [response\(\)](#response)
+* [responseJson\(\)](#responsejson)
+* [responseXml\(\)](#responsexml)
 
 <!-- /MarkdownTOC -->
 
@@ -136,7 +143,7 @@ $value =$params['xyz'] ?? '';
 ```
 
 ## 1.11. queryParam()
-The `queryParam()` function returns all one named query parameter, or null.
+The `queryParam()` function returns one named query parameter, or null.
 
 ```php
 function queryParam(string $paramName, $default=null)
@@ -157,7 +164,7 @@ $value =$params['xyz'] ?? '';
 ```
 
 ## 1.13. postParam()
-The `postParam()` function returns all one named post parameter, or null.
+The `postParam()` function returns one named post parameter, or null.
 
 ```php
 function postParam(string $paramName, $default=null)
@@ -165,3 +172,99 @@ function postParam(string $paramName, $default=null)
 ```php
 $value = postParam('xyz') ?? '';
 ```
+
+## 1.12. cookieParams()
+The `cookieParams()` function returns an array with all cookies sent in the request
+
+```php
+function cookieParams()
+```
+```php
+$params = cookieParams();
+$value =$params['sessionid'] ?? '';
+```
+
+## 1.13. cookieParam()
+The `cookieParam()` function returns one named cookie, or null.
+
+```php
+function cookieParam(string $paramName, $default=null)
+```
+```php
+$value = cookieParam('sessionid') ?? '';
+```
+
+## 1.13. cookie()
+The `cookie()` function returns one named cookie, or sets a cookie for the next HTTP response.
+
+```php
+function cookie(string $name, ?string $value=null, int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httpOnly=false)
+```
+```php
+# Read the value
+$value = cookie('sessionid') ?? '';
+
+# Set a Cookie
+$value = cookie('sessionid',md5(microtime(true)));
+
+```
+
+
+## 1.14. redirect()
+The `redirect()` sends a redirect response to the user.
+
+```php
+function redirect(string $uri, $status=302, $headers = [])
+```
+```php
+# in a controller ...
+return redirect('/antoherUrl',301);
+```
+
+
+## response()
+The `response()` sets the HTTP response to send to the user
+
+```php
+function response(string $body='', int $code=200, array $headers=[])
+```
+```php
+# In a controller ...
+return response('This is a response');
+```
+
+## responseJson()
+The `responseJson()` converts the $data array to a JSON document and sets it as the response to the user, and also adds `application/json` as a content-type header if not present.
+
+```php
+function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK, array $headers=[])
+```
+```php
+# In a controller ...
+$data['result'] = 'OK';
+return responseJson($data);
+```
+
+## responseXml()
+The `responseXml()` sets the $xml document as a response to the user, and also adds `application/xml` as a content-type header.
+
+```php
+function responseXml(array $ar=[], int $code=200)
+```
+```php
+# In a controller ...
+$data = array (
+  'bla' => 'blub',
+  'foo' => 'bar',
+  'another_array' => array (
+    'data' => 'overload',
+  ),
+);
+
+return responseXml($data);
+```
+
+
+function responseHtml(string $body='', int $code=200, array $headers=[])
+
+function responseFile(string $filename, int $code=200, array $headers=[])

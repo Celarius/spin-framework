@@ -23,11 +23,8 @@ for most things, and allows for plugging in almost any PSR compatible component,
 * [1.1. PSR based integrations](#11-psr-based-integrations)
 * [2. Installation](#2-installation)
 * [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
-* [3. Folder structure](#3-folder-structure)
 * [4. Technical Details](#4-technical-details)
-* [5. Using Template Engines](#5-using-template-engines)
-* [5.1. Twig](#51-twig)
-* [5.2. Plates](#52-plates)
+* [3. Folder structure](#3-folder-structure)
 
 <!-- /MarkdownTOC -->
 
@@ -57,6 +54,11 @@ Installing spin-framework as standalone with composer:
 ## 2.1. Using the spin-skeleton
 To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example configs, routes, controllers and many other things.
 
+# 4. Technical Details
+* [Helpers](doc/helpers.md)
+* [Request lifecycle](doc/request_lifecycle.md)
+* [Template Engines](doc/template_engines.md)
+
 # 3. Folder structure
 ```txt
 /<AppName>
@@ -82,54 +84,4 @@ To install and use the spin-framework it is highly recommended to start by cloni
 ```
 
 
-
-# 4. Technical Details
-* [Helpers](doc/helpers.md)
-* [Request lifecycle](doc/request_lifecycle.md)
-
-# 5. Using Template Engines
-## 5.1. Twig
-
-  https://twig.symfony.com/doc/2.x/api.html
-
-```php
-  // Twig Loader
-  $twigLoader = new Twig_Loader_Filesystem( $app->getAppPath().'/Views/Templates');
-
-  // Set Twig environment options
-  $twig = new Twig_Environment($twigLoader, array(
-      'cache' => $app->getAppPath().'/storage/cache',
-  ));
-
-  // Create pageData array
-  $pageData['app'] = $app;
-  $pageData['var1'] = "value1";
-  $pageData['var2'] = "value2";
-
-  // Load & Render template
-  $html = $twig->render('TheFileName.html', $pageData); // loads "/Views/Templates/TheFileName.html"
-
-  // Send response
-  response($html);
-```
-
-## 5.2. Plates
-
-If the users controller extends from the `AbstractController` in the skeleton then the [Plates](http://platesphp.com/) template engine is initialized
-with necessary basics, and enables the user to use it very easily:
-
-```php
-  public function handleGET(array $args)
-  {
-    # Model to send to view
-    $model = ['title'=>'PageTitle', 'user'=>'Kim'];
-
-    # Render view
-    $html = $this->engine->render('pages::index', $model); // renders /Views/Pages/index.html
-
-    # Send the generated html
-    return response($html);
-  }
-
-```
 
