@@ -446,7 +446,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           # Initialize
           $routeHandler->initialize();
 
-          # Run Controller's method
+          # Run Controller's handler
           return $routeHandler->$handlerMethod();
 
         } else {
