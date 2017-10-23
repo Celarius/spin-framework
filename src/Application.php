@@ -454,7 +454,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         }
 
       } else {
-        logger()->error('Error controller class does not exist',['class'=>$handlerClass,'httpCode'=>$httpCode]);
+        logger()->notice('Error controller class does not exist',['class'=>$handlerClass,'httpCode'=>$httpCode]);
       }
     }
 
