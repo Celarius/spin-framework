@@ -128,9 +128,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->afterMiddleware = array();
 
     # Initialize Objects
-    $this->httpServerRequestFactory = $this->loadFactory( $this->getConfig()->get('factories.http.serverRequest','\\Spin\\Factories\\Http\\ServerRequestFactory') );
-    $this->httpResponseFactory = $this->loadFactory( $this->getConfig()->get('factories.http.response','\\Spin\\Factories\\Http\\ResponseFactory') );
-    $this->httpStreamFactory = $this->loadFactory( $this->getConfig()->get('factories.http.stream','\\Spin\\Factories\\Http\\StreamFactory') );
+    $this->httpServerRequestFactory = $this->loadFactory( $this->getConfig()->get('factories.http.serverRequest',['class'=>'\\Spin\\Factories\\Http\\ServerRequestFactory']) );
+    $this->httpResponseFactory = $this->loadFactory( $this->getConfig()->get('factories.http.response',['class'=>'\\Spin\\Factories\\Http\\ResponseFactory']) );
+    $this->httpStreamFactory = $this->loadFactory( $this->getConfig()->get('factories.http.stream',['class'=>'\\Spin\\Factories\\Http\\StreamFactory']) );
     $this->containerFactory = null;
     $this->request = null;
     $this->response = null;
@@ -162,7 +162,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->response = $this->httpResponseFactory->createResponse(404);
 
       # Container
-      $this->containerFactory = $this->loadFactory( ($this->getConfig()->get('factories.container') ?? '\\Spin\\Factories\\ContainerFactory') );
+      $this->containerFactory = $this->loadFactory( ($this->getConfig()->get('factories.container') ?? ['class'=>'\\Spin\\Factories\\ContainerFactory']) );
       $this->container = $this->containerFactory->createContainer();
 
       # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
