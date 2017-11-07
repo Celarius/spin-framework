@@ -128,9 +128,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->afterMiddleware = array();
 
     # Initialize Objects
-    $this->httpServerRequestFactory = $this->loadFactory( ($this->getConfig()->get('factories.http.serverRequest') ?? '\\Spin\\Factories\\Http\\ServerRequestFactory') );
-    $this->httpResponseFactory = $this->loadFactory( ($this->getConfig()->get('factories.http.response') ?? '\\Spin\\Factories\\Http\\ResponseFactory') );
-    $this->httpStreamFactory = $this->loadFactory( ($this->getConfig()->get('factories.http.stream') ?? '\\Spin\\Factories\\Http\\StreamFactory') );
+    $this->httpServerRequestFactory = $this->loadFactory( ($this->getConfig()->get('factories.http.serverRequest','\\Spin\\Factories\\Http\\ServerRequestFactory') );
+    $this->httpResponseFactory = $this->loadFactory( ($this->getConfig()->get('factories.http.response','\\Spin\\Factories\\Http\\ResponseFactory') );
+    $this->httpStreamFactory = $this->loadFactory( ($this->getConfig()->get('factories.http.stream','\\Spin\\Factories\\Http\\StreamFactory') );
     $this->containerFactory = null;
     $this->request = null;
     $this->response = null;
