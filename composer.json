@@ -1,6 +1,6 @@
 {
   "name": "celarius/spin-framework",
-  "description": "A PHP UI/REST framework",
+  "description": "A super lightweight PHP UI/REST Framework",
   "keywords": [
     "php7",
     "php-framework",
