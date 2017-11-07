@@ -278,6 +278,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         # Debug log
         $this->getLogger()->debug('Route matched ',['path'=>$path,'handler'=>$routeInfo['handler']]);
 
+        # init var
+        $result = null;
+
         # Run Before Hooks
         // $ok = $this->runHooks('OnBeforeRequest');
 
