@@ -23,17 +23,16 @@ for most things, and allows for plugging in almost any PSR compatible component,
 - [2. Installation](#2-installation)
   - [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
 - [4. Technical Details](#4-technical-details)
-- [3. Folder structure](#3-folder-structure)
 
 <!-- /MarkdownTOC -->
 
 # 1. Features
 * PHP 7.1+
-* Platform agnostic. (Tested: Windows, Linux, Unix)
+* Platform agnostic. (Windows, *nix)
 * Composer driven in all packages/extensions
-* Template Engine support (skeleton uses [Plates](http://platesphp.com/) by default)
 * PDO based DB connections (MySql,Oracle,CockroachDb,Firebird,Sqlite ...)
 * DAO base classes for DB Entity representation
+* Extendable with other frameworks (ORM, Templates etc.)
 
 ## 1.1. PSR based integrations
 * Logger (PSR-3) Defaults to [Monolog](https://github.com/Seldaek/monolog)
@@ -55,30 +54,5 @@ To install and use the spin-framework it is highly recommended to start by cloni
 
 # 4. Technical Details
 * [Helpers](doc/helpers.md)
-
-# 3. Folder structure
-```txt
-/<AppName>
-  /src
-    /app
-      /Config
-      /Middlewares
-      /Controllers
-      /Views
-        /Templates
-        /Errors
-        /Pages
-      /Models
-      globals.php
-    /public
-    /storage
-      /logs
-      /cache
-    /vendor
-      /celarius/spin-framework
-    composer.json
-  /tests
-```
-
 
 

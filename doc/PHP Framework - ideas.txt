@@ -18,12 +18,6 @@ CodeIgniter / Laravel / Slim / Symphony clone thing
 
 ##############################################################################################################################
 
-TODO
-====
-  * How to show Error pages? 4xx, 5xx series responses should have nice error page instead of just the response code.
-
-##############################################################################################################################
-
 Typical session application
 ===========================
   Create App:
