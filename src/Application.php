@@ -273,6 +273,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     {
       # Match the METHOD and URI to the routes in this group
       $routeInfo = $routeGroup->matchRoute($httpMethod,$path);
+      $result = null;
 
       if ( count($routeInfo)>0 ) {
         # Debug log
@@ -376,7 +377,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             $this->getLogger()->debug('Running After middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
 
             if (!$afterHandler->handle($routeInfo['args'])) {
-              return false;
+              # do nothing as we need to run them all
+              // return false;
             }
           } else {
             # Log
@@ -386,6 +388,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
         # Run After Hooks
         // $ok = $this->runHooks('OnAfterRequest');
+
+        # If we have no result so far, take what the app has..
+        if (!$result) $result = $this->getResponse();
 
         return $result;
 
@@ -446,7 +451,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           # Initialize
           $routeHandler->initialize();
 
-          # Run Controller's method
+          # Run Controller's handler
           return $routeHandler->$handlerMethod();
 
         } else {
