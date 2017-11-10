@@ -390,7 +390,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         # Run After Hooks
         // $ok = $this->runHooks('OnAfterRequest');
 
-        return ( $result ? $result : $this->getResult() );
+        return ( $result ? $result : $this->getResponse() );
 
       } // if count() ...
 
