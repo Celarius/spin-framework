@@ -54,10 +54,10 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     $pdoOptions = [];
     # Convert the PDO params into PDO constants
     if ( count($pdoParams)>0 ) {
-      foreach ($pdoParams as $p)
+      foreach ($pdoParams as $idx => $p)
       {
         $pdoOption = strtoupper(key($p));
-        $pdoValue = trim(reset($p));
+        $pdoValue = $pdoParams[$idx][key($p)];
 
         # Convert to PDO constants
         $k = constant('\PDO::'.$pdoOption); // PDO Option
@@ -413,6 +413,30 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   public function setCharset(?string $charset)
   {
     $this->charset = $charset;
+
+    return $this;
+  }
+
+  /**
+   * Set ServerVersion
+   *
+   * @param string $serverVersio
+   */
+  public function setServerVersion(?string $serverVersion)
+  {
+    $this->serverVersion = $serverVersion;
+
+    return $this;
+  }
+
+  /**
+   * Set clientVersion
+   *
+   * @param string $serverVersio
+   */
+  public function setClientVersion(?string $clientVersion)
+  {
+    $this->clientVersion = $clientVersion;
 
     return $this;
   }

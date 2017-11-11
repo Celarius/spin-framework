@@ -63,7 +63,7 @@ MYSQL:
     # Set it
     $this->setDsn($_dsn);
 
-    return $this->pdo_dsn;
+    return $_dsn;
   }
 
 }
