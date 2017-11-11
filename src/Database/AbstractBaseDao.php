@@ -1,6 +1,6 @@
 <?php
 
-namespace Spin\Core\Database;
+namespace Spin\Database;
 
 use \Spin\Database\AbstractBaseDaoInterface;
 

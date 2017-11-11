@@ -1,9 +1,6 @@
 <?php declare(strict_types=1);
-/**
- * Generic PDO connection
- */
 
-namespace Spin\Core\Database;
+namespace Spin\Database;
 
 use \Spin\Database\PdoConnectionInterface;
 

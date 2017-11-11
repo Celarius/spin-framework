@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Spin\Core\Database;
+namespace Spin\Database;
 
 interface PdoConnectionInterface
 {
