@@ -8,10 +8,10 @@
 
 namespace Spin\Cache\Adapters;
 
-use \Spin\Cache\AbstractCacheDriver;
+use \Spin\Cache\AbstractCacheAdapter;
 use \Psr\SimpleCache\CacheInterface;
 
-class Apcu extends AbstractCacheDriver implements CacheInterface
+class Apcu extends AbstractCacheAdapter implements CacheInterface
 {
   /**
    * Constructor
