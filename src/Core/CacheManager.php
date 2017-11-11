@@ -147,7 +147,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
       # Create the Cache
       try {
         if (class_exists($className)) {
-          $cache = new $className($name, $conf);
+          $cache = new $className($conf);
           logger()->debug( 'Created Cache', ['adapter'=>$cache->getDriver(),'version'=>$cache->getVersion()] );
         } else {
           logger()->error( 'Cache class does not exist', ['config'=>$conf] );
