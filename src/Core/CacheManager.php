@@ -141,7 +141,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
       if (isset($conf['class']) && !empty($conf['class'])) {
         $className = $conf['class'];
       } else {
-        $className = '\\Spin\\Cache\\Adapters\\'.ucfirst($conf['adapter']) ;
+        $className = '\\Spin\\Cache\\Adapters\\'.ucfirst($conf['adapter'] ?? '') ;
       }
 
       # Create the Cache

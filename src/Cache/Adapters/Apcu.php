@@ -6,7 +6,7 @@
  * @package  Spin
 */
 
-namespace Spin\Cache\Drivers;
+namespace Spin\Cache\Adapters;
 
 use \Spin\Cache\AbstractCacheDriver;
 use \Psr\SimpleCache\CacheInterface;
