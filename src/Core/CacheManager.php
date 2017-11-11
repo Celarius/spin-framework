@@ -82,7 +82,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    */
   public function addCache(AbstractCacheAdapterInterface $cache)
   {
-    $this->caches[strtolower($cache->getName())] = $cache;
+    $this->caches[strtolower($cache->getDriver())] = $cache;
 
     return $cache;
   }
@@ -101,7 +101,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
     $cache = $this->findCache($name);
 
     if ($cache) {
-      unset( $this->caches[strtolower($cache->getName())] );
+      unset( $this->caches[strtolower($cache->getDriver())] );
       unset($cache);
       $cache = null;
     }
