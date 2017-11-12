@@ -16,7 +16,7 @@ use Psr\Http\Message\Response;
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const string Application version */
-  const VERSION = '0.0.2';
+  const VERSION = '0.0.1';
 
   /** @var string Application Environment (from ENV vars) */
   protected $environment;
@@ -267,6 +267,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $httpMethod = $this->getRequest()->getMethod();
     $path = $this->getRequest()->getUri()->getPath();
     $routeInfo = null;
+    $response = null;
 
     # Find route match in groups
     foreach ($this->getRouteGroups() as $routeGroup)
@@ -277,9 +278,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       if ( count($routeInfo)>0 ) {
         # Debug log
         $this->getLogger()->debug('Route matched ',['path'=>$path,'handler'=>$routeInfo['handler']]);
-
-        # init var
-        $result = null;
 
         # Run Before Hooks
         // $ok = $this->runHooks('OnBeforeRequest');
@@ -348,7 +346,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
               $this->getLogger()->debug('Running controller->handle()',['rid'=>container('requestId'),'method'=>$handlerMethod]);
 
               # Run Controller's method
-              $result = $routeHandler->$handlerMethod($routeInfo['args']);
+              $response = $routeHandler->$handlerMethod($routeInfo['args']);
+
+              # Set it
+              if ($response)
+                $this->setResponse($response);
 
             } else {
               # Log
@@ -379,8 +381,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             $this->getLogger()->debug('Running After middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
 
             if (!$afterHandler->handle($routeInfo['args'])) {
+
               return false;
             }
+
           } else {
             # Log
             $this->getLogger()->warning('After Middleware not found',['rid'=>container('requestId'),'middleware'=>$middleware]);
@@ -390,7 +394,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         # Run After Hooks
         // $ok = $this->runHooks('OnAfterRequest');
 
-        return ( $result ? $result : $this->getResponse() );
+        # Return the generated response
+        return $this->getResponse();
 
       } // if count() ...
 
