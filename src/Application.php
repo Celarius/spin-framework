@@ -16,7 +16,7 @@ use Psr\Http\Message\Response;
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const string Application version */
-  const VERSION = '0.0.1';
+  const VERSION = '0.0.2';
 
   /** @var string Application Environment (from ENV vars) */
   protected $environment;
@@ -319,9 +319,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             $this->getLogger()->warning('Before Middleware not found',['rid'=>container('requestId'),'middleware'=>$middleware]);
           }
         }
-
-// error_log(print_r($arr,true));
-error_log('if beforeResult... '. ($beforeResult ? 'true':'false') );
 
         #
         # Create & Run the Controller Class - If the Before Middlewares where ok!
