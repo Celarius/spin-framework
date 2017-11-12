@@ -320,6 +320,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           }
         }
 
+// error_log(print_r($arr,true));
+error_log('if beforeResult... '. ($beforeResult ? 'true':'false') );
+
         #
         # Create & Run the Controller Class - If the Before Middlewares where ok!
         #
@@ -370,7 +373,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             $afterHandler = new $middleware($routeInfo['args']);
 
             # Debug log
-            $this->getLogger()->debug('Initialize Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->debug('Initialize After middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
 
             # Initialize
             $afterHandler->initialize($routeInfo['args']);

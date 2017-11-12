@@ -150,7 +150,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function getRequest()
   {
-    return request();
+    return getRequest();
   }
 
   /**
@@ -160,7 +160,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function getResponse()
   {
-    return response();
+    return getResponse();
   }
 
   /**
@@ -180,7 +180,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function getLogger()
   {
-    return log();
+    return getLogger();
   }
 
   /**
