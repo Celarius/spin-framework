@@ -35,7 +35,7 @@ class ArrayToXML
      * @return string XML String containing values
      * @return mixed Boolean false on failure, string XML result on success
      */
-    public function buildXML($data, $startElement = 'data')
+    public function buildXML(array $data, $startElement = 'data')
     {
         if (!is_array($data)) {
             $err = 'Invalid variable type supplied, expected array not found on line ' . __LINE__ . ' in Class: ' . __CLASS__ . ' Method: ' . __METHOD__;
