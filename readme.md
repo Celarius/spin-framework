@@ -16,13 +16,14 @@ for most things, and allows for plugging in almost any PSR compatible component,
 
 <!-- https://github.com/naokazuterada/MarkdownTOC -->
 
-<!-- MarkdownTOC list_bullets="-" bracket="round" lowercase="true" autolink="true" indent="  " -->
+<!-- MarkdownTOC list_bullets="-" bracket="round" lowercase="true" autolink="true" indent="" -->
 
 - [1. Features](#1-features)
-  - [1.1. PSR based integrations](#11-psr-based-integrations)
+- [1.1. PSR based integrations](#11-psr-based-integrations)
 - [2. Installation](#2-installation)
-  - [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
+- [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
 - [4. Technical Details](#4-technical-details)
+- [Apache VHost configuration](#apache-vhost-configuration)
 
 <!-- /MarkdownTOC -->
 
@@ -55,4 +56,46 @@ To install and use the spin-framework it is highly recommended to start by cloni
 # 4. Technical Details
 * [Helpers](doc/helpers.md)
 
+## Apache VHost configuration
+```txt
+<VirtualHost *:80>
+    ServerName ${domain.name}
+    ServerAlias ${alias.domain.name}
+    ServerAdmin webmaster@${domain.name}
 
+    DocumentRoot "${path_to_root}\src\public"
+
+    ErrorLog "logs/${domain.name}.error.log"
+    CustomLog "logs/${domain.name}.access.log" common
+
+    # Default caching headers for static content in /public
+    <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+      Header set Cache-Control "public, max-age=604800, must-revalidate"
+    </FilesMatch>
+
+    <Directory "${path_to_root}\src\public">
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+        Require all granted
+
+        # Set Variables
+        SetEnv ENVIRONMENT ${environment}
+
+        # Load files in this order on "/"
+        DirectoryIndex bootstrap.php index.php index.html
+
+        # Disable appending a "/" and 301 redirection when a directory
+        # matches the requested URL
+        DirectorySlash Off
+
+        # Set Rewrite Engine ON to direct all requests to
+        # the `bootstrap.php` file
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^ bootstrap.php [QSA,L]
+    </Directory>
+</VirtualHost>
+```
