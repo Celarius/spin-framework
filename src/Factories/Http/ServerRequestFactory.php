@@ -15,17 +15,19 @@ namespace Spin\Factories\Http;
 use InvalidArgumentException;
 use Spin\Factories\AbstractFactory;
 
-// Guzzle
+# Guzzle
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\LazyOpenStream;
 
-// PSR-7
+# PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-// PSR-17
-use Psr\Http\Message\ServerRequestFactoryInterface as ServerRequestFactoryInterface;
+# PSR-17
+// use Psr\Http\Message\ServerRequestFactoryInterface;
+use Interop\Http\Factory\ServerRequestFactoryInterface;
+
 
 class ServerRequestFactory extends AbstractFactory implements ServerRequestFactoryInterface
 {

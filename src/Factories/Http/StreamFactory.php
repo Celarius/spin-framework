@@ -15,14 +15,15 @@ namespace Spin\Factories\Http;
 use InvalidArgumentException;
 use Spin\Factories\AbstractFactory;
 
-// Guzzle
+# Guzzle
 use GuzzleHttp\Psr7\LazyOpenStream;
 
-// PSR-7
+# PSR-7
 use Psr\Http\Message\StreamInterface;
 
-// PSR-17
-use Psr\Http\Message\StreamFactoryInterface;
+# PSR-17
+// use Psr\Http\Message\StreamFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 
 class StreamFactory extends AbstractFactory implements StreamFactoryInterface
 {

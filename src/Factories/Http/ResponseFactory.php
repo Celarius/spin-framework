@@ -15,15 +15,16 @@ namespace Spin\Factories\Http;
 use \InvalidArgumentException;
 use \Spin\Factories\AbstractFactory;
 
-// Guzzle
+# Guzzle
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\LazyOpenStream;
 
-// PSR-7
+# PSR-7
 use Psr\Http\Message\ResponseInterface;
 
-// PSR-17
-use Psr\Http\Message\ResponseFactoryInterface;
+# PSR-17
+// use Psr\Http\Message\ResponseFactoryInterface;
+use Interop\Http\Factory\ResponseFactoryInterface;
 
 class ResponseFactory extends AbstractFactory implements ResponseFactoryInterface
 {

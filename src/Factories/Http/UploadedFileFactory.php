@@ -15,11 +15,12 @@ namespace Spin\Factories\Http;
 use \InvalidArgumentException;
 use \Spin\Factories\AbstractFactory;
 
-// Guzzle
+# Guzzle
 use GuzzleHttp\Psr7\LazyOpenStream;
 
-// PSR-17
-use Psr\Http\Message\UploadedFileFactoryInterface;
+# PSR-17
+// use Psr\Http\Message\UploadedFileFactoryInterface;
+use Interop\Http\Factory\UploadedFileFactoryInterface;
 
 class UploadedFileFactory extends AbstractFactory implements UploadedFileFactoryInterface
 {
