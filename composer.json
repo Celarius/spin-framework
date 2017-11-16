@@ -35,7 +35,9 @@
     "guzzlehttp/guzzle": "^6.3",
     "monolog/monolog": "^1.",
     "firebase/php-jwt": "^5.0",
-    "league/container": "^2.4"
+    "league/container": "^2.4",
+
+    "http-interop/http-factory": "^0.3.0"
   },
 
   "require-dev": {
@@ -50,8 +52,7 @@
     "psr-4": {
       "Spin\\": "src/",
       "Psr\\Hug\\" : "src/",
-      "Psr\\EventManager\\" : "src/",
-      "Psr\\Http\\Message\\" : "src/"
+      "Psr\\EventManager\\" : "src/"
     }
   },
   "autoload-dev": {
