@@ -1,6 +1,6 @@
-<!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent="" -->
+<!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent="" depth="4" -->
 
-* [1. Helpers](#1-helpers)
+* [1. Global Helper methods](#1-global-helper-methods)
 * [1.1. env\(\)](#11-env)
 * [1.2. app\(\)](#12-app)
 * [1.3. config\(\)](#13-config)
@@ -10,23 +10,28 @@
 * [1.7. cache\(\)](#17-cache)
 * [1.8. getRequest\(\)](#18-getrequest)
 * [1.9. getResponse\(\)](#19-getresponse)
-* [1.10.. queryParams\(\)](#110-queryparams)
-* [1.11.. queryParam\(\)](#111-queryparam)
-* [1.12.. postParams\(\)](#112-postparams)
-* [1.13.. postParam\(\)](#113-postparam)
-* [1.14.. cookieParams\(\)](#114-cookieparams)
-* [1.15.. cookieParam\(\)](#115-cookieparam)
-* [1.16.. cookie\(\)](#116-cookie)
-* [1.17.. redirect\(\)](#117-redirect)
+* [1.10. queryParams\(\)](#110-queryparams)
+* [1.11. queryParam\(\)](#111-queryparam)
+* [1.12. postParams\(\)](#112-postparams)
+* [1.13. postParam\(\)](#113-postparam)
+* [1.14. cookieParams\(\)](#114-cookieparams)
+* [1.15. cookieParam\(\)](#115-cookieparam)
+* [1.16. cookie\(\)](#116-cookie)
+* [1.17. redirect\(\)](#117-redirect)
 * [1.18. response\(\)](#118-response)
 * [1.19. responseJson\(\)](#119-responsejson)
 * [1.20. responseXml\(\)](#120-responsexml)
 * [1.21. responseHtml\(\)](#121-responsehtml)
 * [1.22. responseFile\(\)](#122-responsefile)
+* [2. Global Helper Objects](#2-global-helper-objects)
+* [2.1. ArrayToXml](#21-arraytoxml)
+* [2.2. Cipher](#22-cipher)
+* [2.3. Hash](#23-hash)
+* [2.4. UUID](#24-uuid)
 
 <!-- /MarkdownTOC -->
 
-# 1. Helpers
+# 1. Global Helper methods
 The following is a list of helper functions available as global functions.
 
 ## 1.1. env()
@@ -132,7 +137,7 @@ function getResponse()
 $request = getResponse();
 ```
 
-## 1.10.. queryParams()
+## 1.10. queryParams()
 The `queryParams()` function returns an array with all query parameters (on the URL).
 
 ```php
@@ -143,7 +148,7 @@ $params = queryParams();
 $value =$params['xyz'] ?? '';
 ```
 
-## 1.11.. queryParam()
+## 1.11. queryParam()
 The `queryParam()` function returns one named query parameter, or null.
 
 ```php
@@ -153,7 +158,7 @@ function queryParam(string $paramName, $default=null)
 $value = queryParam('xyz') ?? '';
 ```
 
-## 1.12.. postParams()
+## 1.12. postParams()
 The `postParams()` function returns an array with all post parameters. The post params are decoded if they are sent in a post request with the content-type `multipart/form-data`.
 
 ```php
@@ -164,7 +169,7 @@ $params = postParams();
 $value =$params['xyz'] ?? '';
 ```
 
-## 1.13.. postParam()
+## 1.13. postParam()
 The `postParam()` function returns one named post parameter, or null.
 
 ```php
@@ -174,7 +179,7 @@ function postParam(string $paramName, $default=null)
 $value = postParam('xyz') ?? '';
 ```
 
-## 1.14.. cookieParams()
+## 1.14. cookieParams()
 The `cookieParams()` function returns an array with all cookies sent in the request
 
 ```php
@@ -185,7 +190,7 @@ $params = cookieParams();
 $value =$params['sessionid'] ?? '';
 ```
 
-## 1.15.. cookieParam()
+## 1.15. cookieParam()
 The `cookieParam()` function returns one named cookie, or null.
 
 ```php
@@ -195,7 +200,7 @@ function cookieParam(string $paramName, $default=null)
 $value = cookieParam('sessionid') ?? '';
 ```
 
-## 1.16.. cookie()
+## 1.16. cookie()
 The `cookie()` function returns one named cookie, or sets a cookie for the next HTTP response.
 
 ```php
@@ -211,7 +216,7 @@ $value = cookie('sessionid',md5(microtime(true)));
 ```
 
 
-## 1.17.. redirect()
+## 1.17. redirect()
 The `redirect()` sends a redirect response to the user.
 
 ```php
@@ -294,3 +299,45 @@ $filename = 'images/image.png'
 return responseFile($filename);
 ```
 
+---
+# 2. Global Helper Objects
+
+## 2.1. ArrayToXml
+The `ArrayToXml()` converts an `$array` to a `$xml` document.
+
+```php
+$array = [];
+$array['key'] = 'value';
+# Convert array to XML document
+$xml = (new \Spin\Helpers\ArrayToXml())->buildXML($array);
+```
+
+## 2.2. Cipher
+The `Cipher` helper encrypts/decrypts strings using OpenSSL.
+
+```php
+# Encrypt a value
+$encryptedValue = \Spin\Helper\Cipher::encrypt( $plain, 'secret', 'AES-256-CBC' );
+
+# Decrypt a value
+$plain = \Spin\Helper\Cipher::decrypt( $encryptedValue, 'secret', 'AES-256-CBC' );
+```
+
+## 2.3. Hash
+The `Hash` helper produces hashes using OpenSSL digest methods.
+
+```php
+# Produce a hash
+$digest = \Spin\Helper\Hash::generate('This is the data','SHA256');
+```
+
+## 2.4. UUID
+The `UUID` helper produces UUID v3, v4 and v4 unique UUID's.
+
+```php
+# UUIDv4 GUID
+$uuidv4 = \Spin\Helper\UUID::generate();
+
+# UUIDv5 GUID
+$uuidv5 = \Spin\Helper\UUID::v5($uuidv4,'My v5 UUID');
+```
