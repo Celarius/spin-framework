@@ -57,5 +57,8 @@
     "psr-4": {
       "Spin\\": "src/"
     }
+  },
+  "scripts": {
+    "test": "phpunit"
   }
 }
