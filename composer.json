@@ -50,16 +50,12 @@
 
   "autoload": {
     "psr-4": {
-      "Spin\\": "src/",
-      "Psr\\EventManager\\" : "src/"
+      "Spin\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Spin\\": "src/",
-      "Psr\\Hug\\" : "src/",
-      "Psr\\EventManager\\" : "src/",
-      "Psr\\Http\\Message\\" : "src/"
+      "Spin\\": "src/"
     }
   }
 }
