@@ -2,8 +2,8 @@
 
 namespace Spin\Core;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\RouteInterface;
+use Spin\Core\AbstractBaseClass;
+use Spin\Core\RouteInterface;
 
 abstract class Route extends AbstractBaseClass implements RouteInterface
 {

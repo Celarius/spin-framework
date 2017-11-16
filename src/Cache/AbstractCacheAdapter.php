@@ -8,7 +8,7 @@
 
 namespace Spin\Cache;
 
-use \Spin\Cache\AbstractCacheAdapterInterface;
+use Spin\Cache\AbstractCacheAdapterInterface;
 
 abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
 {

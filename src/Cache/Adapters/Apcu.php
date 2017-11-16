@@ -8,8 +8,8 @@
 
 namespace Spin\Cache\Adapters;
 
-use \Spin\Cache\AbstractCacheAdapter;
-use \Psr\SimpleCache\CacheInterface;
+use Spin\Cache\AbstractCacheAdapter;
+use Psr\SimpleCache\CacheInterface;
 
 class Apcu extends AbstractCacheAdapter implements CacheInterface
 {

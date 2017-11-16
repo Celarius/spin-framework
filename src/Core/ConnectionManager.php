@@ -20,10 +20,10 @@ Example:
 
 namespace Spin\Core;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\ConnectionManagerInterface;
-use \Spin\Database\PdoConnection;
-use \Spin\Database\PdoConnectionInterface;
+use Spin\Core\AbstractBaseClass;
+use Spin\Core\ConnectionManagerInterface;
+use Spin\Database\PdoConnection;
+use Spin\Database\PdoConnectionInterface;
 
 class ConnectionManager extends AbstractBaseClass implements ConnectionManagerInterface
 {

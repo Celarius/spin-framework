@@ -2,8 +2,8 @@
 
 namespace Spin\Core;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\MiddlewareInterface;
+use Spin\Core\AbstractBaseClass;
+use Spin\Core\MiddlewareInterface;
 
 abstract class Middleware extends AbstractBaseClass implements MiddlewareInterface
 {

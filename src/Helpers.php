@@ -28,7 +28,7 @@
   function responseHtml(string $body='', int $code=200, array $headers=[])
  */
 
-use \Spin\helpers\ArrayToXml;
+use Spin\helpers\ArrayToXml;
 
 if (!function_exists('env')) {
   /**

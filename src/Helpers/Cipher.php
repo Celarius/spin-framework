@@ -15,7 +15,7 @@
 
 namespace Spin\Helpers;
 
-use \Spin\Helper\CipherInterface;
+use Spin\Helper\CipherInterface;
 
 class Cipher implements CipherInterface
 {

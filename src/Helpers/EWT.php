@@ -67,7 +67,7 @@ signature
 */
 namespace Spin\Helpers;
 
-Use \Spin\Helper\EWTInterface;
+Use Spin\Helper\EWTInterface;
 
 class EWT implements EWTInterface
 {

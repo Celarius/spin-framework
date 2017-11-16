@@ -2,9 +2,9 @@
 
 namespace Spin\Core;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\HookManagerInterface;
-use \Spin\Core\Hook;
+use Spin\Core\AbstractBaseClass;
+use Spin\Core\HookManagerInterface;
+use Spin\Core\Hook;
 
 class HookManager extends AbstractBaseClass implements HookManagerInterface
 {

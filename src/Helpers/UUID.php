@@ -14,7 +14,7 @@
 
 namespace Spin\Helpers;
 
-use \Spin\Helper\UUIDInterface;
+use Spin\Helper\UUIDInterface;
 
 class UUID implements UUIDInterface
 {

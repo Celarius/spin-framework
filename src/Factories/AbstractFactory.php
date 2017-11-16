@@ -2,8 +2,8 @@
 
 namespace Spin\Factories;
 
-use \Spin\Factories\AbstractFactoryInterface;
-use \Spin\Core\AbstractBaseClass;
+use Spin\Factories\AbstractFactoryInterface;
+use Spin\Core\AbstractBaseClass;
 
 abstract class AbstractFactory extends AbstractBaseClass
 {
