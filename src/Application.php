@@ -2,14 +2,14 @@
 
 namespace Spin;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\Config;
-use \Spin\Core\Logger;
-use \Spin\Core\RouteGroup;
-use \Spin\Core\ConnectionManager;
-use \Spin\Core\CacheManager;
-use \Spin\Exception\Exception;
-use \Spin\ApplicationInterface;
+use Spin\Core\AbstractBaseClass;
+use Spin\Core\Config;
+use Spin\Core\Logger;
+use Spin\Core\RouteGroup;
+use Spin\Core\ConnectionManager;
+use Spin\Core\CacheManager;
+use Spin\Exception\Exception;
+use Spin\ApplicationInterface;
 
 use Psr\Http\Message\Response;
 

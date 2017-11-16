@@ -12,8 +12,8 @@
 
 namespace Spin\Factories\Http;
 
-use \InvalidArgumentException;
-use \Spin\Factories\AbstractFactory;
+use InvalidArgumentException;
+use Spin\Factories\AbstractFactory;
 
 // Guzzle
 use GuzzleHttp\Psr7\LazyOpenStream;
