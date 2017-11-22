@@ -13,7 +13,9 @@
 
 namespace Spin\Helpers;
 
-class Hash implements \Spin\Helper\HashInterface
+Use Spin\Helpers\HashInterface;
+
+class Hash implements HashInterface
 {
 
   /**
