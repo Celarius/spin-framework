@@ -8,9 +8,9 @@
 
 namespace Spin\Core;
 
-use \Monolog\Handler\StreamHandler;
-use \Monolog\Handler\ErrorLogHandler;
-use \Monolog\Formatter\LineFormatter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Formatter\LineFormatter;
 
 class Logger extends \Monolog\Logger
 {

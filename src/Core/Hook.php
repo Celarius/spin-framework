@@ -2,8 +2,8 @@
 
 namespace Spin\Core;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\HookInterface;
+use Spin\Core\AbstractBaseClass;
+use Spin\Core\HookInterface;
 
 abstract class Hook extends AbstractBaseClass implements HookInterface
 {

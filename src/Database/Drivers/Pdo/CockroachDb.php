@@ -8,7 +8,7 @@
 
 namespace Spin\Database\Drivers\Pdo;
 
-use \Spin\Database\PdoConnection;
+use Spin\Database\PdoConnection;
 
 class CockroachDb extends PdoConnection
 {

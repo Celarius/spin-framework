@@ -11,8 +11,8 @@
 
 namespace Spin\Helpers;
 
-use \Firebase\JWT\JWT;
-use \Spin\Helper\JWTInterface;
+use Firebase\JWT\JWT;
+use Spin\Helpers\JWTInterface;
 
 class JWT extends JWT implements JWTInterface
 {

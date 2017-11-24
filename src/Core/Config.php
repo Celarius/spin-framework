@@ -8,9 +8,9 @@
 
 namespace Spin\Core;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\ConfigInterface;
-use \Spin\Exception\Exception;
+use Spin\Core\AbstractBaseClass;
+use Spin\Core\ConfigInterface;
+use Spin\Exception\Exception;
 
 class Config extends AbstractBaseClass implements ConfigInterface
 {

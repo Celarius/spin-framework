@@ -2,7 +2,7 @@
 
 namespace Spin\Database;
 
-use \Spin\Database\PdoConnectionInterface;
+use Spin\Database\PdoConnectionInterface;
 
 abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 {

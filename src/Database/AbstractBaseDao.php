@@ -2,7 +2,7 @@
 
 namespace Spin\Database;
 
-use \Spin\Database\AbstractBaseDaoInterface;
+use Spin\Database\AbstractBaseDaoInterface;
 
 abstract class AbstractBaseDao implements AbstractBaseDaoInterface
 {

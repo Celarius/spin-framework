@@ -12,14 +12,15 @@
 
 namespace Spin\Factories\Http;
 
-use \InvalidArgumentException;
-use \Spin\Factories\AbstractFactory;
+use InvalidArgumentException;
+use Spin\Factories\AbstractFactory;
 
-// Guzzle
+# Guzzle
 use GuzzleHttp\Psr7\LazyOpenStream;
 
-// PSR-7
-use Psr\Http\Message\UriInterface;
+# PSR-7
+// use Psr\Http\Message\UriFactoryInterface;
+use Interop\Http\Factory\UriFactoryInterface;
 
 class UriFactory extends AbstractFactory implements UriFactoryInterface
 {

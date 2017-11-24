@@ -8,8 +8,8 @@
 
 namespace Spin\Core;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\ControllerInterface;
+use Spin\Core\AbstractBaseClass;
+use Spin\Core\ControllerInterface;
 
 abstract class Controller extends AbstractBaseClass implements ControllerInterface
 {

@@ -28,7 +28,7 @@
   function responseHtml(string $body='', int $code=200, array $headers=[])
  */
 
-use \Spin\helpers\ArrayToXml;
+use Spin\helpers\ArrayToXml;
 
 if (!function_exists('env')) {
   /**
@@ -482,6 +482,32 @@ if (!function_exists('responseFile')) {
     $headers = array_merge(['Content-Type'=>mime_content_type($filename)],$headers);
 
     return response('',$code,$headers);
+  }
+}
+
+if (!function_exists('getClientIp')) {
+  /**
+   * Gets the ClientIp from the request headers
+   *
+   * @todo    Implement Support for RFC7239
+   * @link    https://tools.ietf.org/html/rfc7239
+   * @return  string
+   */
+  function getClientIp(): string
+  {
+    global $app;
+
+    # Determine Clients IP address
+    $ip = $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+
+    # Validate it
+    $ok = filter_var($ip,FILTER_VALIDATE_IP);
+
+    if ($ok) {
+      return $ip;
+    }
+
+    return '0.0.0.0'; // Could not determine address/invalid
   }
 }
 
