@@ -901,6 +901,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       header($header.': '.$values);
     }
 
+    # Remove the "x-powered-by" header set by PHP
+    if (function_exists('header_remove')) header_remove('x-powered-by');
+
     # Set Cookies
     foreach ($this->cookies as $cookie) {
       setCookie( $cookie['name'],
