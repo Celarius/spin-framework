@@ -452,10 +452,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
         if ($routeHandler) {
           # Initialize
-          $routeHandler->initialize();
+          $routeHandler->initialize([]);
 
           # Run Controller's handler
-          return $routeHandler->$handlerMethod();
+          return $routeHandler->$handlerMethod([]);
 
         } else {
           logger()->error('Failed to create error controller',['class'=>$handlerClass]);
