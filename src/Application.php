@@ -118,7 +118,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->setErrorHandlers();
 
     } catch (\Exception $e) {
-      $this->logger->critical('Failed to create core objectes',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
+      if ($this->logger) {
+        $this->logger->critical('Failed to create core objectes',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
+      } else {
+        error_log('CRITICAL: '.$e->getMessage().' - '.$e->getTraceAsString());
+      }
       die;
     }
 
