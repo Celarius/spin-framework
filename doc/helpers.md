@@ -64,7 +64,7 @@ $val = config('application.maintenance');
 ```
 
 ## 1.4. container()
-The `container()` function is used to retreive the container object, or to get/set a specific container key. 
+The `container()` function is used to retreive the container object, or to get/set a specific container key.
 
 If the additional `$id` parameter is given the container item with `$key` is returned.
 
@@ -317,10 +317,10 @@ The `Cipher` helper encrypts/decrypts strings using OpenSSL.
 
 ```php
 # Encrypt a value
-$encryptedValue = \Spin\Helper\Cipher::encrypt( $plain, 'secret', 'AES-256-CBC' );
+$encryptedValue = \Spin\Helpers\Cipher::encrypt( $plain, 'secret', 'AES-256-CBC' );
 
 # Decrypt a value
-$plain = \Spin\Helper\Cipher::decrypt( $encryptedValue, 'secret', 'AES-256-CBC' );
+$plain = \Spin\Helpers\Cipher::decrypt( $encryptedValue, 'secret', 'AES-256-CBC' );
 ```
 
 ## 2.3. Hash
@@ -328,7 +328,7 @@ The `Hash` helper produces hashes using OpenSSL digest methods.
 
 ```php
 # Produce a hash
-$digest = \Spin\Helper\Hash::generate('This is the data','SHA256');
+$digest = \Spin\Helpers\Hash::generate('This is the data','SHA256');
 ```
 
 ## 2.4. UUID
@@ -336,8 +336,8 @@ The `UUID` helper produces UUID v3, v4 and v4 unique UUID's.
 
 ```php
 # UUIDv4 GUID
-$uuidv4 = \Spin\Helper\UUID::generate();
+$uuidv4 = \Spin\Helpers\UUID::generate();
 
 # UUIDv5 GUID
-$uuidv5 = \Spin\Helper\UUID::v5($uuidv4,'My v5 UUID');
+$uuidv5 = \Spin\Helpers\UUID::v5($uuidv4,'My v5 UUID');
 ```

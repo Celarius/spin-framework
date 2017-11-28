@@ -44,7 +44,12 @@ class Cipher implements CipherInterface
     # Encrypt
     $result = openssl_encrypt($data,$algorithm,$secret,0,$iv);
 
-    return base64_encode($iv.$result);
+    if ( !$result===false ) {
+      return base64_encode($iv.$result);
+    } else {
+      return null;
+    }
+
   }
 
 
