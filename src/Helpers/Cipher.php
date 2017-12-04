@@ -30,12 +30,14 @@ class Cipher implements CipherInterface
    */
   public static function encrypt(string $data, string $secret='', string $algorithm='AES-256-CBC')
   {
-    # If AES we will add a random 16 byte IV before the encrypted data
-    if ( strtoupper(substr($algorithm,0,3))==='AES' ) {
-      $iv = openssl_random_pseudo_bytes(16);
-    } else {
-      $iv = '';
-    }
+    // # If AES we will add a random 16 byte IV before the encrypted data
+    // if ( strtoupper(substr($algorithm,0,3))==='AES' ) {
+    //   $iv = openssl_random_pseudo_bytes(16);
+    // } else {
+    //   $iv = '';
+    // }
+    # Add a random Initialization Vector
+    $iv = openssl_random_pseudo_bytes(16);
 
     # If no secret provided, use the one in config
     if (empty($secret))
@@ -44,7 +46,12 @@ class Cipher implements CipherInterface
     # Encrypt
     $result = openssl_encrypt($data,$algorithm,$secret,0,$iv);
 
-    return base64_encode($iv.$result);
+    if ( !$result===false ) {
+      return base64_encode($iv.$result);
+    } else {
+      return null;
+    }
+
   }
 
 
