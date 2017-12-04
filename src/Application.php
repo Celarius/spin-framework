@@ -627,20 +627,21 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  mixed
    */
-  public function setCookie(string $name, ?string $value=null, int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httpOnly=false)
+  public function setCookie(string $name, string $value=null, int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httpOnly=false)
   {
     if ( array_key_exists($name,$this->cookies) && is_null($value) ) {
       # Remove the Cookie
       $this->cookies = array_diff_key($this->cookies,[$name=>'']);
     } else {
-      # Remove the Cookie
+      # Set the Cookie
       $this->cookies[$name] = [
-        'value'=>$value,
-        'expire'=>$expire,
-        'path'=>$path,
-        'domain'=>$domain,
-        'secure'=>$secure,
-        'httpOnly'=>$httpOnly
+        'name'     => $name,
+        'value'    => $value,
+        'expire'   => $expire,
+        'path'     => $path,
+        'domain'   => $domain,
+        'secure'   => $secure,
+        'httpOnly' => $httpOnly
       ];
     }
 
@@ -906,13 +907,14 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
     # Set Cookies
     foreach ($this->cookies as $cookie) {
+error_log('Cookie::'.print_r($cookie,true));
       setCookie( $cookie['name'],
                  $cookie['value'],
-                 $cookie['expire'],
-                 $cookie['path'],
-                 $cookie['domain'],
-                 $cookie['secure'],
-                 $cookie['httponly']
+                 $cookie['expire'] ?? 0,
+                 $cookie['path'] ?? '',
+                 $cookie['domain'] ?? '',
+                 $cookie['secure'] ?? false,
+                 $cookie['httponly'] ?? false
                );
     }
 
