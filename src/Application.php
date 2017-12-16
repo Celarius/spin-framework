@@ -910,8 +910,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     if (function_exists('header_remove')) header_remove('x-powered-by');
 
     # Set Cookies
-    foreach ($this->cookies as $cookie) {
-error_log('Cookie::'.print_r($cookie,true));
+    foreach ($this->cookies as $cookie)
+    {
       setCookie( $cookie['name'],
                  $cookie['value'],
                  $cookie['expire'] ?? 0,
