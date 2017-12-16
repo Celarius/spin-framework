@@ -363,6 +363,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           } else {
             # Debug log
             $this->getLogger()->error('Controller not found ',['rid'=>container('requestId'),'controller'=>$handlerClass]);
+
+            # Attempt to run the 404 error controller (if set by user in config)
+            $this->runErrorController('',404);
           }
         }
 
