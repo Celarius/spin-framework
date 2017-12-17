@@ -339,6 +339,8 @@ if (!function_exists('redirect')) {
    */
   function redirect(string $uri, $status=302, $headers = [])
   {
+    global $app;
+
     # Build response object
     $response = getResponse()
                 ->withStatus($status)
