@@ -112,7 +112,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       date_default_timezone_set($timeZone);
 
       # Create logger
-      $this->logger = new Logger( $this->getAppCode(), $this->getConfig()->get('logger') );
+      $this->logger = new Logger( $this->getAppCode(), $this->getConfig()->get('logger'), $this->basePath );
 
       # Set error handlers to use Logger component
       $this->setErrorHandlers();
