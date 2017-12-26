@@ -20,7 +20,7 @@ class Logger extends \Monolog\Logger
    * @param string $loggerName   Name of the Logger
    * @param array  $options      Array with options from config
    */
-  public function __construct(string $loggerName, ?array $options=[])
+  public function __construct(string $loggerName, ?array $options=[], $basePath='')
   {
     parent::__construct($loggerName);
 
@@ -38,9 +38,11 @@ class Logger extends \Monolog\Logger
       $logFilePath = $options['drivers'][$logDriver]['file_path'] ?? 'storage/log';
       $logFileFormat = $options['drivers'][$logDriver]['file_format'] ?? 'Y-m-d';
 
+      # Construct the filename
+      $file = $basePath . DIRECTORY_SEPARATOR . $logFilePath . DIRECTORY_SEPARATOR . date($logFileFormat) . '.log';
+
       # Create the Stream Handler
-      $handler = new StreamHandler( $logFilePath . DIRECTORY_SEPARATOR . date($logFileFormat) . '.log',
-                                    $this->toMonologLevel($logLevel) );
+      $handler = new StreamHandler( $file, $this->toMonologLevel($logLevel) );
 
     } elseif ( strcasecmp($logDriver,"php")==0 ) {
       # Create the Log Handler
