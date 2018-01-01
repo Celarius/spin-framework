@@ -864,7 +864,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     # Getting or Setting the value?
     if (is_null($value)) {
       # Return what $name has stored in $container array
-      $value = $this->container->get($name) ?? null;
+      if ($this->container->has($name)) {
+        $value = $this->container->get($name);
+      } else {
+        $value = null;
+      }
 
     } else {
       # Setting the container value $name to $value
