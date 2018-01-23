@@ -43,25 +43,25 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
       # Default to ALL
       $methods = ['GET','POST','PUT','PATCH','DELETE','HEAD','OPTIONS'];
 
-      if (!isset($definition['methods'])) {
-        $definition['methods'] = $methods;
+      if (!isset($route['methods'])) {
+        $methods = $route['methods'];
       }
 
       # Is $methods a String, not '*' and not '' ?
       if (
-            is_string($definition['methods']) &&
-            strcasecmp($definition['methods'],'*')!=0 &&
-            !empty(trim($definition['methods']))
+            is_string($route['methods']) &&
+            strcasecmp($route['methods'],'*')!=0 &&
+            !empty(trim($route['methods']))
           )
       {
         # Support giving methods as comma separated string
-        $methods = array_values(explode(',',$definition['methods']));
+        $methods = array_values(explode(',',$route['methods']));
         # Trim spaces/specials from values
         $methods = array_map('trim',$methods);
       } else
       # Is it an array, but NOT emtpy ?
-      if (isset($definition['methods']) && is_array($definition['methods']) && count($definition['methods'])>0) {
-        $methods = $definition['methods'];
+      if (isset($route['methods']) && is_array($route['methods']) && count($route['methods'])>0) {
+        $methods = $route['methods'];
       }
 
       if ( isset($route['path']) && isset($route['handler']) ) {
