@@ -147,8 +147,12 @@ if (!function_exists('container')) {
       return $app->getContainer();
 
     } elseif (is_null($value)) {
-      # Return the $id i nthe container
-      return $app->getContainer()->get($id);
+      # Return the $id in the container
+      if ( $app->getContainer()->has($id) ) {
+        return $app->getContainer()->get($id);
+      } else {
+        return null;
+      }
 
     } else {
       # set $id in container to $value
