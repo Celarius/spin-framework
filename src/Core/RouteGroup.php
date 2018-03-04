@@ -118,6 +118,12 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
         break;
 
       case \FastRoute\Dispatcher::FOUND:
+        # URLDecode each argument
+        foreach ($routeInfo[2] as $idx=>$r)
+        {
+          $routeInfo[2][$idx] = urldecode($r);
+        }
+
         # Return the Handler + args
         return [
           'method'=>$method,
