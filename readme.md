@@ -16,24 +16,28 @@ for most things, and allows for plugging in almost any PSR compatible component,
 
 <!-- https://github.com/naokazuterada/MarkdownTOC -->
 
-<!-- MarkdownTOC list_bullets="-" bracket="round" lowercase="true" autolink="true" indent="" -->
+<!-- MarkdownTOC list_bullets="-" bracket="round" lowercase="true" autolink="true" indent= -->
 
 - [1. Features](#1-features)
 - [1.1. PSR based integrations](#11-psr-based-integrations)
 - [2. Installation](#2-installation)
 - [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
-- [4. Technical Details](#4-technical-details)
-- [Apache VHost configuration](#apache-vhost-configuration)
+- [3. Technical Details](#3-technical-details)
+- [3.1. Apache VHost configuration](#31-apache-vhost-configuration)
 
 <!-- /MarkdownTOC -->
 
 # 1. Features
 * PHP 7.1+
-* Platform agnostic. (Windows, *nix)
-* Composer driven in all packages/extensions
+* Platform agnostic. (Windows, \*nix)
+* Routing engine, with route groups
+* Middleware
+* Containers
+* Composer driven in packages/extensions
 * PDO based DB connections (MySql,Oracle,CockroachDb,Firebird,Sqlite ...)
 * DAO base classes for DB Entity representation
 * Extendable with other frameworks (ORM, Templates etc.)
+
 
 ## 1.1. PSR based integrations
 * Logger (PSR-3) Defaults to [Monolog](https://github.com/Seldaek/monolog)
@@ -44,6 +48,7 @@ for most things, and allows for plugging in almost any PSR compatible component,
 * SimpleCache (PSR-16). Defaults to APCu SimpleCache
 * HTTP Factories (PSR-17)
 
+
 # 2. Installation
 Installing spin-framework as standalone with composer:
 ```bash
@@ -53,10 +58,11 @@ Installing spin-framework as standalone with composer:
 ## 2.1. Using the spin-skeleton
 To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example configs, routes, controllers and many other things.
 
-# 4. Technical Details
+
+# 3. Technical Details
 * [Helpers](doc/helpers.md)
 
-## Apache VHost configuration
+## 3.1. Apache VHost configuration
 ```txt
 <VirtualHost *:80>
     ServerName ${domain.name}
