@@ -41,10 +41,8 @@ for most things, and allows for plugging in almost any PSR compatible component,
 
 ## 1.1. PSR based integrations
 * Logger (PSR-3) Defaults to [Monolog](https://github.com/Seldaek/monolog)
-* Huggable (PSR-8)
 * HTTP Message (PSR-7). Defaults to [Guzzle](https://github.com/guzzle/guzzle)
 * Container (PSR-11). Defaults to [The Leauge Container](http://container.thephpleague.com/)
-* Events (PSR-14).
 * SimpleCache (PSR-16). Defaults to APCu SimpleCache
 * HTTP Factories (PSR-17)
 
