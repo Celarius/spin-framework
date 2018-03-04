@@ -493,7 +493,7 @@ if (!function_exists('responseFile')) {
 
 if (!function_exists('getClientIp')) {
   /**
-   * Gets the ClientIp from the request headers
+   * Gets the Clients IPv4 from the request headers
    *
    * @todo    Implement Support for RFC7239
    * @link    https://tools.ietf.org/html/rfc7239

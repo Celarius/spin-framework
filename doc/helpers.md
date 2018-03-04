@@ -1,4 +1,4 @@
-<!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent="" depth="4" -->
+<!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent= depth="4" -->
 
 * [1. Global Helper methods](#1-global-helper-methods)
 * [1.1. env\(\)](#11-env)
@@ -332,7 +332,7 @@ $digest = \Spin\Helpers\Hash::generate('This is the data','SHA256');
 ```
 
 ## 2.4. UUID
-The `UUID` helper produces UUID v3, v4 and v4 unique UUID's.
+The `UUID` helper produces UUID v3, v4 and v5 unique UUID's.
 
 ```php
 # UUIDv4 GUID
