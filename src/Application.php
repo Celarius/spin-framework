@@ -97,6 +97,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   {
     parent::__construct();
 
+    $GLOBALS['app'] = $this;
+
     try {
       # Require the Global Heloers
       require __DIR__ . '/Helpers.php';
@@ -122,6 +124,40 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Set error handlers to use Logger component
       $this->setErrorHandlers();
 
+      # Initialize properties
+      $this->routeGroups = array();
+      $this->beforeMiddleware = array();
+      $this->afterMiddleware = array();
+
+      $this->responseFile = '';
+      $this->cookies = [];
+      // $this->containerFactory = null;
+      // $this->request = null;
+      // $this->response = null;
+      // $this->container = null;
+
+      # Initialize Objects
+      $this->httpServerRequestFactory = $this->loadFactory( $this->getConfig()->get('factories.http.serverRequest') ?? ['class'=>'\\Spin\\Factories\\Http\\ServerRequestFactory'] );
+      $this->httpResponseFactory = $this->loadFactory( $this->getConfig()->get('factories.http.response') ?? ['class'=>'\\Spin\\Factories\\Http\\ResponseFactory'] );
+      $this->httpStreamFactory = $this->loadFactory( $this->getConfig()->get('factories.http.stream') ?? ['class'=>'\\Spin\\Factories\\Http\\StreamFactory'] );
+
+      # Create Cache Manager
+      $this->cacheManager = new CacheManager();
+
+      # Create Connection Manager
+      $this->connectionManager = new ConnectionManager();
+
+      # HTTP Factories
+      $this->request = $this->httpServerRequestFactory->createServerRequestFromArray($serverRequest ?? $_SERVER);
+      $this->response = $this->httpResponseFactory->createResponse(404);
+
+      # Container
+      $this->containerFactory = $this->loadFactory( ($this->getConfig()->get('factories.container') ?? ['class'=>'\\Spin\\Factories\\ContainerFactory']) );
+      $this->container = $this->containerFactory->createContainer();
+
+      # Create & Process UploadedFiles structure
+      $this->uploadedFilesManager = new UploadedFilesManager($_FILES);
+
     } catch (\Exception $e) {
       if ($this->logger) {
         $this->logger->critical('Failed to create core objectes',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
@@ -130,22 +166,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       }
       die;
     }
-
-    # Initialize properties
-    $this->routeGroups = array();
-    $this->beforeMiddleware = array();
-    $this->afterMiddleware = array();
-
-    # Initialize Objects
-    $this->httpServerRequestFactory = $this->loadFactory( $this->getConfig()->get('factories.http.serverRequest') ?? ['class'=>'\\Spin\\Factories\\Http\\ServerRequestFactory'] );
-    $this->httpResponseFactory = $this->loadFactory( $this->getConfig()->get('factories.http.response') ?? ['class'=>'\\Spin\\Factories\\Http\\ResponseFactory'] );
-    $this->httpStreamFactory = $this->loadFactory( $this->getConfig()->get('factories.http.stream') ?? ['class'=>'\\Spin\\Factories\\Http\\StreamFactory'] );
-    $this->containerFactory = null;
-    $this->request = null;
-    $this->response = null;
-    $this->responseFile = '';
-    $this->container = null;
-    $this->cookies = [];
   }
 
   /**
@@ -159,27 +179,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   public function run(array $serverRequest=null): bool
   {
     try {
-      # Create Cache Manager
-      $this->cacheManager = new CacheManager();
-      $this->getLogger()->debug('CacheManager created',['manager'=>$this->cacheManager]);
-
-      # Create Connection Manager
-      $this->connectionManager = new ConnectionManager();
-      $this->getLogger()->debug('ConnectionManager created',['manager'=>$this->connectionManager]);
-
-      # HTTP Factories
-      $this->request = $this->httpServerRequestFactory->createServerRequestFromArray($serverRequest ?? $_SERVER);
-      $this->response = $this->httpResponseFactory->createResponse(404);
-
-      # Container
-      $this->containerFactory = $this->loadFactory( ($this->getConfig()->get('factories.container') ?? ['class'=>'\\Spin\\Factories\\ContainerFactory']) );
-      $this->container = $this->containerFactory->createContainer();
-
       # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
       container('requestId', md5((string)microtime(true)));
-
-      # Process UploadedFiles structure
-      $this->uploadedFilesManager = new UploadedFilesManager($_FILES);
 
     } catch (\Exception $e) {
       $this->getLogger()
@@ -450,7 +451,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $class = '';
 
     # Determine the Controller Class to run
-    if (array_key_exists($httpCode, $this->errorControllers)) {
+    if (!is_null($this->errorControllers) && array_key_exists($httpCode, $this->errorControllers)) {
       $class = $this->errorControllers[$httpCode];
     } else {
       if ($httpCode>=400 && $httpCode<500) {
@@ -672,7 +673,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
-   * getBasePath returns the full path to the application folder
+   * getBasePath returns the full path to the application root folder
    *
    * @return     string
    */
@@ -887,14 +888,18 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     # Getting or Setting the value?
     if (is_null($value)) {
       # Return what $name has stored in $container array
-      if ($this->container->has($name)) {
-        $value = $this->container->get($name);
+      if ($this->getContainer()->has($name)) {
+        $value = $this->getContainer()->get($name);
       } else {
         $value = null;
       }
 
+    } elseif (is_callable($value)) {
+      # Callable
+      $this->container->share($name,$value);
+
     } else {
-      # Setting the container value $name to $value
+      # Variable
       $this->container->set($name,$value);
 
     }

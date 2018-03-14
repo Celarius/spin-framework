@@ -7,18 +7,18 @@
  * @link http://php.net/manual/en/features.file-upload.php
  */
 
-namespace Spin;
+namespace Spin\Core;
 
 use Spin\Core\AbstractBaseClass;
 use Spin\Exception\Exception;
 use Spin\Core\Config;
 use Spin\Core\Logger;
 use Spin\Core\UploadedFile;
-use Spin\Core\FilesManagerInterface;
+use Spin\Core\UploadedFilesManagerInterface;
 
 use Psr\Http\Message\Response;
 
-class UploadedFilesManager extends AbstractBaseClass implements FilesManagerInterface
+class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesManagerInterface
 {
   /** @var array      Array with \Spin\Core\File objects  */
   protected $files;
@@ -128,10 +128,10 @@ class UploadedFilesManager extends AbstractBaseClass implements FilesManagerInte
         case UPLOAD_ERR_FORM_SIZE:
             throw new Exception($file['name'] . ': The uploaded file exceeds MAX_FILE_SIZE (' . $maxSize . ') ');
         
-        case UPLOAD_ERR_NO_TMP_DIR
+        case UPLOAD_ERR_NO_TMP_DIR:
             throw new Exception($file['name'] . ': Missing a temporary folder');
 
-        case UPLOAD_ERR_CANT_WRITE
+        case UPLOAD_ERR_CANT_WRITE:
             throw new Exception($file['name'] . ': Failed to write file to disk');
 
         default:
