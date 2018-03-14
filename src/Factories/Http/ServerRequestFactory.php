@@ -72,6 +72,8 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
    */
   public function createServerRequestFromArray(?array $server)
   {
+    global $app;
+    
     # Copied from Guzzles ::fromGlobals(), but we need to support the $server array as
     # paramter, so we use that instead of the $_SERVER array guzzle uses by default
 
@@ -83,7 +85,7 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
 
     $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $server);
 
-    logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$uri.'") from array (Guzzle)');
+    $app->getLogger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$uri.'") from array (Guzzle)');
 
     return $serverRequest
            ->withCookieParams($_COOKIE)
