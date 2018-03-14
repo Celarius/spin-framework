@@ -28,10 +28,16 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   /** @var        string          Real filename once the file has been moved */
   protected $filename;
 
+  /** @var        boolean         False until a successful move() */
+  protected $isMoved;
+
+
+
+
   /**
    * Constructor
    *
-   * @param      array  $file     Array with file data
+   * @param      array  $file   Array with file data
    */
   public function __construct(array $file)
   {
@@ -44,12 +50,46 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
     $this->SetError($file['error'] ?? null);
     $this->SetSize($file['size'] ?? 0);
     $this->SetFilename($file['filename'] ?? '');
+
+    $this->setIsMoved(false);
+  }
+
+  /**
+   * Move a downloaded file to the destination $directory
+   *
+   * @param      string   $directory  The directory to move the file to
+   * @param      string   $filename   Optional. The new filename
+   *
+   * @return     boolean
+   */
+  public function move(string $directory, string $filename='')
+  {
+    # If no filename is provided, assume the incoming name
+    if (empty($filename)) $this->setFilename( $this->getName() );
+
+    # Move the file
+    $ok = move_uploaded_file($this->getTmpName(), $destination . DIRECTORY_SEPARATOR . $filename );
+
+    # Set property
+    $this->setIsMoved($ok);
+
+    return $ok;
+  }
+
+  /**
+   * Gets the MimeType
+   *
+   * @return     string
+   */
+  public function getMimeType()
+  {
+    return $this->getType();
   }
 
   /**
    * Gets the name.
    *
-   * @return     mixed
+   * @return     string
    */
   public function getName()
   {
@@ -59,11 +99,11 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   /**
    * Sets the name.
    *
-   * @param      mixed  $name
+   * @param      string  $name
    *
    * @return     self
    */
-  public function setName($name)
+  public function setName(string $name)
   {
     $this->name = $name;
 
@@ -71,9 +111,9 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   }
 
   /**
-   * Gets the type.
+   * Gets the type (Mime Type).
    *
-   * @return     mixed
+   * @return     string
    */
   public function getType()
   {
@@ -81,13 +121,13 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   }
 
   /**
-   * Sets the type.
+   * Sets the type (Mime Type)
    *
    * @param      mixed  $type
    *
    * @return     self
    */
-  public function setType($type)
+  public function setType(string $type)
   {
     $this->type = $type;
 
@@ -97,7 +137,7 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   /**
    * Gets the temporary name.
    *
-   * @return     mixed
+   * @return     string
    */
   public function getTmpName()
   {
@@ -111,7 +151,7 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
    *
    * @return     self
    */
-  public function setTmpName($tmp_name)
+  public function setTmpName(string $tmp_name)
   {
     $this->tmp_name = $tmp_name;
 
@@ -121,7 +161,7 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   /**
    * Gets the error.
    *
-   * @return     mixed
+   * @return     int
    */
   public function getError()
   {
@@ -131,11 +171,11 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   /**
    * Sets the error.
    *
-   * @param      mixed  $error
+   * @param      int  $error
    *
    * @return     self
    */
-  public function setError($error)
+  public function setError(int $error)
   {
     $this->error = $error;
 
@@ -145,7 +185,7 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   /**
    * Gets the size.
    *
-   * @return     mixed
+   * @return     int
    */
   public function getSize()
   {
@@ -159,7 +199,7 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
    *
    * @return     self
    */
-  public function setSize($size)
+  public function setSize(int $size)
   {
     $this->size = $size;
 
@@ -169,7 +209,7 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   /**
    * Gets the filename.
    *
-   * @return     mixed
+   * @return     string
    */
   public function getFilename()
   {
@@ -183,9 +223,33 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
    *
    * @return     self
    */
-  public function setFilename($filename)
+  public function setFilename(string $filename)
   {
     $this->filename = $filename;
+
+    return $this;
+  }
+
+  /**
+   * Gets the isMoved.
+   *
+   * @return     bool
+   */
+  public function getIsMoved()
+  {
+    return $this->isMoved;
+  }
+
+  /**
+   * Sets the isMoved.
+   *
+   * @param      mixed  $isMoved
+   *
+   * @return     self
+   */
+  public function setIsMoved(bool $isMoved)
+  {
+    $this->isMoved = $isMoved;
 
     return $this;
   }
