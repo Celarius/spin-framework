@@ -5,7 +5,7 @@ namespace Spin\Core;
 use Spin\Core\AbstractBaseClass;
 use Spin\Core\FilesInterface;
 
-class File extends AbstractBaseClass implements FilesInterface
+class UploadedFile extends AbstractBaseClass implements FilesInterface
 {
   /** @var        string          The Parameter name on the form */
   protected $parameter;

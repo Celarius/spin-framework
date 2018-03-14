@@ -8,7 +8,7 @@ use Spin\Core\Logger;
 use Spin\Core\RouteGroup;
 use Spin\Core\ConnectionManager;
 use Spin\Core\CacheManager;
-use Spin\Core\FilesManager;
+use Spin\Core\UploadedFilesManager;
 use Spin\Exception\Exception;
 use Spin\ApplicationInterface;
 
@@ -83,7 +83,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   protected $connectionManager;
 
   /** @var        Object          Uploaded files manager */
-  protected $filesManager;
+  protected $uploadedFilesManager;
 
   /** @var        array           Error Controllers, key=http code, value=Controller class[@handler] */
   protected $errorControllers;
@@ -179,7 +179,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       container('requestId', md5((string)microtime(true)));
 
       # Process UploadedFiles structure
-      $this->filesManager = new FilesManager($_FILES);
+      $this->uploadedFilesManager = new UploadedFilesManager($_FILES);
 
     } catch (\Exception $e) {
       $this->getLogger()

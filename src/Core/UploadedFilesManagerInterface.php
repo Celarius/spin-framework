@@ -2,7 +2,7 @@
 
 namespace Spin\Core;
 
-interface FilesManagerInterface
+interface UploadedFilesManagerInterface
 {
 
 }

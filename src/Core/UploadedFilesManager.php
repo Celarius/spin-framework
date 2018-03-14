@@ -13,12 +13,12 @@ use Spin\Core\AbstractBaseClass;
 use Spin\Exception\Exception;
 use Spin\Core\Config;
 use Spin\Core\Logger;
-use Spin\Core\File;
+use Spin\Core\UploadedFile;
 use Spin\Core\FilesManagerInterface;
 
 use Psr\Http\Message\Response;
 
-class FilesManager extends AbstractBaseClass implements FilesManagerInterface
+class UploadedFilesManager extends AbstractBaseClass implements FilesManagerInterface
 {
   /** @var array      Array with \Spin\Core\File objects  */
   protected $files;
@@ -81,7 +81,7 @@ class FilesManager extends AbstractBaseClass implements FilesManagerInterface
     # For each entry in the list, add a file object
     foreach ($list as $file)
     {
-      $this->files[] = new File($file);
+      $this->files[] = new UploadedFile($file);
     }
 
     # Validate/check files/values
