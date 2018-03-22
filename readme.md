@@ -11,7 +11,7 @@ Spin is a application framework for making Web UI's and REST API's quickly and e
 for most things, and allows for plugging in almost any PSR compatible component, such as loggers, HTTP libraries etc.
 
 ```txt
-    NOTE: This framework is in ALPHA stage - Not ready for production
+    NOTE: This framework is in ALPHA stage - Not fully ready for production
 ```
 
 <!-- https://github.com/naokazuterada/MarkdownTOC -->
@@ -51,16 +51,18 @@ for most things, and allows for plugging in almost any PSR compatible component,
 # 2. Installation
 Installing spin-framework as standalone with composer:
 ```bash
-> composer require celarius/spin-framework
+composer require celarius/spin-framework
 ```
 
 ## 2.1. Using the spin-skeleton
-To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example configs, routes, controllers and many other things.
+To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and
+running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example 
+configs, routes, controllers and many other things.
 
 ## 2.2. Testing
 Having PHPUnit installed simply type
 ```txt
-> phpunit
+phpunit
 ```
 At the command prompt and all tests will be executed.
 
