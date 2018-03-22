@@ -896,11 +896,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
     } elseif (is_callable($value)) {
       # Callable
-      $this->container->share($name,$value);
+      $this->getContainer()->share($name,$value);
 
     } else {
       # Variable
-      $this->container->set($name,$value);
+      $this->getContainer()->share($name,$value);
 
     }
 
