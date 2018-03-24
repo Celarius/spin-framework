@@ -38,8 +38,9 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * Calls the appropriate handle*() method.
    *
-   * @param  array $args    Path variable arguments as name=value pairs
-   * @return bool           Value returned by $app->run()
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
    */
   public function handle(array $args)
   {
@@ -58,63 +59,154 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
   /**
    * Handle GET request
    *
-   * @param  array $args    Path variable arguments as name=value pairs
-   * @return bool           Value returned by $app->run()
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
    */
   public function handleGET(array $args)
   {
+    $response = $this->verifyGET($args));
+    if ($response)
+      return $response;
+
     return response('',405);
   }
+
+  /**
+   * Verifies the GET request
+   *
+   * @param      array          $args   The arguments
+   *
+   * @return     null|response  If a response is returned, this is sent to the user
+   */
+  public function verifyGET(array $args)
+  {
+    return null;
+  }
+
 
   /**
    * Handle POST request
    *
-   * @param  array $args    Path variable arguments as name=value pairs
-   * @return bool           Value returned by $app->run()
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
    */
   public function handlePOST(array $args)
   {
+    $response = $this->verifyPOST($args));
+    if ($response)
+      return $response;
+
     return response('',405);
   }
+
+  /**
+   * Verifies the POST request, and the payload
+   *
+   * @param      array          $args   The arguments
+   *
+   * @return     null|response  If a response is returned, this is sent to the user
+   */
+  public function verifyPOST(array $args)
+  {
+    return null;
+  }
+
 
   /**
    * Handle PUT request
    *
-   * @param  array $args    Path variable arguments as name=value pairs
-   * @return bool           Value returned by $app->run()
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
    */
   public function handlePUT(array $args)
   {
+    $response = $this->verifyPUT($args));
+    if ($response)
+      return $response;
+
     return response('',405);
   }
+
+  /**
+   * Verifies the PUT request, and the payload
+   *
+   * @param      array          $args   The arguments
+   *
+   * @return     null|response  If a response is returned, this is sent to the user
+   */
+  public function verifyPUT(array $args)
+  {
+    return null;
+  }
+
 
   /**
    * Handle PATCH request
    *
-   * @param  array $args    Path variable arguments as name=value pairs
-   * @return bool           Value returned by $app->run()
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
    */
   public function handlePATCH(array $args)
   {
+    $response = $this->verifyPATCH($args));
+    if ($response)
+      return $response;
+
     return response('',405);
   }
+
+  /**
+   * Verifies the PATCH request, and the payload
+   *
+   * @param      array          $args   The arguments
+   *
+   * @return     null|response  If a response is returned, this is sent to the user
+   */
+  public function verifyPATCH(array $args)
+  {
+    return null;
+  }
+
 
   /**
    * Handle DELETE request
    *
-   * @param  array $args    Path variable arguments as name=value pairs
-   * @return bool           Value returned by $app->run()
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
    */
   public function handleDELETE(array $args)
   {
+    $response = $this->verifyDELETE($args));
+    if ($response)
+      return $response;
+
     return response('',405);
   }
 
   /**
+   * Verifies the DELETE request
+   *
+   * @param      array          $args   The arguments
+   *
+   * @return     null|response  If a response is returned, this is sent to the user
+   */
+  public function verifyDELETE(array $args)
+  {
+    return null;
+  }
+
+
+  /**
    * Handle HEAD request
    *
-   * @param  array $args    Path variable arguments as name=value pairs
-   * @return bool           Value returned by $app->run()
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
    */
   public function handleHEAD(array $args)
   {
@@ -124,8 +216,9 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
   /**
    * Handle OPTIONS request
    *
-   * @param  array $args    Path variable arguments as name=value pairs
-   * @return bool           Value returned by $app->run()
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
    */
   public function handleOPTIONS(array $args)
   {
@@ -135,18 +228,20 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
   /**
    * Handle custom request
    *
-   * @param  array $args    Path variable arguments as name=value pairs
-   * @return bool           Value returned by $app->run()
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
    */
   public function handleCUSTOM(array $args)
   {
     return response('',405);
   }
 
+
   /**
    * Return the Client HTTP Request object
    *
-   * @return object
+   * @return     object
    */
   public function getRequest()
   {
@@ -156,7 +251,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
   /**
    * Return the Client HTTP Response object
    *
-   * @return object
+   * @return     object
    */
   public function getResponse()
   {
@@ -166,7 +261,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
   /**
    * Return the Config object
    *
-   * @return object
+   * @return     object
    */
   public function getConfig()
   {
@@ -176,7 +271,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
   /**
    * Return the Logger object
    *
-   * @return object
+   * @return     object
    */
   public function getLogger()
   {
@@ -186,7 +281,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
   /**
    * Return the Cache object
    *
-   * @return object
+   * @return     object
    */
   public function getCache()
   {

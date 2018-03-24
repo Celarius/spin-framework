@@ -17,7 +17,7 @@ use Psr\Http\Message\Response;
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application version */
-  const VERSION = '0.0.2';
+  const VERSION = '0.0.3';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
