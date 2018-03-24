@@ -13,6 +13,9 @@ use Spin\Core\ControllerInterface;
 
 abstract class Controller extends AbstractBaseClass implements ControllerInterface
 {
+  /** @var        mixed          The body received for POST, PUT, PATCH */
+  protected $body;
+
   /**
    * Constructor
    */
@@ -65,25 +68,8 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleGET(array $args)
   {
-    $response = $this->verifyGET($args));
-    if ($response)
-      return $response;
-
     return response('',405);
   }
-
-  /**
-   * Verifies the GET request
-   *
-   * @param      array          $args   The arguments
-   *
-   * @return     null|response  If a response is returned, this is sent to the user
-   */
-  public function verifyGET(array $args)
-  {
-    return null;
-  }
-
 
   /**
    * Handle POST request
@@ -94,25 +80,8 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handlePOST(array $args)
   {
-    $response = $this->verifyPOST($args));
-    if ($response)
-      return $response;
-
     return response('',405);
   }
-
-  /**
-   * Verifies the POST request, and the payload
-   *
-   * @param      array          $args   The arguments
-   *
-   * @return     null|response  If a response is returned, this is sent to the user
-   */
-  public function verifyPOST(array $args)
-  {
-    return null;
-  }
-
 
   /**
    * Handle PUT request
@@ -123,25 +92,8 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handlePUT(array $args)
   {
-    $response = $this->verifyPUT($args));
-    if ($response)
-      return $response;
-
     return response('',405);
   }
-
-  /**
-   * Verifies the PUT request, and the payload
-   *
-   * @param      array          $args   The arguments
-   *
-   * @return     null|response  If a response is returned, this is sent to the user
-   */
-  public function verifyPUT(array $args)
-  {
-    return null;
-  }
-
 
   /**
    * Handle PATCH request
@@ -152,25 +104,8 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handlePATCH(array $args)
   {
-    $response = $this->verifyPATCH($args));
-    if ($response)
-      return $response;
-
     return response('',405);
   }
-
-  /**
-   * Verifies the PATCH request, and the payload
-   *
-   * @param      array          $args   The arguments
-   *
-   * @return     null|response  If a response is returned, this is sent to the user
-   */
-  public function verifyPATCH(array $args)
-  {
-    return null;
-  }
-
 
   /**
    * Handle DELETE request
@@ -181,25 +116,8 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleDELETE(array $args)
   {
-    $response = $this->verifyDELETE($args));
-    if ($response)
-      return $response;
-
     return response('',405);
   }
-
-  /**
-   * Verifies the DELETE request
-   *
-   * @param      array          $args   The arguments
-   *
-   * @return     null|response  If a response is returned, this is sent to the user
-   */
-  public function verifyDELETE(array $args)
-  {
-    return null;
-  }
-
 
   /**
    * Handle HEAD request
