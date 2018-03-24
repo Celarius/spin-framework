@@ -13,9 +13,6 @@ use Spin\Core\ControllerInterface;
 
 abstract class Controller extends AbstractBaseClass implements ControllerInterface
 {
-  /** @var        mixed          The body received for POST, PUT, PATCH */
-  protected $body;
-
   /**
    * Constructor
    */
