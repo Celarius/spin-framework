@@ -256,6 +256,8 @@ if (!function_exists('queryParams')) {
    */
   function queryParams()
   {
+    global $app;
+
     return $app->getRequest()->getQueryParams() ?? [];
   }
 }
