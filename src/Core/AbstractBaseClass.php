@@ -1,12 +1,20 @@
 <?php declare(strict_types=1);
 
+/**
+ * AbstractBaseClass
+ *
+ * All Spin classes are based on this class
+ *
+ * @package   Spin
+ */
+
 namespace Spin\Core;
 
 // use \Psr\Hug\Huggable;
 // use \Psr\Hug\GroupHuggable;
 
 /**
- *
+ * Abstract Baseclass
  */
 abstract class AbstractBaseClass // implements Huggable, GroupHuggable
 {
@@ -23,6 +31,11 @@ abstract class AbstractBaseClass // implements Huggable, GroupHuggable
   {
     // $this->hugList = new \SplObjectStorage();
   }
+
+  public function __destruct()
+  {
+  }
+
 
   // /**
   //  * Hugs this object.

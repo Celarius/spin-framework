@@ -1,23 +1,29 @@
 <?php declare(strict_types=1);
 
+/**
+ * Spin Application Class
+ *
+ * @package   Spin
+ */
+
 namespace Spin;
 
-use Spin\Core\AbstractBaseClass;
-use Spin\Core\Config;
-use Spin\Core\Logger;
-use Spin\Core\RouteGroup;
-use Spin\Core\ConnectionManager;
-use Spin\Core\CacheManager;
-use Spin\Core\UploadedFilesManager;
-use Spin\Exception\Exception;
-use Spin\ApplicationInterface;
+use \Spin\Core\AbstractBaseClass;
+use \Spin\Core\Config;
+use \Spin\Core\Logger;
+use \Spin\Core\RouteGroup;
+use \Spin\Core\ConnectionManager;
+use \Spin\Core\CacheManager;
+use \Spin\Core\UploadedFilesManager;
+use \Spin\Exception\Exception;
+use \Spin\ApplicationInterface;
 
-use Psr\Http\Message\Response;
+use \Psr\Http\Message\Response;
 
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
-  /** @const      string          Application version */
-  const VERSION = '0.0.3';
+  /** @const      string          Application/Framework version */
+  const VERSION = '0.0.4';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
@@ -91,12 +97,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Constructor
    *
-   * @param      string  $basePath  The base path
+   * @param      string  $basePath  The base path to the application folder
    */
   public function __construct(string $basePath)
   {
     parent::__construct();
 
+    # Register the $app variable globally. This allows us to use it immediately
     $GLOBALS['app'] = $this;
 
     try {

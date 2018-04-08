@@ -1,5 +1,11 @@
 <?php declare(strict_types=1);
 
+/**
+ * PDO Connection Interface
+ *
+ * @package   Spin
+ */
+
 namespace Spin\Database;
 
 interface PdoConnectionInterface
@@ -59,18 +65,21 @@ interface PdoConnectionInterface
   /**
    * Execute a raw SELECT statement
    *
-   * @param  string $sql          SQL statement to execute (SELECT ...)
-   * @param  array  $params       Bind params
-   * @return array                Array with fetched rows
+   * @param      string  $sql     SQL statement to execute (SELECT ...)
+   * @param      array   $params  Bind params
+   *
+   * @return     array   Array with fetched rows
    */
-  public function rawQuery(string $sql, array $params=[]);
+  public function rawQuery(string $sql, array $params=[]): array;
 
   /**
    * Execute an raw INSERT, UPDATE or DELETE statement
    *
-   * @param  string $sql          SQL statement to execute (INSERT, UPDATE, DELETE ...)
-   * @param  array  $params       Bind params
-   * @return bool                 True if rows affected > 0
+   * @param      string  $sql     SQL statement to execute (INSERT, UPDATE,
+   *                              DELETE ...)
+   * @param      array   $params  Bind params
+   *
+   * @return     bool    True if rows affected > 0
    */
-  public function rawExec(string $sql, array $params=[]);
+  public function rawExec(string $sql, array $params=[]): bool;
 }

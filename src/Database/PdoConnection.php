@@ -1,46 +1,60 @@
 <?php declare(strict_types=1);
 
+/**
+ * PDO Connection class
+ *
+ * @package   Spin
+ */
+
 namespace Spin\Database;
 
-use Spin\Database\PdoConnectionInterface;
+use \Spin\Database\PdoConnectionInterface;
 
 abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 {
-  /** @var string Connection name */
+  /** @var        string          Connection name */
   protected $name = '';
-  /** @var string Connection type */
+
+  /** @var        string          Connection type */
   protected $type = '';
-  /** @var string Connection driver ('MySql','Firebird','Sqlite'...) */
+
+  /** @var        string          Connection driver ('MySql','Firebird','Sqlite'...) */
   protected $driver = '';
+
+  /** @var boolean Connection state. */
+  protected $connected = false;
+
   protected $schema = '';
   protected $host = '';
   protected $port = 0;
   protected $username = '';
   protected $password = '';
   protected $charset = '';
+
   /** @var array PDO options array */
   protected $options = array();
+
   /** @var string Full DSN of PDO connection */
   protected $dsn = '';
+
   /** @var string Database Engine Version we connect to */
   protected $serverVersion = '';
+
   /** @var string Client Driver Version we connect to */
   protected $clientVersion = '';
-  /** @var boolean Connection state. */
-  protected $connected = false;
 
   /**
    * Constructor
    *
-   * @param string $connectionName [description]
-   * @param array  $params         [description]
+   * @param      string  $connectionName    Name of the connection
+   * @param      array   $params            Array with connection parameters
    */
   public function __construct(string $connectionName, array $params=[])
   {
     # Extract the needed parameters
     $this->setName($connectionName);
     $this->setType($params['type'] ?? '');
-    if (isset($params['driver'])) $this->setDriver($params['driver']);
+    $this->setDriver($params['driver'] ?? '');
     $this->setHost($params['host'] ?? '');
     $this->setPort($params['port'] ?? '');
     $this->setSchema($params['schema'] ?? '');
@@ -103,6 +117,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
       // error_log($e->getMessage().' | '.$e->getTraceAsString());
     }
 
+    # Debug log
+    logger()->debug( 'Created Connection', ['connection'=>$this->getName()] );
+
     # Set connected
     $this->connected = true;
   }
@@ -119,9 +136,10 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Connect to Database
    *
-   * This does not work in PDO as the connection is always open as long as the object (this) exists.
+   * This does not work in PDO as the connection is always open as long as the
+   * object (this) exists.
    *
-   * @return [type] [description]
+   * @return     bool
    */
   public function connect(): bool
   {
@@ -133,7 +151,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * This does not work in PDO since there is no disconnect() feature in PDO
    *
-   * @return [type] [description]
+   * @return     bool
    */
   public function disconnect(): bool
   {
@@ -146,7 +164,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Checks if Connected to a Database
    *
-   * @return bool         True for connected, false if not
+   * @return     bool  True for connected, false if not
    */
   public function connected(): bool
   {
@@ -158,7 +176,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * This method needs to be overridden in DB specific driver
    *
-   * @return string       [description]
+   * @return     string  [description]
    */
   public function getDsn(): ?string
   {
@@ -174,7 +192,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get the Name
    *
-   * @return string
+   * @return     string
    */
   public function getName(): ?string
   {
@@ -184,7 +202,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get the Type
    *
-   * @return string
+   * @return     string
    */
   public function getType(): ?string
   {
@@ -194,7 +212,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get the Driver
    *
-   * @return string
+   * @return     string
    */
   public function getDriver(): ?string
   {
@@ -204,7 +222,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get the Schema
    *
-   * @return string
+   * @return     string
    */
   public function getSchema(): ?string
   {
@@ -214,7 +232,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get the Host
    *
-   * @return string
+   * @return     string
    */
   public function getHost(): ?string
   {
@@ -224,7 +242,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get the Port
    *
-   * @return string
+   * @return     string
    */
   public function getPort(): ?int
   {
@@ -234,7 +252,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get Username
    *
-   * @return string
+   * @return     string
    */
   public function getUsername(): ?string
   {
@@ -244,7 +262,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get Password
    *
-   * @return string
+   * @return     string
    */
   public function getPassword(): ?string
   {
@@ -254,7 +272,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get Charset
    *
-   * @return string
+   * @return     string
    */
   public function getCharset(): ?string
   {
@@ -264,7 +282,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get Options
    *
-   * @return array
+   * @return     array
    */
   public function getOptions(): array
   {
@@ -274,7 +292,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get Server Version
    *
-   * @return array
+   * @return     array
    */
   public function getServerVersion(): ?string
   {
@@ -284,7 +302,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get Client Version
    *
-   * @return array
+   * @return     array
    */
   public function getClientVersion(): ?string
   {
@@ -294,7 +312,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set DSN connection string
    *
-   * @param [type] $dsn           [description]
+   * @param      [type]  $dsn    [description]
+   *
+   * @return     self
    */
   public function setDsn(?string $dsn)
   {
@@ -306,8 +326,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set Connection Name
    *
-   * @param   string $name
-   * @return  self
+   * @param      string  $name
+   *
+   * @return     self
    */
   public function setName(?string $name)
   {
@@ -319,8 +340,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set Type
    *
-   * @param   string $type
-   * @return  self
+   * @param      string  $type
+   *
+   * @return     self
    */
   public function setType(?string $type)
   {
@@ -332,8 +354,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set Connection host
    *
-   * @param   string $host
-   * @return  self
+   * @param      string  $host
+   *
+   * @return     self
    */
   public function setHost(?string $host)
   {
@@ -345,8 +368,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set port
    *
-   * @param   string $port
-   * @return  self
+   * @param      string  $port
+   *
+   * @return     self
    */
   public function setPort($port)
   {
@@ -358,8 +382,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set Driver
    *
-   * @param   string $driver
-   * @return  self
+   * @param      string  $driver
+   *
+   * @return     self
    */
   public function setDriver(?string $driver)
   {
@@ -371,8 +396,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set Schema
    *
-   * @param   string $schema
-   * @return  self
+   * @param      string  $schema
+   *
+   * @return     self
    */
   public function setSchema(?string $schema)
   {
@@ -384,7 +410,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set Username
    *
-   * @param string $username      [description]
+   * @param      string  $username  [description]
+   *
+   * @return     self
    */
   public function setUsername(?string $username)
   {
@@ -396,7 +424,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set Password
    *
-   * @param string $password      [description]
+   * @param      string  $password  [description]
+   *
+   * @return     self
    */
   public function setPassword(?string $password)
   {
@@ -408,7 +438,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set Charset
    *
-   * @param string $charset       Charset to use
+   * @param      string  $charset  Charset to use
+   *
+   * @return     self
    */
   public function setCharset(?string $charset)
   {
@@ -420,7 +452,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set ServerVersion
    *
-   * @param string $serverVersio
+   * @param      string  $serverVersion
+   *
+   * @return     self
    */
   public function setServerVersion(?string $serverVersion)
   {
@@ -432,7 +466,10 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set clientVersion
    *
-   * @param string $serverVersio
+   * @param      ?string  $clientVersion  The client version
+   * @param      string  $serverVersio
+   *
+   * @return     self
    */
   public function setClientVersion(?string $clientVersion)
   {
@@ -444,7 +481,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Set Connection Options
    *
-   * @param array $options        [description]
+   * @param      array  $options  [description]
+   *
+   * @return     self
    */
   public function setOptions(array $options)
   {
@@ -456,11 +495,12 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Execute a SELECT statement
    *
-   * @param  string $sql          SQL statement to execute (SELECT ...)
-   * @param  array  $params       Bind params
-   * @return array                Array with fetched rows
+   * @param      string  $sql     SQL statement to execute (SELECT ...)
+   * @param      array   $params  Bind params
+   *
+   * @return     array   Array with fetched rows
    */
-  public function rawQuery(string $sql, array $params=[])
+  public function rawQuery(string $sql, array $params=[]): array
   {
     $rows = [];
 
@@ -498,11 +538,13 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Execute an INSERT, UPDATE or DELETE statement
    *
-   * @param  string $sql          SQL statement to execute (INSERT, UPDATE, DELETE ...)
-   * @param  array  $params       Bind params
-   * @return bool                 True if rows affected > 0
+   * @param      string  $sql     SQL statement to execute (INSERT, UPDATE,
+   *                              DELETE ...)
+   * @param      array   $params  Bind params
+   *
+   * @return     bool    True if rows affected > 0
    */
-  public function rawExec(string $sql, array $params=[])
+  public function rawExec(string $sql, array $params=[]): bool
   {
     $result = false;
 
@@ -535,4 +577,5 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
     return $result;
   }
+
 }

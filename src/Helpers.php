@@ -32,12 +32,14 @@ use Spin\helpers\ArrayToXml;
 
 if (!function_exists('env')) {
   /**
-   * Gets the value of an environment variable. Supports boolean, empty and null.
+   * Gets the value of an environment variable. Supports boolean, empty and
+   * null.
    *
-   * @param  string  $var
-   * @param  mixed   $default
-   * @return mixed
- */
+   * @param      string  $var         Environment Variable to obtain
+   * @param      mixed   $default     Default value if not found
+   *
+   * @return     mixed
+   */
   function env(string $var, $default=null)
   {
     # Get from Environmental vars
@@ -76,7 +78,9 @@ if (!function_exists('app')) {
   /**
    * Get the global $app "object" or a $property or a dependancy
    *
-   * @return object
+   * @param      string  $property  The property
+   *
+   * @return     mixed
    */
   function app(string $property=null)
   {
@@ -94,7 +98,10 @@ if (!function_exists('config')) {
   /**
    * Get/Set a Config key/value
    *
-   * @return object
+   * @param      string          $key    The key in DOt format
+   * @param      integer|string  $value  The value
+   *
+   * @return     mixed
    */
   function config(string $key=null, string $value=null)
   {
@@ -123,20 +130,23 @@ if (!function_exists('container')) {
    * When setting a value, it's added using the shared method
    *
    * Examples:
-   *   # Generating new instances of an obj
-   *   container()->add('MyClass','\\App\\Custom\\MyClass');
-   *   $myClass = container('MyClass'); // Get a new myClass instance
    *
-   *   # Retreiving same instance
-   *   container()->share('session','\\App\\Custom\\Session');
-   *   $session1 = container('session'); // Get the session instance
-   *   $session2 = container('session'); // Get the smae session instance
+   * // Set a variable to a classname
+   * container()->add('MyClass','\\App\\Custom\\MyClass');
    *
-   *   # Quick save/get a value
-   *   container('MyKey','1234'); // Store value
-   *   $val = container('MyKey'); // Get the value
+   * // Get instance of the Class
+   * $myClass = container('MyClass');
    *
-   * @return mixed
+   * // Set a key=value in container
+   * container('MyKey','1234');
+   *
+   * // Get the value
+   * $value = container('MyKey');
+   *
+   * @param      string  $id     The identifier
+   * @param      mixed   $value  The value
+   *
+   * @return     mixed
    */
   function container(string $id=null, $value=null)
   {
@@ -180,13 +190,16 @@ if (!function_exists('db')) {
   /**
    * Get a Connection object
    *
-   * @return object
+   * @param      string  $connectionName  The connection name
+   * @param      array   $params          The connection parameters
+   *
+   * @return     object
    */
-  function db(string $connectionName='')
+  function db(string $connectionName='', array $params=[])
   {
     global $app;
 
-    return $app->getConnectionManager()->getConnection($connectionName);
+    return $app->getConnectionManager()->getConnection($connectionName, $params);
   }
 }
 
@@ -194,7 +207,9 @@ if (!function_exists('cache')) {
   /**
    * Get the Cache object
    *
-   * @return object
+   * @param      string  $driverName  The driver name
+   *
+   * @return     object
    */
   function cache(string $driverName='')
   {
@@ -236,9 +251,10 @@ if (!function_exists('queryParam')) {
   /**
    * Get a Query Param ($_GET variable)
    *
-   * @param  string $paramName
-   * @param  mixed $default
-   * @return mixed
+   * @param      string  $paramName
+   * @param      mixed   $default
+   *
+   * @return     mixed
    */
   function queryParam(string $paramName, $default=null)
   {

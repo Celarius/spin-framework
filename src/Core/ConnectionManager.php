@@ -5,7 +5,7 @@
  *
  * Manages all Database Connections
  *
- * When we 1st need a DB connection, it is created via the ConnectionFactory
+ * @package    Spin
  */
 
 /*
@@ -20,30 +20,32 @@ Example:
 
 namespace Spin\Core;
 
-use Spin\Core\AbstractBaseClass;
-use Spin\Core\ConnectionManagerInterface;
-use Spin\Database\PdoConnection;
-use Spin\Database\PdoConnectionInterface;
+use \Spin\Core\AbstractBaseClass;
+use \Spin\Core\ConnectionManagerInterface;
+use \Spin\Database\PdoConnection;
+use \Spin\Database\PdoConnectionInterface;
 
 class ConnectionManager extends AbstractBaseClass implements ConnectionManagerInterface
 {
-  /** @var array List of Instantiated Connections */
+  /** @var        array         List of Instantiated Connections */
   protected $connections = [];
 
   /**
    * Get or Create a connection
    *
-   * @param  string $name         Name of the connection (from Config)
-   * @return null | object
+   * @param      string  $name    Name of the connection
+   * @param      array   $params  The connection parameters
+   *
+   * @return     null    | object
    */
-  public function getConnection(string $name=null)
+  public function getConnection(string $name=null, array $params=[])
   {
-    # Find the connection (if we already have it created)
+    # Find the connection - null if it's not created
     $connection = $this->findConnection($name);
 
     if (is_null($connection)) {
-      # Attempt to create the connection
-      $connection = $this->createConnection($name);
+      # Create the connection
+      $connection = $this->createConnection($name, $params);
 
       if (!is_null($connection)) {
         $this->addConnection($connection);
@@ -54,13 +56,14 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   }
 
   /**
-   * Find a connection based on name
+   * Find a connection in the pool
    *
-   * If the $name is empty/null we'll return the 1st
-   * connection in the internal connection list (if there is one)
+   * If the $name is empty/null we'll return the 1st connection in the internal
+   * connection list (if there is one)
    *
-   * @param  string   $name       Name of the connection (from Config)
-   * @return null | PdoConnection
+   * @param      string  $name   Name of the connection (from Config)
+   *
+   * @return     null    | PdoConnection
    */
   public function findConnection(string $name=null)
   {
@@ -78,10 +81,11 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   }
 
   /**
-   * Adds the Connection to the Pool
+   * Adds a Connection to the Pool
    *
-   * @param [type] $connection [description]
-   * @return  connection
+   * @param      [type]      $connection  [description]
+   *
+   * @return     connection
    */
   public function addConnection(PdoConnectionInterface $connection)
   {
@@ -93,8 +97,9 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   /**
    * Remove a connection from the pool
    *
-   * @param  [type] $name Name of connection to remove
-   * @return bool
+   * @param      [type]  $name   Name of connection to remove
+   *
+   * @return     bool
    */
   public function removeConnection(string $name)
   {
@@ -114,16 +119,22 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   }
 
   /**
-   * Creates a Connection based on the $connectionName
+   * Creates a Connection based on the $connectionName and optional $params
    *
-   * Finds the corresponding connection in the config and uses it
-   * to instanciate a connection. If the ConnectionName is empty, we will use
-   * the 1st available record in the Connections list.
+   * Finds the corresponding $connectionName in the config and uses it to
+   * instanciate a connection. If the ConnectionName is empty, we will use the
+   * 1st available record in the Connections list.
    *
-   * @param  string $connectionName [description]
-   * @return null | PdoConnection
+   * If $connectionName is not found, and $params is populated, the $params are
+   * be used to create the connection, which is added with $connectioName to the
+   * internal list. The format is the same as in the `config-{env}.json` file
+   *
+   * @param      string  $connectionName  A name for the connection
+   * @param      array   $params          The connection parameters
+   *
+   * @return     null  | PdoConnection
    */
-  protected function createConnection(string $connectionName)
+  protected function createConnection(string $connectionName, array $params=[])
   {
     # Try to find the connection in the internal list, if it was created already
     $connection = $this->connections[strtolower($connectionName)] ?? null;
@@ -138,17 +149,19 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
     }
 
     if (is_null($connection)) {
-      # Get connection's params from conf
-      $connConf = config()->get('connections.'.$connectionName);
+      # Get connection's params from conf - unelss they were provided
+      if (count($params)==0) {
+        $params = config()->get('connections.'.$connectionName);
+      }
 
       # Type="PDO"
-      if ( strcasecmp($connConf['type'] ?? '','PDO')==0 ) {
-        $className = '\\Spin\\Database\\Drivers\\'.ucfirst($connConf['type']).'\\'.ucfirst($connConf['driver']) ;
+      if ( strcasecmp($params['type'] ?? '','PDO')==0 ) {
+        # Build the Classname
+        $className = '\\Spin\\Database\\Drivers\\'.ucfirst($params['type'] ?? '').'\\'.ucfirst($params['driver'] ?? '') ;
 
         try {
           # Create the PdoConnection
-          $connection = new $className($connectionName, $connConf);
-          logger()->debug( 'Created Connection', ['connection'=>$connection] );
+          $connection = new $className($connectionName, $params);
 
         } catch (\Exception $e) {
           logger()->critical( $e->getMessage(), ['trace'=>$e->getTraceAsString()] );
@@ -161,9 +174,9 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   }
 
   /**
-   * Get array of containers
+   * Get array of connections
    *
-   * @return array
+   * @return     array
    */
   public function getConnections(): array
   {

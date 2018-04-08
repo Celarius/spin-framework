@@ -73,9 +73,10 @@ If the additional `$value` parameter is given the container item with `$key` is 
 function container(string $id=null, $value=null)
 ```
 ```php
-container('MySuperFunc', function() {
-  // do something in the Super Function
-}
+container('MySuperFunc',
+  function() {
+    // do something in the Super Function
+  }
 );
 
 # Call the defined callable

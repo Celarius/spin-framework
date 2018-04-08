@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
 /**
- * Spin Framework
+ * Config class
  *
  * @package   Spin
  */
 
 namespace Spin\Core;
 
-use Spin\Core\AbstractBaseClass;
-use Spin\Core\ConfigInterface;
-use Spin\Exception\Exception;
+use \Spin\Core\AbstractBaseClass;
+use \Spin\Core\ConfigInterface;
+use \Spin\Exception\Exception;
 
 class Config extends AbstractBaseClass implements ConfigInterface
 {
@@ -20,14 +20,13 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /** @var string     Config file name */
   protected $filename;
 
-
   /**
    * Constructor
    *
    * Load config file based on $appPath and $environment
    *
-   * @param string  $appPath      Path to the /app folder
-   * @param string  $environment  Name of the environment
+   * @param      string  $appPath      Path to the /app folder
+   * @param      string  $environment  Name of the environment
    */
   public function __construct(string $appPath, string $environment)
   {
@@ -45,7 +44,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Clear all config values
    *
-   * @return  self
+   * @return     self
    */
   public function clear()
   {
@@ -58,11 +57,11 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Load Configuration file
    *
-   * @param   string     $filename
+   * @param      string     $filename
    *
-   * @throws  Exception  On invalid JSON file
+   * @throws     Exception  On invalid JSON file
    *
-   * @return  self
+   * @return     self
    */
   public function load(string $filename)
   {
@@ -92,11 +91,11 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Load & Merge Configuration file to existing config
    *
-   * @param   string     $filename
+   * @param      string     $filename
    *
-   * @throws  Exception  On invalid JSON file
+   * @throws     Exception  On invalid JSON file
    *
-   * @return  self
+   * @return     self
    */
   public function loadAndMerge(string $filename)
   {
@@ -125,9 +124,9 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Save Configuration file
    *
-   * @param   string $filename       If null the last used filename is used
+   * @param      string  $filename  If null the last used filename is used
    *
-   * @return  bool
+   * @return     bool
    */
   function save(string $filename=null): bool
   {
@@ -140,14 +139,15 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Get a config item
    *
-   * The item is in DOT format.
+   * The $key is in DOT format.
    *
    * Example: get('application.code')
    *
-   * @param   string $key          "." notation key to retreive
-   * @param   string $default      Optional Default value if group::section::key not found
+   * @param      string  $key      "." notation key to retreive
+   * @param      string  $default  Optional Default value if group::section::key
+   *                               not found
    *
-   * @return  mixed
+   * @return     mixed
    */
   public function get(string $key,string $default=null)
   {
@@ -166,14 +166,14 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Set a Configuration $key to $value
    *
-   * The item is in DOT format.
+   * The $key is in DOT format.
    *
    * Example: set('application.code','theValue');
    *
-   * @param   string  $key           Key to update/set. Dot notaition
-   * @param   mixed   $value
+   * @param      string  $key    Key to update/set. Dot notaition
+   * @param      mixed   $value
    *
-   * @return  self
+   * @return     self
    */
   public function set(string $key, $value)
   {
@@ -204,7 +204,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Get config filename
    *
-   * @return  string
+   * @return     string
    */
   public function getFilename(): string
   {
@@ -215,7 +215,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Return all config values
    *
-   * @return  array
+   * @return     array
    */
   public function getValues(): array
   {
@@ -226,9 +226,10 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Recursively change the key names of array and subarrays to $case
    *
-   * @param  array $input   The array to change
-   * @param  const $case    Case to use CASE_LOWER or CASE_UPPER
-   * @return array          The resulting array
+   * @param      array  $input  The array to change
+   * @param      const  $case   Case to use CASE_LOWER or CASE_UPPER
+   *
+   * @return     array  The resulting array
    */
   protected function array_change_key_case_recursive(array $input, $case = CASE_LOWER): array
   {
