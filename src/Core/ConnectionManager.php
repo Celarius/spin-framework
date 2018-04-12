@@ -83,7 +83,7 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   /**
    * Adds a Connection to the Pool
    *
-   * @param      [type]      $connection  [description]
+   * @param      PdoConnectionInterface  $connection  [description]
    *
    * @return     connection
    */
@@ -97,7 +97,7 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   /**
    * Remove a connection from the pool
    *
-   * @param      [type]  $name   Name of connection to remove
+   * @param      string  $name   Name of connection to remove
    *
    * @return     bool
    */
@@ -167,7 +167,6 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
           logger()->critical( $e->getMessage(), ['trace'=>$e->getTraceAsString()] );
         }
       }
-
     }
 
     return $connection;
