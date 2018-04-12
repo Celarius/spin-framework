@@ -12,21 +12,21 @@
 
 namespace Spin\Factories\Http;
 
-use InvalidArgumentException;
-use Spin\Factories\AbstractFactory;
+use \InvalidArgumentException;
+use \Spin\Factories\AbstractFactory;
 
 # Guzzle
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\ServerRequest;
-use GuzzleHttp\Psr7\LazyOpenStream;
+use \GuzzleHttp\Psr7\Request;
+use \GuzzleHttp\Psr7\ServerRequest;
+use \GuzzleHttp\Psr7\LazyOpenStream;
 
 # PSR-7
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use \Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\ServerRequestInterface;
 
 # PSR-17
-// use Psr\Http\Message\ServerRequestFactoryInterface;
-use Interop\Http\Factory\ServerRequestFactoryInterface;
+// use \Psr\Http\Message\ServerRequestFactoryInterface;
+use \Interop\Http\Factory\ServerRequestFactoryInterface;
 
 
 class ServerRequestFactory extends AbstractFactory implements ServerRequestFactoryInterface
@@ -34,10 +34,10 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
   /**
    * Create a new server request
    *
-   * @param string $method
-   * @param UriInterface|string $uri
+   * @param      string                  $method
+   * @param      UriInterface|string     $uri
    *
-   * @return ServerRequestInterface
+   * @return     ServerRequestInterface
    */
   public function createServerRequest($method, $uri)
   {
@@ -64,11 +64,12 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
   /**
    * Create a new server request from server variables array
    *
-   * @param array $server                Typically $_SERVER or similar array
+   * @param      array                   $server  Typically $_SERVER or similar
+   *                                              array
    *
-   * @return ServerRequestInterface
+   * @return     ServerRequestInterface
    *
-   * @throws \InvalidArgumentException   If no valid method or URI can be determined.
+   * @throws     \InvalidArgumentException  If no valid method or URI can be determined.
    */
   public function createServerRequestFromArray(?array $server)
   {

@@ -4,7 +4,9 @@
  * PDO Firebird Connection driver
  *
  * https://www.firebirdsql.org
-*/
+ * 
+ * @package    Spin
+ */
 
 namespace Spin\Database\Drivers\Pdo;
 
@@ -15,8 +17,8 @@ class Firebird extends PdoConnection
   /**
    * Constructor
    *
-   * @param string $connectionName [description]
-   * @param array  $params         [description]
+   * @param      string  $connectionName  [description]
+   * @param      array   $params          [description]
    */
   public function __construct(string $connectionName, array $params=[])
   {
@@ -39,7 +41,7 @@ class Firebird extends PdoConnection
   /**
    * Get DSN - Firebird formatting
    *
-   * @return string       [description]
+   * @return     string  [description]
    */
   public function getDsn(): string
   {

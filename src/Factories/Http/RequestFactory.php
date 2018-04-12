@@ -12,29 +12,29 @@
 
 namespace Spin\Factories\Http;
 
-use InvalidArgumentException;
-use Spin\Factories\AbstractFactory;
+use \InvalidArgumentException;
+use \Spin\Factories\AbstractFactory;
 
 # Guzzle
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\LazyOpenStream;
+use \GuzzleHttp\Psr7\Request;
+use \GuzzleHttp\Psr7\LazyOpenStream;
 
 # PSR-7
-use Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\RequestInterface;
 
 # PSR-17
 // use Psr\Http\Message\RequestFactoryInterface;
-use Interop\Http\Factory\RequestFactoryInterface;
+use \Interop\Http\Factory\RequestFactoryInterface;
 
 class RequestFactory extends AbstractFactory implements RequestFactoryInterface
 {
   /**
    * Create a new request.
    *
-   * @param string $method
-   * @param UriInterface|string $uri
+   * @param      string               $method
+   * @param      UriInterface|string  $uri
    *
-   * @return RequestInterface
+   * @return     RequestInterface
    */
   public function createRequest($method, $uri)
   {

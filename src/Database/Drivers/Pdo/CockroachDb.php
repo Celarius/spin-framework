@@ -4,6 +4,8 @@
  * PDO CockroachDb Connection driver
  *
  * https://www.cockroachlabs.com
+ * 
+ * @package    Spin
 */
 
 namespace Spin\Database\Drivers\Pdo;
@@ -12,14 +14,14 @@ use Spin\Database\PdoConnection;
 
 class CockroachDb extends PdoConnection
 {
-  /** @var string SSL Mode: [disable|allow|prefer|require|verify-ca|verify-full] */
+  /** @var      string        SSL Mode: [disable|allow|prefer|require|verify-ca|verify-full] */
   protected $sslmode = 'prefer';
 
   /**
    * Constructor
    *
-   * @param string $connectionName [description]
-   * @param array  $params         [description]
+   * @param      string  $connectionName  [description]
+   * @param      array   $params          [description]
    */
   public function __construct(string $connectionName, array $params=[])
   {

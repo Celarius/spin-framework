@@ -1,10 +1,12 @@
 <?php declare(strict_types=1);
 
 /**
- * PDO MySql Connection driver
+ * PDO PostgreSql Connection driver
  *
  * https://www.mysql.com/
-*/
+ * 
+ * @package    Spin
+ */
 
 namespace Spin\Database\Drivers\Pdo;
 
@@ -18,8 +20,8 @@ class Pgsql extends PdoConnection
   /**
    * Constructor
    *
-   * @param string $connectionName [description]
-   * @param array  $params         [description]
+   * @param      string  $connectionName  [description]
+   * @param      array   $params          [description]
    */
   public function __construct(string $connectionName, array $params=[])
   {
@@ -44,9 +46,9 @@ class Pgsql extends PdoConnection
   }
 
   /**
-   * Get DSN - CockraochDb formatting
+   * Get DSN - PostgreSql formatting
    *
-   * @return string       [description]
+   * @return     string  [description]
    */
   public function getDsn(): string
   {

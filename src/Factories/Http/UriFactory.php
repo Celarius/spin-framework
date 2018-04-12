@@ -12,27 +12,26 @@
 
 namespace Spin\Factories\Http;
 
-use InvalidArgumentException;
-use Spin\Factories\AbstractFactory;
+use \InvalidArgumentException;
+use \Spin\Factories\AbstractFactory;
 
 # Guzzle
-use GuzzleHttp\Psr7\LazyOpenStream;
+use \GuzzleHttp\Psr7\LazyOpenStream;
 
 # PSR-7
 // use Psr\Http\Message\UriFactoryInterface;
-use Interop\Http\Factory\UriFactoryInterface;
+use \Interop\Http\Factory\UriFactoryInterface;
 
 class UriFactory extends AbstractFactory implements UriFactoryInterface
 {
   /**
    * Create a new URI.
    *
-   * @param string $uri
+   * @param      string        $uri
    *
-   * @return UriInterface
+   * @return     UriInterface
    *
-   * @throws \InvalidArgumentException
-   *  If the given URI cannot be parsed.
+   * @throws     \InvalidArgumentException  If the given URI cannot be parsed.
    */
   public function createUri($uri = '')
   {

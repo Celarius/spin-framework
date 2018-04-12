@@ -1,7 +1,15 @@
 <?php declare(strict_types=1);
 
+/**
+ * Exception
+ * 
+ * @package     Spin
+ */
+
 namespace Spin\Exception;
 
-class RunTimeException extends \RunTimeException
+Use \RunTimeException;
+
+class RunTimeException extends RunTimeException
 {
 }
