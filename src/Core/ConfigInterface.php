@@ -1,15 +1,13 @@
 <?php declare(strict_types=1);
+
 /**
- * Spin Framework
+ * ConfigInterface
  *
  * @package   Spin
  */
 
 namespace Spin\Core;
 
-/**
- *
- */
 interface ConfigInterface
 {
   /**
@@ -22,56 +20,62 @@ interface ConfigInterface
   /**
    * Load Configuration file
    *
-   * @param   string $filename
-   * @return  self
+   * @param      string  $filename
+   * 
+   * @return     self
    */
   function load(string $filename);
 
   /**
    * Load & Merge Configuration file to existing config
    *
-   * @param   string $filename
-   * @return  self
+   * @param      string  $filename
+   * 
+   * @return     self
    */
   function loadAndMerge(string $filename);
 
   /**
    * Save Configuration file
    *
-   * @param   string $filename
-   * @return  self
+   * @param      string  $filename
+   *
+   * @return     self
    */
   function save(string $filename=null): bool;
 
   /**
    * Get a config item
    *
-   * @param   string $key          "." notationed key to retreive
-   * @param   string $default      Optional Default value if group::section::key not found
-   * @return  mixed
+   * @param      string  $key      "." notationed key to retreive
+   * @param      string  $default  Optional Default value if group::section::key
+   *                               not found
+   *
+   * @return     mixed
    */
   function get(string $key,string $default=null);
 
   /**
    * Set a config item
    *
-   * @param   string $key          "." notationed key to retreive
-   * @param   mixed $value         Value to set
-   * @return  self
+   * @param      string  $key    "." notationed key to retreive
+   * @param      mixed   $value  Value to set
+   *
+   * @return     self
    */
   function set(string $key, $value);
 
   /**
    * Get config filename
    *
-   * @return  array
+   * @return     array
    */
   function getFilename(): string;
 
   /**
    * Return all config values
    *
-   * @return  array
+   * @return     array
    */
   function getValues(): array;
 

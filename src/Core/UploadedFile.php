@@ -1,11 +1,17 @@
 <?php declare(strict_types=1);
 
+/**
+ * UploadedFile
+ *
+ * @package  Spin
+ */
+
 namespace Spin\Core;
 
-use Spin\Core\AbstractBaseClass;
-use Spin\Core\FilesInterface;
+use \Spin\Core\AbstractBaseClass;
+use \Spin\Core\FileInterface;
 
-class UploadedFile extends AbstractBaseClass implements FilesInterface
+class UploadedFile extends AbstractBaseClass implements UploadedFileInterface
 {
   /** @var        string          The Parameter name on the form */
   protected $parameter;
@@ -31,9 +37,6 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
   /** @var        boolean         False until a successful move() */
   protected $isMoved;
 
-
-
-
   /**
    * Constructor
    *
@@ -44,12 +47,12 @@ class UploadedFile extends AbstractBaseClass implements FilesInterface
     parent::__construct();
 
     # Populate properties
-    $this->SetName($file['name'] ?? '');
-    $this->SetType($file['type'] ?? '');
-    $this->SetTmpName($file['tmp_name'] ?? '');
-    $this->SetError($file['error'] ?? null);
-    $this->SetSize($file['size'] ?? 0);
-    $this->SetFilename($file['filename'] ?? '');
+    $this->setName($file['name'] ?? '');
+    $this->setType($file['type'] ?? '');
+    $this->setTmpName($file['tmp_name'] ?? '');
+    $this->setError($file['error'] ?? 0);
+    $this->setSize($file['size'] ?? 0);
+    $this->setFilename($file['filename'] ?? '');
 
     $this->setIsMoved(false);
   }

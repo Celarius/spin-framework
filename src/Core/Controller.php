@@ -8,8 +8,8 @@
 
 namespace Spin\Core;
 
-use Spin\Core\AbstractBaseClass;
-use Spin\Core\ControllerInterface;
+use \Spin\Core\AbstractBaseClass;
+use \Spin\Core\ControllerInterface;
 
 abstract class Controller extends AbstractBaseClass implements ControllerInterface
 {
@@ -24,10 +24,10 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
   /**
    * Initialization method
    *
-   * This method is called right after the object has been created
-   * before any route specific Middleware handlers
+   * This method is called right after the object has been created before any
+   * route specific Middleware handlers
    *
-   * @param  array $args    Path variable arguments as name=value pairs
+   * @param      array  $args   Path variable arguments as name=value pairs
    */
   public function initialize(array $args)
   {
@@ -151,7 +151,6 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
   {
     return response('',405);
   }
-
 
   /**
    * Return the Client HTTP Request object

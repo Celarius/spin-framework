@@ -19,14 +19,14 @@ Example:
 
 namespace Spin\Core;
 
-use Spin\Core\AbstractBaseClass;
-use Spin\Core\CacheManagerInterface;
-use Spin\Cache\AbstractCacheAdapter;
-use Spin\Cache\AbstractCacheAdapterInterface;
+use \Spin\Core\AbstractBaseClass;
+use \Spin\Core\CacheManagerInterface;
+use \Spin\Cache\AbstractCacheAdapter;
+use \Spin\Cache\AbstractCacheAdapterInterface;
 
 class CacheManager extends AbstractBaseClass implements CacheManagerInterface
 {
-  /** @var array List of Instantiated Caches */
+  /** @var      array         List of Instantiated Caches */
   protected $caches = [];
 
   /**

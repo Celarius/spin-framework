@@ -4,9 +4,9 @@ namespace Spin;
 
 use PHPUnit\Framework\TestCase;
 
-use Spin\Helpers\Cipher;
-use Spin\Helpers\Hash;
-use Spin\Helpers\UUID;
+use \Spin\Helpers\Cipher;
+use \Spin\Helpers\Hash;
+use \Spin\Helpers\UUID;
 
 class HelpersTest extends TestCase
 {

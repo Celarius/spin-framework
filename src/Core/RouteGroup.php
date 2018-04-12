@@ -1,5 +1,11 @@
 <?php declare(strict_types=1);
 
+/**
+ * RouteGroup
+ *
+ * @package  Spin
+ */
+
 namespace Spin\Core;
 
 use \Spin\Core\AbstractBaseClass;
@@ -8,18 +14,28 @@ use \Spin\Core\RouteGroupInterface;
 
 class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
 {
+  /** @var      string        Name of group */
   protected $name;
+
+  /** @var      string        Path prefix */
   protected $prefix;
+
+  /** @var      array         Array of middleware */
   protected $beforeMiddleware = array();
+
+  /** @var      array         Array of middleware */
   protected $afterMiddleware = array();
+
+  /** @var      array         Array of routes */
   protected $routes;
 
+  /** @var      object        Collector */
   protected $routeCollector = null;
 
   /**
    * Constructor
    *
-   * @param array $definition [description]
+   * @param      array  $definition  [description]
    */
   public function __construct(array $definition)
   {
@@ -73,9 +89,11 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
   /**
    * Add a new route in the route collector
    *
-   * @param string $path        [description]
-   * @param string $handler     [description]
-   * @return self
+   * @param      array   $methods  The methods
+   * @param      string  $path     [description]
+   * @param      string  $handler  [description]
+   *
+   * @return     self
    */
   public function addRoute(array $methods, string $path, string $handler)
   {
@@ -92,9 +110,12 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
   /**
    * Match the $uri against the stored routes
    *
-   * @param  string $uri        HTTP Method name (GET,POST,PUT,DELETE,HEAD,OPTIONS)
-   * @param  string $uri        [description]
-   * @return array              Array with matching info
+   * @param      string  $method  The method
+   * @param      string  $uri     HTTP Method name
+   *                              (GET,POST,PUT,DELETE,HEAD,OPTIONS)
+   * @param      string  $uri    [description]
+   *
+   * @return     array   Array with matching info
    */
   public function matchRoute( string $method, string $uri )
   {
@@ -107,16 +128,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
     # Examine $RouteInfo response
     switch ($routeInfo[0])
     {
-      # Nothing found
-      case \FastRoute\Dispatcher::NOT_FOUND:
-        return [];
-        break;
-
-      # This should never happen to us ...
-      case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        return [];
-        break;
-
+      # We found a route match
       case \FastRoute\Dispatcher::FOUND:
         # URLDecode each argument
         foreach ($routeInfo[2] as $idx=>$r)
@@ -133,6 +145,17 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
         ];
         break;
 
+      # Nothing found
+      case \FastRoute\Dispatcher::NOT_FOUND:
+        return [];
+        break;
+
+      # This should never happen to us ...
+      case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+        return [];
+        break;
+
+      # Default we return empty
       default:
         return [];
         break;
@@ -142,7 +165,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
   /**
    * Get the RouteGroup Name
    *
-   * @return string
+   * @return     string
    */
   public function getName(): string
   {
@@ -152,7 +175,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
   /**
    * Get the RouteGroup Prefix
    *
-   * @return string
+   * @return     string
    */
   public function getPrefix(): string
   {
@@ -162,7 +185,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
   /**
    * Get the Before Middleware array
    *
-   * @return array
+   * @return     array
    */
   public function getBeforeMiddleware(): array
   {
@@ -172,7 +195,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
   /**
    * Get the After Middleware array
    *
-   * @return array
+   * @return     array
    */
   public function getAfterMiddleware(): array
   {
@@ -182,7 +205,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
   /**
    * Get the RouteGroup Routes array
    *
-   * @return array
+   * @return     array
    */
   public function getRoutes(): array
   {
