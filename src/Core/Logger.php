@@ -61,7 +61,7 @@ class Logger extends MonoLogger
     $handler->setFormatter($formatter);
 
     # Push Buffer Handler that buffers before the actual user-defined handler
-    $this->pushHandler(new BufferHandler($handler);
+    $this->pushHandler(new BufferHandler($handler));
 
     # Add a log entry
     $this->debug('Logger created successfully');
