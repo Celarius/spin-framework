@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 /**
- * Spin\Helper\UUID
+ * UUID
  *
  *   Generates a v4 UUID
  *
@@ -14,14 +14,14 @@
 
 namespace Spin\Helpers;
 
-use Spin\Helpers\UUIDInterface;
+use \Spin\Helpers\UUIDInterface;
 
 class UUID implements UUIDInterface
 {
   /**
    * Generate v4 UUID
    *
-   * @return string
+   * @return     string
    */
   public static function generate(): string
   {
@@ -49,7 +49,7 @@ class UUID implements UUIDInterface
   /**
    * Generate v4 UUID
    *
-   * @return string
+   * @return     string
    */
   public static function v4(): string
   {
@@ -59,9 +59,10 @@ class UUID implements UUIDInterface
   /**
    * Generate a v5 UUID, based on $namespace and $name
    *
-   * @param  string $namespace    A Valid UUID
-   * @param  string $name         A Random String
-   * @return string
+   * @param      string  $namespace  A Valid UUID
+   * @param      string  $name       A Random String
+   *
+   * @return     string
    */
   public static function v5(string $namespace, string $name): string
   {
@@ -102,8 +103,9 @@ class UUID implements UUIDInterface
   /**
    * Checks if an UUID is valid (v3,v4 and v5)
    *
-   * @param  string  $uuid
-   * @return bool
+   * @param      string  $uuid
+   *
+   * @return     bool
    */
   public static function is_valid(string $uuid): bool
   {

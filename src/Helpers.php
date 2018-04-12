@@ -35,8 +35,8 @@ if (!function_exists('env')) {
    * Gets the value of an environment variable. Supports boolean, empty and
    * null.
    *
-   * @param      string  $var         Environment Variable to obtain
-   * @param      mixed   $default     Default value if not found
+   * @param      string  $var      Environment Variable to obtain
+   * @param      mixed   $default  Default value if not found
    *
    * @return     mixed
    */
@@ -176,7 +176,7 @@ if (!function_exists('logger')) {
   /**
    * Get the Logger object
    *
-   * @return object
+   * @return     object
    */
   function logger()
   {
@@ -223,7 +223,7 @@ if (!function_exists('getRequest')) {
   /**
    * Get the Request object
    *
-   * @return object
+   * @return     object
    */
   function getRequest()
   {
@@ -237,7 +237,7 @@ if (!function_exists('getResponse')) {
   /**
    * Get the getResponse object
    *
-   * @return object
+   * @return     object
    */
   function getResponse()
   {
@@ -268,7 +268,7 @@ if (!function_exists('queryParams')) {
   /**
    * Get All Query Params ($_GET variables)
    *
-   * @return array
+   * @return     array
    */
   function queryParams()
   {
@@ -282,9 +282,10 @@ if (!function_exists('postParam')) {
   /**
    * Get a Post Param ($_POST variable)
    *
-   * @param  string $paramName
-   * @param  mixed $default
-   * @return mixed
+   * @param      string  $paramName
+   * @param      mixed   $default
+   *
+   * @return     mixed
    */
   function postParam(string $paramName, $default=null)
   {
@@ -298,9 +299,10 @@ if (!function_exists('cookieParam')) {
   /**
    * Get a Cookie Param ($_COOKIE variable)
    *
-   * @param  string $paramName
-   * @param  mixed $default
-   * @return mixed
+   * @param      string  $paramName
+   * @param      mixed   $default
+   *
+   * @return     mixed
    */
   function cookieParam(string $paramName, $default=null)
   {
@@ -314,7 +316,7 @@ if (!function_exists('cookieParams')) {
   /**
    * Get all Cookie Params ($_COOKIE variable)
    *
-   * @return array
+   * @return     array
    */
   function cookieParams()
   {
@@ -328,7 +330,15 @@ if (!function_exists('cookie')) {
   /**
    * Get/Set Cookies depending on values
    *
-   * @return mixed
+   * @param      string   $name      The name
+   * @param      ?string  $value     The value
+   * @param      integer  $expire    The expire
+   * @param      string   $path      The path
+   * @param      string   $domain    The domain
+   * @param      boolean  $secure    The secure
+   * @param      boolean  $httpOnly  The http only
+   *
+   * @return     mixed
    */
   function cookie(string $name, ?string $value=null, int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httpOnly=false)
   {
@@ -353,11 +363,11 @@ if (!function_exists('redirect')) {
   /**
    * Redirect the user
    *
-   * @param  string  $uri       Where to redirect to. FQDN or relative path
-   * @param  int     $status    Status code, defaults to 302
-   * @param  array   $headers   Additinal headers
+   * @param      string  $uri      Where to redirect to. FQDN or relative path
+   * @param      int     $status   Status code, defaults to 302
+   * @param      array   $headers  Additinal headers
    *
-   * @return object
+   * @return     object
    */
   function redirect(string $uri, $status=302, $headers = [])
   {
@@ -384,11 +394,11 @@ if (!function_exists('response')) {
   /**
    * Get/Set the Response to send to the client
    *
-   * @param  string      $body      Body to send
-   * @param  int|integer $code      HTTP Code
-   * @param  array       $headers   Headers to include
+   * @param      string                       $body     Body to send
+   * @param      int|integer                  $code     HTTP Code
+   * @param      array                        $headers  Headers to include
    *
-   * @return \Psr\Http\ResponseInterface
+   * @return     \Psr\Http\ResponseInterface
    */
   function response(string $body='', int $code=200, array $headers=[])
   {
@@ -418,15 +428,15 @@ if (!function_exists('response')) {
 
 if (!function_exists('responseJson')) {
   /**
-   * Send a JSON response with $code and $a content.
-   * Also sets the content-type header to "application/json"
+   * Send a JSON response with $code and $a content. Also sets the content-type
+   * header to "application/json"
    *
-   * @param   $data            Array to encode
-   * @param   $code            HTTP Code
-   * @param   $options         JSON encoding options
-   * @param   array $headers   Headers to include
+   * @param      array     $data     The data
+   * @param      integer   $code     The code
+   * @param      integer   $options  The options
+   * @param      array     $headers  The headers
    *
-   * @return  Response
+   * @return     Response
    */
   function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK, array $headers=[])
   {
@@ -443,12 +453,12 @@ if (!function_exists('responseXml')) {
   /**
    * Build a XML response from the $data supplied
    *
-   * @param   array  $data      Array to encode in XML
-   * @param   string $root      Root element
-   * @param   int    $code      HTTP Code
-   * @param   array  $headers   Headers to include
+   * @param      array     $data     Array to encode in XML
+   * @param      string    $root     Root element
+   * @param      int       $code     HTTP Code
+   * @param      array     $headers  Headers to include
    *
-   * @return  Response
+   * @return     Response
    */
   function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
   {
@@ -469,11 +479,11 @@ if (!function_exists('responseHtml')) {
   /**
    * Send a HTML response with $code and $body content.
    *
-   * @param   int    $code     HTTP Code
-   * @param   string $html     Array to encode
-   * @param   array  $headers  Headers to include
+   * @param      string   $body     The body
+   * @param      integer  $code     The code
+   * @param      array    $headers  The headers
    *
-   * @return  object
+   * @return     object
    */
   function responseHtml(string $body='', int $code=200, array $headers=[])
   {
@@ -489,11 +499,11 @@ if (!function_exists('responseFile')) {
   /**
    * Send a FILE as a response with $code.
    *
-   * @param   $ar       Array to encode
-   * @param   $code     HTTP Code
-   * @param   $options  JSON encoding options
+   * @param      string   $filename  The filename
+   * @param      integer  $code      The code
+   * @param      array    $headers   The headers
    *
-   * @return  object
+   * @return     object
    */
   function responseFile(string $filename, int $code=200, array $headers=[])
   {
@@ -513,9 +523,10 @@ if (!function_exists('getClientIp')) {
   /**
    * Gets the Clients IPv4 from the request headers
    *
-   * @todo    Implement Support for RFC7239
-   * @link    https://tools.ietf.org/html/rfc7239
-   * @return  string
+   * @todo       Implement Support for RFC7239
+   * @link       https://tools.ietf.org/html/rfc7239
+   *
+   * @return     string
    */
   function getClientIp(): string
   {

@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 /**
- * Spin\Helper\Hash
+ * Hash
  *
  *   OpenSSL Hash Helper. Wraps the OpenSSL digest() method into easily usable helper method
  *
@@ -13,7 +13,7 @@
 
 namespace Spin\Helpers;
 
-Use Spin\Helpers\HashInterface;
+Use \Spin\Helpers\HashInterface;
 
 class Hash implements HashInterface
 {
@@ -21,9 +21,10 @@ class Hash implements HashInterface
   /**
    * Genreate a Hash (digest) of the $data using $method
    *
-   * @param  string $data       [description]
-   * @param  string $method     [description]
-   * @return string
+   * @param      string  $data    [description]
+   * @param      string  $method  [description]
+   *
+   * @return     string
    */
   public static function generate(string $data, string $method='SHA256'): string
   {
@@ -36,10 +37,11 @@ class Hash implements HashInterface
   /**
    * Check that the $hash of $data is correct, using $method
    *
-   * @param  string $data       [description]
-   * @param  string $hash       [description]
-   * @param  string $method     [description]
-   * @return bool
+   * @param      string  $data    [description]
+   * @param      string  $hash    [description]
+   * @param      string  $method  [description]
+   *
+   * @return     bool
    */
   public static function check(string $data, string $hash, string $method='SHA256'): bool
   {
@@ -52,7 +54,7 @@ class Hash implements HashInterface
   /**
    * Return array of hash Methods available
    *
-   * @return array
+   * @return     array
    */
   public static function getMethods(): array
   {
