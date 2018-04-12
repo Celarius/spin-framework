@@ -4,6 +4,8 @@
  * CacheManager
  *
  * Manager for Cache integrations
+ * 
+ * @package   Spin
  */
 
 /*
@@ -30,8 +32,9 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
   /**
    * Get or Create a Cache
    *
-   * @param  string $name         Name of the Cache (from Config)
-   * @return null | object
+   * @param      string  $name   Name of the Cache (from Config)
+   *
+   * @return     null | object
    */
   public function getCache(string $name=null)
   {
@@ -53,11 +56,12 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
   /**
    * Find a Cache based on name
    *
-   * If the $name is empty/null we'll return the 1st
-   * cache in the internal list (if there is one)
+   * If the $name is empty/null we'll return the 1st cache in the internal list
+   * (if there is one)
    *
-   * @param  string   $name       Name of the cache (from Config)
-   * @return null | PdoConnection
+   * @param      string  $name   Name of the cache (from Config)
+   *
+   * @return     null | PdoConnection
    */
   public function findCache(string $name=null)
   {
@@ -77,21 +81,23 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
   /**
    * Adds the Cache to the Pool
    *
-   * @param [type] $cache [description]
-   * @return  connection
+   * @param      AbstractCacheAdapterInterface  $cache  [description]
+   *
+   * @return     Self
    */
   public function addCache(AbstractCacheAdapterInterface $cache)
   {
     $this->caches[strtolower($cache->getDriver())] = $cache;
 
-    return $cache;
+    return $this;
   }
 
   /**
    * Remove a cache from the pool
    *
-   * @param  [type] $cache Name of cache to remove
-   * @return bool
+   * @param      string  $name   The name of cache to remove
+   *
+   * @return     Self
    */
   public function removeCache(string $name)
   {
@@ -106,18 +112,18 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
       $cache = null;
     }
 
-    return is_null($cache);
+    return $this;
   }
 
   /**
    * Creates a cache based on the $name
    *
-   * Finds the corresponding name in the config and uses it
-   * to instanciate a cache. If the $name is empty, we will use
-   * the 1st available in the caches list.
+   * Finds the corresponding name in the config and uses it to instanciate a
+   * cache. If the $name is empty, we will use the 1st available in the caches
+   * list.
    *
-   * @param  string $name [description]
-   * @return null | AbstractCacheAdapter
+   * @param      string  $name   [description]
+   * @return     null | AbstractCacheAdapter
    */
   protected function createCache(string $name)
   {
@@ -164,7 +170,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
   /**
    * Get array of containers
    *
-   * @return array
+   * @return     array
    */
   public function getCaches(): array
   {
