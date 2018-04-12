@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 /**
- * Spin\Helper\Cipher
+ * Cipher
  *
  *   Wraps the OpenSSL encrypt() and decrypt() methods into easily usable static helper methods
  *   Note: Uses the Configuration setting "application.secret" as the default password.
@@ -15,18 +15,18 @@
 
 namespace Spin\Helpers;
 
-use Spin\Helpers\CipherInterface;
+use \Spin\Helpers\CipherInterface;
 
 class Cipher implements CipherInterface
 {
   /**
    * Encrypt $data with $secret
    *
-   * @param  string $data        [description]
-   * @param  string $iv          [description]
-   * @param  string $secret      [description]
-   * @param  string $algorithm   [description]
-   * @return string              Base64 Encoded String
+   * @param      string  $data       [description]
+   * @param      string  $secret     [description]
+   * @param      string  $algorithm  [description]
+   *
+   * @return     string  Base64 Encoded String
    */
   public static function encrypt(string $data, string $secret='', string $algorithm='AES-256-CBC')
   {
@@ -54,15 +54,14 @@ class Cipher implements CipherInterface
 
   }
 
-
   /**
    * Decrypt $data with $secret
    *
-   * @param  string $data      [description]
-   * @param  string $iv        [description]
-   * @param  string $secret    [description]
-   * @param  string $algorithm [description]
-   * @return [type]            [description]
+   * @param      string  $data       [description]
+   * @param      string  $secret     [description]
+   * @param      string  $algorithm  [description]
+   *
+   * @return     [type]  [description]
    */
   public static function decrypt(string $data, string $secret='', string $algorithm='AES-256-CBC')
   {
@@ -89,7 +88,7 @@ class Cipher implements CipherInterface
   /**
    * Return array of Cipher methods available
    *
-   * @return array
+   * @return     array
    */
   public static function getMethods(): array
   {

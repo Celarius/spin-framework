@@ -11,21 +11,21 @@
 
 namespace Spin\Factories;
 
-use Spin\Factories\AbstractFactory;
+use \Spin\Factories\AbstractFactory;
 
 # PSR-11
-use Psr\Container\ContainerInterface;
+use \Psr\Container\ContainerInterface;
 
 # The Leauge Container
-use League\Container\Container;
-use League\Container\ReflectionContainer;
+use \League\Container\Container;
+use \League\Container\ReflectionContainer;
 
 class ContainerFactory extends AbstractFactory
 {
   /**
    * Create a new container
    *
-   * @return \Psr\Container\ContainerInterface
+   * @return     \Psr\Container\ContainerInterface
    */
   public function createContainer()
   {

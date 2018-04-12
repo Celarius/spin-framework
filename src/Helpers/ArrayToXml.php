@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
 /**
- *
  * Based on Stack-Overflow questions and answers
  *
- * @link  http://stackoverflow.com/questions/99350/passing-php-associative-arrays-to-and-from-xml
+ * @link      http://stackoverflow.com/questions/99350/passing-php-associative-arrays-to-and-from-xml
+ * @package   Spin
  */
 
 namespace Spin\Helpers;
@@ -17,9 +17,11 @@ class ArrayToXML
     /**
      * Construct ArrayToXML object with selected version and encoding
      *
-     * for available values check XmlWriter docs http://www.php.net/manual/en/function.xmlwriter-start-document.php
-     * @param string $xmlVersion XML Version, default 1.0
-     * @param string $xmlEncoding XML Encoding, default UTF-8
+     * for available values check XmlWriter docs
+     * http://www.php.net/manual/en/function.xmlwriter-start-document.php
+     *
+     * @param      string  $xmlVersion   XML Version, default 1.0
+     * @param      string  $xmlEncoding  XML Encoding, default UTF-8
      */
     public function __construct($xmlVersion = '1.0', $xmlEncoding = 'UTF-8')
     {
@@ -30,10 +32,12 @@ class ArrayToXML
     /**
      * Build an XML Data Set
      *
-     * @param array $data Associative Array containing values to be parsed into an XML Data Set(s)
-     * @param string $startElement Root Opening Tag, default data
-     * @return string XML String containing values
-     * @return mixed Boolean false on failure, string XML result on success
+     * @param      array   $data          Associative Array containing values to
+     *                                    be parsed into an XML Data Set(s)
+     * @param      string  $startElement  Root Opening Tag, default data
+     *
+     * @return     string  XML String containing values
+     * @return     mixed  Boolean false on failure, string XML result on success
      */
     public function buildXML(array $data, $startElement = 'data')
     {
@@ -56,13 +60,14 @@ class ArrayToXML
     }
 
     /**
-     * Write keys in $data prefixed with @ as XML attributes, if $data is an array.
-     * When an @ prefixed key is found, a '%' key is expected to indicate the element itself,
-     * and '#' prefixed key indicates CDATA content
+     * Write keys in $data prefixed with @ as XML attributes, if $data is an
+     * array. When an @ prefixed key is found, a '%' key is expected to indicate
+     * the element itself, and '#' prefixed key indicates CDATA content
      *
-     * @param XMLWriter $xml object
-     * @param array $data with attributes filtered out
-     * @return array $data | $nonAttributes
+     * @param      XMLWriter  $xml    object
+     * @param      array      $data   with attributes filtered out
+     *
+     * @return     array      $data | $nonAttributes
      */
     protected function writeAttr(XMLWriter $xml, $data)
     {
@@ -96,8 +101,8 @@ class ArrayToXML
     /**
      * Write XML as per Associative Array
      *
-     * @param XMLWriter $xml object
-     * @param array $data Associative Data Array
+     * @param      XMLWriter  $xml    object
+     * @param      array      $data   Associative Data Array
      */
     protected function writeEl(XMLWriter $xml, $data)
     {
@@ -127,11 +132,12 @@ class ArrayToXML
     }
 
     /**
-     * Check if array is associative with string based keys
-     * FROM: http://stackoverflow.com/questions/173400/php-arrays-a-good-way-to-check-if-an-array-is-associative-or-sequential/4254008#4254008
+     * Check if array is associative with string based keys FROM:
+     * http://stackoverflow.com/questions/173400/php-arrays-a-good-way-to-check-if-an-array-is-associative-or-sequential/4254008#4254008
      *
-     * @param array $array Array to check
-     * @return bool
+     * @param      array  $array  Array to check
+     *
+     * @return     bool
      */
     protected function isAssoc($array)
     {

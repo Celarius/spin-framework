@@ -10,7 +10,6 @@
 
 /*
 Example:
-
   # Get a Connection by Name
   $dbCon = db('name1'); // Gives you back a PdoConnection object
 

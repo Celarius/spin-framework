@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 /**
- * Spin\Helper\JWT
+ * JWT
  *
  * JSON Web Token Class
  *
@@ -11,8 +11,8 @@
 
 namespace Spin\Helpers;
 
-use Firebase\JWT\JWT;
-use Spin\Helpers\JWTInterface;
+use \Firebase\JWT\JWT;
+use \Spin\Helpers\JWTInterface;
 
 class JWT extends JWT implements JWTInterface
 {

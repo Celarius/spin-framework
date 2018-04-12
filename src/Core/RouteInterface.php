@@ -1,5 +1,11 @@
 <?php declare(strict_types=1);
 
+/**
+ * RouteInterface
+ *
+ * @package  Spin
+ */
+
 namespace Spin\Core;
 
 class RouteInterface
@@ -7,21 +13,21 @@ class RouteInterface
   /**
    * Return Method
    *
-   * @return string
+   * @return     string
    */
   public function getMethod();
 
   /**
    * Return Path
    *
-   * @return string
+   * @return     string
    */
   public function getPath();
 
   /**
    * Return Handler
    *
-   * @return string
+   * @return     string
    */
   public function getHandler();
 }

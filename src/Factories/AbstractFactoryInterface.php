@@ -1,18 +1,28 @@
 <?php declare(strict_types=1);
 
+/**
+ * AbstractFactoryInterface
+ * 
+ * @package  Spin
+ */
+
 namespace Spin\Factories;
 
 interface AbstractFactoryInterface
 {
   /**
-   * @return mixed
+   * Gets the options.
+   *
+   * @return     mixed
    */
   function getOptions(): array;
 
   /**
-   * @param mixed $options
+   * Sets the options.
    *
-   * @return self
+   * @param      mixed  $options
+   *
+   * @return     self
    */
   function setOptions(array $options);
 }

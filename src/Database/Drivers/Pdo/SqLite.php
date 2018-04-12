@@ -1,10 +1,12 @@
 <?php declare(strict_types=1);
 
 /**
- * PDO MySql Connection driver
+ * PDO Sqlite Connection driver
  *
  * https://www.mysql.com/
-*/
+ * 
+ * @package    Spin
+ */
 
 namespace Spin\Database\Drivers\Pdo;
 
@@ -18,8 +20,10 @@ class SqLite extends PdoConnection
   /**
    * Constructor
    *
-   * @param string $connectionName [description]
-   * @param array  $params         [description]
+   * @param      string  $connectionName  [description]
+   * @param      array   $params          [description]
+   *
+   * @return     <type>  ( description_of_the_return_value )
    */
   public function __construct(string $connectionName, array $params=[])
   {
@@ -40,9 +44,9 @@ class SqLite extends PdoConnection
   /**
    * Get DSN - SqLite formatting
    *
-   *   sqlite:/tmp/foo.db
+   * sqlite:/tmp/foo.db
    *
-   * @return string       [description]
+   * @return     string  [description]
    */
   public function getDsn(): string
   {
@@ -69,7 +73,7 @@ class SqLite extends PdoConnection
   /**
    * Get the Filename
    *
-   * @return string
+   * @return     string
    */
   public function getFilename(): string
   {
@@ -79,8 +83,9 @@ class SqLite extends PdoConnection
   /**
    * Set filename
    *
-   * @param   string $filename
-   * @return  self
+   * @param      string  $filename
+   *
+   * @return     self
    */
   public function setFilename(string $filename)
   {

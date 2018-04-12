@@ -4,21 +4,26 @@
  * Logger class that extends Monologger
  *
  * Constructor will auto-configure based on configuration options
+ * 
+ * @package  Spin
  */
 
 namespace Spin\Core;
 
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\ErrorLogHandler;
-use Monolog\Formatter\LineFormatter;
+use \Monolog\Handler\StreamHandler;
+use \Monolog\Handler\ErrorLogHandler;
+use \Monolog\Handler\BufferHandler;
+use \Monolog\Formatter\LineFormatter;
+use \Monolog\Logger as MonoLogger;
 
-class Logger extends \Monolog\Logger
+class Logger extends MonoLogger
 {
   /**
    * Logger Constructor
    *
-   * @param string $loggerName   Name of the Logger
-   * @param array  $options      Array with options from config
+   * @param      string  $loggerName  Name of the Logger
+   * @param      array   $options     Array with options from config
+   * @param      string  $basePath    The base path
    */
   public function __construct(string $loggerName, ?array $options=[], $basePath='')
   {
@@ -46,19 +51,17 @@ class Logger extends \Monolog\Logger
 
     } elseif ( strcasecmp($logDriver,"php")==0 ) {
       # Create the Log Handler
-      $handler = new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM,
-                                      $this->toMonologLevel($logLevel) );
+      $handler = new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, $this->toMonologLevel($logLevel) );
     } else {
       # Fallback handler is PHP own logfile
-      $handler = new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM,
-                                      $this->toMonologLevel($logLevel) );
+      $handler = new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, $this->toMonologLevel($logLevel) );
     }
 
     # Set Formatter for $handler
     $handler->setFormatter($formatter);
 
-    # Push handler
-    $this->pushHandler($handler);
+    # Push Buffer Handler that buffers before the actual user-defined handler
+    $this->pushHandler(new BufferHandler($handler));
 
     # Add a log entry
     $this->debug('Logger created successfully');

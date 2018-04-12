@@ -12,27 +12,28 @@
 
 namespace Spin\Factories\Http;
 
-use InvalidArgumentException;
-use Spin\Factories\AbstractFactory;
+use \InvalidArgumentException;
+use \Spin\Factories\AbstractFactory;
 
 # Guzzle
-use GuzzleHttp\Psr7\LazyOpenStream;
+use \GuzzleHttp\Psr7\LazyOpenStream;
 
 # PSR-7
-use Psr\Http\Message\StreamInterface;
+use \Psr\Http\Message\StreamInterface;
 
 # PSR-17
 // use Psr\Http\Message\StreamFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
+use \Interop\Http\Factory\StreamFactoryInterface;
 
 class StreamFactory extends AbstractFactory implements StreamFactoryInterface
 {
   /**
    * Return a StreamObject for a string
    *
-   * @param  string $for [description]
+   * @param      string  $content  The content
+   * @param      string  $for    [description]
    *
-   * @return object
+   * @return     object
    */
   public function createStream($content = '')
   {
@@ -47,10 +48,10 @@ class StreamFactory extends AbstractFactory implements StreamFactoryInterface
    *
    * The `$filename` MAY be any string supported by `fopen()`.
    *
-   * @param string $filename
-   * @param string $mode
+   * @param      string           $filename
+   * @param      string           $mode
    *
-   * @return StreamInterface
+   * @return     StreamInterface
    */
   public function createStreamFromFile($filename, $mode = 'r')
   {
@@ -65,9 +66,9 @@ class StreamFactory extends AbstractFactory implements StreamFactoryInterface
    *
    * The stream MUST be readable and may be writable.
    *
-   * @param resource $resource
+   * @param      resource         $resource
    *
-   * @return StreamInterface
+   * @return     StreamInterface
    */
   public function createStreamFromResource($resource)
   {

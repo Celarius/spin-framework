@@ -14,10 +14,10 @@ use \Spin\Exception\Exception;
 
 class Config extends AbstractBaseClass implements ConfigInterface
 {
-  /** @var array      Configuration Array */
+  /** @var      array         Configuration Array */
   protected $confValues = array();
 
-  /** @var string     Config file name */
+  /** @var      string        Config file name */
   protected $filename;
 
   /**
@@ -53,7 +53,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
     return $this;
   }
 
-
   /**
    * Load Configuration file
    *
@@ -87,7 +86,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
     return $this;
   }
 
-
   /**
    * Load & Merge Configuration file to existing config
    *
@@ -120,7 +118,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
     return $this;
   }
 
-
   /**
    * Save Configuration file
    *
@@ -134,7 +131,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
 
     return ( file_put_contents($this->filename, json_encode($this->confValues,JSON_PRETTY_PRINT))!==false );
   }
-
 
   /**
    * Get a config item
@@ -161,7 +157,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
 
     return $val ?? $default;
   }
-
 
   /**
    * Set a Configuration $key to $value
@@ -200,7 +195,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
     return $this;
   }
 
-
   /**
    * Get config filename
    *
@@ -211,7 +205,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
     return $this->filename;
   }
 
-
   /**
    * Return all config values
    *
@@ -221,7 +214,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
   {
     return $this->confValues;
   }
-
 
   /**
    * Recursively change the key names of array and subarrays to $case

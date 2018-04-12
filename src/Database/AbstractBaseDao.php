@@ -1,4 +1,10 @@
-<?php
+<?php declare(strict_types=1);
+
+/**
+ * AbstractBaseDao
+ *
+ * @package    Spin
+ */
 
 namespace Spin\Database;
 
@@ -12,7 +18,7 @@ abstract class AbstractBaseDao implements AbstractBaseDaoInterface
   /**
    * Constructor
    *
-   * @param \Nofuzz\Database\PdoConnectionInterface $connection
+   * @param      string  $connectionName
    */
   public function __construct(string $connectionName='')
   {
@@ -23,7 +29,7 @@ abstract class AbstractBaseDao implements AbstractBaseDaoInterface
   /**
    * Get the DB connection assinged to this DAO object
    *
-   * @return null|\Nofuzz\Database\PdoConnectionInterface
+   * @return     null|PdoConnection
    */
   public function getConnection()
   {
@@ -35,7 +41,7 @@ abstract class AbstractBaseDao implements AbstractBaseDaoInterface
   /**
    * Get the DB connection assinged to this DAO object
    *
-   * @return null|\Nofuzz\Database\PdoConnectionInterface
+   * @return     null|PdoConnection
    * @deprecated 0.5.6 Removed in version 0.5.6
    */
   public function db()
@@ -46,7 +52,7 @@ abstract class AbstractBaseDao implements AbstractBaseDaoInterface
   /**
    * Begin transaction if not already started
    *
-   * @return bool
+   * @return     bool
    */
   public function beginTransaction()
   {
@@ -59,7 +65,7 @@ abstract class AbstractBaseDao implements AbstractBaseDaoInterface
   /**
    * Commit active transaction
    *
-   * @return bool
+   * @return     bool
    */
   public function commit()
   {
@@ -72,7 +78,7 @@ abstract class AbstractBaseDao implements AbstractBaseDaoInterface
   /**
    * Rollback active transaction
    *
-   * @return bool
+   * @return     bool
    */
   public function rollback()
   {
@@ -85,9 +91,10 @@ abstract class AbstractBaseDao implements AbstractBaseDaoInterface
   /**
    * Execute a SELECT statement
    *
-   * @param  string $sql          SQL statement to execute (SELECT ...)
-   * @param  array  $params       Bind params
-   * @return array                Array with fetched rows
+   * @param      string  $sql     SQL statement to execute (SELECT ...)
+   * @param      array   $params  Bind params
+   *
+   * @return     array   Array with fetched rows
    */
   public function rawQuery(string $sql, array $params=[])
   {
@@ -97,9 +104,11 @@ abstract class AbstractBaseDao implements AbstractBaseDaoInterface
   /**
    * Execute an INSERT, UPDATE or DELETE statement
    *
-   * @param  string $sql          SQL statement to execute (INSERT, UPDATE, DELETE ...)
-   * @param  array  $params       Bind params
-   * @return bool                 True if rows affected > 0
+   * @param      string  $sql     SQL statement to execute (INSERT, UPDATE,
+   *                              DELETE ...)
+   * @param      array   $params  Bind params
+   *
+   * @return     bool    True if rows affected > 0
    */
   public function rawExec(string $sql, array $params=[])
   {

@@ -12,15 +12,15 @@
 
 namespace Spin\Factories\Http;
 
-use InvalidArgumentException;
-use Spin\Factories\AbstractFactory;
+use \InvalidArgumentException;
+use \Spin\Factories\AbstractFactory;
 
 # Guzzle
-use GuzzleHttp\Psr7\LazyOpenStream;
+use \GuzzleHttp\Psr7\LazyOpenStream;
 
 # PSR-17
 // use Psr\Http\Message\UploadedFileFactoryInterface;
-use Interop\Http\Factory\UploadedFileFactoryInterface;
+use \Interop\Http\Factory\UploadedFileFactoryInterface;
 
 class UploadedFileFactory extends AbstractFactory implements UploadedFileFactoryInterface
 {
@@ -30,22 +30,21 @@ class UploadedFileFactory extends AbstractFactory implements UploadedFileFactory
    * If a string is used to create the file, a temporary resource will be
    * created with the content of the string.
    *
-   * If a size is not provided it will be determined by checking the size of
-   * the file.
+   * If a size is not provided it will be determined by checking the size of the
+   * file.
    *
-   * @see http://php.net/manual/features.file-upload.post-method.php
-   * @see http://php.net/manual/features.file-upload.errors.php
+   * @see        http://php.net/manual/features.file-upload.post-method.php
+   * @see        http://php.net/manual/features.file-upload.errors.php
    *
-   * @param string|resource $file
-   * @param integer $size in bytes
-   * @param integer $error PHP file upload error
-   * @param string $clientFilename
-   * @param string $clientMediaType
+   * @param      string|resource        $file
+   * @param      integer                $size             in bytes
+   * @param      integer                $error            PHP file upload error
+   * @param      string                 $clientFilename
+   * @param      string                 $clientMediaType
    *
-   * @return UploadedFileInterface
+   * @return     UploadedFileInterface
    *
-   * @throws \InvalidArgumentException
-   *  If the file resource is not readable.
+   * @throws     \InvalidArgumentException  If the file resource is not readable.
    */
   public function createUploadedFile(
       $file,

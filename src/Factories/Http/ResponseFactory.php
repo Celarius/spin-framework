@@ -12,28 +12,28 @@
 
 namespace Spin\Factories\Http;
 
-use InvalidArgumentException;
-use Spin\Factories\AbstractFactory;
+use \InvalidArgumentException;
+use \Spin\Factories\AbstractFactory;
 
 # Guzzle
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\LazyOpenStream;
+use \GuzzleHttp\Psr7\Response;
+use \GuzzleHttp\Psr7\LazyOpenStream;
 
 # PSR-7
-use Psr\Http\Message\ResponseInterface;
+use \Psr\Http\Message\ResponseInterface;
 
 # PSR-17
 // use Psr\Http\Message\ResponseFactoryInterface;
-use Interop\Http\Factory\ResponseFactoryInterface;
+use \Interop\Http\Factory\ResponseFactoryInterface;
 
 class ResponseFactory extends AbstractFactory implements ResponseFactoryInterface
 {
   /**
    * Create a new response.
    *
-   * @param integer $code HTTP status code
+   * @param      integer            $code   HTTP status code
    *
-   * @return ResponseInterface
+   * @return     ResponseInterface
    */
   public function createResponse($code = 200)
   {

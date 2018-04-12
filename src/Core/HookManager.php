@@ -1,10 +1,16 @@
 <?php declare(strict_types=1);
 
+/**
+ * HookManager
+ *
+ * @package  Spin
+ */
+
 namespace Spin\Core;
 
-use Spin\Core\AbstractBaseClass;
-use Spin\Core\HookManagerInterface;
-use Spin\Core\Hook;
+use \Spin\Core\AbstractBaseClass;
+use \Spin\Core\HookManagerInterface;
+use \Spin\Core\Hook;
 
 class HookManager extends AbstractBaseClass implements HookManagerInterface
 {
@@ -12,10 +18,12 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
   const ON_BEFORE_REQUEST = 1;
   const ON_AFTER_REQUEST = 2;
 
-  /** @var array      List of loaded Hook objects */
+  /** @var        array      List of loaded Hook objects */
   protected $hooks;
 
-  /** Constructor */
+  /**
+   * Constructor
+   */
   public function __construct()
   {
     parent::__construct();
@@ -27,11 +35,13 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
   /**
    * Get a Hook Object by $name
    *
-   * @param  string $name Hook Name
-   * @return mixed
+   * @param      string  $name   Hook Name
+   *
+   * @return     mixed
    */
   public function getHook(string $name): Hook
   {
+    # Find hook in list
     foreach ($this->hooks as $hook)
     {
       if (strcasecmp($name,$hook->getName()==0)) {
@@ -45,8 +55,9 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
   /**
    * Add a Hook by $name
    *
-   * @param  mixed  $hook
-   * @return self
+   * @param      mixed  $hook
+   *
+   * @return     self
    */
   public function addHook(Hook $hook)
   {
@@ -67,8 +78,9 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
   /**
    * Remove a Hook by $name
    *
-   * @param  string $name Hook Name
-   * @return bool
+   * @param      string  $name   Hook Name
+   *
+   * @return     self
    */
   public function removeHook(string $name): bool
   {
@@ -82,7 +94,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
       }
     }
 
-    return false;
+    return $this;
   }
 
 }

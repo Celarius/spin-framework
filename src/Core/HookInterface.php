@@ -1,5 +1,11 @@
 <?php declare(strict_types=1);
 
+/**
+ * HookInterface
+ *
+ * @package  Spin
+ */
+
 namespace Spin\Core;
 
 interface HookInterface
@@ -7,25 +13,25 @@ interface HookInterface
   /**
    * Run the hook code
    *
-   * @param  array|null $args Arguments to Hook
+   * @param      array|null  $args   Arguments to Hook
    *
-   * @return void
+   * @return     void
    */
-  function run(array $args=null);
+  abstract public function run(array $args=null);
 
   /**
    * Get hook name
    *
-   * @return   string
+   * @return     string
    */
   public function getName(): string;
 
   /**
    * Set Hook name
    *
-   * @param   string $name [description]
+   * @param      string  $name   [description]
    *
-   * @return  self
+   * @return     self
    */
   public function setName(string $name);
 }
