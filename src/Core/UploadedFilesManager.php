@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
+
 /**
  * Uploaded files manager
+ * 
+ * @package  Spin
  * 
  * @link http://php.net/manual/en/reserved.variables.files.php
  * @link http://php.net/manual/en/features.file-upload.post-method.php
@@ -9,18 +12,18 @@
 
 namespace Spin\Core;
 
-use Spin\Core\AbstractBaseClass;
-use Spin\Exception\Exception;
-use Spin\Core\Config;
-use Spin\Core\Logger;
-use Spin\Core\UploadedFile;
-use Spin\Core\UploadedFilesManagerInterface;
+use \Spin\Core\AbstractBaseClass;
+use \Spin\Core\Config;
+use \Spin\Core\Logger;
+use \Spin\Core\UploadedFile;
+use \Spin\Core\UploadedFilesManagerInterface;
+use \Spin\Exception\Exception;
 
-use Psr\Http\Message\Response;
+use \Psr\Http\Message\Response;
 
 class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesManagerInterface
 {
-  /** @var array      Array with \Spin\Core\File objects  */
+  /** @var       array          Array with \Spin\Core\File objects  */
   protected $files;
 
   /**
