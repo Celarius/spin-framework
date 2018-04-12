@@ -52,10 +52,11 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
   /**
    * Set the $key to $value, with $ttl (default 0)
    *
-   * @param [type] $key   [description]
-   * @param [type] $value [description]
-   * @param [type] $ttl   [description]
-   * @return bool
+   * @param      [type]  $key    [description]
+   * @param      [type]  $value  [description]
+   * @param      [type]  $ttl    [description]
+   *
+   * @return     bool
    */
   public function set($key, $value, $ttl = null)
   {
