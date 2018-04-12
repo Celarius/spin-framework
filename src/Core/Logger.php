@@ -12,6 +12,7 @@ namespace Spin\Core;
 
 use \Monolog\Handler\StreamHandler;
 use \Monolog\Handler\ErrorLogHandler;
+use \Monolog\Handler\BufferHandler;
 use \Monolog\Formatter\LineFormatter;
 use \Monolog\Logger as MonoLogger;
 
@@ -59,8 +60,8 @@ class Logger extends MonoLogger
     # Set Formatter for $handler
     $handler->setFormatter($formatter);
 
-    # Push handler
-    $this->pushHandler($handler);
+    # Push Buffer Handler that buffers before the actual user-defined handler
+    $this->pushHandler(new BufferHandler($handler);
 
     # Add a log entry
     $this->debug('Logger created successfully');
