@@ -33,12 +33,14 @@ class RequestFactory extends AbstractFactory implements RequestFactoryInterface
    *
    * @param      string               $method
    * @param      UriInterface|string  $uri
+   * @param      array                $headers  The headers
+   * @param      mixed                $body     The body
    *
    * @return     RequestInterface
    */
-  public function createRequest($method, $uri)
+  public function createRequest($method, $uri, $headers=[], $body=null)
   {
-    $request = new Request($method, $uri);
+    $request = new Request($method, $uri, $headers, $body);
 
     logger()->debug('Created PSR-7 Request("'.$method.'","'.$uri.'"") (Guzzle)');
 
