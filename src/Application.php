@@ -700,6 +700,16 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
+   * getConfigPath returns the full path to the application folder + "/app/Config"
+   *
+   * @return     string
+   */
+  public function getConfigPath(): string
+  {
+    return $this->appPath . DIRECTORY_SEPARATOR . 'Config';
+  }
+
+  /**
    * getAppPath returns the full path to the application folder + "/storage"
    *
    * @return     string
