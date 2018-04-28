@@ -710,7 +710,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
-   * getAppPath returns the full path to the application folder + "/storage"
+   * getStoragePath returns the full path to the application folder + "/storage"
    *
    * @return     string
    */
