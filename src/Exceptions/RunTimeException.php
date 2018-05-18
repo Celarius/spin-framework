@@ -6,10 +6,10 @@
  * @package     Spin
  */
 
-namespace Spin\Exception;
+namespace \Spin\Exceptions;
 
 Use \RunTimeException;
 
-class RunTimeException extends RunTimeException
+class SpinRunTimeException extends RunTimeException
 {
 }

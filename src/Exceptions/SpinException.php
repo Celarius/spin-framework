@@ -6,10 +6,10 @@
  * @package     Spin
  */
 
-namespace Spin\Exception;
+namespace \Spin\Exceptions;
 
 Use \Exception;
 
-class Exception extends Exception
+class SpinException extends Exception
 {
 }

@@ -9,15 +9,14 @@
 namespace Spin;
 
 use \Spin\Core\AbstractBaseClass;
+use \Spin\ApplicationInterface;
 use \Spin\Core\Config;
 use \Spin\Core\Logger;
 use \Spin\Core\RouteGroup;
 use \Spin\Core\ConnectionManager;
 use \Spin\Core\CacheManager;
 use \Spin\Core\UploadedFilesManager;
-use \Spin\Exception\Exception;
-use \Spin\ApplicationInterface;
-
+use \Spin\Exceptions\SpinException;
 use \Psr\Http\Message\Response;
 
 class Application extends AbstractBaseClass implements ApplicationInterface
@@ -223,9 +222,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Load the $filename routes file and create all RouteGroups
    *
-   * @param      string                     $filename  [description]
+   * @param      string                          $filename  [description]
    *
-   * @throws     \Spin\Exception\Exception  (description)
+   * @throws     \Spin\Exceptions\SpinException  
    *
    * @return     bool
    */
@@ -262,7 +261,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         $this->errorControllers = $routesFile['errors'] ?? [];
 
       } else {
-        throw new Exception('Invalid routes file',['file'=>$filename]);
+        throw new SpinException('Invalid routes file',['file'=>$filename]);
 
       }
 
