@@ -261,7 +261,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         $this->errorControllers = $routesFile['errors'] ?? [];
 
       } else {
-        throw new SpinException('Invalid routes file',['file'=>$filename]);
+        throw new SpinException('Invalid routes file "'.$filename.'"');
 
       }
 
