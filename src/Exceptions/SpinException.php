@@ -6,7 +6,7 @@
  * @package     Spin
  */
 
-namespace \Spin\Exceptions;
+namespace Spin\Exceptions;
 
 Use \Exception;
 
