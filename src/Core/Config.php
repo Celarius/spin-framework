@@ -10,7 +10,7 @@ namespace Spin\Core;
 
 use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\ConfigInterface;
-use \Spin\Exception\Exception;
+use \Spin\Exceptions\SpinException;
 
 class Config extends AbstractBaseClass implements ConfigInterface
 {
@@ -78,7 +78,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
         // $this->confValues = array_replace_recursive($this->confValues, $configArray);
         $this->confValues = $configArray;
       } else {
-        throw new Exception('Invalid JSON file "'.$filename.'"');
+        throw new SpinException('Invalid JSON file "'.$filename.'"');
 
       }
     }
@@ -109,7 +109,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
         $this->confValues = array_replace_recursive($this->confValues, $configArray);
 
       } else {
-        throw new Exception('Invalid JSON file "'.$filename.'"');
+        throw new SpinException('Invalid JSON file "'.$filename.'"');
 
       }
 

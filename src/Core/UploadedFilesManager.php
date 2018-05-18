@@ -17,7 +17,7 @@ use \Spin\Core\Config;
 use \Spin\Core\Logger;
 use \Spin\Core\UploadedFile;
 use \Spin\Core\UploadedFilesManagerInterface;
-use \Spin\Exception\Exception;
+use \Spin\Exceptions\SpinException;
 
 use \Psr\Http\Message\Response;
 
@@ -111,7 +111,7 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
     {
       # Filesize check
       if ( $maxSize>0 && $file['size']>$maxSize) {
-        throw new Exception('Exceeded filesize limit');
+        throw new SpinException('Exceeded filesize limit');
       }
 
       # Check error codes (http://php.net/manual/en/features.file-upload.errors.php)
@@ -120,25 +120,25 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
             break;
 
         case UPLOAD_ERR_PARTIAL:
-            throw new Exception($file['name'] . ': The uploaded file was only partially uploaded');
+            throw new SpinException($file['name'] . ': The uploaded file was only partially uploaded');
 
         case UPLOAD_ERR_NO_FILE:
-            throw new Exception($file['name'] . ': No file was uploaded');
+            throw new SpinException($file['name'] . ': No file was uploaded');
 
         case UPLOAD_ERR_INI_SIZE:
-            throw new Exception($file['name'] . ': The uploaded file exceeds the upload_max_filesize directive in php.ini');
+            throw new SpinException($file['name'] . ': The uploaded file exceeds the upload_max_filesize directive in php.ini');
 
         case UPLOAD_ERR_FORM_SIZE:
-            throw new Exception($file['name'] . ': The uploaded file exceeds MAX_FILE_SIZE (' . $maxSize . ') ');
+            throw new SpinException($file['name'] . ': The uploaded file exceeds MAX_FILE_SIZE (' . $maxSize . ') ');
         
         case UPLOAD_ERR_NO_TMP_DIR:
-            throw new Exception($file['name'] . ': Missing a temporary folder');
+            throw new SpinException($file['name'] . ': Missing a temporary folder');
 
         case UPLOAD_ERR_CANT_WRITE:
-            throw new Exception($file['name'] . ': Failed to write file to disk');
+            throw new SpinException($file['name'] . ': Failed to write file to disk');
 
         default:
-            throw new Exception('Unknown errors');
+            throw new SpinException('Unknown errors');
       }           
     }
 
