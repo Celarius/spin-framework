@@ -110,7 +110,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       require __DIR__ . '/Helpers.php';
 
       # Extract Environment
-      $this->environment = strtolower(env('ENVIRONMENT','dev'));
+      $this->setEnvironment( env('ENVIRONMENT','dev') );
 
       # Set paths
       $this->basePath = realpath($basePath);
@@ -118,7 +118,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->storagePath = $this->basePath . DIRECTORY_SEPARATOR . 'storage';
 
       # Create confog
-      $this->config = new Config( $this->appPath, $this->environment );
+      $this->config = new Config( $this->appPath, $this->getEnvironment() );
 
       # Set Timezone - default to UTC
       $timeZone = $this->getConfig()->get('application.global.timezone', 'UTC');
@@ -224,7 +224,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @param      string                          $filename  [description]
    *
-   * @throws     \Spin\Exceptions\SpinException  
+   * @throws     \Spin\Exceptions\SpinException
    *
    * @return     bool
    */
@@ -232,7 +232,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   {
     # If no filename given, default to "app/Config/routes.json"
     if (empty($filename)) {
-      $filename = $this->appPath.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.'routes-'.$this->environment.'.json';
+      $filename = $this->appPath.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.'routes-'.$this->getEnvironment().'.json';
     }
 
     if ( file_exists($filename) ) {
@@ -859,6 +859,20 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   public function getEnvironment(): string
   {
     return $this->environment;
+  }
+
+  /**
+   * Set the Environment
+   *
+   * @param      string  $environment  The environment
+   *
+   * @return     self
+   */
+  public function setEnvironment(string $environment)
+  {
+    $this->environment = strtolower($environment);
+
+    return $this;
   }
 
   /**
