@@ -11,7 +11,7 @@ Spin is a application framework for making Web UI's and REST API's quickly and e
 for most things, and allows for plugging in almost any PSR compatible component, such as loggers, HTTP libraries etc.
 
 ```txt
-    NOTE: This framework is in ALPHA stage - Not fully ready for production
+    NOTE: This framework is in RC stage - Please contribute to make it complete
 ```
 
 <!-- https://github.com/naokazuterada/MarkdownTOC -->
