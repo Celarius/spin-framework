@@ -22,7 +22,7 @@ use \Psr\Http\Message\Response;
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application/Framework version */
-  const VERSION = '0.0.5';
+  const VERSION = '0.0.6';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
@@ -117,7 +117,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->appPath = $this->basePath . DIRECTORY_SEPARATOR . 'app';
       $this->storagePath = $this->basePath . DIRECTORY_SEPARATOR . 'storage';
 
-      # Create confog
+      # Create config
       $this->config = new Config( $this->appPath, $this->getEnvironment() );
 
       # Set Timezone - default to UTC
