@@ -430,7 +430,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     ##
     ## No route matched the request ?!
     ##
-    $this->getLogger()->notice('No route matched the request',['path'=>$path]);
+    $this->getLogger()->notice('No route matched the request',['method'=>$this->getRequest()->getMethod(),'path'=>$path]);
 
     ##
     ## Try to load the "errors" controllers in the routes-{env}.json file
