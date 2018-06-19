@@ -51,6 +51,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var        Object          Config object */
   protected $config;
 
+  /** @var        Array           Name, Code and Version of App */
+  protected $version;
+
   /** @var        Object          PSR-3 compatible Logger object */
   protected $logger;
 
@@ -119,6 +122,16 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       # Create config
       $this->config = new Config( $this->appPath, $this->getEnvironment() );
+
+      # Load & Decode the version file
+      $verFile = app()->getConfigPath().DIRECTORY_SEPARATOR.'version.json';
+      $this->version = (file_exists($verFile) ? json_decode(file_get_contents($verFile),true) : []);
+      if (empty($this->version['application']['version'] ?? '')) {
+        # Backwards compatible with pre "version.json" Spin apps
+        $this->version['application']['code'] = config('application.code');
+        $this->version['application']['name'] = config('application.name');
+        $this->version['application']['version'] = config('application.version');
+      }
 
       # Set Timezone - default to UTC
       $timeZone = $this->getConfig()->get('application.global.timezone', 'UTC');
@@ -742,7 +755,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function getAppName(): string
   {
-    return $this->getConfig()->get('application.name','');
+    return $this->version['application']['name'] ?? '';
   }
 
   /**
@@ -752,7 +765,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function getAppCode(): string
   {
-    return $this->getConfig()->get('application.code','');
+    return $this->version['application']['code'] ?? '';
   }
 
   /**
@@ -762,7 +775,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function getAppVersion(): string
   {
-    return $this->getConfig()->get('application.version','');
+    return $this->version['application']['version'] ?? '';
   }
 
   /**
