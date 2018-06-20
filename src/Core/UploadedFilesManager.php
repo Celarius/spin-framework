@@ -2,9 +2,9 @@
 
 /**
  * Uploaded files manager
- * 
+ *
  * @package  Spin
- * 
+ *
  * @link http://php.net/manual/en/reserved.variables.files.php
  * @link http://php.net/manual/en/features.file-upload.post-method.php
  * @link http://php.net/manual/en/features.file-upload.php
@@ -34,7 +34,7 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
   public function __construct(array $files)
   {
     parent::__construct();
-    
+
     # Empty array
     $this->files = [];
 
@@ -69,15 +69,15 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
           $file['error'] = $fileInfo['error'][$i];
           $file['size'] = $fileInfo['size'][$i];
           $file['param'] = $param;
-          
-          $list[] = $file;  
+
+          $list[] = $file;
         }
 
       } else {
         $file = $fileInfo;
         $file['param'] = $param;
 
-        $list[] = $file;  
+        $list[] = $file;
       }
     }
 
@@ -107,7 +107,7 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
   {
     if (0 == $maxSize) $maxSize = $this->getMaximumFileUploadSize();
 
-    foreach ($this->files as $file) 
+    foreach ($this->files as $file)
     {
       # Filesize check
       if ( $maxSize>0 && $file['size']>$maxSize) {
@@ -130,7 +130,7 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
 
         case UPLOAD_ERR_FORM_SIZE:
             throw new SpinException($file['name'] . ': The uploaded file exceeds MAX_FILE_SIZE (' . $maxSize . ') ');
-        
+
         case UPLOAD_ERR_NO_TMP_DIR:
             throw new SpinException($file['name'] . ': Missing a temporary folder');
 
@@ -139,10 +139,10 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
 
         default:
             throw new SpinException('Unknown errors');
-      }           
+      }
     }
 
-    return true;    
+    return true;
   }
 
   /**
@@ -152,10 +152,10 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
    *
    * @return     int   File size in bytes
    */
-  protected function getMaximumFileUploadSize()  
-  {  
-    return min($this->convertPHPSizeToBytes(ini_get('post_max_size')), $this->convertPHPSizeToBytes(ini_get('upload_max_filesize')));  
-  }  
+  protected function getMaximumFileUploadSize()
+  {
+    return min($this->convertPHPSizeToBytes(ini_get('post_max_size')), $this->convertPHPSizeToBytes(ini_get('upload_max_filesize')));
+  }
 
   /**
    * This function transforms the php.ini notation for numbers (like '2M') to an
@@ -170,8 +170,8 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
     $sSuffix = strtoupper(substr($sSize, -1));
 
     if (!in_array($sSuffix,array('P','T','G','M','K'))){
-      return (int)$sSize;  
-    } 
+      return (int)$sSize;
+    }
 
     $iValue = substr($sSize, 0, -1);
 
@@ -194,5 +194,15 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
     }
 
     return (int)$iValue;
-  }      
+  }
+
+  /**
+   * Gets the files
+   *
+   * @return     array  The files
+   */
+  public function getFiles(): array
+  {
+    return $this->files;
+  }
 }

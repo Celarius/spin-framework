@@ -12,7 +12,7 @@ class UploadedFilesManagerTest extends TestCase
   protected $app;
 
   /**
-   * Setup test
+   * Setup
    */
   public function setup()
   {
@@ -21,13 +21,25 @@ class UploadedFilesManagerTest extends TestCase
   }
 
   /**
-   * Test OpenSSL Encryption / Decryption
+   * Test
    */
   public function testUploadedFilesManager()
   {
     $manager = new UploadedFilesManager($_FILES);
 
     $this->assertTrue( !is_null($manager) );
+  }
+
+  /**
+   * Test
+   */
+  public function testUploadedFilesManagerFiles()
+  {
+    $manager = new UploadedFilesManager($_FILES);
+
+    $files = $manager->getFiles();
+
+    $this->assertTrue( is_array($files) );
   }
 
 }
