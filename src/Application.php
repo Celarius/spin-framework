@@ -22,7 +22,7 @@ use \Psr\Http\Message\Response;
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application/Framework version */
-  const VERSION = '0.0.6';
+  const VERSION = '0.0.7';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
@@ -1043,6 +1043,16 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     }
 
     return $this;
+  }
+
+  /**
+   * Get the UploadedFilesManager
+   *
+   * @return     UploadedFilesManager
+   */
+  public function getUploadedFilesManager()
+  {
+    return $this->uploadedFilesManager;
   }
 
 }
