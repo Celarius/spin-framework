@@ -565,7 +565,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
       # Execute statement
       if ($sth->execute()) {
-        $result = $this->rowCount() > 0;
+        $result = $sth->rowCount() > 0;
       }
 
       # Close cursor
