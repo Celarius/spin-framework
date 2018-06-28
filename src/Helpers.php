@@ -416,8 +416,10 @@ if (!function_exists('response')) {
       $response = $response->withHeader($header,$values);
     }
 
-    # Set file to respond with
-    $app->setFileResponse('');
+    if (mb_strlen($body)>0) {
+      # Empty the response file if we are sending back content
+      $app->setFileResponse('');
+    }
 
     # Set it
     $app->setResponse($response);
