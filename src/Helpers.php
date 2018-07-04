@@ -548,3 +548,17 @@ if (!function_exists('getClientIp')) {
   }
 }
 
+if (!function_exists("getConfigPath")) {
+  /**
+   * Gets the Config folder path
+   *
+   * @return     string
+   */
+  function getConfigPath(): string
+  {
+    GLOBAL $app;
+
+    return $app->getAppPath() . DIRECTORY_SEPARATOR . 'Config';
+  }
+}
+
