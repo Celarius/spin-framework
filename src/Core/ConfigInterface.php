@@ -21,7 +21,7 @@ interface ConfigInterface
    * Load Configuration file
    *
    * @param      string  $filename
-   * 
+   *
    * @return     self
    */
   function load(string $filename);
@@ -30,7 +30,7 @@ interface ConfigInterface
    * Load & Merge Configuration file to existing config
    *
    * @param      string  $filename
-   * 
+   *
    * @return     self
    */
   function loadAndMerge(string $filename);
@@ -48,12 +48,12 @@ interface ConfigInterface
    * Get a config item
    *
    * @param      string  $key      "." notationed key to retreive
-   * @param      string  $default  Optional Default value if group::section::key
+   * @param      mied    $default  Optional Default value if group::section::key
    *                               not found
    *
    * @return     mixed
    */
-  function get(string $key,string $default=null);
+  function get(string $key, $default=null);
 
   /**
    * Set a config item
