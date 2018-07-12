@@ -99,7 +99,7 @@ if (!function_exists('config')) {
    * Get/Set a Config key/value
    *
    * @param      string  $key    The key in DOt format
-   * @param      mixed   $value  The default value
+   * @param      mixed   $value  The value to set
    *
    * @return     mixed
    */
@@ -113,7 +113,7 @@ if (!function_exists('config')) {
 
     } elseif (is_null($value)) {
       # Return config Key's value
-      return $app->getConfig()->get($key,$value);
+      return $app->getConfig()->get($key);
 
     } else {
       # Set config $key to $value
