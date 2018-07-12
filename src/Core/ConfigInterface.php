@@ -48,7 +48,7 @@ interface ConfigInterface
    * Get a config item
    *
    * @param      string  $key      "." notationed key to retreive
-   * @param      mied    $default  Optional Default value if group::section::key
+   * @param      mixed   $default  Optional Default value if group::section::key
    *                               not found
    *
    * @return     mixed
