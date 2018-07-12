@@ -98,12 +98,12 @@ if (!function_exists('config')) {
   /**
    * Get/Set a Config key/value
    *
-   * @param      string          $key    The key in DOt format
-   * @param      integer|string  $value  The value
+   * @param      string  $key    The key in DOt format
+   * @param      mixed   $value  The default value
    *
    * @return     mixed
    */
-  function config(string $key=null, string $value=null)
+  function config(string $key=null, $value=null)
   {
     global $app;
 
