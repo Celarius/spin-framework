@@ -113,7 +113,7 @@ if (!function_exists('config')) {
 
     } elseif (is_null($value)) {
       # Return config Key's value
-      return $app->getConfig()->get($key);
+      return $app->getConfig()->get($key,$value);
 
     } else {
       # Set config $key to $value
