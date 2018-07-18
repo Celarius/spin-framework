@@ -4,7 +4,7 @@
  * CacheManager
  *
  * Manager for Cache integrations
- * 
+ *
  * @package   Spin
  */
 
@@ -36,7 +36,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    *
    * @return     null | object
    */
-  public function getCache(string $name=null)
+  public function getCache(string $name='')
   {
     # Find the cache (if we already have it created)
     $cache = $this->findCache($name);
@@ -63,7 +63,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    *
    * @return     null | PdoConnection
    */
-  public function findCache(string $name=null)
+  public function findCache(string $name='')
   {
     if ( empty($name) ) {
       # Take first available
