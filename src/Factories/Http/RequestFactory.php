@@ -27,25 +27,23 @@ use Psr\Http\Message\RequestFactoryInterface;
 
 class RequestFactory extends AbstractFactory implements RequestFactoryInterface
 {
-  /**
-   * Create a new request.
-   *
-   * @param      string               $method
-   * @param      UriInterface|string  $uri
-   * @param      array                $headers  The headers
-   * @param      mixed                $body     The body
-   *
-   * @return     RequestInterface
-   */
   // public function createRequest($method, $uri, $headers=[], $body=null)
   // {
   //   $request = new Request($method, $uri, $headers, $body);
   //   logger()->debug('Created PSR-7 Request("'.$method.'","'.$uri.'"") (Guzzle)');
   //   return $request;
   // }
+  /**
+   * Create a new request.
+   *
+   * @param      string               $method
+   * @param      UriInterface|string  $uri
+   *
+   * @return     RequestInterface
+   */
   public function createRequest(string $method, $uri): RequestInterface
   {
-    $request = new Request($method, $uri, $headers, $body);
+    $request = new Request($method, $uri);
 
     logger()->debug('Created PSR-7 Request("'.$method.'","'.$uri.'"") (Guzzle)');
 
