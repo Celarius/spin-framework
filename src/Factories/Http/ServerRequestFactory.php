@@ -25,8 +25,7 @@ use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ServerRequestInterface;
 
 # PSR-17
-// use \Psr\Http\Message\ServerRequestFactoryInterface;
-use \Interop\Http\Factory\ServerRequestFactoryInterface;
+use \Psr\Http\Message\ServerRequestFactoryInterface;
 
 
 class ServerRequestFactory extends AbstractFactory implements ServerRequestFactoryInterface
@@ -36,10 +35,11 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
    *
    * @param      string                  $method
    * @param      UriInterface|string     $uri
+   * @param      array                   $serverParams  The server parameters
    *
    * @return     ServerRequestInterface
    */
-  public function createServerRequest($method, $uri)
+  public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
   {
     # Copied from Guzzles ::fromGlobals(), but we need to support the $server array as
     # paramter, so we use that instead of the $_SERVER array guzzle uses by default
@@ -74,7 +74,7 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
   public function createServerRequestFromArray(?array $server)
   {
     global $app;
-    
+
     # Copied from Guzzles ::fromGlobals(), but we need to support the $server array as
     # paramter, so we use that instead of the $_SERVER array guzzle uses by default
 

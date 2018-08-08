@@ -19,8 +19,7 @@ use \Spin\Factories\AbstractFactory;
 use \GuzzleHttp\Psr7\LazyOpenStream;
 
 # PSR-7
-// use Psr\Http\Message\UriFactoryInterface;
-use \Interop\Http\Factory\UriFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
 
 class UriFactory extends AbstractFactory implements UriFactoryInterface
 {

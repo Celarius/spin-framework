@@ -23,8 +23,7 @@ use \GuzzleHttp\Psr7\LazyOpenStream;
 use \Psr\Http\Message\RequestInterface;
 
 # PSR-17
-// use Psr\Http\Message\RequestFactoryInterface;
-use \Interop\Http\Factory\RequestFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 
 class RequestFactory extends AbstractFactory implements RequestFactoryInterface
 {

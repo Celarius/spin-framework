@@ -23,8 +23,7 @@ use \GuzzleHttp\Psr7\LazyOpenStream;
 use \Psr\Http\Message\ResponseInterface;
 
 # PSR-17
-// use Psr\Http\Message\ResponseFactoryInterface;
-use \Interop\Http\Factory\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 class ResponseFactory extends AbstractFactory implements ResponseFactoryInterface
 {
@@ -35,7 +34,7 @@ class ResponseFactory extends AbstractFactory implements ResponseFactoryInterfac
    *
    * @return     ResponseInterface
    */
-  public function createResponse($code = 200)
+  public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
   {
     $response = new Response($code);
 

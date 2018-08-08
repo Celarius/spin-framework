@@ -19,8 +19,7 @@ use \Spin\Factories\AbstractFactory;
 use \GuzzleHttp\Psr7\LazyOpenStream;
 
 # PSR-17
-// use Psr\Http\Message\UploadedFileFactoryInterface;
-use \Interop\Http\Factory\UploadedFileFactoryInterface;
+use Psr\Http\Message\UploadedFileFactoryInterface;
 
 class UploadedFileFactory extends AbstractFactory implements UploadedFileFactoryInterface
 {
