@@ -140,12 +140,12 @@ class Config extends AbstractBaseClass implements ConfigInterface
    * Example: get('application.code')
    *
    * @param      string  $key      "." notation key to retreive
-   * @param      string  $default  Optional Default value if group::section::key
+   * @param      mixed   $default  Optional Default value if group::section::key
    *                               not found
    *
    * @return     mixed
    */
-  public function get(string $key,string $default=null)
+  public function get(string $key, $default=null)
   {
     $keys = explode('.',$key);
     $val = $this->confValues;

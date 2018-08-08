@@ -19,7 +19,7 @@ interface CacheManagerInterface
    * @param      string  $name   Name of the Cache (from Config)
    * @return     null  | object
    */
-  public function getCache(string $name=null);
+  public function getCache(string $name='');
 
   /**
    * Find a Cache based on name
@@ -28,16 +28,16 @@ interface CacheManagerInterface
    * (if there is one)
    *
    * @param      string  $name   Name of the cache (from Config)
-   * 
+   *
    * @return     null  | PdoConnection
    */
-  public function findCache(string $name=null);
+  public function findCache(string $name='');
 
   /**
    * Adds the Cache to the Pool
    *
    * @param      AbstractCacheAdapterInterface  $cache  [description]
-   * 
+   *
    * @return     self
    */
   public function addCache(AbstractCacheAdapterInterface $cache);
