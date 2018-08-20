@@ -31,7 +31,7 @@ interface JWTInterface
    * @uses       jsonDecode
    * @uses       urlsafeB64Decode
    */
-  static function decode($jwt, $key, $allowed_algs = array());
+  static function decode($jwt, $key, array $allowed_algs = array());
 
   /**
    * Converts and signs a PHP object or array into a JWT string.
@@ -44,7 +44,7 @@ interface JWTInterface
    *                                     'HS512' and 'RS256'
    * @param      mixed         $keyId
    * @param      array         $head     An array with header elements to attach
-   * 
+   *
    * @return     string  A signed JWT
    * @uses       jsonEncode
    * @uses       urlsafeB64Encode
