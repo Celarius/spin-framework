@@ -16,7 +16,6 @@
   function config(string $key=null, string $value=null)
   function container(string $id=null, $value=null)
 
-  function log()
   function db(string $connectionName='')
   function cache(string $driverName='')
   function request()
@@ -26,6 +25,8 @@
   function responseJson(array $ar=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK)
   function responseXml(array $ar=[], int $code=200)
   function responseHtml(string $body='', int $code=200, array $headers=[])
+
+  function getClientIp()
  */
 
 use Spin\helpers\ArrayToXml;
