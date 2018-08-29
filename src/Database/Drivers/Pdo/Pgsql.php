@@ -3,7 +3,7 @@
 /**
  * PDO PostgreSql Connection driver
  *
- * https://www.mysql.com/
+ * https://www.postgresql.org
  * 
  * @package    Spin
  */

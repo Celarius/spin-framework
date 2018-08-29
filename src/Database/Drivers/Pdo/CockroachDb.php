@@ -6,7 +6,7 @@
  * https://www.cockroachlabs.com
  * 
  * @package    Spin
-*/
+ */
 
 namespace Spin\Database\Drivers\Pdo;
 

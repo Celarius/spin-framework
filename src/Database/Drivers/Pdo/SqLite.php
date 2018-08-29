@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
 /**
- * PDO Sqlite Connection driver
+ * PDO SqLite Connection driver
  *
- * https://www.mysql.com/
+ * https://www.sqlite.org
  * 
  * @package    Spin
  */
