@@ -2,16 +2,16 @@
 
 /**
  * PDO ODBC Microsoft SQL Server Connection driver
- * 
- * Download the ODBC Sql Server 11 driver from the link provided to 
+ *
+ * Download the ODBC Sql Server 17 driver from the link provided to
  * enable ODBC connections to SQL Server Express.
- * 
+ *
  * @link      https://www.microsoft.com/en-us/download/details.aspx?id=36434  (version 11)
  * @link      https://www.microsoft.com/en-us/download/details.aspx?id=53339  (version 13.1)
  * @link      https://www.microsoft.com/en-us/download/details.aspx?id=56567  (version 17)
- * 
+ *
  * @link      https://www.microsoft.com/en-us/download/details.aspx?id=42299  (Microsoft® SQL Server® 2014 Express)
- * 
+ *
  * @package   Spin
  */
 
@@ -54,7 +54,7 @@ class Odbc_sqlsrv extends PdoConnection
   {
     // Use any of these or check exact MSSQL ODBC drivername in "ODBC Data Source Administrator"
     //
-    // $mssqldriver = 'SQL Server'; 
+    // $mssqldriver = 'SQL Server';
     // $mssqldriver = 'SQL Server Native Client 11.0';
     // $mssqldriver = 'ODBC Driver 11 for SQL Server';
     // $mssqldriver = 'ODBC Driver 13 for SQL Server';
