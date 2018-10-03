@@ -62,7 +62,7 @@ class Odbc_sqlsrv extends PdoConnection
 
     # Build the DSN
     $_dsn = 'odbc:'.
-            'Driver=ODBC Driver 17 for SQL Server;'.
+            'Driver=ODBC Driver 11 for SQL Server;'.
             'Server=' . $this->getHost() . '\\SQLEXPRESS' . ($this->getPort()!=0 ? ','.$this->getPort() : '' ) . ';'.
             'Database=' . $this->getSchema();
 
