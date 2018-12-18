@@ -164,6 +164,7 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
 
         } catch (\Exception $e) {
           logger()->critical( $e->getMessage(), ['trace'=>$e->getTraceAsString()] );
+          throw $e;
         }
       }
     }
