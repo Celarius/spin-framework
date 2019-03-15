@@ -296,6 +296,18 @@ if (!function_exists('postParam')) {
   }
 }
 
+if (!function_exists('postParams')) {
+  /**
+   * Get all Post Params ($_POST variable)
+   *
+   * @return     array
+   */
+  function postParams()
+  {
+    return $_POST;
+  }
+}
+
 if (!function_exists('cookieParam')) {
   /**
    * Get a Cookie Param ($_COOKIE variable)
