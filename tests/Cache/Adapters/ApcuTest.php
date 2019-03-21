@@ -18,7 +18,7 @@ class ApcuTest extends TestCase
 
       if ($e->getMessage() === 'Cache driver APCu not available') {
         # APCU is not available, assume OK
-        $this->assertFalse( true );
+        $this->assertFalse( false );
       }
 
       throw $e;
