@@ -1,4 +1,5 @@
 # Changelog
+SPIN Framework Changelog
 
 ## 0.0.8
 - Added \ for all root namespace functions (performance enhancement)
