@@ -108,7 +108,7 @@ if (!function_exists('config')) {
   {
     global $app;
 
-    if (is_null($key)) {
+    if (\is_null($key)) {
       # Return config object
       return $app->getConfig();
 

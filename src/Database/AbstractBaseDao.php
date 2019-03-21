@@ -33,7 +33,7 @@ abstract class AbstractBaseDao implements AbstractBaseDaoInterface
    */
   public function getConnection()
   {
-    $this->connection = db($this->connectionName);
+    $this->connection = \db($this->connectionName);
 
     return $this->connection;
   }

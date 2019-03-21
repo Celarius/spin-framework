@@ -45,14 +45,14 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
     # paramter, so we use that instead of the $_SERVER array guzzle uses by default
 
     $method = isset($server['REQUEST_METHOD']) ? $server['REQUEST_METHOD'] : 'GET';
-    $headers = function_exists('getallheaders') ? getallheaders() : [];
+    $headers = \function_exists('getallheaders') ? \getallheaders() : [];
     $uri = $uri;
     $body = new LazyOpenStream('php://input', 'r+');
-    $protocol = isset($server['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $server['SERVER_PROTOCOL']) : '1.1';
+    $protocol = isset($server['SERVER_PROTOCOL']) ? \str_replace('HTTP/', '', $server['SERVER_PROTOCOL']) : '1.1';
 
     $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $server);
 
-    logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$url.'") (Guzzle)');
+    \logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$url.'") (Guzzle)');
 
     return $serverRequest
         ->withCookieParams($_COOKIE)
@@ -79,14 +79,14 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
     # paramter, so we use that instead of the $_SERVER array guzzle uses by default
 
     $method = isset($server['REQUEST_METHOD']) ? $server['REQUEST_METHOD'] : 'GET';
-    $headers = function_exists('getallheaders') ? getallheaders() : [];
+    $headers = \function_exists('getallheaders') ? \getallheaders() : [];
     $uri = ServerRequest::getUriFromGlobals();
     $body = new LazyOpenStream('php://input', 'r+');
-    $protocol = isset($server['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $server['SERVER_PROTOCOL']) : '1.1';
+    $protocol = isset($server['SERVER_PROTOCOL']) ? \str_replace('HTTP/', '', $server['SERVER_PROTOCOL']) : '1.1';
 
     $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $server);
 
-    $app->getLogger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$uri.'") from array (Guzzle)');
+    \logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$uri.'") from array (Guzzle)');
 
     return $serverRequest
            ->withCookieParams($_COOKIE)

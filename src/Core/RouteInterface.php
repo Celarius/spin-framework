@@ -15,19 +15,19 @@ class RouteInterface
    *
    * @return     string
    */
-  public function getMethod();
+  function getMethod();
 
   /**
    * Return Path
    *
    * @return     string
    */
-  public function getPath();
+  function getPath();
 
   /**
    * Return Handler
    *
    * @return     string
    */
-  public function getHandler();
+  function getHandler();
 }

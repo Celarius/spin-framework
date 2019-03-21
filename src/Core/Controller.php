@@ -44,7 +44,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handle(array $args)
   {
-    switch ( strtoupper(getRequest()->getMethod()) ) {
+    switch ( \strtoupper(getRequest()->getMethod()) ) {
       case "GET"    : return $this->handleGET($args); break;
       case "POST"   : return $this->handlePOST($args); break;
       case "PUT"    : return $this->handlePUT($args); break;
@@ -65,7 +65,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleGET(array $args)
   {
-    return response('',405);
+    return \response('',405);
   }
 
   /**
@@ -77,7 +77,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handlePOST(array $args)
   {
-    return response('',405);
+    return \response('',405);
   }
 
   /**
@@ -89,7 +89,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handlePUT(array $args)
   {
-    return response('',405);
+    return \response('',405);
   }
 
   /**
@@ -101,7 +101,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handlePATCH(array $args)
   {
-    return response('',405);
+    return \response('',405);
   }
 
   /**
@@ -113,7 +113,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleDELETE(array $args)
   {
-    return response('',405);
+    return \response('',405);
   }
 
   /**
@@ -125,7 +125,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleHEAD(array $args)
   {
-    return response('',405);
+    return \response('',405);
   }
 
   /**
@@ -137,7 +137,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleOPTIONS(array $args)
   {
-    return response('',405);
+    return \response('',405);
   }
 
   /**
@@ -149,7 +149,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function handleCUSTOM(array $args)
   {
-    return response('',405);
+    return \response('',405);
   }
 
   /**
@@ -159,7 +159,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function getRequest()
   {
-    return getRequest();
+    return \getRequest();
   }
 
   /**
@@ -169,7 +169,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function getResponse()
   {
-    return getResponse();
+    return \getResponse();
   }
 
   /**
@@ -179,7 +179,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function getConfig()
   {
-    return config();
+    return \config();
   }
 
   /**
@@ -189,7 +189,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function getLogger()
   {
-    return getLogger();
+    return \getLogger();
   }
 
   /**
@@ -199,7 +199,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function getCache()
   {
-    return cache();
+    return \cache();
   }
 
 }

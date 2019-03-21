@@ -38,7 +38,7 @@ class ResponseFactory extends AbstractFactory implements ResponseFactoryInterfac
   {
     $response = new Response($code);
 
-    logger()->debug('Created PSR-7 Response (Guzzle)');
+    \logger()->debug('Created PSR-7 Response (Guzzle)');
 
     return $response;
   }

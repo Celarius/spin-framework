@@ -67,16 +67,16 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
     $pdoOptions = [];
     # Convert the PDO params into PDO constants
-    if ( count($pdoParams)>0 ) {
+    if ( \count($pdoParams)>0 ) {
       foreach ($pdoParams as $idx => $p)
       {
-        $pdoOption = strtoupper(key($p));
+        $pdoOption = \strtoupper(key($p));
         $pdoValue = $pdoParams[$idx][key($p)];
 
         # Convert to PDO constants
-        $k = constant('\PDO::'.$pdoOption); // PDO Option
-        if ( !is_numeric($pdoValue) && !empty($pdoValue) ) {
-          $v = @constant('\PDO::'.$pdoValue);  // PDO constant
+        $k = \constant('\PDO::'.$pdoOption); // PDO Option
+        if ( !\is_numeric($pdoValue) && !empty($pdoValue) ) {
+          $v = @\constant('\PDO::'.$pdoValue);  // PDO constant
         } else if (!empty($pdoValue)) {
           $v = $pdoValue; // Its a string
         } else {
@@ -88,7 +88,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     }
 
     # Default PDO options for all drivers if none given
-    if (count($pdoOptions)==0) {
+    if (\count($pdoOptions)==0) {
       $pdoOptions =
         array(
           \PDO::ATTR_PERSISTENT => TRUE,
@@ -118,7 +118,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     }
 
     # Debug log
-    logger()->debug( 'Created Connection', ['connection'=>$this->getName()] );
+    \logger()->debug( 'Created Connection', ['connection'=>$this->getName()] );
 
     # Set connected
     $this->connected = true;
@@ -517,7 +517,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
       # Binds
       foreach ($params as $bind=>$value) {
-        $sth->bindValue( ':'.ltrim($bind,':'), $value);
+        $sth->bindValue( ':'.\ltrim($bind,':'), $value);
       }
 
       # Execute statement
@@ -560,7 +560,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     if ($sth = $this->prepare($sql)) {
       # Binds
       foreach ($params as $bind=>$value) {
-        $sth->bindValue( ':'.ltrim($bind,':'), $value);
+        $sth->bindValue( ':'.\ltrim($bind,':'), $value);
       }
 
       # Execute statement

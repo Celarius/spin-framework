@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Spin;
+namespace Spin\tests\Core;
 
 use PHPUnit\Framework\TestCase;
 

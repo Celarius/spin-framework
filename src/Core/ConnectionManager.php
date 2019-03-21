@@ -42,11 +42,11 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
     # Find the connection - null if it's not created
     $connection = $this->findConnection($name);
 
-    if (is_null($connection)) {
+    if (\is_null($connection)) {
       # Create the connection
       $connection = $this->createConnection($name, $params);
 
-      if (!is_null($connection)) {
+      if (!\is_null($connection)) {
         $this->addConnection($connection);
       }
     }
@@ -68,12 +68,12 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   {
     if ( empty($name) ) {
       # Take first available connection
-      $connection = reset($this->connections);
+      $connection = \reset($this->connections);
       if ($connection === false)
         return null;
     } else {
       # Attempt to find the connection from the pool
-      $connection = ( $this->connections[strtolower($name)] ?? null);
+      $connection = ( $this->connections[\strtolower($name)] ?? null);
     }
 
     return $connection;
@@ -88,7 +88,7 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
    */
   public function addConnection(PdoConnectionInterface $connection)
   {
-    $this->connections[strtolower($connection->getName())] = $connection;
+    $this->connections[\strtolower($connection->getName())] = $connection;
 
     return $connection;
   }
@@ -109,12 +109,12 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
 
     if ($connection) {
       $connection->disconnect();
-      unset( $this->connections[strtolower($connection->getName())] );
+      unset( $this->connections[\strtolower($connection->getName())] );
       unset($connection);
       $connection = null;
     }
 
-    return is_null($connection);
+    return \is_null($connection);
   }
 
   /**
@@ -136,34 +136,34 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   protected function createConnection(string $connectionName, array $params=[])
   {
     # Try to find the connection in the internal list, if it was created already
-    $connection = $this->connections[strtolower($connectionName)] ?? null;
+    $connection = $this->connections[\strtolower($connectionName)] ?? null;
 
     # If no connection found, and the $connectionName is empty, read in 1st one
-    if (is_null($connection) && empty($connectionName)) {
+    if (\is_null($connection) && empty($connectionName)) {
       # Get connections from conf
-      $arr = config()->get('connections');
-      reset($arr);
+      $arr = \config()->get('connections');
+      \reset($arr);
       # Take the 1st connections name
       $connectionName = key($arr);
     }
 
-    if (is_null($connection)) {
+    if (\is_null($connection)) {
       # Get connection's params from conf - unelss they were provided
-      if (count($params)==0) {
-        $params = config()->get('connections.'.$connectionName);
+      if (\count($params)==0) {
+        $params = \config()->get('connections.'.$connectionName);
       }
 
       # Type="PDO"
-      if ( strcasecmp($params['type'] ?? '','PDO')==0 ) {
+      if ( \strcasecmp($params['type'] ?? '','PDO')==0 ) {
         # Build the Classname
-        $className = '\\Spin\\Database\\Drivers\\'.ucfirst($params['type'] ?? '').'\\'.ucfirst($params['driver'] ?? '') ;
+        $className = '\\Spin\\Database\\Drivers\\'.\ucfirst($params['type'] ?? '').'\\'.\ucfirst($params['driver'] ?? '') ;
 
         try {
           # Create the PdoConnection
           $connection = new $className($connectionName, $params);
 
         } catch (\Exception $e) {
-          logger()->critical( $e->getMessage(), ['trace'=>$e->getTraceAsString()] );
+          \logger()->critical( $e->getMessage(), ['trace'=>$e->getTraceAsString()] );
           throw $e;
         }
       }

@@ -29,7 +29,7 @@ class Hash implements HashInterface
   public static function generate(string $data, string $method='SHA256'): string
   {
     $hash = '';
-    $hash = openssl_digest($data,$method);
+    $hash = \openssl_digest($data,$method);
 
     return $hash;
   }
@@ -45,9 +45,9 @@ class Hash implements HashInterface
    */
   public static function check(string $data, string $hash, string $method='SHA256'): bool
   {
-    $hash_compare = openssl_digest($data,$method);
+    $hash_compare = \openssl_digest($data,$method);
 
-    return (strcmp($hash, $hash_compare) === 0);
+    return (\strcmp($hash, $hash_compare) === 0);
   }
 
 
@@ -58,7 +58,7 @@ class Hash implements HashInterface
    */
   public static function getMethods(): array
   {
-    return openssl_get_md_methods();
+    return \openssl_get_md_methods();
   }
 
 }

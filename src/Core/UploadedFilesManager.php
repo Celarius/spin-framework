@@ -59,7 +59,7 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
     # Loop all Parameter names
     foreach ($files as $param => $fileInfo)
     {
-      if ( is_array($fileInfo['name']) ) {
+      if ( \is_array($fileInfo['name']) ) {
         # Loop each index number
         foreach ($fileInfo['name'] as $i=>$value)
         {
@@ -90,7 +90,7 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
     # Validate/check files/values
     $this->validateInput($maxSize);
 
-    return count($this->files);
+    return \count($this->files);
   }
 
   /**
@@ -116,25 +116,25 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
 
       # Check error codes (http://php.net/manual/en/features.file-upload.errors.php)
       switch ( $file['error'] ) {
-        case UPLOAD_ERR_OK:
+        case \UPLOAD_ERR_OK:
             break;
 
-        case UPLOAD_ERR_PARTIAL:
+        case \UPLOAD_ERR_PARTIAL:
             throw new SpinException($file['name'] . ': The uploaded file was only partially uploaded');
 
-        case UPLOAD_ERR_NO_FILE:
+        case \UPLOAD_ERR_NO_FILE:
             throw new SpinException($file['name'] . ': No file was uploaded');
 
-        case UPLOAD_ERR_INI_SIZE:
+        case \UPLOAD_ERR_INI_SIZE:
             throw new SpinException($file['name'] . ': The uploaded file exceeds the upload_max_filesize directive in php.ini');
 
-        case UPLOAD_ERR_FORM_SIZE:
+        case \UPLOAD_ERR_FORM_SIZE:
             throw new SpinException($file['name'] . ': The uploaded file exceeds MAX_FILE_SIZE (' . $maxSize . ') ');
 
-        case UPLOAD_ERR_NO_TMP_DIR:
+        case \UPLOAD_ERR_NO_TMP_DIR:
             throw new SpinException($file['name'] . ': Missing a temporary folder');
 
-        case UPLOAD_ERR_CANT_WRITE:
+        case \UPLOAD_ERR_CANT_WRITE:
             throw new SpinException($file['name'] . ': Failed to write file to disk');
 
         default:
@@ -154,7 +154,7 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
    */
   protected function getMaximumFileUploadSize()
   {
-    return min($this->convertPHPSizeToBytes(ini_get('post_max_size')), $this->convertPHPSizeToBytes(ini_get('upload_max_filesize')));
+    return \min($this->convertPHPSizeToBytes(\ini_get('post_max_size')), $this->convertPHPSizeToBytes(\ini_get('upload_max_filesize')));
   }
 
   /**
@@ -167,13 +167,13 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
    */
   protected function convertPHPSizeToBytes($sSize)
   {
-    $sSuffix = strtoupper(substr($sSize, -1));
+    $sSuffix = \strtoupper(substr($sSize, -1));
 
-    if (!in_array($sSuffix,array('P','T','G','M','K'))){
+    if (!\in_array($sSuffix,array('P','T','G','M','K'))){
       return (int)$sSize;
     }
 
-    $iValue = substr($sSize, 0, -1);
+    $iValue = \substr($sSize, 0, -1);
 
     switch ($sSuffix) {
       case 'P':

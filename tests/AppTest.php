@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Spin;
+namespace Spin\tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +24,7 @@ class AppTest extends TestCase
    */
   public function testAppCreate()
   {
-    $this->assertSame($this->app->getBasePath(), realpath(__DIR__));
+    $this->assertSame($this->app->getBasePath(), \realpath(__DIR__));
   }
 
 }

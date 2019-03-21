@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Spin;
+namespace Spin\tests\Helpers;
 
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +12,7 @@ class HelpersTest extends TestCase
 {
   /** @var        string          Application object */
   protected $app;
-  
+
   protected $secret;
 
   /**

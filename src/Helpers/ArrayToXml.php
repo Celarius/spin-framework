@@ -41,9 +41,9 @@ class ArrayToXML
      */
     public function buildXML(array $data, $startElement = 'data')
     {
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             $err = 'Invalid variable type supplied, expected array not found on line ' . __LINE__ . ' in Class: ' . __CLASS__ . ' Method: ' . __METHOD__;
-            trigger_error($err);
+            \trigger_error($err);
             return false; //return false error occurred
         }
         $xml = new \XmlWriter();
@@ -71,24 +71,24 @@ class ArrayToXML
      */
     protected function writeAttr(XMLWriter $xml, $data)
     {
-        if (is_array($data)) {
+        if (\is_array($data)) {
             $nonAttributes = array();
             foreach ($data as $key => $val) {
                 //handle an attribute with elements
                 if ($key[0] == '@') {
                     $xml->writeAttribute(substr($key, 1), $val);
                 } else if ($key[0] == '%') {
-                    if (is_array($val)) $nonAttributes = $val;
+                    if (\is_array($val)) $nonAttributes = $val;
                     else $xml->text($val);
                 } elseif ($key[0] == '#') {
-                    if (is_array($val)) $nonAttributes = $val;
+                    if (\is_array($val)) $nonAttributes = $val;
                     else {
                         $xml->startElement(substr($key, 1));
                         $xml->writeCData($val);
                         $xml->endElement();
                     }
                 }else if($key[0] == "!"){
-                    if (is_array($val)) $nonAttributes = $val;
+                    if (\is_array($val)) $nonAttributes = $val;
                     else $xml->writeCData($val);
                 }
                 //ignore normal elements
@@ -107,9 +107,9 @@ class ArrayToXML
     protected function writeEl(XMLWriter $xml, $data)
     {
         foreach ($data as $key => $value) {
-            if (is_array($value) && !$this->isAssoc($value)) { //numeric array
+            if (\is_array($value) && !$this->isAssoc($value)) { //numeric array
                 foreach ($value as $itemValue) {
-                    if (is_array($itemValue)) {
+                    if (\is_array($itemValue)) {
                         $xml->startElement($key);
                         $itemValue = $this->writeAttr($xml, $itemValue);
                         $this->writeEl($xml, $itemValue);
@@ -119,7 +119,7 @@ class ArrayToXML
                         $xml->writeElement($key, "$itemValue");
                     }
                 }
-            } else if (is_array($value)) { //associative array
+            } else if (\is_array($value)) { //associative array
                 $xml->startElement($key);
                 $value = $this->writeAttr($xml, $value);
                 $this->writeEl($xml, $value);
@@ -141,6 +141,6 @@ class ArrayToXML
      */
     protected function isAssoc($array)
     {
-        return (bool)count(array_filter(array_keys($array), 'is_string'));
+        return (bool)\count(\array_filter(\array_keys($array), 'is_string'));
     }
 }

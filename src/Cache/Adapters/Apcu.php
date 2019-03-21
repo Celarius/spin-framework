@@ -24,14 +24,14 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
     parent::__construct('APCu',$options);
 
     # Check if APCu extension is loaded and available
-    if ( ( extension_loaded('apcu') == false ) ||
-         ( ini_get('apc.enabled') != '1' ) )
+    if ( ( \extension_loaded('apcu') == false ) ||
+         ( \ini_get('apc.enabled') != '1' ) )
     {
       throw new \Exception('Cache driver '.$this->getDriver().' not available');
     }
 
     # Set the version of the APCu library
-    $this->setVersion( phpversion('apcu') );
+    $this->setVersion( \phpversion('apcu') );
   }
 
   /**
@@ -44,7 +44,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
   public function get($key, $default = null)
   {
     $success = false;
-    $value = apcu_fetch( $key, $success );
+    $value = \apcu_fetch( $key, $success );
 
     return ( $success ? $value : $default );
   }
@@ -60,7 +60,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
    */
   public function set($key, $value, $ttl = null)
   {
-    $success = apcu_store( $key, $value, (is_null($ttl) ? 0 : (int) $ttl) );
+    $success = \apcu_store( $key, $value, (\is_null($ttl) ? 0 : (int) $ttl) );
 
     return $success;
   }
@@ -73,7 +73,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
    */
   public function delete($key)
   {
-    $success = apcu_delete( $key );
+    $success = \apcu_delete( $key );
 
     return $success;
   }
@@ -85,7 +85,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
    */
   public function clear()
   {
-    return apcu_clear_cache();
+    return \apcu_clear_cache();
   }
 
   /**
@@ -115,7 +115,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
   public function setMultiple($items, $ttl = null)
   {
     foreach ($items as $key=>$value) {
-      $this->set($key,$value,(is_null($ttl) ? 0 : (int) $ttl));
+      $this->set($key,$value,(\is_null($ttl) ? 0 : (int) $ttl));
     }
 
     return true;
@@ -144,7 +144,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
    */
   public function has($key)
   {
-    $success = apcu_exists( $key );
+    $success = \apcu_exists( $key );
 
     return $success;
   }
@@ -159,7 +159,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
   public function inc(string $key, int $amount=1): int
   {
     $success = false;
-    $value = apcu_inc( $key, $amount, $success);
+    $value = \apcu_inc( $key, $amount, $success);
 
     return ( $success ? $value : false );
   }
@@ -174,7 +174,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
   public function dec(string $key, int $amount=1): int
   {
     $success = false;
-    $value = apcu_dec( $key, $amount, $success);
+    $value = \apcu_dec( $key, $amount, $success);
 
     return ( $success ? $value : false );
   }

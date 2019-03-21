@@ -4,7 +4,7 @@
  * PDO MySql Connection driver
  *
  * https://www.mysql.com/
- * 
+ *
  * @package    Spin
  */
 
@@ -26,7 +26,7 @@ class MySql extends PdoConnection
     $this->setDriver('mysql');
 
     # PDO options
-    if (count($params['options'] ?? [])==0) {
+    if (\count($params['options'] ?? [])==0) {
       $params['options'] = [
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,

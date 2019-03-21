@@ -37,17 +37,17 @@ class Cipher implements CipherInterface
     //   $iv = '';
     // }
     # Add a random Initialization Vector
-    $iv = openssl_random_pseudo_bytes(16);
+    $iv = \openssl_random_pseudo_bytes(16);
 
     # If no secret provided, use the one in config
     if (empty($secret))
-      $secret = config()->get('application.secret');
+      $secret = \config()->get('application.secret');
 
     # Encrypt
-    $result = openssl_encrypt($data,$algorithm,$secret,0,$iv);
+    $result = \openssl_encrypt($data,$algorithm,$secret,0,$iv);
 
     if ( !$result===false ) {
-      return base64_encode($iv.$result);
+      return \base64_encode($iv.$result);
     } else {
       return null;
     }
@@ -66,10 +66,10 @@ class Cipher implements CipherInterface
   public static function decrypt(string $data, string $secret='', string $algorithm='AES-256-CBC')
   {
     # if AES we extract the 16 bytes in the beginning as the IV
-    if ( strtoupper(substr($algorithm,0,3))==='AES' ) {
-      $encoded  = base64_decode($data);
-      $iv       = substr($encoded,0,16);
-      $encoded  = substr($encoded,16);
+    if ( \strtoupper(\substr($algorithm,0,3))==='AES' ) {
+      $encoded  = \base64_decode($data);
+      $iv       = \substr($encoded,0,16);
+      $encoded  = \substr($encoded,16);
     } else {
       $encoded = $data;
       $iv = '';
@@ -77,10 +77,10 @@ class Cipher implements CipherInterface
 
     # If no secret provided, use the one in config
     if (empty($secret))
-      $secret = config()->get('application.secret');
+      $secret = \config()->get('application.secret');
 
     # Decrypt
-    $result = openssl_decrypt($encoded,$algorithm,$secret,0,$iv);
+    $result = \openssl_decrypt($encoded,$algorithm,$secret,0,$iv);
 
     return $result;
   }
@@ -92,7 +92,7 @@ class Cipher implements CipherInterface
    */
   public static function getMethods(): array
   {
-    return openssl_get_cipher_methods();
+    return \openssl_get_cipher_methods();
   }
 
 }

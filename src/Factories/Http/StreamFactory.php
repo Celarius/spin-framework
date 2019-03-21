@@ -54,7 +54,7 @@ class StreamFactory extends AbstractFactory implements StreamFactoryInterface
   public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
   {
     # Open the file
-    $resource = fopen($filename, $mode);
+    $resource = \fopen($filename, $mode);
 
     return \GuzzleHttp\Psr7\stream_for($resource);
   }

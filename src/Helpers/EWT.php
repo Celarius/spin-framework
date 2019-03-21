@@ -87,11 +87,11 @@ class EWT implements EWTInterface
   public static function encode($data, string $secret, string $hash='sha256', string $alg='aes-256-ctr', string $iv=null )
   {
     # Make a HASH of the secret
-    $secret = openssl_digest($secret,'sha256');
+    $secret = \openssl_digest($secret,'sha256');
 
     # Generate a random IV if not provided, matches for AES based algorithms
     if (empty($iv)) {
-      $iv = substr( openssl_digest(random_bytes(32),'sha256'),0,16);
+      $iv = \substr(\openssl_digest(\random_bytes(32),'sha256'),0,16);
     }
 
     # Encode
@@ -100,7 +100,7 @@ class EWT implements EWTInterface
     $ewt['i'] = $iv;
     $ewt['h'] = $hash;
     $ewt['s'] = static::sign($data,$secret,$hash);
-    $ewt['p'] = openssl_encrypt($data,$alg,$secret,0,$iv);
+    $ewt['p'] = \openssl_encrypt($data,$alg,$secret,0,$iv);
 
     return static::base64url_encode( json_encode($ewt) );
   }
@@ -116,15 +116,15 @@ class EWT implements EWTInterface
   public static function decode(string $data, string $secret )
   {
     # Make a HASH of the secret
-    $secret = openssl_digest($secret,'sha256');
+    $secret = \openssl_digest($secret,'sha256');
 
     $b64 = static::base64url_decode($data);
-    $ewt = json_decode($b64,true);
+    $ewt = \json_decode($b64,true);
 
-    $payload = openssl_decrypt($ewt['p'], $ewt['a'], $secret, 0, $ewt['i']);
+    $payload = \openssl_decrypt($ewt['p'], $ewt['a'], $secret, 0, $ewt['i']);
 
     # Verify signature - if fail return null
-    if ( strcasecmp(static::sign($payload,$secret,$ewt['h']),$ewt['s'])!=0) {
+    if (\strcasecmp(static::sign($payload,$secret,$ewt['h']),$ewt['s'])!=0) {
       return null;
     }
 
@@ -142,7 +142,7 @@ class EWT implements EWTInterface
    */
   private static function sign($data, string $secret, string $algo='sha256')
   {
-    return hash_hmac($algo, $data, $secret, false);
+    return \hash_hmac($algo, $data, $secret, false);
   }
 
   /**
@@ -154,13 +154,13 @@ class EWT implements EWTInterface
    */
   public static function base64url_decode($input)
   {
-    $remainder = strlen($input) % 4;
+    $remainder = \strlen($input) % 4;
     if ($remainder) {
         $padlen = 4 - $remainder;
-        $input .= str_repeat('=', $padlen);
+        $input .= \str_repeat('=', $padlen);
     }
 
-    return base64_decode(strtr($input, '-_', '+/'));
+    return \base64_decode(\strtr($input, '-_', '+/'));
   }
 
   /**
@@ -172,6 +172,6 @@ class EWT implements EWTInterface
    */
   public static function base64url_encode($input)
   {
-    return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
+    return \str_replace('=','',\strtr(\base64_encode($input), '+/', '-_'));
   }
 }

@@ -34,7 +34,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
     $this->clear();
 
     # Build $filename based on $appPath and $environment
-    $filename = $appPath . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'config-' . $environment.'.json';
+    $filename = $appPath . \DIRECTORY_SEPARATOR . 'Config' . \DIRECTORY_SEPARATOR . 'config-' . $environment.'.json';
 
     # Load the config
     $this->load($filename);
@@ -65,17 +65,17 @@ class Config extends AbstractBaseClass implements ConfigInterface
   public function load(string $filename)
   {
     # Attempt to load config file
-    if ( file_exists($filename) ) {
+    if ( \file_exists($filename) ) {
       # Set filename
       $this->filename = $filename;
 
       # Load the config
-      $configArray = json_decode( file_get_contents($filename), true);
+      $configArray = \json_decode( \file_get_contents($filename), true);
 
       if ($configArray) {
         // $configArray = $this->array_change_key_case_recursive($configArray); // Lowercase the keys
         # Merge the Config with existing config
-        // $this->confValues = array_replace_recursive($this->confValues, $configArray);
+        // $this->confValues = \array_replace_recursive($this->confValues, $configArray);
         $this->confValues = $configArray;
       } else {
         throw new SpinException('Invalid JSON file "'.$filename.'"');
@@ -98,15 +98,15 @@ class Config extends AbstractBaseClass implements ConfigInterface
   public function loadAndMerge(string $filename)
   {
     # Attempt to load config file
-    if ( file_exists($filename) ) {
+    if ( \file_exists($filename) ) {
       # Set filename
       $this->filename = $filename;
       # Load the config
-      $configArray = json_decode( file_get_contents($filename), true);
+      $configArray = \json_decode( \file_get_contents($filename), true);
       if ($configArray) {
         // $configArray = $this->array_change_key_case_recursive($configArray); // Lowercase the keys
         # Merge the Config with existing config
-        $this->confValues = array_replace_recursive($this->confValues, $configArray);
+        $this->confValues = \array_replace_recursive($this->confValues, $configArray);
 
       } else {
         throw new SpinException('Invalid JSON file "'.$filename.'"');
@@ -129,7 +129,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
   {
     if (!empty($filename)) $this->filename = $filename;
 
-    return ( file_put_contents($this->filename, json_encode($this->confValues,JSON_PRETTY_PRINT))!==false );
+    return (\file_put_contents($this->filename,\json_encode($this->confValues,JSON_PRETTY_PRINT))!==false);
   }
 
   /**
@@ -147,12 +147,12 @@ class Config extends AbstractBaseClass implements ConfigInterface
    */
   public function get(string $key, $default=null)
   {
-    $keys = explode('.',$key);
+    $keys = \explode('.',$key);
     $val = $this->confValues;
 
-    for ($i=0; $i<count($keys); $i++) {
+    for ($i=0; $i<\count($keys); $i++) {
       $val = ( $val[ $keys[$i] ] ?? null);
-      if (is_null($val)) break;
+      if (\is_null($val)) break;
     }
 
     return $val ?? $default;
@@ -172,7 +172,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
    */
   public function set(string $key, $value)
   {
-    $keys = explode('.',$key);
+    $keys = \explode('.',$key);
     $arr = &$this->confValues;
     $arrParent = null;
 
@@ -181,12 +181,12 @@ class Config extends AbstractBaseClass implements ConfigInterface
       $arrParent = &$arr;
       $lastKey = $key;
       if (!isset($arr[$key])) {
-        $arr[$key]=array();
+        $arr[$key]=[];
       }
       $arr = &$arr[$key];
     }
 
-    if (is_null($value)) {
+    if (\is_null($value)) {
       unset($arrParent[$lastKey]); // delete the key
     } else {
       $arr = $value; // set the value in the original confArray
@@ -228,15 +228,15 @@ class Config extends AbstractBaseClass implements ConfigInterface
     # Check the CASE param
     if (!in_array($case, array(CASE_UPPER, CASE_LOWER)))
     {
-      return array();
+      return [];
     }
 
     # Initial Key Case Change for root level keys
-    $input = array_change_key_case($input, $case);
+    $input = \array_change_key_case($input, $case);
 
     # Loop all keys in all sub-arrays
     foreach($input as $key => $array)
-      if (is_array($array))
+      if (\is_array($array))
         $input[$key] = $this->array_change_key_case_recursive($array, $case);
 
     return $input;

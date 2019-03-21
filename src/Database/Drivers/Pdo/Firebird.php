@@ -4,7 +4,7 @@
  * PDO Firebird Connection driver
  *
  * https://www.firebirdsql.org
- * 
+ *
  * @package    Spin
  */
 
@@ -26,7 +26,7 @@ class Firebird extends PdoConnection
     $this->setDriver('firebird');
 
     # PDO options
-    if (count($params['options'] ?? [])==0) {
+    if (\count($params['options'] ?? [])==0) {
       $params['options'] = [
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,

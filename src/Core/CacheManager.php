@@ -41,11 +41,11 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
     # Find the cache (if we already have it created)
     $cache = $this->findCache($name);
 
-    if (is_null($cache)) {
+    if (\is_null($cache)) {
       # Attempt to create the cache
       $cache = $this->createCache($name);
 
-      if (!is_null($cache)) {
+      if (!\is_null($cache)) {
         $this->addCache($cache);
       }
     }
@@ -67,12 +67,12 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
   {
     if ( empty($name) ) {
       # Take first available
-      $cache = reset($this->caches);
+      $cache = \reset($this->caches);
       if ($cache === false)
         return null;
     } else {
       # Attempt to find the cache from the list
-      $cache = ( $this->caches[strtolower($name)] ?? null);
+      $cache = ( $this->caches[\strtolower($name)] ?? null);
     }
 
     return $cache;
@@ -87,7 +87,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    */
   public function addCache(AbstractCacheAdapterInterface $cache)
   {
-    $this->caches[strtolower($cache->getDriver())] = $cache;
+    $this->caches[\strtolower($cache->getDriver())] = $cache;
 
     return $this;
   }
@@ -107,7 +107,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
     $cache = $this->findCache($name);
 
     if ($cache) {
-      unset( $this->caches[strtolower($cache->getDriver())] );
+      unset( $this->caches[\strtolower($cache->getDriver())] );
       unset($cache);
       $cache = null;
     }
@@ -128,39 +128,47 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
   protected function createCache(string $name)
   {
     # Try to find the connection in the internal list, if it was created already
-    $cache = $this->caches[strtolower($name)] ?? null;
+    $cache = $this->caches[\strtolower($name)] ?? null;
 
     # If no connection found, and the $name is empty, read in 1st one
-    if (is_null($cache) && empty($name)) {
+    if (\is_null($cache) && empty($name)) {
       # Get caches from conf
-      $arr = config()->get('caches');
-      reset($arr);
+      $arr = \config()->get('caches');
+      \reset($arr);
       # Take the 1st caches name
-      $name = key($arr);
+      $name = \key($arr);
     }
 
-    if (is_null($cache)) {
+    if (\is_null($cache)) {
       # Get connection's params from conf
-      $conf = config()->get('caches.'.$name);
+      $conf = \config()->get('caches.'.$name);
 
       # Instantiate either based on CLASS or the ADAPTER name
       if (isset($conf['class']) && !empty($conf['class'])) {
         $className = $conf['class'];
       } else {
-        $className = '\\Spin\\Cache\\Adapters\\'.ucfirst($conf['adapter'] ?? '') ;
+        $className = '\\Spin\\Cache\\Adapters\\'.\ucfirst($conf['adapter'] ?? '') ;
       }
 
       # Create the Cache
       try {
-        if (class_exists($className)) {
+        if (\class_exists($className)) {
           $cache = new $className($conf);
-          logger()->debug( 'Created Cache', ['adapter'=>$cache->getDriver(),'version'=>$cache->getVersion()] );
+          \logger()->debug( 'Created Cache',[
+            'adapter'=>$cache->getDriver(),
+            'version'=>$cache->getVersion()
+          ]);
         } else {
-          logger()->error( 'Cache class does not exist', ['name'=>$name,'config'=>$conf] );
+          \logger()->error( 'Cache class does not exist',[
+            'name'=>$name,
+            'config'=>$conf
+          ]);
         }
 
       } catch (\Exception $e) {
-        logger()->critical( $e->getMessage(), ['trace'=>$e->getTraceAsString()] );
+        \logger()->critical( $e->getMessage(),[
+          'trace'=>$e->getTraceAsString()
+        ]);
       }
     }
 

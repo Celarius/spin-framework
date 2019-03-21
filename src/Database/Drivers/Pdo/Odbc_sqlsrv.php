@@ -33,7 +33,7 @@ class Odbc_sqlsrv extends PdoConnection
     $this->setDriver('odbc_sqlsrv');
 
     # PDO options
-    if (count($params['options'] ?? [])==0) {
+    if (\count($params['options'] ?? [])==0) {
       $params['options'] = [
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,

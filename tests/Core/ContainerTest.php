@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Spin;
+namespace Spin\tests\Core;
 
 use PHPUnit\Framework\TestCase;
 
@@ -76,7 +76,7 @@ class ContainerTest extends TestCase
   public function testContainerAnonymousFunction()
   {
     # Set it
-    container('anon', 
+    container('anon',
       function() {
         return 1234;
       }

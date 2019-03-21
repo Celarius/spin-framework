@@ -44,7 +44,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
     # Find hook in list
     foreach ($this->hooks as $hook)
     {
-      if (strcasecmp($name,$hook->getName()==0)) {
+      if (\strcasecmp($name,$hook->getName()==0)) {
         return $hook;
       }
     }
@@ -65,7 +65,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
     $exists = $this->getHook($hook->getName());
 
     # If it exists, return with null
-    if (!is_null($exists)) {
+    if (!\is_null($exists)) {
       return false;
     }
 
@@ -86,7 +86,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
   {
     foreach ($this->hooks as $idx => $hook)
     {
-      if (strcasecmp($name,$hook->getName()==0)) {
+      if (\strcasecmp($name,$hook->getName()==0)) {
         # Remove it
         unset( $this->hooks[$idx] );
 

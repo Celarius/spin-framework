@@ -4,7 +4,7 @@
  * PDO PostgreSql Connection driver
  *
  * https://www.postgresql.org
- * 
+ *
  * @package    Spin
  */
 
@@ -32,7 +32,7 @@ class Pgsql extends PdoConnection
     $this->setSSLMode($params['sslmode'] ?? '');
 
     # PDO options
-    if (count($params['options'] ?? [])==0) {
+    if (\count($params['options'] ?? [])==0) {
       $params['options'] = [
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,

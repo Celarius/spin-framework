@@ -4,7 +4,7 @@
  * Logger class that extends Monologger
  *
  * Constructor will auto-configure based on configuration options
- * 
+ *
  * @package  Spin
  */
 
@@ -39,17 +39,17 @@ class Logger extends MonoLogger
     $formatter = new LineFormatter($logLineFormat, $logDateFormat);
 
     # Set options based on FILE or PHP
-    if ( strcasecmp($logDriver,"file")==0 ) {
+    if ( \strcasecmp($logDriver,"file")==0 ) {
       $logFilePath = $options['drivers'][$logDriver]['file_path'] ?? 'storage/log';
       $logFileFormat = $options['drivers'][$logDriver]['file_format'] ?? 'Y-m-d';
 
       # Construct the filename
-      $file = $basePath . DIRECTORY_SEPARATOR . $logFilePath . DIRECTORY_SEPARATOR . date($logFileFormat) . '.log';
+      $file = $basePath . \DIRECTORY_SEPARATOR . $logFilePath . \DIRECTORY_SEPARATOR . \date($logFileFormat) . '.log';
 
       # Create the Stream Handler
       $handler = new StreamHandler( $file, $this->toMonologLevel($logLevel) );
 
-    } elseif ( strcasecmp($logDriver,"php")==0 ) {
+    } elseif ( \strcasecmp($logDriver,"php")==0 ) {
       # Create the Log Handler
       $handler = new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, $this->toMonologLevel($logLevel) );
     } else {

@@ -45,7 +45,7 @@ class RequestFactory extends AbstractFactory implements RequestFactoryInterface
   {
     $request = new Request($method, $uri);
 
-    logger()->debug('Created PSR-7 Request("'.$method.'","'.$uri.'"") (Guzzle)');
+    \logger()->debug('Created PSR-7 Request("'.$method.'","'.$uri.'"") (Guzzle)');
 
     return $request;
   }

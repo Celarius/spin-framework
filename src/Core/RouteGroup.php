@@ -65,23 +65,23 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
 
       # Is $methods a String, not '*' and not '' ?
       if (
-            is_string($route['methods']) &&
-            strcasecmp($route['methods'],'*')!=0 &&
-            !empty(trim($route['methods']))
+            \is_string($route['methods']) &&
+            \strcasecmp($route['methods'],'*')!=0 &&
+            !empty(\trim($route['methods']))
           )
       {
         # Support giving methods as comma separated string
-        $methods = array_values(explode(',',$route['methods']));
+        $methods = \array_values(explode(',',$route['methods']));
         # Trim spaces/specials from values
-        $methods = array_map('trim',$methods);
+        $methods = \array_map('trim',$methods);
       } else
       # Is it an array, but NOT emtpy ?
-      if (isset($route['methods']) && is_array($route['methods']) && count($route['methods'])>0) {
+      if (isset($route['methods']) && \is_array($route['methods']) && \count($route['methods'])>0) {
         $methods = $route['methods'];
       }
 
       if ( isset($route['path']) && isset($route['handler']) ) {
-        $this->addRoute($methods,'/'.ltrim($route['path'],'/'),$route['handler']);
+        $this->addRoute($methods,'/'.\ltrim($route['path'],'/'),$route['handler']);
       }
     }
   }
@@ -133,7 +133,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
         # URLDecode each argument
         foreach ($routeInfo[2] as $idx=>$r)
         {
-          $routeInfo[2][$idx] = urldecode($r);
+          $routeInfo[2][$idx] = \urldecode($r);
         }
 
         # Return the Handler + args

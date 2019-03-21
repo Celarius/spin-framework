@@ -4,7 +4,7 @@
  * PDO CockroachDb Connection driver
  *
  * https://www.cockroachlabs.com
- * 
+ *
  * @package    Spin
  */
 
@@ -32,7 +32,7 @@ class CockroachDb extends PdoConnection
     $this->setSSLMode($params['sslmode'] ?? 'disable');
 
     # PDO options
-    if (count($params['options'] ?? [])==0) {
+    if (\count($params['options'] ?? [])==0) {
       $params['options'] = [
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
