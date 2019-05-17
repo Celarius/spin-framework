@@ -134,9 +134,11 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
     if (\is_null($cache) && empty($name)) {
       # Get caches from conf
       $arr = \config()->get('caches');
-      \reset($arr);
-      # Take the 1st caches name
-      $name = \key($arr);
+      if ($arr) {
+        \reset($arr);
+        # Take the 1st caches name
+        $name = \key($arr);
+      }
     }
 
     if (\is_null($cache)) {
