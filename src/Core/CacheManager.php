@@ -163,6 +163,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
         } else {
           \logger()->error( 'Cache class does not exist',[
             'name'=>$name,
+            'classname'=>$className,
             'config'=>$conf
           ]);
         }
