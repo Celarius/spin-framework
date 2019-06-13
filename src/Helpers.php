@@ -22,11 +22,14 @@
 
   function redirect($to = null, $status = 302, $headers = [])
   function response(string $body='', int $code=200, array $headers=[]))
-  function responseJson(array $ar=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK)
-  function responseXml(array $ar=[], int $code=200)
+  function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK, array $headers=[])
+  function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
   function responseHtml(string $body='', int $code=200, array $headers=[])
 
   function getClientIp()
+
+  function getConfigPath()
+  function mime_content_type($filename)
  */
 
 use Spin\helpers\ArrayToXml;
