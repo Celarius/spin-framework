@@ -56,7 +56,7 @@ composer require celarius/spin-framework
 
 ## 2.1. Using the spin-skeleton
 To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and
-running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example 
+running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example
 configs, routes, controllers and many other things.
 
 ## 2.2. Testing
@@ -68,6 +68,7 @@ At the command prompt and all tests will be executed.
 
 # 3. Technical Details
 * [Helpers](doc/helpers.md)
+* [Databases](doc/Databases.md)
 
 ## 3.1. Apache VHost configuration
 ```txt
