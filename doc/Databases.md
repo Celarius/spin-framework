@@ -1,11 +1,10 @@
 <!-- MarkdownTOC list_bullets="*" bracket="round" lowercase="true" autolink="true" indent= depth="4" -->
 
-* [1. Cache](#1-cache)
-* [1.1. Instantiating a Cache](#11-instantiating-a-cache)
-* [1.2. Configuring a cache](#12-configuring-a-cache)
-* [1.3. Using multiple cache adaters](#13-using-multiple-cache-adaters)
-* [2. Examples](#2-examples)
-* [3. Writing custom adapters](#3-writing-custom-adapters)
+* [1. Databases](#1-databases)
+* [1.1 Configuration](#1-configuration)
+* [1.2 Driver Names](#1-driver-names)
+* [2. Creating custom connections](#2-Creating-custom-connections)
+
 
 <!-- /MarkdownTOC -->
 
@@ -52,3 +51,12 @@ ODBC MS SQL Server  = "odbc_sqlsrv"
 PostgreSQL          = "pgsql"
 SQLite              = "sqlite"
 ```
+
+# 2 Creating custom connections
+To create a custom connection on the fly in the code the helper `db()` is used.
+
+Passing the `$name` of the connection as well as the connection `$params` to it. This will create
+a new connection in the connecton manager. The `$params` is an array with the same format as the
+config parameters.
+
+
