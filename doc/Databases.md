@@ -59,4 +59,22 @@ Passing the `$name` of the connection as well as the connection `$params` to it.
 a new connection in the connecton manager. The `$params` is an array with the same format as the
 config parameters.
 
-
+Example:
+```php
+# Create a new connection named `MyCon`
+db('MyCon', [
+  "type"      => "Pdo",
+  "driver"    => "{driver_name}",
+  "schema"    => "{schema_name}",
+  "host"      => "{db_host/ip}",
+  "port"      => "{db_port}",
+  "username"  => "{db_username}",
+  "password"  => "{db_password}",
+  "charset"   => "UTF8",
+  "options"   => [
+    "ATTR_PERSISTENT" => true,
+    "ATTR_ERRMODE"    => "ERRMODE_EXCEPTION",
+    "ATTR_AUTOCOMMIT" => false
+  ]
+]);
+```
