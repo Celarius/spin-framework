@@ -61,8 +61,8 @@ config parameters.
 
 Example:
 ```php
-# Create a new connection named `MyCon`
-db('MyCon', [
+# Create a new PdoConnection named `MyCon`
+$pdo = db('MyCon', [
   "type"      => "Pdo",
   "driver"    => "{driver_name}",
   "schema"    => "{schema_name}",
