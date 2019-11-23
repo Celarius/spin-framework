@@ -2,7 +2,7 @@
 SPIN Framework Changelog
 
 ## 0.0.9
-- Added `getSharedStoragePath()`. Returns the configured (config: storage.shared) shared storage path.
+- Added `getSharedStoragePath()` (docker persitent storage compatibility)
 - Root namespaces for `Helpers.php`
 - Added error-checking for some variables on application startup
 - License date updated
