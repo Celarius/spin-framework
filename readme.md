@@ -35,7 +35,7 @@ for most things, and allows for plugging in almost any PSR compatible component,
 * Middleware
 * Containers
 * Composer driven in packages/extensions
-* PDO based DB connections (MySql,Oracle,CockroachDb,Firebird,Sqlite ...)
+* PDO based DB connections (MySql,PostgreSql,Oracle,CockroachDb,Firebird,Sqlite ...)
 * DAO base classes for DB Entity representation
 * Extendable with other frameworks (ORM, Templates etc.)
 
@@ -70,7 +70,13 @@ At the command prompt and all tests will be executed.
 * [Helpers](doc/helpers.md)
 * [Databases](doc/Databases.md)
 
+
 ## 3.1. Apache VHost configuration
+VHost for running the application under Apache with domain-name recognition.
+
+If Port number based applications are desired the `<VirtualHost:80>` needs to change to
+the corresponding port, and the `domain.name` removed from the config.
+
 ```txt
 <VirtualHost *:80>
 
@@ -78,7 +84,6 @@ At the command prompt and all tests will be executed.
     Define alias.domain.name        www.mydomain.com
     Define path_to_root             C:/Path/Project
     Define environment              DEV
-
 
     ServerName ${domain.name}
     ServerAlias ${alias.domain.name}

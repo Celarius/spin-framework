@@ -23,7 +23,7 @@ interface ApplicationInterface
 
   /**
    * Execute the HandlerMethod of one of the Error Controllers defined in
-   * rotues-{env].json}
+   * rotues-{env}.json
    *
    * @param      string       $body      An optional body to send if $httpCode
    *                                     handler not found
@@ -56,7 +56,7 @@ interface ApplicationInterface
    * exception handler for all exceptions.
    *
    * @param      [type]  $exception  [description]
-   * 
+   *
    * @return     [type]  [description]
    */
   function exceptionHandler($exception);
@@ -76,18 +76,27 @@ interface ApplicationInterface
   function getAppPath(): string;
 
   /**
-   * getAppPath returns the full path to the application folder + "/storage"
+   * getStoragePath returns the full path to the application folder + "/storage"
    *
    * @return     string
    */
   function getStoragePath(): string;
 
   /**
+   * getSharedStoragePath returns the full path to the configured shared storage path.
+   * If the config does not contain an entry for the shared storage, the result is the same
+   * as `getStoragePath()`
+   *
+   * @return     string
+   */
+  function getSharedStoragePath(): string;
+
+  /**
    * Returns a $app object property if it exists
    *
    * @param      string  $property  The property name, or container name to
    *                                return
-   *                                
+   *
    * @return     mixed|null  Null if nothing was found
    */
   function getProperty(string $property);
@@ -202,7 +211,7 @@ interface ApplicationInterface
    * @param      string      $name   Dependency name
    * @param      mixed|null  $value  Value to SET. if Omitted, then $name is
    *                                 returned (if found)
-   *                                 
+   *
    * @return     mixed|null
    */
   function container(string $name, $value=null);

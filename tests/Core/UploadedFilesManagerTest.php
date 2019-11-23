@@ -14,7 +14,7 @@ class UploadedFilesManagerTest extends TestCase
   /**
    * Setup
    */
-  public function setup()
+  public function setUp(): void
   {
     global $app;
     $this->app = $app;

@@ -1,6 +1,13 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.9
+- Added `getSharedStoragePath()`. Returns the configured (config: storage.shared) shared storage path.
+- Root namespaces for `Helpers.php`
+- Added error-checking for some variables on application startup
+- License date updated
+- Unittests updated to work with PHPUnit v8
+
 ## 0.0.8
 - Added \ for all root namespace functions (performance enhancement)
 - Code cleanup

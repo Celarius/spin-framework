@@ -18,7 +18,7 @@ class HelpersTest extends TestCase
   /**
    * Setup test
    */
-  public function setup()
+  public function setUp(): void
   {
     global $app;
 

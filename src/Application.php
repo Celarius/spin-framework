@@ -22,7 +22,7 @@ use \Psr\Http\Message\Response;
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application/Framework version */
-  const VERSION = '0.0.8';
+  const VERSION = '0.0.9';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
@@ -35,6 +35,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
   /** @var        string          Path to $basePath.'/storage' folder */
   protected $storagePath;
+
+  /** @var        string          Path to shared storage */
+  protected $sharedStoragePath;
 
   /** @var        array           List of Route Groups */
   protected $routeGroups;
@@ -123,6 +126,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Create config
       $this->config = new Config( $this->appPath, $this->getEnvironment() );
 
+      # Shared StoragePath
+      $this->sharedStoragePath = \config('storage.shared');
+      if (empty($this->sharedStoragePath)) $this->sharedStoragePath = $this->storagePath;
+
       # Load & Decode the version file
       $verFile = \app()->getConfigPath() . \DIRECTORY_SEPARATOR . 'version.json';
       $this->version = (\file_exists($verFile) ? \json_decode(\file_get_contents($verFile),true) : []);
@@ -208,6 +215,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       die;
     }
 
+    # Check and Report on config variables
+    $this->checkAndReportConfigVars();
+
     # Load Routes
     $ok = $this->loadRoutes();
 
@@ -230,6 +240,23 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     }
 
     return false;
+  }
+
+  /**
+   * Checks and Reports on config variables
+   *
+   * @return void
+   */
+  protected function checkAndReportConfigVars(): void
+  {
+    ##
+    ## Perform checks on some variables
+    ##
+    if (!\file_exists($this->sharedStoragePath)) {
+      $this->getLogger()->warning('config: {shared.storage} path not found',['path'=>$this->sharedStoragePath]);
+    }
+
+    return ;
   }
 
   /**
@@ -765,6 +792,20 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   public function getStoragePath(): string
   {
     return $this->storagePath;
+  }
+
+  /**
+   * getSharedStoragePath returns the full path to the configured shared storage path.
+   * If the config does not contain an entry for the shared storage, the result is the same
+   * as `getStoragePath()`
+   *
+   * @return     string
+   */
+  public function getSharedStoragePath(): string
+  {
+    if (empty($this->sharedStoragePath)) return $this->getStoragepath();
+
+    return $this->sharedStoragePath;
   }
 
   /**

@@ -34,7 +34,7 @@
 
 use Spin\helpers\ArrayToXml;
 
-if (!function_exists('env')) {
+if (!\function_exists('env')) {
   /**
    * Gets the value of an environment variable. Supports boolean, empty and
    * null.
@@ -47,14 +47,14 @@ if (!function_exists('env')) {
   function env(string $var, $default=null)
   {
     # Get from Environmental vars
-    $val = getenv($var);
+    $val = \getenv($var);
 
     # If nothing found, return $default
     if ($val === false)
       return $default;
 
     # Modify "True","False","Null","Empty" values
-    switch (strtolower($val)) {
+    switch (\strtolower($val)) {
       case 'true':
       case '(true)':
         return true;
@@ -71,14 +71,14 @@ if (!function_exists('env')) {
 
     # Extract "" encapsulated values
     if ( $val[0]==='"' && $val[-1]==='"' ) {
-      return trim($val,'"');
+      return \trim($val,'"');
     }
 
     return $val;
   }
 }
 
-if (!function_exists('app')) {
+if (!\function_exists('app')) {
   /**
    * Get the global $app "object" or a $property or a dependancy
    *
@@ -90,7 +90,7 @@ if (!function_exists('app')) {
   {
     global $app;
 
-    if (is_string($property) && !empty($property) ) {
+    if (\is_string($property) && !empty($property) ) {
       return $app->getProperty($property);
     }
 
@@ -98,7 +98,7 @@ if (!function_exists('app')) {
   }
 }
 
-if (!function_exists('config')) {
+if (!\function_exists('config')) {
   /**
    * Get/Set a Config key/value
    *
@@ -127,7 +127,7 @@ if (!function_exists('config')) {
   }
 }
 
-if (!function_exists('container')) {
+if (!\function_exists('container')) {
   /**
    * Get or Set an object in the Container
    *
@@ -176,7 +176,7 @@ if (!function_exists('container')) {
   }
 }
 
-if (!function_exists('logger')) {
+if (!\function_exists('logger')) {
   /**
    * Get the Logger object
    *
@@ -190,7 +190,7 @@ if (!function_exists('logger')) {
   }
 }
 
-if (!function_exists('db')) {
+if (!\function_exists('db')) {
   /**
    * Get a Connection object
    *
@@ -207,7 +207,7 @@ if (!function_exists('db')) {
   }
 }
 
-if (!function_exists('cache')) {
+if (!\function_exists('cache')) {
   /**
    * Get the Cache object
    *
@@ -223,7 +223,7 @@ if (!function_exists('cache')) {
   }
 }
 
-if (!function_exists('getRequest')) {
+if (!\function_exists('getRequest')) {
   /**
    * Get the Request object
    *
@@ -237,7 +237,7 @@ if (!function_exists('getRequest')) {
   }
 }
 
-if (!function_exists('getResponse')) {
+if (!\function_exists('getResponse')) {
   /**
    * Get the getResponse object
    *
@@ -251,7 +251,7 @@ if (!function_exists('getResponse')) {
   }
 }
 
-if (!function_exists('queryParam')) {
+if (!\function_exists('queryParam')) {
   /**
    * Get a Query Param ($_GET variable)
    *
@@ -268,7 +268,7 @@ if (!function_exists('queryParam')) {
   }
 }
 
-if (!function_exists('queryParams')) {
+if (!\function_exists('queryParams')) {
   /**
    * Get All Query Params ($_GET variables)
    *
@@ -282,7 +282,7 @@ if (!function_exists('queryParams')) {
   }
 }
 
-if (!function_exists('postParam')) {
+if (!\function_exists('postParam')) {
   /**
    * Get a Post Param ($_POST variable)
    *
@@ -299,7 +299,7 @@ if (!function_exists('postParam')) {
   }
 }
 
-if (!function_exists('postParams')) {
+if (!\function_exists('postParams')) {
   /**
    * Get all Post Params ($_POST variable)
    *
@@ -311,7 +311,7 @@ if (!function_exists('postParams')) {
   }
 }
 
-if (!function_exists('cookieParam')) {
+if (!\function_exists('cookieParam')) {
   /**
    * Get a Cookie Param ($_COOKIE variable)
    *
@@ -328,7 +328,7 @@ if (!function_exists('cookieParam')) {
   }
 }
 
-if (!function_exists('cookieParams')) {
+if (!\function_exists('cookieParams')) {
   /**
    * Get all Cookie Params ($_COOKIE variable)
    *
@@ -342,7 +342,7 @@ if (!function_exists('cookieParams')) {
   }
 }
 
-if (!function_exists('cookie')) {
+if (!\function_exists('cookie')) {
   /**
    * Get/Set Cookies depending on values
    *
@@ -362,11 +362,11 @@ if (!function_exists('cookie')) {
 
     if (is_null($value)) {
       # Read the cookie param
-      return cookieParam($name);
+      return \cookieParam($name);
     }
 
     # Set the cookie
-    return app()->setCookie($name,$value,$expire,$path,$domain,$secure,$httpOnly);
+    return \app()->setCookie($name,$value,$expire,$path,$domain,$secure,$httpOnly);
   }
 }
 
@@ -375,7 +375,7 @@ if (!function_exists('cookie')) {
 ## Global Functions for returning responses
 ##
 
-if (!function_exists('redirect')) {
+if (!\function_exists('redirect')) {
   /**
    * Redirect the user
    *
@@ -390,7 +390,7 @@ if (!function_exists('redirect')) {
     global $app;
 
     # Build response object
-    $response = getResponse()
+    $response = \getResponse()
                 ->withStatus($status)
                 ->withHeader('Location',$uri);
 
@@ -406,7 +406,7 @@ if (!function_exists('redirect')) {
   }
 }
 
-if (!function_exists('response')) {
+if (!\function_exists('response')) {
   /**
    * Get/Set the Response to send to the client
    *
@@ -420,10 +420,10 @@ if (!function_exists('response')) {
   {
     global $app;
 
-    $bStream = app('httpStreamFactory')->createStream($body);
+    $bStream = \app('httpStreamFactory')->createStream($body);
 
     # Build response object
-    $response = getResponse()
+    $response = \getResponse()
                 ->withStatus($code)
                 ->withBody($bStream);
 
@@ -432,7 +432,7 @@ if (!function_exists('response')) {
       $response = $response->withHeader($header,$values);
     }
 
-    if (mb_strlen($body)>0) {
+    if (\mb_strlen($body)>0) {
       # Empty the response file if we are sending back content
       $app->setFileResponse('');
     }
@@ -444,7 +444,7 @@ if (!function_exists('response')) {
   }
 }
 
-if (!function_exists('responseJson')) {
+if (!\function_exists('responseJson')) {
   /**
    * Send a JSON response with $code and $a content. Also sets the content-type
    * header to "application/json"
@@ -460,14 +460,14 @@ if (!function_exists('responseJson')) {
   {
     global $app;
 
-    $body = json_encode($data, $options);
-    $headers = array_merge(['Content-Type'=>'application/json'],$headers);
+    $body = \json_encode($data, $options);
+    $headers = \array_merge(['Content-Type'=>'application/json'],$headers);
 
-    return response($body,$code,$headers);
+    return \response($body,$code,$headers);
   }
 }
 
-if (!function_exists('responseXml')) {
+if (!\function_exists('responseXml')) {
   /**
    * Build a XML response from the $data supplied
    *
@@ -482,18 +482,18 @@ if (!function_exists('responseXml')) {
   {
     global $app;
 
-    $body = xml_encode($a,$options);
-    $headers = array_merge(['Content-Type'=>'application/xml'],$headers);
+    $body = \xml_encode($a,$options);
+    $headers = \array_merge(['Content-Type'=>'application/xml'],$headers);
 
     # Build the XML
     $xmlBuilder = new ArrayToXml();
     $xml = $xmlBuilder->buildXml($data,$root);
 
-    return response($xml,$code,$headers);
+    return \response($xml,$code,$headers);
   }
 }
 
-if (!function_exists('responseHtml')) {
+if (!\function_exists('responseHtml')) {
   /**
    * Send a HTML response with $code and $body content.
    *
@@ -507,13 +507,13 @@ if (!function_exists('responseHtml')) {
   {
     global $app;
 
-    $headers = array_merge(['Content-Type'=>'text/html'],$headers);
+    $headers = \array_merge(['Content-Type'=>'text/html'],$headers);
 
-    return response($body,$code,$headers);
+    return \response($body,$code,$headers);
   }
 }
 
-if (!function_exists('responseFile')) {
+if (!\function_exists('responseFile')) {
   /**
    * Send a FILE as a response with $code.
    *
@@ -531,13 +531,13 @@ if (!function_exists('responseFile')) {
     $app->setFileResponse($filename);
 
     # Determine Mime-Type for file
-    $headers = array_merge(['Content-Type'=>mime_content_type($filename)],$headers);
+    $headers = \array_merge(['Content-Type'=>\mime_content_type($filename)],$headers);
 
-    return response('',$code,$headers);
+    return \response('',$code,$headers);
   }
 }
 
-if (!function_exists('getClientIp')) {
+if (!\function_exists('getClientIp')) {
   /**
    * Gets the Clients IPv4 from the request headers
    *
@@ -554,7 +554,7 @@ if (!function_exists('getClientIp')) {
     $ip = $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 
     # Validate it
-    $ok = filter_var($ip,FILTER_VALIDATE_IP);
+    $ok = \filter_var($ip,FILTER_VALIDATE_IP);
 
     if ($ok) {
       return $ip;
@@ -564,7 +564,7 @@ if (!function_exists('getClientIp')) {
   }
 }
 
-if (!function_exists("getConfigPath")) {
+if (!\function_exists("getConfigPath")) {
   /**
    * Gets the Config folder path
    *
@@ -578,7 +578,7 @@ if (!function_exists("getConfigPath")) {
   }
 }
 
-if(!function_exists('mime_content_type')) {
+if(!\function_exists('mime_content_type')) {
   /**
    * { function_description }
    *
@@ -643,15 +643,17 @@ if(!function_exists('mime_content_type')) {
       'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
     ];
 
-    $ext = strtolower(array_pop(explode('.',$filename)));
-    if (array_key_exists($ext, $mime_types)) {
+    $ext = \strtolower(\array_pop(\explode('.',$filename)));
+    if (\array_key_exists($ext, $mime_types)) {
       return $mime_types[$ext];
-    } elseif (function_exists('finfo_open')) {
-      $finfo = finfo_open(FILEINFO_MIME);
-      $mimetype = finfo_file($finfo, $filename);
-      finfo_close($finfo);
+    } elseif (\function_exists('finfo_open')) {
+      $finfo = \finfo_open(FILEINFO_MIME);
+      $mimetype = \finfo_file($finfo, $filename);
+      \finfo_close($finfo);
+
       return $mimetype;
     } else {
+
       return 'application/octet-stream';
     }
   }
