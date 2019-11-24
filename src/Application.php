@@ -258,8 +258,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     ##
     ## Perform checks on some variables
     ##
-error_log( print_r($this->sharedStoragePath,true) );
-
     if (!\is_dir($this->sharedStoragePath)) {
       # Attempt to create it
       $ok = \mkdir($this->sharedStoragePath, 0777, true);
