@@ -16,3 +16,4 @@ Calling `app()->getSharedStoragePath()` obtains the configured path in the confi
 the envirnoment to it. Files in this folder can be considered persistent as they are shared and accessible between all instances.
 
 If this folder is not found when the application is run() it is set to the same as `getStoragePath` to maintain a folder.
+
