@@ -128,7 +128,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       # Shared StoragePath
       $this->sharedStoragePath = \config('storage.shared');
-      if (empty($this->sharedStoragePath)) $this->sharedStoragePath = $this->storagePath;
+      if (!empty($this->sharedStoragePath)) {
+        # Append the environment to the path
+        $this->sharedStoragePath += \DIRECTORY_SEPARATOR . \strtolower($this->getEnvironment());
+      } else {
+        # Just use the local storage path instead
+        $this->sharedStoragePath = $this->storagePath;
+      }
 
       # Load & Decode the version file
       $verFile = \app()->getConfigPath() . \DIRECTORY_SEPARATOR . 'version.json';
@@ -252,8 +258,14 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     ##
     ## Perform checks on some variables
     ##
-    if (!\file_exists($this->sharedStoragePath)) {
-      $this->getLogger()->warning('config: {shared.storage} path not found',['path'=>$this->sharedStoragePath]);
+    if (!\is_dir($this->sharedStoragePath)) {
+      # Attempt to create it
+      $ok = \mkdir($this->sharedStoragePath, 0777, true);
+
+      # if it is not found, then report warning
+      if (!$ok) {
+        $this->getLogger()->warning('config: {shared.storage} path not found',['path'=>$this->sharedStoragePath]);
+      }
     }
 
     return ;

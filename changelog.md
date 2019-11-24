@@ -7,6 +7,7 @@ SPIN Framework Changelog
 - Added error-checking for some variables on application startup
 - License date updated
 - Unittests updated to work with PHPUnit v8
+- Technical documentation pages
 
 ## 0.0.8
 - Added \ for all root namespace functions (performance enhancement)

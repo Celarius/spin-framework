@@ -67,8 +67,11 @@ phpunit
 At the command prompt and all tests will be executed.
 
 # 3. Technical Details
-* [Helpers](doc/helpers.md)
+* [Cache](doc/Cache.md)
+* [Helpers](doc/Helpers.md)
 * [Databases](doc/Databases.md)
+* [Uploading files](doc/Uploaded files.md)
+* [Storage folders](doc/Storeage folders.md)
 
 
 ## 3.1. Apache VHost configuration
