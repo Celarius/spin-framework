@@ -126,16 +126,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Create config
       $this->config = new Config( $this->appPath, $this->getEnvironment() );
 
-      # Shared StoragePath
-      $this->sharedStoragePath = \config('storage.shared');
-      if (!empty($this->sharedStoragePath)) {
-        # Append the environment to the path
-        $this->sharedStoragePath .= \DIRECTORY_SEPARATOR . \strtolower($this->getEnvironment()) . \strtolower($this->getAppCode());
-      } else {
-        # Just use the local storage path instead
-        $this->sharedStoragePath = $this->storagePath;
-      }
-
       # Load & Decode the version file
       $verFile = \app()->getConfigPath() . \DIRECTORY_SEPARATOR . 'version.json';
       $this->version = (\file_exists($verFile) ? \json_decode(\file_get_contents($verFile),true) : []);
@@ -144,6 +134,16 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         $this->version['application']['code'] = \config('application.code');
         $this->version['application']['name'] = \config('application.name');
         $this->version['application']['version'] = \config('application.version');
+      }
+
+      # Shared StoragePath
+      $this->sharedStoragePath = \config('storage.shared');
+      if (!empty($this->sharedStoragePath)) {
+        # Append the environment to the path
+        $this->sharedStoragePath .= \DIRECTORY_SEPARATOR . \strtolower($this->getEnvironment()) . \strtolower($this->getAppCode());
+      } else {
+        # Just use the local storage path instead
+        $this->sharedStoragePath = $this->storagePath;
       }
 
       # Set Timezone - default to UTC
