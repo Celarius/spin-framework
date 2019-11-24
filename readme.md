@@ -18,13 +18,14 @@ for most things, and allows for plugging in almost any PSR compatible component,
 
 <!-- MarkdownTOC list_bullets="-" bracket="round" lowercase="true" autolink="true" indent= -->
 
+- [Spin - A super lightweight PHP UI/REST framework](#spin---a-super-lightweight-php-uirest-framework)
 - [1. Features](#1-features)
-- [1.1. PSR based integrations](#11-psr-based-integrations)
+  - [1.1. PSR based integrations](#11-psr-based-integrations)
 - [2. Installation](#2-installation)
-- [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
-- [2.2. Testing](#22-testing)
+  - [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
+  - [2.2. Testing](#22-testing)
 - [3. Technical Details](#3-technical-details)
-- [3.1. Apache VHost configuration](#31-apache-vhost-configuration)
+  - [3.1. Apache VHost configuration](#31-apache-vhost-configuration)
 
 <!-- /MarkdownTOC -->
 
@@ -70,8 +71,8 @@ At the command prompt and all tests will be executed.
 * [Cache](doc/Cache.md)
 * [Helpers](doc/Helpers.md)
 * [Databases](doc/Databases.md)
-* [Uploading files](doc/Uploaded files.md)
-* [Storage folders](doc/Storeage folders.md)
+* [Uploading files](doc/Uploaded-files.md)
+* [Storage folders](doc/Storage-folders.md)
 
 
 ## 3.1. Apache VHost configuration
