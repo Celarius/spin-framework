@@ -36,7 +36,7 @@
     "guzzlehttp/guzzle": "^6.3",
     "monolog/monolog": "^2",
     "firebase/php-jwt": "^5.0",
-    "league/container": "^2.4"
+    "league/container": "^3"
   },
 
   "require-dev": {
