@@ -9,6 +9,8 @@ SPIN Framework Changelog
 - Unittests updated to work with PHPUnit v8
 - Technical documentation pages
 - Monolog v2+ package in composer
+- Leauge/Container v3+
+-
 
 ## 0.0.8
 - Added \ for all root namespace functions (performance enhancement)
