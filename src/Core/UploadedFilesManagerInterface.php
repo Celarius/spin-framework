@@ -16,4 +16,10 @@ interface UploadedFilesManagerInterface
    */
   public function parseFiles(array $files, int $maxSize=0);
 
+  /**
+   * Gets the files
+   *
+   * @return     array  The files
+   */
+  public function getFiles(): array;
 }

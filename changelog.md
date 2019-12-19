@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.10
+- UploadedFile and UploadedFilesmanager fixes
+
 ## 0.0.9
 - Added `getSharedStoragePath()` (docker persitent storage compatibility)
 - Root namespaces for `Helpers.php`
