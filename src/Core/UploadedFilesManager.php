@@ -110,12 +110,12 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
     foreach ($this->files as $file)
     {
       # Filesize check
-      if ( $maxSize>0 && $file['size']>$maxSize) {
+      if ( $maxSize>0 && $file->getSize()>$maxSize) {
         throw new SpinException('Exceeded filesize limit');
       }
 
       # Check error codes (http://php.net/manual/en/features.file-upload.errors.php)
-      switch ( $file['error'] ) {
+      switch ( $file->getError() ) {
         case \UPLOAD_ERR_OK:
             break;
 
