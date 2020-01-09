@@ -25,6 +25,7 @@
   function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK, array $headers=[])
   function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
   function responseHtml(string $body='', int $code=200, array $headers=[])
+  function responseFile(string $filename, int $code=200, array $headers=[])
 
   function getClientIp()
 
@@ -480,9 +481,6 @@ if (!\function_exists('responseXml')) {
    */
   function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
   {
-    global $app;
-
-    $body = \xml_encode($a,$options);
     $headers = \array_merge(['Content-Type'=>'application/xml'],$headers);
 
     # Build the XML
@@ -658,3 +656,4 @@ if(!\function_exists('mime_content_type')) {
     }
   }
 }
+

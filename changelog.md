@@ -1,6 +1,11 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.11
+- responseXML() fixed
+- Package.json version corrected
+- PHP v7.4.x compatibility verified
+
 ## 0.0.10
 - UploadedFile and UploadedFilesmanager fixes
 

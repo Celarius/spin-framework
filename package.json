@@ -1,7 +1,7 @@
 {
     "name": "spin-framework",
     "title": "Spin Framework",
-    "version": "0.0.9",
+    "version": "0.0.11",
     "homepage": "https://github.com/Celarius/spin-framework",
     "description": "A super lightweight PHP UI/REST Framework",
     "author": {
