@@ -84,6 +84,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var        String          Name of file to send as response */
   protected $responseFile;
 
+  /** @var        String          True/False for removing the file after sending to client */
+  protected $responseFileRemove;
+
   /** @var        array           PSR-11 compatible Container for Dependencies */
   protected $container;
 
@@ -189,6 +192,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       # Create & Process UploadedFiles structure
       $this->uploadedFilesManager = new UploadedFilesManager($_FILES);
+
+      # Init internal variables
+      $this->responseFile = '';
+      $this->responseFileRemove = false;
 
     } catch (\Exception $e) {
       if ($this->logger) {
@@ -1042,13 +1049,15 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Set the file to send as response
    *
-   * @param      string  $filename  [description]
+   * @param      string  $filename  Filename to send
+   * @param      bool    $remove    True to remove the file after sending
    *
    * @return     self
    */
-  public function setFileResponse(string $filename)
+  public function setFileResponse(string $filename, bool $remove=false)
   {
     $this->responseFile = $filename;
+    $this->responseFileRemove = $remove;
 
     return $this;
   }
@@ -1105,6 +1114,15 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
         # Send the file
         \readfile($this->responseFile);
+
+        # Remove the file if we are told to do so
+        if ($this->responseFileRemove) {
+          @\unlink($this->responseFile);
+        }
+
+        # Reset the values
+        $this->responseFile = '';
+        $this->responseFileRemove = false;
 
       } else {
         # Log warning

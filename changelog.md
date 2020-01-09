@@ -5,6 +5,7 @@ SPIN Framework Changelog
 - responseXML() fixed
 - Package.json version corrected
 - PHP v7.4.x compatibility verified
+- responseFile() has new param for removing file after sending
 
 ## 0.0.10
 - UploadedFile and UploadedFilesmanager fixes

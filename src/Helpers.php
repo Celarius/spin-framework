@@ -518,15 +518,16 @@ if (!\function_exists('responseFile')) {
    * @param      string   $filename  The filename
    * @param      integer  $code      The code
    * @param      array    $headers   The headers
+   * @param      bool     $remove    True to remove the file after sending
    *
    * @return     object
    */
-  function responseFile(string $filename, int $code=200, array $headers=[])
+  function responseFile(string $filename, int $code=200, array $headers=[], bool $remove=false)
   {
     global $app;
 
     # Set file to respond with
-    $app->setFileResponse($filename);
+    $app->setFileResponse($filename, $remove);
 
     # Determine Mime-Type for file
     $headers = \array_merge(['Content-Type'=>\mime_content_type($filename)],$headers);
