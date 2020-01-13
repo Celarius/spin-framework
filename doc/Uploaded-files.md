@@ -15,8 +15,8 @@ It provides a method calleg `getFiles()` to retreive a list of `UploadedFile` ob
   $manager = new UploadedFilesManager(); // Defaults to use $_FILES
 
   # Loop the received files
-  foreach ($manager->getFiles() as $fileInfo) { // $fileInfo is an instance of UploadedFile
+  foreach ($manager->getFiles() as $uploadedFile) { // $fileInfo is an instance of UploadedFile
     # Move the file to our /tmp directory
-    $fileInfo->move('/tmp', $fileInfo->getName());
+    $uploadedFile->move('/tmp', $uploadedFile->getName());
   }
 ```
