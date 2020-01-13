@@ -31,15 +31,18 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
    *
    * @param      array  $files  The files array. Usually $_FILES global
    */
-  public function __construct(array $files)
+  public function __construct(array $files=[])
   {
     parent::__construct();
+
+    # Provide array of files OR use the default $_FILES
+    $files = ( \count($files)==0 ? $_FILES : $files);
 
     # Empty array
     $this->files = [];
 
     # Parse the $_FILES array
-    $this->parseFiles($_FILES);
+    $this->parseFiles($files);
   }
 
   /**
