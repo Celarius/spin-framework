@@ -12,7 +12,7 @@ It provides a method calleg `getFiles()` to retreive a list of `UploadedFile` ob
 **Example**
 ```php
   # Create Manager
-  $manager = new UploadedFilesManager();
+  $manager = new UploadedFilesManager(); // Defaults to use $_FILES
 
   # Loop the received files
   foreach ($manager->getFiles() as $fileInfo) { // $fileInfo is an instance of UploadedFile
