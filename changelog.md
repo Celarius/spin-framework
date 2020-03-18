@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.12
+- Composer v2 compatibility, class names corrected
+
 ## 0.0.11
 - responseXML() fixed
 - Package.json version corrected

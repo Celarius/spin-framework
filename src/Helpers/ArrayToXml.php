@@ -9,7 +9,7 @@
 
 namespace Spin\Helpers;
 
-class ArrayToXML
+class ArrayToXml
 {
     private $version;
     private $encoding;
@@ -17,8 +17,8 @@ class ArrayToXML
     /**
      * Construct ArrayToXML object with selected version and encoding
      *
-     * for available values check XmlWriter docs
-     * http://www.php.net/manual/en/function.xmlwriter-start-document.php
+     * for available values check XMLWriter docs
+     * http://www.php.net/manual/en/function.xMLwriter-start-document.php
      *
      * @param      string  $xmlVersion   XML Version, default 1.0
      * @param      string  $xmlEncoding  XML Encoding, default UTF-8
@@ -46,7 +46,7 @@ class ArrayToXML
             \trigger_error($err);
             return false; //return false error occurred
         }
-        $xml = new \XmlWriter();
+        $xml = new \XMLWriter();
         $xml->openMemory();
         $xml->startDocument($this->version, $this->encoding);
         $xml->startElement($startElement);
@@ -69,7 +69,7 @@ class ArrayToXML
      *
      * @return     array      $data | $nonAttributes
      */
-    protected function writeAttr(XMLWriter $xml, $data)
+    protected function writeAttr(\XMLWriter $xml, $data)
     {
         if (\is_array($data)) {
             $nonAttributes = array();
@@ -104,7 +104,7 @@ class ArrayToXML
      * @param      XMLWriter  $xml    object
      * @param      array      $data   Associative Data Array
      */
-    protected function writeEl(XMLWriter $xml, $data)
+    protected function writeEl(\XMLWriter $xml, $data)
     {
         foreach ($data as $key => $value) {
             if (\is_array($value) && !$this->isAssoc($value)) { //numeric array
