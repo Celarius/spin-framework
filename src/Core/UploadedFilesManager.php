@@ -123,22 +123,22 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
             break;
 
         case \UPLOAD_ERR_PARTIAL:
-            throw new SpinException($file['name'] . ': The uploaded file was only partially uploaded');
+            throw new SpinException($file->getname(). ': The uploaded file was only partially uploaded');
 
         case \UPLOAD_ERR_NO_FILE:
-            throw new SpinException($file['name'] . ': No file was uploaded');
+            throw new SpinException($file->getname() . ': No file was uploaded');
 
         case \UPLOAD_ERR_INI_SIZE:
-            throw new SpinException($file['name'] . ': The uploaded file exceeds the upload_max_filesize directive in php.ini');
+            throw new SpinException($file->getname() . ': The uploaded file exceeds the upload_max_filesize directive in php.ini');
 
         case \UPLOAD_ERR_FORM_SIZE:
-            throw new SpinException($file['name'] . ': The uploaded file exceeds MAX_FILE_SIZE (' . $maxSize . ') ');
+            throw new SpinException($file->getname() . ': The uploaded file exceeds MAX_FILE_SIZE (' . $maxSize . ') ');
 
         case \UPLOAD_ERR_NO_TMP_DIR:
-            throw new SpinException($file['name'] . ': Missing a temporary folder');
+            throw new SpinException($file->getname() . ': Missing a temporary folder');
 
         case \UPLOAD_ERR_CANT_WRITE:
-            throw new SpinException($file['name'] . ': Failed to write file to disk');
+            throw new SpinException($file->getname() . ': Failed to write file to disk');
 
         default:
             throw new SpinException('Unknown errors');
