@@ -116,7 +116,7 @@ if (!\function_exists('config')) {
       # Return config object
       return $app->getConfig();
 
-    } elseif (is_null($value)) {
+    } elseif (\is_null($value)) {
       # Return config Key's value
       return $app->getConfig()->get($key);
 
@@ -157,11 +157,11 @@ if (!\function_exists('container')) {
   {
     global $app;
 
-    if (is_null($id)) {
+    if (\is_null($id)) {
       # Return the container
       return $app->getContainer();
 
-    } elseif (is_null($value)) {
+    } elseif (\is_null($value)) {
       # Return the $id in the container
       if ( $app->getContainer()->has($id) ) {
         return $app->getContainer()->get($id);
@@ -361,7 +361,7 @@ if (!\function_exists('cookie')) {
   {
     global $app;
 
-    if (is_null($value)) {
+    if (\is_null($value)) {
       # Read the cookie param
       return \cookieParam($name);
     }
