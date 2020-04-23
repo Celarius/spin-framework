@@ -411,9 +411,9 @@ if (!\function_exists('response')) {
   /**
    * Get/Set the Response to send to the client
    *
-   * @param      string                       $body     Body to send
-   * @param      int|integer                  $code     HTTP Code
-   * @param      array                        $headers  Headers to include
+   * @param      string    $body     The body to send
+   * @param      integer   $code     Optional HTTP response code
+   * @param      array     $headers  Optional extra HTTP headers
    *
    * @return     \Psr\Http\ResponseInterface
    */
@@ -447,15 +447,15 @@ if (!\function_exists('response')) {
 
 if (!\function_exists('responseJson')) {
   /**
-   * Send a JSON response with $code and $a content. Also sets the content-type
-   * header to "application/json"
+   * Send a JSON response with $code and an array $data as JSON.
+   * Also sets the content-type header to "application/json"
    *
-   * @param      array     $data     The data
-   * @param      integer   $code     The code
-   * @param      integer   $options  The options
-   * @param      array     $headers  The headers
+   * @param      array     $data     The array to send
+   * @param      integer   $code     Optional HTTP response code
+   * @param      integer   $options  Optional JSON formatting options
+   * @param      array     $headers  Optional extra HTTP headers
    *
-   * @return     Response
+   * @return     \Psr\Http\ResponseInterface
    */
   function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK, array $headers=[])
   {
@@ -473,11 +473,11 @@ if (!\function_exists('responseXml')) {
    * Build a XML response from the $data supplied
    *
    * @param      array     $data     Array to encode in XML
-   * @param      string    $root     Root element
-   * @param      int       $code     HTTP Code
-   * @param      array     $headers  Headers to include
+   * @param      string    $root     Optional XML Root element
+   * @param      integer   $code     Optional HTTP response code
+   * @param      array     $headers  Optional extra HTTP headers
    *
-   * @return     Response
+   * @return     \Psr\Http\ResponseInterface
    */
   function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
   {
@@ -495,11 +495,11 @@ if (!\function_exists('responseHtml')) {
   /**
    * Send a HTML response with $code and $body content.
    *
-   * @param      string   $body     The body
-   * @param      integer  $code     The code
-   * @param      array    $headers  The headers
+   * @param      string    $body     The body to send
+   * @param      integer   $code     Optional HTTP response code
+   * @param      array     $headers  Optional extra HTTP headers
    *
-   * @return     object
+   * @return     \Psr\Http\ResponseInterface
    */
   function responseHtml(string $body='', int $code=200, array $headers=[])
   {
@@ -520,7 +520,7 @@ if (!\function_exists('responseFile')) {
    * @param      array    $headers   The headers
    * @param      bool     $remove    True to remove the file after sending
    *
-   * @return     object
+   * @return     \Psr\Http\ResponseInterface
    */
   function responseFile(string $filename, int $code=200, array $headers=[], bool $remove=false)
   {
