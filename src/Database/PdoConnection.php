@@ -66,25 +66,24 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     $pdoParams = $params['options'] ?? [];
 
     $pdoOptions = [];
-    # Convert the PDO params into PDO constants
-    if ( \count($pdoParams)>0 ) {
-      foreach ($pdoParams as $idx => $p)
-      {
-        $pdoOption = \strtoupper(key($p));
-        $pdoValue = $pdoParams[$idx][key($p)];
 
-        # Convert to PDO constants
-        $k = \constant('\PDO::'.$pdoOption); // PDO Option
-        if ( !\is_numeric($pdoValue) && !empty($pdoValue) ) {
-          $v = @\constant('\PDO::'.$pdoValue);  // PDO constant
-        } else if (!empty($pdoValue)) {
-          $v = $pdoValue; // Its a string
-        } else {
-          $v = 0; // false
-        }
-        # Set the Option
-        $pdoOptions[ $k ] = $v;
+    # Convert the PDO params into PDO constants
+    foreach ($pdoParams as $pdoOption => $pdoValue)
+    {
+      # Convert name to PDO constant
+      if (!\is_numeric($pdoOption)) {
+        $pdoOption = \constant('\PDO::'.\strtoupper($pdoOption)); // PDO Option
       }
+
+      if ( !\is_numeric($pdoValue) && !empty($pdoValue) ) {
+        $pdoValue = @\constant('\PDO::'.$pdoValue);  // PDO constant
+      } else if (!empty($pdoValue)) {
+        $pdoValue = $pdoValue; // Its a string
+      } else {
+        $pdoValue = 0; // false
+      }
+      # Set the Option
+      $pdoOptions[ $pdoOption ] = $pdoValue;
     }
 
     # Default PDO options for all drivers if none given
