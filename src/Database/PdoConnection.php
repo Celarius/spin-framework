@@ -75,12 +75,15 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
         $pdoOption = \constant('\PDO::'.\strtoupper($pdoOption)); // PDO Option
       }
 
-      if ( !\is_numeric($pdoValue) && !empty($pdoValue) ) {
-        $pdoValue = @\constant('\PDO::'.$pdoValue);  // PDO constant
-      } else if (\is_numeric($pdoValue)) {
+      if (\is_numeric($pdoValue)) {
         $pdoValue = $pdoValue; // Its a number
+
       } else if (\is_bool($pdoValue)) {
         $pdoValue = (int)$pdoValue; // Its a BOOLEAN, convert to int
+
+      } else if (!empty($pdoValue)) {
+        $pdoValue = @\constant('\PDO::'.$pdoValue) ?? 0;  // PDO constant
+
       } else {
         $pdoValue = 0; // false
       }
@@ -91,11 +94,31 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     # Default PDO options for all drivers if none given
     if (\count($pdoOptions)==0) {
       $pdoOptions = [
-          \PDO::ATTR_PERSISTENT => TRUE,
+          \PDO::ATTR_PERSISTENT => (int)TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-          \PDO::ATTR_AUTOCOMMIT => FALSE
+          \PDO::ATTR_AUTOCOMMIT => (int)FALSE
         ];
     }
+
+    "connections": {
+      "core": {
+        "type": "Pdo",
+        "driver": "mysql",
+        "schema": "processors_qa1",
+        "host": "localhost",
+        "port": 3306,
+        "username": "ewq",
+        "password": "ewq",
+        "charset": "UTF8",
+        "options": [
+          {"ATTR_PERSISTENT": true },
+          {"ATTR_ERRMODE": "ERRMODE_EXCEPTION"},
+          {"ATTR_AUTOCOMMIT": false},
+          {"ATTR_EMULATE_PREPARES": false}]
+      }
+    },
+
+
 
     # Set PDO Options
     $this->setOptions($pdoOptions);
