@@ -78,7 +78,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
       if ( !\is_numeric($pdoValue) && !empty($pdoValue) ) {
         $pdoValue = @\constant('\PDO::'.$pdoValue);  // PDO constant
       } else if (\is_numeric($pdoValue)) {
-        $pdoValue = $pdoValue; // Its a string
+        $pdoValue = $pdoValue; // Its a number
       } else if (\is_bool($pdoValue)) {
         $pdoValue = (int)$pdoValue; // Its a BOOLEAN, convert to int
       } else {
