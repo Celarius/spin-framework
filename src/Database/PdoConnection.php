@@ -83,17 +83,16 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
         $pdoValue = 0; // false
       }
       # Set the Option
-      $pdoOptions[ $pdoOption ] = $pdoValue;
+      $pdoOptions[ (int)$pdoOption ] = $pdoValue;
     }
 
     # Default PDO options for all drivers if none given
     if (\count($pdoOptions)==0) {
-      $pdoOptions =
-        array(
+      $pdoOptions = [
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
           \PDO::ATTR_AUTOCOMMIT => FALSE
-        );
+        ];
     }
 
     # Set PDO Options
