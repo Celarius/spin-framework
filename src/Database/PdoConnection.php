@@ -100,26 +100,6 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
         ];
     }
 
-    "connections": {
-      "core": {
-        "type": "Pdo",
-        "driver": "mysql",
-        "schema": "processors_qa1",
-        "host": "localhost",
-        "port": 3306,
-        "username": "ewq",
-        "password": "ewq",
-        "charset": "UTF8",
-        "options": [
-          {"ATTR_PERSISTENT": true },
-          {"ATTR_ERRMODE": "ERRMODE_EXCEPTION"},
-          {"ATTR_AUTOCOMMIT": false},
-          {"ATTR_EMULATE_PREPARES": false}]
-      }
-    },
-
-
-
     # Set PDO Options
     $this->setOptions($pdoOptions);
 
