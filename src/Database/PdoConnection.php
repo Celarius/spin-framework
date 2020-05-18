@@ -70,11 +70,6 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     # Convert the PDO params into PDO constants
     foreach ($pdoParams as $pdoOption => $pdoValue)
     {
-      # Convert name to PDO constant
-      // if (!\is_numeric($pdoOption)) {
-      //   $pdoOption = \constant('\PDO::'.\strtoupper($pdoOption)); // PDO Option
-      // }
-
       if (\is_numeric($pdoValue)) {
         $pdoValue = $pdoValue; // Its a number
 
@@ -82,8 +77,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
         $pdoValue = (int)$pdoValue; // Its a BOOLEAN, convert to int
 
       } else if (!empty($pdoValue)) {
-        $pdoOption = \constant('\PDO::'.\strtoupper($pdoOption)) ?? 0; // PDO Option
-        // $pdoValue = @\constant('\PDO::'.$pdoValue) ?? 0;  // PDO constant
+        $pdoOption = \constant('\PDO::'.\strtoupper($pdoValue)) ?? 0; // PDO Option
 
       } else {
         $pdoValue = 0; // false
