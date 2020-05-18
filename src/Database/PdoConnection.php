@@ -520,7 +520,17 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
       # Binds
       foreach ($params as $bind=>$value) {
-        $sth->bindValue( ':'.\ltrim($bind,':'), $value);
+        if (\is_numeric($value) && \intval($value)==$value) {
+          $sth->bindValue( ':'.\ltrim($bind,':'), (int)$value, \PDO::PARAM_INT); // INT !
+        } else
+        if (\is_bool($value)) {
+          $sth->bindValue( ':'.\ltrim($bind,':'), (bool)$value, \PDO::PARAM_BOOL);
+        } else
+        if (\is_null($value)) {
+          $sth->bindValue( ':'.\ltrim($bind,':'), null, \PDO::PARAM_NULL);
+        } else {
+            $sth->bindValue( ':'.\ltrim($bind,':'), $value);
+        }
       }
 
       # Execute statement
