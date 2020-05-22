@@ -532,7 +532,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
         if (\is_null($value)) {
           $sth->bindValue( ':'.\ltrim($bind,':'), null, \PDO::PARAM_NULL);
         } else {
-            $sth->bindValue( ':'.\ltrim($bind,':'), $value);
+          $sth->bindValue( ':'.\ltrim($bind,':'), $value, \PDO::PARAM_STR);
         }
       }
 
