@@ -521,8 +521,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     if ($sth = $this->prepare($sql)) {
 
       # Binds
-      foreach ($params as $bind=>$value) {
-        if (\is_numeric($value) && \intval($value)==$value) {
+      foreach ($params as $bind=>$value)
+      {
+        if (\is_int($value)) {
           $sth->bindValue( ':'.\ltrim($bind,':'), (int)$value, \PDO::PARAM_INT); // INT !
         } else
         if (\is_bool($value)) {
