@@ -203,7 +203,7 @@ interface ApplicationInterface
    *
    * @return     null  | array
    */
-  function getRouteGroups();
+  function getRouteGroups(): array;
 
   /**
    * Get or Set a Container value.

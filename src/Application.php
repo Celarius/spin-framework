@@ -199,11 +199,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
     } catch (\Exception $e) {
       if ($this->logger) {
-        $this->logger->critical('Failed to create core objectes',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
+        $this->logger->critical('Failed to create core objects',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
       } else {
         \error_log('CRITICAL: '.$e->getMessage().' - '.$e->getTraceAsString());
       }
-      die;
+
+      # Rethrow the exception
+      throw $e;
     }
   }
 
@@ -1006,9 +1008,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get all RouteGroups
    *
-   * @return     null  | array
+   * @return    array
    */
-  public function getRouteGroups()
+  public function getRouteGroups(): array
   {
     return $this->routeGroups;
   }
