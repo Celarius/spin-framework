@@ -97,9 +97,12 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
    */
   public function addRoute(array $methods, string $path, string $handler)
   {
+    $fullPath = $this->getPrefix().(!empty($path) ? '/'.$path : '');
+    if (empty($fullPath)) $fullPath = '/';
+
     $this->routeCollector->addRoute(
       $methods,
-      $this->getPrefix().(!empty($path) ? '/'.$path : ''),
+      $fullPath,
       $handler
     );
 
