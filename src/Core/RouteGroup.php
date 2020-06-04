@@ -81,7 +81,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
       }
 
       if ( isset($route['path']) && isset($route['handler']) ) {
-        $this->addRoute($methods,'/'.\ltrim($route['path'],'/'),$route['handler']);
+        $this->addRoute($methods,\ltrim($route['path'],'/'),$route['handler']);
       }
     }
   }
@@ -99,7 +99,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
   {
     $this->routeCollector->addRoute(
       $methods,
-      $this->getPrefix().$path,
+      $this->getPrefix().(!empty($path) ? '/'.$path : ''),
       $handler
     );
 

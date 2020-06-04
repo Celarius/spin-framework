@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.14
+- Support for empty `path` in routeGroups
+
 ## 0.0.13
 - PDO param binding examines the type of value passed, and uses correct PDO::PARAM_* for it
 

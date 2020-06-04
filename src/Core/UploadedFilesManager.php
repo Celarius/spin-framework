@@ -126,7 +126,7 @@ class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesMan
             throw new SpinException($file->getname(). ': The uploaded file was only partially uploaded');
 
         case \UPLOAD_ERR_NO_FILE:
-            throw new SpinException($file->getName() . ': No file was uploaded');
+            throw new SpinException('No file was uploaded');
 
         case \UPLOAD_ERR_INI_SIZE:
             throw new SpinException($file->getName() . ': The uploaded file exceeds the upload_max_filesize directive in php.ini');
