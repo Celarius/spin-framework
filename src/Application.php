@@ -22,7 +22,7 @@ use \Psr\Http\Message\Response;
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application/Framework version */
-  const VERSION = '0.0.14';
+  const VERSION = '0.0.15';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
@@ -102,6 +102,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var        array           Error Controllers, key=http code, value=Controller class[@handler] */
   protected $errorControllers;
 
+  /** @var        int             Initial memory usage when SPIN starts */
+  protected $initialMemUsage;
+
   /**
    * Constructor
    *
@@ -110,6 +113,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   public function __construct(string $basePath)
   {
     parent::__construct();
+
+    # Get initial memory usage at beginning
+    $this->initialMemUsage = \memory_get_usage();
 
     # Register the $app variable globally. This allows us to use it immediately
     $GLOBALS['app'] = $this;
@@ -1165,4 +1171,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return $this->uploadedFilesManager;
   }
 
+  /**
+   * Get the value of initialMemUsage
+   */
+  public function getInitialMemUsage()
+  {
+    return $this->initialMemUsage;
+  }
 }

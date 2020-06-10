@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.15
+- Storing/Getter for initial memory usage
+
 ## 0.0.14
 - Support for empty `path` in routeGroups
 
