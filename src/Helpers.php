@@ -621,6 +621,7 @@ if(!\function_exists('mime_content_type')) {
 
       // audio/video
       'mp3' => 'audio/mpeg',
+      'mp4' => 'audio/mpeg',
       'qt' => 'video/quicktime',
       'mov' => 'video/quicktime',
 
