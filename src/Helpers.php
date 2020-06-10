@@ -597,7 +597,6 @@ if(!\function_exists('mime_content_type')) {
       'json' => 'application/json',
       'xml' => 'application/xml',
       'swf' => 'application/x-shockwave-flash',
-      'flv' => 'video/x-flv',
 
       // images
       'png' => 'image/png',
@@ -622,6 +621,7 @@ if(!\function_exists('mime_content_type')) {
       // audio/video
       'mp3' => 'audio/mpeg',
       'mp4' => 'audio/mpeg',
+      'flv' => 'video/x-flv',
       'qt' => 'video/quicktime',
       'mov' => 'video/quicktime',
 
