@@ -73,9 +73,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
       $configArray = \json_decode( \file_get_contents($filename), true);
 
       if ($configArray) {
-        // $configArray = $this->array_change_key_case_recursive($configArray); // Lowercase the keys
-        # Merge the Config with existing config
-        // $this->confValues = \array_replace_recursive($this->confValues, $configArray);
         $this->confValues = $configArray;
       } else {
         throw new SpinException('Invalid JSON file "'.$filename.'"');
@@ -104,7 +101,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
       # Load the config
       $configArray = \json_decode( \file_get_contents($filename), true);
       if ($configArray) {
-        // $configArray = $this->array_change_key_case_recursive($configArray); // Lowercase the keys
         # Merge the Config with existing config
         $this->confValues = \array_replace_recursive($this->confValues, $configArray);
 
@@ -112,7 +108,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
         throw new SpinException('Invalid JSON file "'.$filename.'"');
 
       }
-
     }
 
     return $this;

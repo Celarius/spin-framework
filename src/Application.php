@@ -121,7 +121,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $GLOBALS['app'] = $this;
 
     try {
-      # Require the Global Heloers
+      # Require the Global Helpers
       require __DIR__ . '/Helpers.php';
 
       # Extract Environment
@@ -129,14 +129,14 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       # Set paths
       $this->basePath = \realpath($basePath);
-      $this->appPath = $this->basePath . \DIRECTORY_SEPARATOR . 'app';
-      $this->storagePath = $this->basePath . \DIRECTORY_SEPARATOR . 'storage';
+      $this->appPath = $this->basePath . '/app';
+      $this->storagePath = $this->basePath . '/storage';
 
       # Create config
       $this->config = new Config( $this->appPath, $this->getEnvironment() );
 
       # Load & Decode the version file
-      $verFile = \app()->getConfigPath() . \DIRECTORY_SEPARATOR . 'version.json';
+      $verFile = \app()->getConfigPath() . '/version.json';
       $this->version = (\file_exists($verFile) ? \json_decode(\file_get_contents($verFile),true) : []);
       if (empty($this->version['application']['version'] ?? '')) {
         # Backwards compatible with pre "version.json" Spin apps
@@ -149,7 +149,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->sharedStoragePath = \config('storage.shared');
       if (!empty($this->sharedStoragePath)) {
         # Append the environment to the path
-        $this->sharedStoragePath .= \DIRECTORY_SEPARATOR . \strtolower($this->getEnvironment()) . \DIRECTORY_SEPARATOR . \strtolower($this->getAppCode());
+        $this->sharedStoragePath.'/'.\strtolower($this->getEnvironment()).'/'.\strtolower($this->getAppCode());
       } else {
         # Just use the local storage path instead
         $this->sharedStoragePath = $this->storagePath;
@@ -1119,6 +1119,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           'headers'=>$this->getResponse()->getHeaders(),
           'file'=>$this->responseFile
         ]);
+
+        # If we have output buffering on, flush it
+        if (\ob_get_level()) while (@\ob_end_flush());
 
         # Send the file
         \readfile($this->responseFile);
