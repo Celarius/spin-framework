@@ -529,8 +529,10 @@ if (!\function_exists('responseFile')) {
     # Set file to respond with
     $app->setFileResponse($filename, $remove);
 
-    # Determine Mime-Type for file
-    $headers = \array_merge(['Content-Type'=>\mime_content_type($filename)],$headers);
+    # Determine Mime-Type for file (if not set)
+    if (!\array_key_exists('Content-Type',$headers)) {
+      $headers = \array_merge(['Content-Type'=>\mime_content_type($filename)],$headers);
+    }
 
     return \response('',$code,$headers);
   }
@@ -583,7 +585,7 @@ if(!\function_exists('mime_content_type')) {
    *
    * @param      <type>        $filename  The filename
    *
-   * @return     array|string  ( description_of_the_return_value )
+   * @return     array|string  The mime type(s) of the file
    */
   function mime_content_type($filename)
   {

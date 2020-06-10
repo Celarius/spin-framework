@@ -3,6 +3,7 @@ SPIN Framework Changelog
 
 ## 0.0.15
 - Storing/Getter for initial memory usage
+- Determine Mime-Type for file (if not set)
 
 ## 0.0.14
 - Support for empty `path` in routeGroups
