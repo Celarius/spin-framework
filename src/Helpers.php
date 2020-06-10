@@ -531,7 +531,8 @@ if (!\function_exists('responseFile')) {
 
     # Determine Mime-Type for file (if not set)
     if (!\array_key_exists('Content-Type',$headers)) {
-      $headers = \array_merge(['Content-Type'=>\mime_content_type($filename)],$headers);
+      $mime_type = \mime_content_type($filename);
+      $headers = \array_merge(['Content-Type'=>$mime_type],$headers);
     }
 
     return \response('',$code,$headers);
