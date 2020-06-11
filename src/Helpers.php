@@ -590,6 +590,20 @@ if(!\function_exists('mime_content_type')) {
    */
   function mime_content_type($filename)
   {
+    return \mime_content_type_ex($filename);
+  }
+}
+
+if(!\function_exists('mime_content_type_ex')) {
+  /**
+   * { function_description }
+   *
+   * @param      <type>        $filename  The filename
+   *
+   * @return     array|string  The mime type(s) of the file
+   */
+  function mime_content_type_ex($filename)
+  {
     $mime_types = [
       'txt' => 'text/plain',
       'htm' => 'text/html',
@@ -649,15 +663,17 @@ if(!\function_exists('mime_content_type')) {
     $ext = \strtolower(\array_pop(\explode('.',$filename)));
     if (\array_key_exists($ext, $mime_types)) {
       return $mime_types[$ext];
+
     } elseif (\function_exists('finfo_open')) {
       $finfo = \finfo_open(\FILEINFO_MIME_TYPE);
       $mimetype = \finfo_file($finfo, $filename);
       \finfo_close($finfo);
 
       return $mimetype;
-    } else {
 
+    } else {
       return 'application/octet-stream';
+
     }
   }
 }
