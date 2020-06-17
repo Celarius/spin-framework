@@ -149,7 +149,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->sharedStoragePath = \config('storage.shared');
       if (!empty($this->sharedStoragePath)) {
         # Append the environment to the path
-        $this->sharedStoragePath.'/'.\strtolower($this->getEnvironment()).'/'.\strtolower($this->getAppCode());
+        $this->sharedStoragePath = $this->sharedStoragePath.'/'.\strtolower($this->getEnvironment()).'/'.\strtolower($this->getAppCode());
       } else {
         # Just use the local storage path instead
         $this->sharedStoragePath = $this->storagePath;
