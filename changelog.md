@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.16
+- Added `copy` to UploaedFiles class
+
 ## 0.0.15
 - Storing/Getter for initial memory usage
 - Determine Mime-Type for file (if not set)

@@ -71,10 +71,29 @@ class UploadedFile extends AbstractBaseClass implements UploadedFileInterface
     if (empty($filename)) $this->setFilename( $this->getName() );
 
     # Move the file
-    $ok = \move_uploaded_file($this->getTmpName(), $directory . DIRECTORY_SEPARATOR . $filename );
+    $ok = @\move_uploaded_file($this->getTmpName(), $directory . DIRECTORY_SEPARATOR . $filename );
 
     # Set property
     $this->setIsMoved($ok);
+
+    return $ok;
+  }
+
+  /**
+   * Copy a downloaded file to $directory named $filename
+   *
+   * @param      string   $directory  The directory to move the file to
+   * @param      string   $filename   Optional. The new filename
+   *
+   * @return     boolean
+   */
+  public function copy(string $directory, string $filename='')
+  {
+    # If no filename is provided, assume the incoming name
+    if (empty($filename)) $this->setFilename( $this->getName() );
+
+    # Move the file
+    $ok = @\copy($this->getTmpName(), $directory . DIRECTORY_SEPARATOR . $filename );
 
     return $ok;
   }

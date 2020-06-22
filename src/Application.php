@@ -22,7 +22,7 @@ use \Psr\Http\Message\Response;
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application/Framework version */
-  const VERSION = '0.0.15';
+  const VERSION = '0.0.16';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
