@@ -1154,7 +1154,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->getLogger()->debug('Sending body',[
         'code' => $this->getResponse()->getStatusCode(),
         'headers' => $this->getResponse()->getHeaders(),
-        'size' => $this->response->getSize(),
+        'size' => $this->response->getBody()->getSize(),
       ]);
 
       # Send the Body
