@@ -1147,9 +1147,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       }
 
     } else {
-      # Get body
-      // $body = (string)$this->response->getBody();
-
       # Debug log
       $this->getLogger()->debug('Sending body',[
         'code' => $this->getResponse()->getStatusCode(),
