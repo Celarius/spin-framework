@@ -19,6 +19,38 @@ use \Spin\Core\UploadedFilesManager;
 use \Spin\Exceptions\SpinException;
 use \Psr\Http\Message\Response;
 
+/**
+ * Class representing the 'requestId'
+ */
+class RequestIdClass {
+  protected $id='';
+
+  public function __construct()
+  {
+    $this->generateId();
+  }
+
+  public function __toString()
+  {
+    return $this->id;
+  }
+
+  public function generateId()
+  {
+    $this->id = \md5((string)\microtime(true));
+
+    return $this->id;
+  }
+
+  public function setId($value)
+  {
+    $this->id = $value;
+
+    return $this;
+  }
+}
+
+
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application/Framework version */
@@ -105,9 +137,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var        int             Initial memory usage when SPIN starts */
   protected $initialMemUsage;
 
-  /** @var        array           Global variables accesible via container($var, $value) */
-  protected $globalVars = [];
-
 
   /**
    * Constructor
@@ -127,9 +156,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     try {
       # Require the Global Helpers
       require __DIR__ . '/Helpers.php';
-
-      # Global vars
-      $this->globalVars = [];
 
       # Extract Environment
       $this->setEnvironment( \env('ENVIRONMENT','dev') );
@@ -234,7 +260,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   {
     try {
       # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
-      \container('requestId', \md5((string)\microtime(true)));
+      \container('requestId', new RequestIdClass());
 
     } catch (\Exception $e) {
       $this->getLogger()

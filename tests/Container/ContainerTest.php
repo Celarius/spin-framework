@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Spin\tests\Core;
+namespace Spin\tests\Container;
 
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +18,6 @@ class ContainerObject
     $this->property = $value;
   }
 }
-
 
 class ContainerTest extends TestCase
 {
@@ -83,6 +82,18 @@ class ContainerTest extends TestCase
     );
 
     $this->assertEquals(1234, container('anon')); //$value);
+  }
+
+  /** Test RequestId class */
+  public function testContainerRequestIdClass()
+  {
+    # Create class
+    container('requestId', new \Spin\RequestIdClass() );
+
+    # set new value
+    container('requestId')->setId('abc123');
+
+    $this->assertEquals('abc123', container('requestId'));
   }
 
 }
