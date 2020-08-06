@@ -158,20 +158,13 @@ if (!\function_exists('container')) {
     global $app;
 
     if (\is_null($id)) {
-      # Return the container
       return $app->getContainer();
 
     } elseif (\is_null($value)) {
-      # Return the $id in the container
-      if ( $app->getContainer()->has($id) ) {
-        return $app->getContainer()->get($id);
-      } else {
-        return null;
-      }
+      return $app->getGlobalVars()[$id] ?? null;
 
     } else {
-      # Set $id in container to $value
-      return $app->getContainer()->share($id,$value);
+      return $app->setGlobalVar($id, $value);
 
     }
   }

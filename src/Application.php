@@ -22,7 +22,7 @@ use \Psr\Http\Message\Response;
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application/Framework version */
-  const VERSION = '0.0.16';
+  const VERSION = '0.0.17';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
@@ -105,6 +105,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var        int             Initial memory usage when SPIN starts */
   protected $initialMemUsage;
 
+  /** @var        array           Global variables accesible via container($var, $value) */
+  protected $globalVars = [];
+
+
   /**
    * Constructor
    *
@@ -123,6 +127,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     try {
       # Require the Global Helpers
       require __DIR__ . '/Helpers.php';
+
+      # Global vars
+      $this->globalVars = [];
 
       # Extract Environment
       $this->setEnvironment( \env('ENVIRONMENT','dev') );
@@ -375,6 +382,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         $beforeResult = true; // assume all before handlers succeed
         $routeResult = false;
         $afterResult = true; // assume all after handlers succeed
+
 
         #
         # Run the Common AND Groups Before Middlewares (ServerRequestInterface)
@@ -1177,5 +1185,37 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   public function getInitialMemUsage()
   {
     return $this->initialMemUsage;
+  }
+
+  /**
+   * Get the value of globalVars
+   */
+  public function getGlobalVars()
+  {
+    return $this->globalVars;
+  }
+
+  /**
+   * Set the value of globalVars
+   *
+   * @return  self
+   */
+  public function setGlobalVars($globalVars)
+  {
+    $this->globalVars = $globalVars;
+
+    return $this;
+  }
+
+  /**
+   * Set one global var
+   *
+   * @return  self
+   */
+  public function setGlobalVar(string $id, $value)
+  {
+    $this->globalVars[$id] = $value;
+
+    return $this;
   }
 }

@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.17
+- container() now uses internal globalVars instead when get/set variables
+
 ## 0.0.16
 - Added `copy` to UploaedFiles class
 
