@@ -32,7 +32,7 @@ class RequestIdClass {
 
   public function __toString()
   {
-    return $this->id;
+    return (string) $this->id;
   }
 
   public function generateId()
@@ -258,16 +258,16 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function run(array $serverRequest=null): bool
   {
-    try {
-      # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
-      \container('requestId', new RequestIdClass());
+    // try {
+    //   # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
+    //   \container('requestId', new RequestIdClass());
 
-    } catch (\Exception $e) {
-      $this->getLogger()
-           ->critical('Failed to create/load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
+    // } catch (\Exception $e) {
+    //   $this->getLogger()
+    //        ->critical('Failed to create/load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
 
-      die;
-    }
+    //   die;
+    // }
 
     # Check and Report on config variables
     $this->checkAndReportConfigVars();
@@ -421,13 +421,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             $beforeHandler = new $middleware($routeInfo['args']);
 
             # Debug log
-            $this->getLogger()->debug('Initialize Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->debug('Initialize Before middleware',['middleware'=>$middleware]);
 
             # Initialize
             $beforeHandler->initialize($routeInfo['args']);
 
             # Debug log
-            $this->getLogger()->debug('Running Before middleware',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->debug('Running Before middleware',['middleware'=>$middleware]);
 
             if (!$beforeHandler->handle($routeInfo['args'])) {
               # Record outcome
@@ -438,9 +438,16 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             }
           } else {
             # Log
-            $this->getLogger()->warning('Before Middleware not found',['rid'=>container('requestId'),'middleware'=>$middleware]);
+            $this->getLogger()->warning('Before Middleware not found',['middleware'=>$middleware]);
           }
         }
+
+
+        # Make sure we have a requestId at this stage
+        if (\is_null(\container('requestId'))) {
+          \container('requestId', \md5((string)\microtime(true))); // Setting this is a ONE-TIME-OPERATION
+        }
+
 
         #
         # Create & Run the Controller Class - If the Before Middlewares where ok!
