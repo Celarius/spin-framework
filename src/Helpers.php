@@ -530,10 +530,8 @@ if (!\function_exists('responseFile')) {
     $app->setFileResponse($filename, $remove);
 
     # Determine Mime-Type for file (if not set)
-    if (!\array_key_exists('Content-Type',$headers)) {
-      $mime_type = \mime_content_type($filename);
-      $headers = \array_merge(['Content-Type'=>$mime_type],$headers);
-    }
+    $mime_type = \mime_content_type_ex($filename);
+    $headers = \array_merge($headers,['Content-Type'=>$mime_type]);
 
     return \response('',$code,$headers);
   }
@@ -660,7 +658,14 @@ if(!\function_exists('mime_content_type_ex')) {
       'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
     ];
 
-    $ext = \strtolower(\array_pop(\explode('.',$filename)));
+    $a = \explode('.',$filename);
+    if (\is_array($a)) {
+      $ext = \strtolower(\array_pop($a));
+    } else {
+      $ext = '';
+    }
+
+    // $ext = \strtolower(\array_pop(\explode('.',$filename)));
     if (\array_key_exists($ext, $mime_types)) {
       return $mime_types[$ext];
 
