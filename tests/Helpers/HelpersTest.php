@@ -7,6 +7,8 @@ use PHPUnit\Framework\TestCase;
 use \Spin\Helpers\Cipher;
 use \Spin\Helpers\Hash;
 use \Spin\Helpers\UUID;
+use \Spin\Helpers\JWT;
+use \Spin\Helpers\EWT;
 
 class HelpersTest extends TestCase
 {
@@ -71,4 +73,31 @@ class HelpersTest extends TestCase
 
     $this->assertEquals('0eeda2f3-b68c-5ae7-a0ab-cc14eac039db', $a);
   }
+
+  /**
+   * Test JWT Encoding
+   *
+   * @covers \EWT
+   */
+  public function testJwtEncodeDecode()
+  {
+    $jwt = JWT::encode('abc123','xyz987');
+    $payload = JWT::decode($jwt,'xyz987',['HS256']);
+
+    $this->assertEquals($payload,'abc123');
+  }
+
+  /**
+   * Test EWT Encoding
+   *
+   * @covers \EWT
+   */
+  public function testEwtEncodeDecode()
+  {
+    $ewt = EWT::encode('abc123',\config('application.secret') ?? 'xyz987');
+    $payload = EWT::decode($ewt,\config('application.secret') ?? 'xyz987');
+
+    $this->assertEquals($payload,'abc123');
+  }
+
 }

@@ -95,14 +95,15 @@ class EWT implements EWTInterface
     }
 
     # Encode
-    $ewt = array();
-    $ewt['a'] = $alg; // Needs to be verified that it contains valid value
-    $ewt['i'] = $iv;
-    $ewt['h'] = $hash;
-    $ewt['s'] = static::sign($data,$secret,$hash);
-    $ewt['p'] = \openssl_encrypt($data,$alg,$secret,0,$iv);
+    $ewt = [
+      'a' => $alg, // Needs to be verified that it contains valid value
+      'i' => $iv,
+      'h' => $hash,
+      's' => static::sign($data,$secret,$hash),
+      'p' => \openssl_encrypt($data,$alg,$secret,0,$iv),
+    ];
 
-    return static::base64url_encode( json_encode($ewt) );
+    return static::base64url_encode(\json_encode($ewt));
   }
 
   /**
@@ -121,7 +122,7 @@ class EWT implements EWTInterface
     $b64 = static::base64url_decode($data);
     $ewt = \json_decode($b64,true);
 
-    $payload = \openssl_decrypt($ewt['p'], $ewt['a'], $secret, 0, $ewt['i']);
+    $payload = \openssl_decrypt($ewt['p'],$ewt['a'],$secret,0,$ewt['i']);
 
     # Verify signature - if fail return null
     if (\strcasecmp(static::sign($payload,$secret,$ewt['h']),$ewt['s'])!=0) {
