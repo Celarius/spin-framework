@@ -10,22 +10,22 @@ namespace Spin\Database;
 
 interface PdoConnectionInterface
 {
-  # PDO Class Interface
+  # PDO Class Interface (must be commented out because of declaration errors)
   // function __construct ( string $dsn, string $username='', string $password='', array $options=[] );
-  function beginTransaction(): bool;
-  function commit(): bool;
-  function errorCode();
-  function errorInfo(): array;
-  function exec(string $statement): int;
-  function getAttribute(int $attribute);
-  function getAvailableDrivers(): array;
-  function inTransaction(): bool;
-  function lastInsertId (string $name=NULL): string;
-  function prepare(string $statement, array $driver_options = array()): \PDOStatement;
-  function query(string $statement): \PDOStatement;
-  function quote(string $string, int $parameter_type=\PDO::PARAM_STR): string;
-  function rollBack(): bool;
-  function setAttribute(int $attribute, $value): bool;
+  // function beginTransaction(): bool;
+  // function commit(): bool;
+  // function errorCode();
+  // function errorInfo(): array;
+  // function exec(string $statement): int;
+  // function getAttribute(int $attribute);
+  // function getAvailableDrivers(): array;
+  // function inTransaction(): bool;
+  // function lastInsertId (string $name=NULL): string;
+  // function prepare(string $statement, array $driver_options = array()): \PDOStatement;
+  // function query(string $statement): \PDOStatement;
+  // function quote(string $string, int $parameter_type=\PDO::PARAM_STR): string;
+  // function rollBack(): bool;
+  // function setAttribute(int $attribute, $value): bool;
 
   # Custom additions
   function connect(): bool;
