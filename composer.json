@@ -33,7 +33,7 @@
     "psr/cache": "^1",
 
     "nikic/fast-route": "^1",
-    "guzzlehttp/guzzle": "^6",
+    "guzzlehttp/guzzle": "^7",
     "monolog/monolog": "^2",
     "firebase/php-jwt": "^5",
     "league/container": "^3"
