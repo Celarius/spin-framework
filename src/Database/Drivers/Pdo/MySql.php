@@ -57,7 +57,7 @@ MYSQL:
   );
 */
     # Build the DSN
-    $_dsn = $this->getDriver().':'.
+    $_dsn = \strtolower($this->getDriver()).':'.
             'host='.$this->getHost().($this->getPort()!=0 ? ';port='.$this->getPort() : '' ).
             ';dbname='.$this->getSchema().
             ';charset='.$this->getCharset();
