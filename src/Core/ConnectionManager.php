@@ -156,7 +156,8 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
       # Type="PDO"
       if ( \strcasecmp($params['type'] ?? '','PDO')==0 ) {
         # Build the Classname
-        $className = '\\Spin\\Database\\Drivers\\'.\ucfirst($params['type'] ?? '').'\\'.\ucfirst($params['driver'] ?? '') ;
+        // $className = '\\Spin\\Database\\Drivers\\'.\ucfirst($params['type'] ?? '').'\\'.\ucfirst($params['driver'] ?? '') ;
+        $className = '\\Spin\\Database\\Drivers\\'.\ucfirst($params['type'] ?? '').'\\'.($params['driver'] ?? '') ;
 
         try {
           # Create the PdoConnection
