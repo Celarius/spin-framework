@@ -80,7 +80,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
         $pdoValue = $pdoValue; // Its a number
 
       } else if (\is_bool($pdoValue)) {
-        $pdoValue = (int)$pdoValue; // Its a BOOLEAN, convert to int
+        $pdoValue = (int) $pdoValue; // Its a BOOLEAN, convert to int
 
       } else if (!empty($pdoValue)) {
         $pdoValue = \constant('\PDO::'.\strtoupper($pdoValue)) ?? 0; // PDO value name constant

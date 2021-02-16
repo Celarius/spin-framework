@@ -699,9 +699,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return     bool
    */
-  public function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext)
+  public function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext=[])
   {
-    if (!(\error_reporting() & $errNo)) {
+    if (!(\error_reporting() && $errNo)) {
         // This error code is not included in error_reporting, so let it fall
         // through to the standard PHP error handler
         // Example all @ prefixed functions
