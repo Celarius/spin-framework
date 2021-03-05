@@ -678,8 +678,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->errorLevel = \error_reporting( E_ALL | E_STRICT);
 
     # set to the user defined error handler
-    $old_error_handler = \set_error_handler(array($this,'errorHandler'), E_ALL);
-    $old_exception_handler = \set_exception_handler(array($this,'exceptionHandler'));
+    $old_error_handler = \set_error_handler( array($this,'errorHandler'), E_ALL );
+    $old_exception_handler = \set_exception_handler( array($this,'exceptionHandler') );
 
     $this->getLogger()->debug('Error handlers set');
 

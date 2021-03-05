@@ -424,9 +424,16 @@ if (!\function_exists('response')) {
     $bStream = \app('httpStreamFactory')->createStream($body);
 
     # Build response object
-    $response = \getResponse()
-                ->withStatus($code)
-                ->withBody($bStream);
+    $response = \getResponse();
+
+    if ( !\is_array($response) ) {
+      # Set status and Body
+      $response->withStatus($code)
+              ->withBody($bStream);
+    } else {
+      throw new \Exception('Invalid response object. httpCode='.$code.', body='.$body);
+      die;
+    }
 
     # Set all the headers the user sent
     foreach($headers as $header => $values) {
