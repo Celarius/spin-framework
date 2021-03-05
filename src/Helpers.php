@@ -431,7 +431,8 @@ if (!\function_exists('response')) {
       $response->withStatus($code)
               ->withBody($bStream);
     } else {
-      throw new \Exception('Invalid response object. httpCode='.$code.', body='.$body);
+      http_response_code($code);
+      echo 'Invalid response object. httpCode='.$code.', body='.$body;
       die;
     }
 
