@@ -429,9 +429,10 @@ if (!\function_exists('response')) {
     if ( !\is_array($response) ) {
       # Set status and Body
       $response->withStatus($code)
-              ->withBody($bStream);
+               ->withBody($bStream);
     } else {
       http_response_code($code);
+      \error_log(\print_r($response,true));
       \error_log('[DS-GATEWAY] [CRITICAL] Invalid response object. {"httpCode":'.$code.', "body":"'.$body.'"}');
       die;
     }
