@@ -432,7 +432,7 @@ if (!\function_exists('response')) {
               ->withBody($bStream);
     } else {
       http_response_code($code);
-      echo 'Invalid response object. httpCode='.$code.', body='.$body;
+      \error_log('[DS-GATEWAY] [CRITICAL] Invalid response object. {"httpCode":'.$code.', "body":"'.$body.'"}');
       die;
     }
 
