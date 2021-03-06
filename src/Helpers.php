@@ -424,18 +424,18 @@ if (!\function_exists('response')) {
     $bStream = \app('httpStreamFactory')->createStream($body);
 
     # Build response object
-    $response = \getResponse();
+    $response = \app()->getResponse();
 
-    if ( !\is_array($response) ) {
-      # Set status and Body
-      $response->withStatus($code)
-               ->withBody($bStream);
-    } else {
-      http_response_code($code);
+    if ( \is_array($response) ) {
+      \http_response_code($code);
       \error_log(\print_r($response,true));
       \error_log('[DS-GATEWAY] [CRITICAL] Invalid response object. {"httpCode":'.$code.', "body":"'.$body.'"}');
       die;
     }
+
+    # Set status and Body
+    $response = $response->withStatus($code)
+                         ->withBody($bStream);
 
     # Set all the headers the user sent
     foreach($headers as $header => $values) {
@@ -461,19 +461,19 @@ if (!\function_exists('responseJson')) {
    *
    * @param      array     $data     The array to send
    * @param      integer   $code     Optional HTTP response code
-   * @param      integer   $options  Optional JSON formatting options
+   * @param      integer   $options  Optional JSON formatting options (\JSON_PRETTY_PRINT etc.)
    * @param      array     $headers  Optional extra HTTP headers
    *
    * @return     \Psr\Http\ResponseInterface
    */
-  function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK, array $headers=[])
+  function responseJson(array $data=[], int $code=200, int $options=0, array $headers=[])
   {
     global $app;
 
     $body = \json_encode($data, $options);
     $headers = \array_merge(['Content-Type'=>'application/json'],$headers);
 
-    return \response($body,$code,$headers);
+    return \response($body, $code, $headers);
   }
 }
 
