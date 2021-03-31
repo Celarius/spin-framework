@@ -54,7 +54,7 @@ class RequestIdClass {
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application/Framework version */
-  const VERSION = '0.0.17';
+  const VERSION = '0.0.18';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
@@ -791,6 +791,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Set a cookie for the next response
    *
+   * Defaults to setting 'samesite'='Strict' to prevent CSRF.
+   *
    * @param      string        $name      [description]
    * @param      string|null   $value     [description]
    * @param      int|integer   $expire    [description]
@@ -815,7 +817,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         'path'     => $path,
         'domain'   => $domain,
         'secure'   => $secure,
-        'httpOnly' => $httpOnly
+        'httpOnly' => $httpOnly,
+        'samesite' => 'Strict'      // CSRF protection
       ];
     }
 
@@ -1138,14 +1141,28 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     # Set Cookies
     foreach ($this->cookies as $cookie)
     {
+      $cookieOptions = [
+        'expire'    => $cookie['expire'] ?? 0,
+        'path'      => $cookie['path'] ?? '',
+        'domain'    => $cookie['domain'] ?? '',
+        'secure'    => $cookie['secure'] ?? false,
+        'httponly'  => $cookie['httponly'] ?? false,
+        'samesite'  => $cookie['samesite'] ?? 'Strict',
+      ];
+
+      # Set cookie using $options array (PHP 7.3.0+)
       \setCookie( $cookie['name'],
                   $cookie['value'],
-                  $cookie['expire'] ?? 0,
-                  $cookie['path'] ?? '',
-                  $cookie['domain'] ?? '',
-                  $cookie['secure'] ?? false,
-                  $cookie['httponly'] ?? false
-                );
+                  $cookieOptions );
+
+      // \setCookie( $cookie['name'],
+      //             $cookie['value'],
+      //             $cookie['expire'] ?? 0,
+      //             $cookie['path'] ?? '',
+      //             $cookie['domain'] ?? '',
+      //             $cookie['secure'] ?? false,
+      //             $cookie['httponly'] ?? false
+      //           );
     }
 
     ##

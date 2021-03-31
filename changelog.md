@@ -1,5 +1,7 @@
 # Changelog
 SPIN Framework Changelog
+## 0.0.18
+- app()->setCookie() internally uses setCookie() with array to set 'samesite'=>'Strict' for cookies by default
 
 ## 0.0.17
 - container() now uses internal globalVars instead when get/set variables
