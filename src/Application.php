@@ -1146,8 +1146,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         'path'      => $cookie['path'] ?? '',
         'domain'    => $cookie['domain'] ?? '',
         'secure'    => $cookie['secure'] ?? false,
-        'httponly'  => $cookie['httponly'] ?? false,
-        'samesite'  => $cookie['samesite'] ?? 'Strict',
+        'httponly'  => $cookie['httponly'] ?? true,         // Set HTTPOnly by default (no script access tocookie)
+        'samesite'  => $cookie['samesite'] ?? 'Strict',     // Set SameSite=Strict for better CSRF security
       ];
 
       # Set cookie using $options array (PHP 7.3.0+)
