@@ -1142,7 +1142,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     foreach ($this->cookies as $cookie)
     {
       $cookieOptions = [
-        'expire'    => $cookie['expire'] ?? 0,
+        'expires'   => $cookie['expire'] ?? 0,
         'path'      => $cookie['path'] ?? '',
         'domain'    => $cookie['domain'] ?? '',
         'secure'    => $cookie['secure'] ?? false,
