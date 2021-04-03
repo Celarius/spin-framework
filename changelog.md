@@ -1,5 +1,10 @@
 # Changelog
 SPIN Framework Changelog
+
+## 0.0.19
+- Started using Ramsey\UUID for UUID generation
+- Added UUID v6 generation as default in UUID::generate() method
+
 ## 0.0.18
 - app()->setCookie() internally uses setCookie() with array to set HTTPOnly=true and 'SameSite'=>'Strict' for cookies by default
 
