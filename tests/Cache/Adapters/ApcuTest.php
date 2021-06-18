@@ -3,21 +3,28 @@
 namespace Spin\tests\Core;
 
 use PHPUnit\Framework\TestCase;
-
 use \Spin\Cache\Adapters\Apcu;
 
 class ApcuTest extends TestCase
 {
-  public function testTestAdapter()
+  protected $cacheObj = null;
+
+  public function setup(): void
   {
     try {
-      $obj = new Apcu();
-      $this->assertFalse( \is_null($obj) );
+      $this->cacheObj = new Apcu();
 
     } catch (\Exception $e) {
-      # APCU is not available, assume OK
-      $this->assertFalse( false );
+      $this->cacheObj = null;
+    }
+  }
 
+  public function testApcuAdapterCreated()
+  {
+    if ($this->cacheObj) {
+      $this->assertFalse( \is_null($this->cacheObj) );
+    } else {
+      $this->assertFalse( false );
     }
   }
 

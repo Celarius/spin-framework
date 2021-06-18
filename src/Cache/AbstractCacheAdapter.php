@@ -12,18 +12,20 @@ use Spin\Cache\AbstractCacheAdapterInterface;
 
 abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
 {
-  /** @var array Driver Options from Config */
+  /** @var  array       Driver Options from Config */
   protected $options = [];
-  /** @var string Driver name */
+
+  /** @var  string      Driver name */
   protected $driver = '';
-  /** @var string Driver Version */
+
+  /** @var  string      Driver Version */
   protected $version = '';
 
   /**
    * Constructor
    *
-   * @param string $driver  [description]
-   * @param array  $options [description]
+   * @param string  $driver         Driver name
+   * @param array   $options        Optional. Array with driver options
    */
   public function __construct(string $driver, array $options=[])
   {
@@ -31,19 +33,22 @@ abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
     $this->setOptions($options);
   }
 
-  /**
-   * @return mixed
-   */
+  abstract public function get($key, $default = null);
+  abstract public function set($key, $value, $ttl = null);
+  abstract public function delete($key);
+  abstract public function clear();
+  abstract public function getMultiple($keys, $default = null);
+  abstract public function setMultiple($items, $ttl = null);
+  abstract public function deleteMultiple($keys);
+  abstract public function has($key);
+  abstract public function inc(string $key, int $amount=1);
+  abstract public function dec(string $key, int $amount=1);
+
   public function getOptions(): array
   {
       return $this->options;
   }
 
-  /**
-   * @param mixed $options
-   *
-   * @return self
-   */
   public function setOptions(array $options)
   {
       $this->options = $options;
@@ -51,19 +56,11 @@ abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
       return $this;
   }
 
-  /**
-   * @return mixed
-   */
   public function getDriver(): string
   {
       return $this->driver;
   }
 
-  /**
-   * @param mixed $driver
-   *
-   * @return self
-   */
   public function setDriver(string $driver)
   {
       $this->driver = $driver;
@@ -71,19 +68,11 @@ abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
       return $this;
   }
 
-  /**
-   * @return mixed
-   */
   public function getVersion(): string
   {
       return $this->version;
   }
 
-  /**
-   * @param mixed $version
-   *
-   * @return self
-   */
   public function setVersion(string $version)
   {
       $this->version = $version;
