@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.20
+- Guzzle v2.0.0 stream support via `Utils::streamFor()`
+
 ## 0.0.19
 - Started using Ramsey\UUID for UUID generation
 - Added UUID v6 generation as default in UUID::generate() method

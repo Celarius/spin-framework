@@ -54,7 +54,7 @@ class RequestIdClass {
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @const      string          Application/Framework version */
-  const VERSION = '0.0.19';
+  const VERSION = '0.0.20';
 
   /** @var        string          Application Environment (from ENV vars) */
   protected $environment;
