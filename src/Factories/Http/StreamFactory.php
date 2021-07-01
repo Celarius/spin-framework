@@ -17,9 +17,11 @@ use \Spin\Factories\AbstractFactory;
 
 # Guzzle
 use \GuzzleHttp\Psr7\LazyOpenStream;
+use \GuzzleHttp\Psr7\Utils;
 
 # PSR-7
 use \Psr\Http\Message\StreamInterface;
+use \Psr\Http\Message\UtilsInterface;
 
 # PSR-17
 use Psr\Http\Message\StreamFactoryInterface;
@@ -35,7 +37,7 @@ class StreamFactory extends AbstractFactory implements StreamFactoryInterface
    */
   public function createStream(string $content = ''): StreamInterface
   {
-    return \GuzzleHttp\Psr7\stream_for($content);
+    return Utils::streamFor($content);
   }
 
   /**
@@ -56,7 +58,7 @@ class StreamFactory extends AbstractFactory implements StreamFactoryInterface
     # Open the file
     $resource = \fopen($filename, $mode);
 
-    return \GuzzleHttp\Psr7\stream_for($resource);
+    return Utils::streamFor($resource);
   }
 
   /**
@@ -70,7 +72,7 @@ class StreamFactory extends AbstractFactory implements StreamFactoryInterface
    */
   public function createStreamFromResource($resource): StreamInterface
   {
-    return \GuzzleHttp\Psr7\stream_for($resource);
+    return Utils::streamFor($resource);
   }
 
 }
