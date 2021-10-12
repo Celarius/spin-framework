@@ -26,7 +26,7 @@ use \Spin\Cache\AbstractCacheAdapterInterface;
 
 class CacheManager extends AbstractBaseClass implements CacheManagerInterface
 {
-  /** @var      array         List of Instantiated Caches */
+  /** @var  array         List of Instantiated Caches */
   protected $caches = [];
 
   /**

@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.21
+- Variable definitions in classes with `/** @var` docblocks in most places
+
 ## 0.0.20
 - Guzzle v2.0.0 stream support via `Utils::streamFor()`
 

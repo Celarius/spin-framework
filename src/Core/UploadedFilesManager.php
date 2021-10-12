@@ -23,7 +23,7 @@ use \Psr\Http\Message\Response;
 
 class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesManagerInterface
 {
-  /** @var       array          Array with \Spin\Core\File objects  */
+  /** @var  array          Array with \Spin\Core\File objects  */
   protected $files;
 
   /**

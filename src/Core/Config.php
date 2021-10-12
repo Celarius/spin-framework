@@ -14,10 +14,10 @@ use \Spin\Exceptions\SpinException;
 
 class Config extends AbstractBaseClass implements ConfigInterface
 {
-  /** @var      array         Configuration Array */
+  /** @var  array         Configuration Array */
   protected $confValues = array();
 
-  /** @var      string        Config file name */
+  /** @var  string        Config file name */
   protected $filename;
 
   /**

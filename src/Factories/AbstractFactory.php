@@ -2,7 +2,7 @@
 
 /**
  * AbstractFactory
- * 
+ *
  * @package  Spin
  */
 
@@ -13,7 +13,7 @@ use \Spin\Core\AbstractBaseClass;
 
 abstract class AbstractFactory extends AbstractBaseClass
 {
-  /** @var      array           Factory Options */
+  /** @var  array           Factory Options */
   protected $options;
 
   /**

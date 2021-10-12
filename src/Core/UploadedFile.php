@@ -13,28 +13,28 @@ use \Spin\Core\FileInterface;
 
 class UploadedFile extends AbstractBaseClass implements UploadedFileInterface
 {
-  /** @var        string          The Parameter name on the form */
+  /** @var  string          The Parameter name on the form */
   protected $parameter;
 
-  /** @var        string          Filename */
+  /** @var  string          Filename */
   protected $name;
 
-  /** @var        string          File MIME type */
+  /** @var  string          File MIME type */
   protected $type;
 
-  /** @var        string          Temporary filename (in temp path) */
+  /** @var  string          Temporary filename (in temp path) */
   protected $tmp_name;
 
-  /** @var        int             Error code */
+  /** @var  int             Error code */
   protected $error;
 
-  /** @var        int             Byte size of file */
+  /** @var  int             Byte size of file */
   protected $size;
 
-  /** @var        string          Real filename once the file has been moved */
+  /** @var  string          Real filename once the file has been moved */
   protected $filename;
 
-  /** @var        boolean         False until a successful move() */
+  /** @var  boolean         False until a successful move() */
   protected $isMoved;
 
   /**

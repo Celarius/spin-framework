@@ -53,88 +53,88 @@ class RequestIdClass {
 
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
-  /** @const      string          Application/Framework version */
-  const VERSION = '0.0.20';
+  /** @var  string                  Application/Framework version */
+  const VERSION = '0.0.21';
 
-  /** @var        string          Application Environment (from ENV vars) */
+  /** @var  string                  Application Environment (from ENV vars) */
   protected $environment;
 
-  /** @var        string          Base path to application folder */
+  /** @var  string                  Base path to application folder */
   protected $basePath;
 
-  /** @var        string          Path to $basePath.'/app' folder */
+  /** @var  string                  Path to $basePath.'/app' folder */
   protected $appPath;
 
-  /** @var        string          Path to $basePath.'/storage' folder */
+  /** @var  string                  Path to $basePath.'/storage' folder */
   protected $storagePath;
 
-  /** @var        string          Path to shared storage */
+  /** @var  string                  Path to shared storage */
   protected $sharedStoragePath;
 
-  /** @var        array           List of Route Groups */
+  /** @var  array                   List of Route Groups */
   protected $routeGroups;
 
-  /** @var        array           List of Global Before Middleware */
+  /** @var  array                   List of Global Before Middleware */
   protected $beforeMiddleware;
 
-  /** @var        array           List of Global After Middleware */
+  /** @var  array                   List of Global After Middleware */
   protected $afterMiddleware;
 
-  /** @var        int             PHP Error Level we are using */
+  /** @var  int                     PHP Error Level we are using */
   protected $errorLevel = \E_ALL;
 
-  /** @var        Object          Config object */
+  /** @var  Config                  Config object */
   protected $config;
 
-  /** @var        Array           Name, Code and Version of App */
+  /** @var  array                   Name, Code and Version of App */
   protected $version;
 
-  /** @var        Object          PSR-3 compatible Logger object */
+  /** @var  Logger                  PSR-3 compatible Logger object */
   protected $logger;
 
-  /** @var        Object          HTTP Factory */
+  /** @var  Object                  HTTP Factory */
   protected $httpServerRequestFactory;
 
-  /** @var        Object          HTTP Factory */
+  /** @var  Object                  HTTP Factory */
   protected $httpResponseFactory;
 
-  /** @var        Object          HTTP Factory */
+  /** @var  Object                  HTTP Factory */
   protected $httpStreamFactory;
 
-  /** @var        Object          Container Factory */
+  /** @var  Object                  Container Factory */
   protected $containerFactory;
 
-  /** @var        array           List of cookies to send with response */
+  /** @var  array                   List of cookies to send with response */
   protected $cookies;
 
-  /** @var        Object          PSR-7 compatible HTTP Server Request */
+  /** @var  Request                 PSR-7 compatible HTTP Server Request */
   protected $request;
 
-  /** @var        Object          PSR-7 compatible HTTP Response */
+  /** @var  Response                PSR-7 compatible HTTP Response */
   protected $response;
 
-  /** @var        String          Name of file to send as response */
+  /** @var  string                  Name of file to send as response */
   protected $responseFile;
 
-  /** @var        String          True/False for removing the file after sending to client */
+  /** @var  bool                    True/False for removing the file after sending to client */
   protected $responseFileRemove;
 
-  /** @var        array           PSR-11 compatible Container for Dependencies */
+  /** @var  array                   PSR-11 compatible Container for Dependencies */
   protected $container;
 
-  /** @var        Object          Manager that handles all caches */
+  /** @var  CacheManager            Manager that handles all caches */
   protected $cacheManager;
 
-  /** @var        Object          DB Connections manager */
+  /** @var  ConnectionManager       DB Connections manager */
   protected $connectionManager;
 
-  /** @var        Object          Uploaded files manager */
+  /** @var  UploadedFilesManager    Uploaded files manager */
   protected $uploadedFilesManager;
 
-  /** @var        array           Error Controllers, key=http code, value=Controller class[@handler] */
+  /** @var  array                   Error Controllers, key=http code, value=Controller class[@handler] */
   protected $errorControllers;
 
-  /** @var        int             Initial memory usage when SPIN starts */
+  /** @var  int                     Initial memory usage when SPIN starts */
   protected $initialMemUsage;
 
 
@@ -995,7 +995,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return     object
    */
-  public function getConnectionManager()
+  public function getConnectionManager(): ?ConnectionManager
   {
     return $this->connectionManager;
   }

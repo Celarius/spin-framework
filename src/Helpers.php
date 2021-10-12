@@ -33,7 +33,9 @@
   function mime_content_type($filename)
  */
 
+use Spin\Database\PdoConnection;
 use Spin\helpers\ArrayToXml;
+use \Spin\Core\Logger;
 
 if (!\function_exists('env')) {
   /**
@@ -181,9 +183,9 @@ if (!\function_exists('logger')) {
   /**
    * Get the Logger object
    *
-   * @return     object
+   * @return  Logger
    */
-  function logger()
+  function logger(): ?Logger
   {
     global $app;
 
@@ -198,9 +200,9 @@ if (!\function_exists('db')) {
    * @param      string  $connectionName  The connection name
    * @param      array   $params          The connection parameters
    *
-   * @return     object
+   * @return     PDOConnection|null
    */
-  function db(string $connectionName='', array $params=[])
+  function db(string $connectionName='', array $params=[]): ?PdoConnection
   {
     global $app;
 

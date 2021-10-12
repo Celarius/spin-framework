@@ -12,35 +12,46 @@ use \Spin\Database\PdoConnectionInterface;
 
 abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 {
-  /** @var        string          Connection name */
+  /** @var  string          Connection name */
   protected $name = '';
 
-  /** @var        string          Connection type */
+  /** @var  string          Connection type */
   protected $type = '';
 
-  /** @var        string          Connection driver ('MySql','Firebird','Sqlite'...) */
+  /** @var  string          Connection driver name ('MySql','Firebird','Sqlite'...) */
   protected $driver = '';
 
-  /** @var boolean Connection state. */
+  /** @var  bool            Connection state. */
   protected $connected = false;
 
+  /** @var  string          Connection property string */
   protected $schema = '';
+
+  /** @var  string          Connection property string */
   protected $host = '';
+
+  /** @var  string          Connection property string */
   protected $port = 0;
+
+  /** @var  string          Connection property string */
   protected $username = '';
+
+  /** @var  string          Connection property string */
   protected $password = '';
+
+  /** @var  string          Connection property string */
   protected $charset = '';
 
-  /** @var array PDO options array */
-  protected $options = array();
+  /** @var array            PDO options array */
+  protected $options = [];
 
-  /** @var string Full DSN of PDO connection */
+  /** @var string           Full DSN of PDO connection */
   protected $dsn = '';
 
-  /** @var string Database Engine Version we connect to */
+  /** @var string           Database Engine Version we connect to */
   protected $serverVersion = '';
 
-  /** @var string Client Driver Version we connect to */
+  /** @var string           Client Driver Version we connect to */
   protected $clientVersion = '';
 
   /**
@@ -247,7 +258,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Get the Port
    *
-   * @return     string
+   * @return     int
    */
   public function getPort(): ?int
   {

@@ -26,7 +26,7 @@ use \Spin\Database\PdoConnectionInterface;
 
 class ConnectionManager extends AbstractBaseClass implements ConnectionManagerInterface
 {
-  /** @var        array         List of Instantiated Connections */
+  /** @var  array         List of Instantiated Connections */
   protected $connections = [];
 
   /**

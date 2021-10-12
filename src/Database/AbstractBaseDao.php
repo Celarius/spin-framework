@@ -12,7 +12,10 @@ use Spin\Database\AbstractBaseDaoInterface;
 
 abstract class AbstractBaseDao implements AbstractBaseDaoInterface
 {
+  /** @var  string                    Name of connection */
   protected $connectionName;
+
+  /** @var  object                    Connection object */
   protected $connection;
 
   /**

@@ -13,13 +13,13 @@ use \Spin\Core\RouteInterface;
 
 abstract class Route extends AbstractBaseClass implements RouteInterface
 {
-  /** @var      string        HTTP Method */
+  /** @var  string        HTTP Method */
   protected $method;
 
-  /** @var      string        URI path */
+  /** @var  string        URI path */
   protected $path;
 
-  /** @var      string        Handler class name */
+  /** @var  string        Handler class name */
   protected $handler;
 
   /**

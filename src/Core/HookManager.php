@@ -18,7 +18,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
   const ON_BEFORE_REQUEST = 1;
   const ON_AFTER_REQUEST = 2;
 
-  /** @var        array      List of loaded Hook objects */
+  /** @var  array      List of loaded Hook objects */
   protected $hooks;
 
   /**
@@ -44,7 +44,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
     # Find hook in list
     foreach ($this->hooks as $hook)
     {
-      if (\strcasecmp($name,$hook->getName()==0)) {
+      if ( \strcasecmp($name, $hook->getName())==0 ) {
         return $hook;
       }
     }
@@ -86,7 +86,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
   {
     foreach ($this->hooks as $idx => $hook)
     {
-      if (\strcasecmp($name,$hook->getName()==0)) {
+      if ( \strcasecmp($name, $hook->getName())==0 ) {
         # Remove it
         unset( $this->hooks[$idx] );
 

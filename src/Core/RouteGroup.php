@@ -12,24 +12,28 @@ use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\Route;
 use \Spin\Core\RouteGroupInterface;
 
+use \FastRoute\RouteCollector;
+use \FastRoute\DataGenerator\GroupCountBased;
+use \FastRoute\RouteParser\Std;
+
 class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
 {
-  /** @var      string        Name of group */
+  /** @var  string                Name of group */
   protected $name;
 
-  /** @var      string        Path prefix */
+  /** @var  string                Path prefix */
   protected $prefix;
 
-  /** @var      array         Array of middleware */
+  /** @var  array                 Array of middleware */
   protected $beforeMiddleware = array();
 
-  /** @var      array         Array of middleware */
+  /** @var  array                 Array of middleware */
   protected $afterMiddleware = array();
 
-  /** @var      array         Array of routes */
+  /** @var  array                 Array of routes */
   protected $routes;
 
-  /** @var      object        Collector */
+  /** @var  RouteCollector        Collector */
   protected $routeCollector = null;
 
   /**
@@ -71,7 +75,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
           )
       {
         # Support giving methods as comma separated string
-        $methods = \array_values(explode(',',$route['methods']));
+        $methods = \array_values(\explode(',',$route['methods']));
         # Trim spaces/specials from values
         $methods = \array_map('trim',$methods);
       } else

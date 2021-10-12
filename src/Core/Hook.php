@@ -13,7 +13,7 @@ use \Spin\Core\HookInterface;
 
 abstract class Hook extends AbstractBaseClass implements HookInterface
 {
-  /** @var      string        Name of Hook */
+  /** @var  string        Name of Hook */
   protected $name;
 
   /**
