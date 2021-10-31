@@ -33,34 +33,34 @@ interface PdoConnectionInterface
 
   # Getters
   function connected(): bool;
-  function getDsn(): ?string;
-  function getName(): ?string;
-  function getType(): ?string;
-  function getDriver(): ?string;
-  function getSchema(): ?string;
-  function getHost(): ?string;
-  function getPort(): ?int;
-  function getUsername(): ?string;
-  function getPassword(): ?string;
-  function getCharset(): ?string;
+  function getDsn(): string;
+  function getName(): string;
+  function getType(): string;
+  function getDriver(): string;
+  function getSchema(): string;
+  function getHost(): string;
+  function getPort(): int;
+  function getUsername(): string;
+  function getPassword(): string;
+  function getCharset(): string;
   function getOptions(): array;
-  function getServerVersion(): ?string;
-  function getClientVersion(): ?string;
+  function getServerVersion(): string;
+  function getClientVersion(): string;
 
   # Setters
-  function setDsn(?string $dsn);
-  function setName(?string $name);
-  function setType(?string $type);
-  function setHost(?string $host);
-  function setPort($port);
-  function setDriver(?string $driver);
-  function setSchema(?string $schema);
-  function setUsername(?string $username);
-  function setPassword(?string $password);
-  function setCharset(?string $charset);
+  function setDsn(string $dsn);
+  function setName(string $name);
+  function setType(string $type);
+  function setHost(string $host);
+  function setPort(int $port);
+  function setDriver(string $driver);
+  function setSchema(string $schema);
+  function setUsername(string $username);
+  function setPassword(string $password);
+  function setCharset(string $charset);
   function setOptions(array $options);
-  function setServerVersion(?string $serverVersion);
-  function setClientVersion(?string $clientVersion);
+  function setServerVersion(string $serverVersion);
+  function setClientVersion(string $clientVersion);
 
   /**
    * Execute a raw SELECT statement
