@@ -22,8 +22,6 @@ class SqLite extends PdoConnection
    *
    * @param      string  $connectionName  [description]
    * @param      array   $params          [description]
-   *
-   * @return     <type>  ( description_of_the_return_value )
    */
   public function __construct(string $connectionName, array $params=[])
   {
@@ -34,8 +32,8 @@ class SqLite extends PdoConnection
     $this->setFilename($params['filename'] ?? '');
 
     # Username & Password
-    $this->setUsername(null);
-    $this->setPassword(null);
+    $this->setUsername('');
+    $this->setPassword('');
 
     # Parent Constructor
     parent::__construct($connectionName,$params);

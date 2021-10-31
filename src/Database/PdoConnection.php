@@ -30,7 +30,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /** @var  string          Connection property string */
   protected $host = '';
 
-  /** @var  string          Connection property string */
+  /** @var  int             Connection property string */
   protected $port = 0;
 
   /** @var  string          Connection property string */
@@ -68,7 +68,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     $this->setType($params['type'] ?? '');
     $this->setDriver($params['driver'] ?? '');
     $this->setHost($params['host'] ?? '');
-    $this->setPort($params['port'] ?? '');
+    $this->setPort($params['port'] ?? 0);
     $this->setSchema($params['schema'] ?? '');
     $this->setUsername($params['username'] ?? '');
     $this->setPassword($params['password'] ?? '');

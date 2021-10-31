@@ -32,11 +32,11 @@ In the `config-<env>.json` file the database driver is configured in the `connec
       "username": "{db_username}",
       "password": "{db_password}",
       "charset": "UTF8",
-      "options": [
-        {"ATTR_PERSISTENT" : true},
-        {"ATTR_ERRMODE" : "ERRMODE_EXCEPTION"},
-        {"ATTR_AUTOCOMMIT" : false}
-      ]
+      "options": {
+        "ATTR_PERSISTENT" : true,
+        "ATTR_ERRMODE" : "ERRMODE_EXCEPTION",
+        "ATTR_AUTOCOMMIT" : false
+      } 
     }
   },
 ```
