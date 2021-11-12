@@ -189,7 +189,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    */
   public function getLogger()
   {
-    return \getLogger();
+    return \logger();
   }
 
   /**
