@@ -598,7 +598,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       if ($httpCode>=400 && $httpCode<500) {
         $class = $this->errorControllers['4xx'] ?? '';
       } else
-      if ($httpCode>=400 && $httpCode<500) {
+      if ($httpCode>=500) {
         $class = $this->errorControllers['5xx'] ?? '';
       }
     }
