@@ -100,6 +100,13 @@ interface AbstractCacheAdapterInterface
   function dec(string $key, int $amount=1);
 
   /**
+   * Returns cache statistics
+   *
+   * @return array
+   */
+  function statistics(): array;
+
+  /**
    * @return mixed
    */
   function getOptions(): array;

@@ -43,6 +43,7 @@ abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
   abstract public function has($key);
   abstract public function inc(string $key, int $amount=1);
   abstract public function dec(string $key, int $amount=1);
+  abstract public function statistics(): array;
 
   public function getOptions(): array
   {

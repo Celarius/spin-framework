@@ -39,16 +39,12 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
 
   public function set($key, $value, $ttl = null)
   {
-    $success = \apcu_store( $key, $value, (\is_null($ttl) ? 0 : (int) $ttl) );
-
-    return $success;
+    return \apcu_store( $key, $value, (\is_null($ttl) ? 0 : (int) $ttl) );
   }
 
   public function delete($key)
   {
-    $success = \apcu_delete( $key );
-
-    return $success;
+    return  \apcu_delete( $key );
   }
 
   public function clear()
@@ -86,15 +82,13 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
 
   public function has($key)
   {
-    $success = \apcu_exists( $key );
-
-    return $success;
+    return \apcu_exists( $key );
   }
 
   public function inc(string $key, int $amount=1)
   {
     $success = false;
-    $value = \apcu_inc( $key, $amount, $success);
+    $value = \apcu_inc($key, $amount, $success);
 
     return ( $success ? $value : false );
   }
@@ -107,4 +101,8 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
     return ( $success ? $value : false );
   }
 
+  public function statistics(): array
+  {
+    return apcu_cache_info();
+  }
 }
