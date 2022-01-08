@@ -491,7 +491,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
             } else {
               # Log
-              $this->getLogger()->error('Method not found in controller ',[
+              $this->getLogger()->error('Method not found in controller',[
                 'controller' => $handlerClass,
                 'method' => $handlerMethod,
                 'rid' => \container('requestId'),
@@ -500,7 +500,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
           } else {
             # Debug log
-            $this->getLogger()->error('Controller not found ',[
+            $this->getLogger()->error('Controller not found',[
               'method' => $this->getRequest()->getMethod(),
               'path' => $path,
               'controller' => $handlerClass,
