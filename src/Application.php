@@ -469,8 +469,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             {
               # Debug log
               $this->getLogger()->debug('Running controller->initialize()',[
+                'controller' => $handlerClass,
                 'rid' => \container('requestId'),
-                'controller'=>$handlerClass
               ]);
 
               # Initialize
@@ -478,8 +478,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
               # Debug log
               $this->getLogger()->debug('Running controller->handle()',[
+                'method' => $handlerMethod,
                 'rid' => \container('requestId'),
-                'method'=>$handlerMethod
               ]);
 
               # Run Controller's method
@@ -492,17 +492,19 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             } else {
               # Log
               $this->getLogger()->error('Method not found in controller ',[
+                'controller' => $handlerClass,
+                'method' => $handlerMethod,
                 'rid' => \container('requestId'),
-                'controller'=>$handlerClass,
-                'method'=>$handlerMethod
               ]);
             }
 
           } else {
             # Debug log
             $this->getLogger()->error('Controller not found ',[
+              'method' => $this->getRequest()->getMethod(),
+              'path' => $path,
+              'controller' => $handlerClass,
               'rid' => \container('requestId'),
-              'controller'=>$handlerClass
             ]);
 
             # Attempt to run the 404 error controller (if set by user in config)
@@ -521,8 +523,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
             # Debug log
             $this->getLogger()->debug('Initialize After middleware',[
+              'middleware' => $middleware,
               'rid' => \container('requestId'),
-              'middleware'=>$middleware
             ]);
 
             # Initialize
@@ -530,8 +532,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
             # Debug log
             $this->getLogger()->debug('Running After middleware',[
+              'middleware' => $middleware,
               'rid' => \container('requestId'),
-              'middleware'=>$middleware
             ]);
 
             if (!$afterHandler->handle($routeInfo['args'])) {
@@ -542,8 +544,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           } else {
             # Log
             $this->getLogger()->warning('After Middleware not found',[
+              'middleware' => $middleware,
               'rid' => \container('requestId'),
-              'middleware'=>$middleware
             ]);
           }
         }
