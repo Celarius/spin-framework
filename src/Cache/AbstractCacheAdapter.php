@@ -33,6 +33,11 @@ abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
     $this->setOptions($options);
   }
 
+  public function initialize()
+  {
+    return $this;
+  }
+
   abstract public function get($key, $default = null);
   abstract public function set($key, $value, $ttl = null);
   abstract public function delete($key);

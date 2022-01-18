@@ -57,6 +57,11 @@ class TestAdapter extends AbstractCacheAdapter
   {
     return 0;
   }
+
+  public function statistics(): array
+  {
+    return [];
+  }
 }
 
 

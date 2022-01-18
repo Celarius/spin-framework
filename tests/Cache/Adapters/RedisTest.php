@@ -3,18 +3,18 @@
 namespace Spin\tests\Core;
 
 use PHPUnit\Framework\TestCase;
-use \Spin\Cache\Adapters\Apcu;
+use \Spin\Cache\Adapters\Redis;
 
-class ApcuTest extends TestCase
+class RedisTest extends TestCase
 {
   protected $cacheObj;
 
   public function setup(): void
   {
-    $this->cacheObj = new Apcu();
+    $this->cacheObj = new Redis([]);
   }
 
-  public function testApcuAdapterCreated()
+  public function testRedisAdapterCreated()
   {
     $this->assertNotNull( $this->cacheObj );
   }

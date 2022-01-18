@@ -563,7 +563,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     ##
     ## No route matched the request ?!
     ##
-    $this->getLogger()->notice('No route matched the request',[
+    $this->getLogger()->info('No route matched the request',[
       'method' => $this->getRequest()->getMethod(),
       'path' => $path,
       'ip' => \getClientIp(),
@@ -819,7 +819,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         'path'     => $path,
         'domain'   => $domain,
         'secure'   => $secure,
-        'httpOnly' => $httpOnly,
+        'httponly' => $httpOnly,
         'samesite' => 'Strict'      // CSRF protection
       ];
     }
@@ -1148,7 +1148,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         'path'      => $cookie['path'] ?? '',
         'domain'    => $cookie['domain'] ?? '',
         'secure'    => $cookie['secure'] ?? false,
-        'httponly'  => $cookie['httponly'] ?? true,         // Set HTTPOnly by default (no script access tocookie)
+        'httponly'  => $cookie['httponly'] ?? true,         // Set HTTPOnly by default (no script access to cookie)
         'samesite'  => $cookie['samesite'] ?? 'Strict',     // Set SameSite=Strict for better CSRF security
       ];
 
