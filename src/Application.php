@@ -1181,7 +1181,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         ]);
 
         # If we have output buffering on, flush it
-        if (\ob_get_level()) while (@\ob_end_flush());
+        if (\ob_get_level()>0 && \ob_get_length()>0) while (@\ob_end_flush());
 
         # Send the file
         \readfile($this->responseFile);
