@@ -22,7 +22,8 @@ use \Psr\Http\Message\Response;
 /**
  * Class representing the 'requestId'
  */
-class RequestIdClass {
+class RequestIdClass
+{
   protected $id='';
 
   public function __construct()
