@@ -2,7 +2,9 @@
 
 namespace Spin\Cache;
 
-interface AbstractCacheAdapterInterface
+use Psr\SimpleCache\CacheInterface;
+
+interface AbstractCacheAdapterInterface extends CacheInterface
 {
   /**
    * Get $key from cache

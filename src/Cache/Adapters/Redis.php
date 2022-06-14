@@ -3,6 +3,8 @@
 /**
  * Redis Cache Driver
  *
+ * Implements Psr\SimpleCache\CacheInterface methods
+ *
  * @package   Spin
  *
  * @link      https://github.com/predis/predis

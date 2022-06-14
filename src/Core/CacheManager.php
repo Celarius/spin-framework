@@ -10,11 +10,11 @@
 
 /*
 Example:
-  # Use 1st available Cache listed, and get 'key' from it
+  # Use 1st available Cache listed, and get 'key' from it (Usually "APCu" cache)
   $value = cache()->get('key');
 
-  # Use 'remote.redis' cache, and get 'key' from it
-  $value = cache('remote.redis')->get('key');
+  # Use 'redis' cache, and get 'key' from it
+  $value = cache('redis')->get('key');
 */
 
 namespace Spin\Core;
@@ -61,7 +61,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    *
    * @param      string  $name   Name of the cache (from Config)
    *
-   * @return     null | PdoConnection
+   * @return     null | AbstractCacheAdapter
    */
   public function findCache(string $name='')
   {
@@ -83,7 +83,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    *
    * @param      AbstractCacheAdapterInterface  $cache  [description]
    *
-   * @return     Self
+   * @return     self
    */
   public function addCache(AbstractCacheAdapterInterface $cache)
   {
@@ -97,7 +97,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    *
    * @param      string  $name   The name of cache to remove
    *
-   * @return     Self
+   * @return     self
    */
   public function removeCache(string $name)
   {

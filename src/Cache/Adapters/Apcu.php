@@ -3,6 +3,8 @@
 /**
  * APCu Cache Driver
  *
+ * Implements Psr\SimpleCache\CacheInterface methods
+ *
  * @package  Spin
 */
 

@@ -8,9 +8,11 @@
 
 namespace Spin\Cache;
 
+use Psr\SimpleCache\CacheInterface;
 use Spin\Cache\AbstractCacheAdapterInterface;
 
-abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
+abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface, CacheInterface
+
 {
   /** @var  array       Driver Options from Config */
   protected $options = [];
