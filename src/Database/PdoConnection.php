@@ -80,11 +80,11 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     $pdoOptions = [];
 
     # Convert the PDO params into PDO constants
-    foreach ($pdoParams as $pdoOption => $pdoValue)
+    foreach ($pdoParams as $pdoOptionName => $pdoValue)
     {
       # Convert PDO-OPTION to a number
-      if (!\is_numeric($pdoOption)) {
-        $pdoOption = \constant('\PDO::'.\strtoupper($pdoOption)); // PDO Option name constant
+      if (!\is_numeric($pdoOptionName)) {
+        $pdoOption = \constant('\PDO::'.\strtoupper($pdoOptionName)); // PDO Option name constant
       }
 
       # Convert PDO-VALUE to a number
@@ -96,7 +96,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
       } else if (!empty($pdoValue)) {
 
-        if (\mb_substr($pdoOption,0,6)=='MYSQL_') {
+        if (\mb_substr($pdoOptionName,0,6)=='MYSQL_') {
           // MySQL values, do not prepend with `PDO::`
           // Just fallthrough with the value as is
           $pdoValue = $pdoValue;
