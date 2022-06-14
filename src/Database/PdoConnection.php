@@ -96,12 +96,12 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
       } else if (!empty($pdoValue)) {
 
-        if (\mb_substr($pdoOption,0,6)!='MYSQL_') {
-          $pdoValue = \constant('\PDO::'.\strtoupper($pdoValue)) ?? 0; // PDO value name constant
-
-        } else {
+        if (\mb_substr($pdoOption,0,6)=='MYSQL_') {
           // MySQL values, do not prepend with `PDO::`
           // Just fallthrough with the value as is
+          $pdoValue = $pdoValue;
+        } else {
+          $pdoValue = \constant('\PDO::'.\strtoupper($pdoValue)) ?? 0; // PDO value name constant
         }
 
       } else {
