@@ -619,7 +619,8 @@ if(!\function_exists('mime_content_type_ex')) {
       'html' => 'text/html',
       'php' => 'text/html',
       'css' => 'text/css',
-      'js' => 'application/javascript',
+      // 'js' => 'application/javascript',        // Specifications: HTML and RFC 9239
+      'js' => 'text/javascript',
       'json' => 'application/json',
       'xml' => 'application/xml',
       'swf' => 'application/x-shockwave-flash',
