@@ -162,10 +162,23 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
         try {
           # Create the PdoConnection
           $connection = new $className($connectionName, $params);
-
         } catch (\Exception $e) {
-          \logger()->critical( $e->getMessage(), ['trace'=>$e->getTraceAsString()] );
-          throw $e;
+          # replace host/password from trace
+          $beforeTraceLength  = \strlen($e->getTraceAsString());
+          $trace              = $e->getTraceAsString();
+          $trace              = \str_replace($params['password'], "", $trace);
+
+          # add trace
+          \logger()->critical( $e->getMessage(), ['trace'=>$trace] );
+
+          # throw new exception only if trace is modified
+          if($beforeTraceLength != \strlen($trace)) {
+            # new exception
+            throw new \Exception($e->getMessage(), $e->getCode());
+          } else {
+            # just re-throw exception
+            throw $e;
+          }
         }
       }
     }
