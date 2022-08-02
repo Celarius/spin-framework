@@ -1,11 +1,11 @@
 [![Latest Stable Version](https://poser.pugx.org/celarius/spin-framework/v/stable)](https://packagist.org/packages/celarius/spin-framework)
 [![Total Downloads](https://poser.pugx.org/celarius/spin-framework/downloads)](https://packagist.org/packages/celarius/spin-framework)
 [![License](https://poser.pugx.org/nofuzz/framework/license)](https://packagist.org/packages/celarius/spin-framework)
-[![PHP7 Ready](https://img.shields.io/badge/PHP7-ready-green.svg)](https://packagist.org/packages/celarius/spin-framework)
+[![PHP8 Ready](https://img.shields.io/badge/PHP8-ready-green.svg)](https://packagist.org/packages/celarius/spin-framework)
 
 # Spin - A super lightweight PHP UI/REST framework
 [![Latest Unstable Version](https://poser.pugx.org/celarius/spin-framework/v/unstable)](https://packagist.org/packages/celarius/spin-framework)
-[![Build Status](https://travis-ci.org/Celarius/spin-framework.svg?branch=master)](https://travis-ci.org/Celarius/spin-framework)
+[![Build Status](https://travis-ci.com/Celarius/spin-framework.svg?branch=master)](https://travis-ci.com/Celarius/spin-framework)
 
 Spin is a application framework for making Web UI's and REST API's quickly and effectively with PHP. It uses [PSR standards](http://www.php-fig.org/psr/)
 for most things, and allows for plugging in almost any PSR compatible component, such as loggers, HTTP libraries etc.
@@ -30,7 +30,7 @@ for most things, and allows for plugging in almost any PSR compatible component,
 <!-- /MarkdownTOC -->
 
 # 1. Features
-* PHP 7.1+
+* PHP 8+
 * Platform agnostic. (Windows, \*nix)
 * Routing engine, with route groups
 * Middleware
