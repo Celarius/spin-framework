@@ -55,7 +55,7 @@ class RequestIdClass
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @var  string                  Application/Framework version */
-  const VERSION = '0.0.21';
+  const VERSION = '0.0.22';
 
   /** @var  string                  Application Environment (from ENV vars) */
   protected $environment;
@@ -684,6 +684,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $old_error_handler = \set_error_handler( array($this,'errorHandler'), E_ALL );
     $old_exception_handler = \set_exception_handler( array($this,'exceptionHandler') );
 
+    \register_shutdown_function( array($this,'fatalErrorhandler') );
+
     $this->getLogger()->debug('Error handlers set');
 
     return true;
@@ -789,6 +791,40 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           );
 
     return null;
+  }
+
+  /**
+   * PHP Fatal Error Handler
+   *
+   * Handles any PHP Fatal Errors.
+   *
+   * This includes "maximum tmeout", "out of memory", "undefined variable" situations.
+   *
+   * @return     bool
+   */
+  public function fatalErrorhandler()
+  {
+    # Get last PHP error
+    $lastErrorArray = \error_get_last();
+
+    # If no error happened, just exit
+    if (!$lastErrorArray) {
+      return false;
+    }
+
+    # Log the Fatal Error
+    $this->getLogger()->critical('PHP Fatal error', $lastErrorArray);
+
+    # Run the Error Controller
+    $response = $this->runErrorController($lastErrorArray['message'] ?? 'Unknown',500);
+
+    # Set the error response
+    $this->setResponse($response);
+
+    # Set HTTP Response Code
+    \http_response_code(500);
+
+    return true;
   }
 
   /**

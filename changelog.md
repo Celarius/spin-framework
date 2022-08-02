@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.22
+- Added "PHP Fatal Error" catching, making framework return a 500 Error to the caller with the last error message
+
 ## 0.0.21
 - Variable definitions in classes with `/** @var` docblocks in most places
 
