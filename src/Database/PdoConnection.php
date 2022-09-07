@@ -127,9 +127,6 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     # Parent Constructor (PDO Class)
     parent::__construct($this->getDsn(),$this->getUsername(),$this->getPassword(),$this->getOptions());
 
-    # There are sometimes errors here, but no exception so we clear them
-    \error_clear_last();
-
     try {
       # Retreive the Client Library Version (if supported)
       $this->setClientVersion($this->getAttribute(\PDO::ATTR_CLIENT_VERSION));
@@ -143,6 +140,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     } catch (\Exception $e) {
       // error_log($e->getMessage().' | '.$e->getTraceAsString());
     }
+
+    # There are sometimes errors here, but no exception so we clear them
+    \error_clear_last();
 
     # Debug log
     \logger()->debug( 'Created Connection', ['connection'=>$this->getName()] );
