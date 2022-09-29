@@ -6,8 +6,8 @@
  * This factory produces PSR-7 compliant objects using
  * the Guzzle framework.
  *
- * @link     https://github.com/guzzle/guzzle
  * @package  Spin
+ * @link     https://github.com/guzzle/guzzle
  */
 
 namespace Spin\Factories\Http;
@@ -15,11 +15,12 @@ namespace Spin\Factories\Http;
 use \InvalidArgumentException;
 use \Spin\Factories\AbstractFactory;
 
+# PSR-7
+use \Psr\Http\Message\UriFactoryInterface;
+use \Psr\Http\Message\UriInterface;
+
 # Guzzle
 use \GuzzleHttp\Psr7\LazyOpenStream;
-
-# PSR-7
-use Psr\Http\Message\UriFactoryInterface;
 
 class UriFactory extends AbstractFactory implements UriFactoryInterface
 {

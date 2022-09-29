@@ -8,6 +8,8 @@
 
 namespace Spin\Core;
 
+use \Psr\Http\Message\RequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\ControllerInterface;
 
@@ -40,19 +42,19 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * @param      array  $args   Path variable arguments as name=value pairs
    *
-   * @return     bool   Value returned by $app->run()
+   * @return     Response       Value returned by $app->run()
    */
   public function handle(array $args)
   {
     switch ( \strtoupper(getRequest()->getMethod()) ) {
-      case "GET"    : return $this->handleGET($args); break;
-      case "POST"   : return $this->handlePOST($args); break;
-      case "PUT"    : return $this->handlePUT($args); break;
-      case "PATCH"  : return $this->handlePATCH($args); break;
-      case "DELETE" : return $this->handleDELETE($args); break;
-      case "HEAD"   : return $this->handleHEAD($args); break;
-      case "OPTIONS": return $this->handleOPTIONS($args); break;
-      default       : return $this->handleCUSTOM($args); break;
+      case "GET"    : return $this->handleGET($args);
+      case "POST"   : return $this->handlePOST($args);
+      case "PUT"    : return $this->handlePUT($args);
+      case "PATCH"  : return $this->handlePATCH($args);
+      case "DELETE" : return $this->handleDELETE($args);
+      case "HEAD"   : return $this->handleHEAD($args);
+      case "OPTIONS": return $this->handleOPTIONS($args);
+      default       : return $this->handleCUSTOM($args);
     }
   }
 
@@ -61,7 +63,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * @param      array  $args   Path variable arguments as name=value pairs
    *
-   * @return     bool   Value returned by $app->run()
+   * @return     Response   Value returned by $app->run()
    */
   public function handleGET(array $args)
   {
@@ -73,7 +75,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * @param      array  $args   Path variable arguments as name=value pairs
    *
-   * @return     bool   Value returned by $app->run()
+   * @return     Response   Value returned by $app->run()
    */
   public function handlePOST(array $args)
   {
@@ -85,7 +87,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * @param      array  $args   Path variable arguments as name=value pairs
    *
-   * @return     bool   Value returned by $app->run()
+   * @return     Response   Value returned by $app->run()
    */
   public function handlePUT(array $args)
   {
@@ -97,7 +99,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * @param      array  $args   Path variable arguments as name=value pairs
    *
-   * @return     bool   Value returned by $app->run()
+   * @return     Response   Value returned by $app->run()
    */
   public function handlePATCH(array $args)
   {
@@ -109,7 +111,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * @param      array  $args   Path variable arguments as name=value pairs
    *
-   * @return     bool   Value returned by $app->run()
+   * @return     Response   Value returned by $app->run()
    */
   public function handleDELETE(array $args)
   {
@@ -121,7 +123,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * @param      array  $args   Path variable arguments as name=value pairs
    *
-   * @return     bool   Value returned by $app->run()
+   * @return     Response   Value returned by $app->run()
    */
   public function handleHEAD(array $args)
   {
@@ -133,7 +135,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * @param      array  $args   Path variable arguments as name=value pairs
    *
-   * @return     bool   Value returned by $app->run()
+   * @return     Response   Value returned by $app->run()
    */
   public function handleOPTIONS(array $args)
   {
@@ -145,7 +147,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
    *
    * @param      array  $args   Path variable arguments as name=value pairs
    *
-   * @return     bool   Value returned by $app->run()
+   * @return     Response   Value returned by $app->run()
    */
   public function handleCUSTOM(array $args)
   {

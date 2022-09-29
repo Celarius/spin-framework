@@ -17,7 +17,9 @@ use \Spin\Core\ConnectionManager;
 use \Spin\Core\CacheManager;
 use \Spin\Core\UploadedFilesManager;
 use \Spin\Exceptions\SpinException;
-use \Psr\Http\Message\Response;
+use \Psr\Http\Message\RequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+
 
 /**
  * Class representing the 'requestId'
@@ -55,7 +57,7 @@ class RequestIdClass
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /** @var  string                  Application/Framework version */
-  const VERSION = '0.0.22';
+  const VERSION = '0.0.23';
 
   /** @var  string                  Application Environment (from ENV vars) */
   protected $environment;
@@ -138,6 +140,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /** @var  int                     Initial memory usage when SPIN starts */
   protected $initialMemUsage;
 
+  /** @var  array                   Application controlled global vars */
+  protected $globalVars;
 
   /**
    * Constructor
@@ -383,7 +387,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Matches & runs route handler matching the Server Request
    *
-   * @return     array  The matching route group
+   * @return     Response|null  The matching route group
    */
   protected function runRoute()
   {
@@ -539,7 +543,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
             if (!$afterHandler->handle($routeInfo['args'])) {
 
-              return false;
+              return null;
             }
 
           } else {
@@ -647,9 +651,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * @param      string  $params  The params found in the config file under the
    *                              factory
    *
-   * @throws     Exception
+   * @throws     \Exception
    *
-   * @return     object  | null
+   * @return     object|null
    */
   protected function loadFactory(?array $params=[])
   {
@@ -696,11 +700,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * Handles all errors from the code. This is set as the default error handler.
    *
-   * @param      [type]  $errNo       [description]
-   * @param      [type]  $errStr      [description]
-   * @param      [type]  $errFile     [description]
-   * @param      [type]  $errLine     [description]
-   * @param      array   $errContext  [description]
+   * @param      string $errNo        [description]
+   * @param      string $errStr       [description]
+   * @param      string $errFile      [description]
+   * @param      string $errLine      [description]
+   * @param      array  $errContext   [description]
    *
    * @return     bool
    */
@@ -722,14 +726,12 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       case E_STRICT:
         $this->getLogger()->critical("$errStr in file $errFile on line $errLine",$errContext);
         exit(1);
-        break;
 
       # Error
       case E_ERROR:
       case E_USER_ERROR:
         $this->getLogger()->error("$errStr in file $errFile on line $errLine",$errContext);
           exit(1);
-          break;
 
       # Warning
       case E_WARNING:
@@ -968,7 +970,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the HTTP Request (ServerRequest)
    *
-   * @return     object
+   * @return     null|Request
    */
   public function getRequest()
   {
@@ -978,7 +980,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the HTTP Response (ServerResponse)
    *
-   * @return     object
+   * @return     null|Response
    */
   public function getResponse()
   {
@@ -988,11 +990,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the HTTP Response (ServerResponse)
    *
-   * @param      \Psr\Http\Respone  $response
+   * @param      Response  $response
    *
    * @return     self
    */
-  public function setResponse($response)
+  public function setResponse(Response $response)
   {
     $this->response = $response;
 
@@ -1012,7 +1014,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the PSR-3 Logger object
    *
-   * @return     object
+   * @return     Logger
    */
   public function getLogger()
   {
@@ -1032,7 +1034,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the DB Manager
    *
-   * @return     object
+   * @return     ConnectionManager
    */
   public function getConnectionManager(): ?ConnectionManager
   {
@@ -1080,7 +1082,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @param      string  $groupName  [description]
    *
-   * @return     null    | RouteGroup
+   * @return     null|RouteGroup
    */
   public function getRouteGroup(string $groupName)
   {
@@ -1156,7 +1158,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Send Response back to client
    *
-   * @return bool
+   * @return self
    */
   public function sendResponse()
   {
@@ -1193,15 +1195,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       \setCookie( $cookie['name'],
                   $cookie['value'],
                   $cookieOptions );
-
-      // \setCookie( $cookie['name'],
-      //             $cookie['value'],
-      //             $cookie['expire'] ?? 0,
-      //             $cookie['path'] ?? '',
-      //             $cookie['domain'] ?? '',
-      //             $cookie['secure'] ?? false,
-      //             $cookie['httponly'] ?? false
-      //           );
     }
 
     ##
@@ -1252,7 +1245,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       ]);
 
       # Send the Body
-      echo (string)$this->response->getBody();
+      echo (string) $this->response->getBody();
     }
 
     return $this;
@@ -1297,6 +1290,16 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
+   * Get one global var
+   *
+   * @return  null|mixed
+   */
+  public function getGlobalVar(string $id)
+  {
+    return $this->globalVars[$id] ?? null;
+  }
+
+    /**
    * Set one global var
    *
    * @return  self

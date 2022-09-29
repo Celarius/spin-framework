@@ -116,7 +116,7 @@ class ArrayToXml
                         $xml->endElement();
                     } else {
                         $itemValue = $this->writeAttr($xml, $itemValue);
-                        $xml->writeElement($key, "$itemValue");
+                        $xml->writeElement($key, (string) $itemValue);
                     }
                 }
             } else if (\is_array($value)) { //associative array
@@ -126,7 +126,7 @@ class ArrayToXml
                 $xml->endElement();
             } else { //scalar
                 $value = $this->writeAttr($xml, $value);
-                $xml->writeElement($key, "$value");
+                $xml->writeElement($key, (string) $value);
             }
         }
     }

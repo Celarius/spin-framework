@@ -6,8 +6,8 @@
  * This factory produces PSR-7 compliant objects using
  * the Guzzle framework.
  *
- * @link     https://github.com/guzzle/guzzle
  * @package  Spin
+ * @link     https://github.com/guzzle/guzzle
  */
 
 namespace Spin\Factories\Http;
@@ -15,24 +15,18 @@ namespace Spin\Factories\Http;
 use \InvalidArgumentException;
 use \Spin\Factories\AbstractFactory;
 
-# Guzzle
-use \GuzzleHttp\Psr7\Request;
-use \GuzzleHttp\Psr7\LazyOpenStream;
-
 # PSR-7
 use \Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\UriInterface;
 
 # PSR-17
-use Psr\Http\Message\RequestFactoryInterface;
+use \Psr\Http\Message\RequestFactoryInterface;
+
+# Guzzle
+use \GuzzleHttp\Psr7\Request;
 
 class RequestFactory extends AbstractFactory implements RequestFactoryInterface
 {
-  // public function createRequest($method, $uri, $headers=[], $body=null)
-  // {
-  //   $request = new Request($method, $uri, $headers, $body);
-  //   logger()->debug('Created PSR-7 Request("'.$method.'","'.$uri.'"") (Guzzle)');
-  //   return $request;
-  // }
   /**
    * Create a new request.
    *

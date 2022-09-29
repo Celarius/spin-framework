@@ -89,7 +89,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
       # Convert PDO-VALUE to a number
       if (\is_numeric($pdoValue)) {
-        $pdoValue = $pdoValue; // Its a number
+        $pdoValue = (float) $pdoValue; // Its a number
 
       } else if (\is_bool($pdoValue)) {
         $pdoValue = (int) $pdoValue; // Its a BOOLEAN, convert to int
@@ -99,7 +99,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
         if (\mb_substr($pdoOptionName,0,6)=='MYSQL_') {
           // MySQL values, do not prepend with `PDO::`
           // Just fallthrough with the value as is
-          $pdoValue = $pdoValue;
+          $pdoValue = (string) $pdoValue;
         } else {
           $pdoValue = \constant('\PDO::'.\strtoupper($pdoValue)) ?? 0; // PDO value name constant
         }

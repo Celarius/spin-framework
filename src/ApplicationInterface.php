@@ -8,6 +8,9 @@
 
 namespace Spin;
 
+use \Psr\Http\Message\RequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+
 interface ApplicationInterface
 {
 
@@ -125,25 +128,25 @@ interface ApplicationInterface
   /**
    * Get the HTTP Request (ServerRequest)
    *
-   * @return     object
+   * @return     null|Request
    */
   function getRequest();
 
   /**
    * Get the HTTP Response (ServerResponse)
    *
-   * @return     object
+   * @return     null|Response
    */
   function getResponse();
 
   /**
    * Get the HTTP Response (ServerResponse)
    *
-   * @param      \Psr\Http\Respone  $response
+   * @param      Response  $response
    *
    * @return     self
    */
-  function setResponse($response);
+  function setResponse(Response $response);
 
   /**
    * Get the Config object

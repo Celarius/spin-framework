@@ -8,26 +8,26 @@
 
 namespace Spin\Core;
 
-class RouteInterface
+interface RouteInterface
 {
   /**
    * Return Method
    *
    * @return     string
    */
-  function getMethod();
+  public function getMethod();
 
   /**
    * Return Path
    *
    * @return     string
    */
-  function getPath();
+  public function getPath();
 
   /**
    * Return Handler
    *
    * @return     string
    */
-  function getHandler();
+  public function getHandler();
 }

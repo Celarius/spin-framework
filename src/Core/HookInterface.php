@@ -17,7 +17,7 @@ interface HookInterface
    *
    * @return     void
    */
-  abstract public function run(array $args=null);
+  public function run(array $args=null);
 
   /**
    * Get hook name

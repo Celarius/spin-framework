@@ -6,8 +6,8 @@
  * This factory produces PSR-7 compliant objects using
  * the Guzzle framework.
  *
- * @link     https://github.com/guzzle/guzzle
  * @package  Spin
+ * @link     https://github.com/guzzle/guzzle
  */
 
 namespace Spin\Factories\Http;
@@ -41,7 +41,7 @@ class UploadedFileFactory extends AbstractFactory implements UploadedFileFactory
    * @param      string                 $clientFilename
    * @param      string                 $clientMediaType
    *
-   * @return     UploadedFileInterface
+   * @return     null|UploadedFileInterface
    *
    * @throws     \InvalidArgumentException  If the file resource is not readable.
    */

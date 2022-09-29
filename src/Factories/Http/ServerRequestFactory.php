@@ -6,8 +6,8 @@
  * This factory produces PSR-7 compliant objects using
  * the Guzzle framework.
  *
- * @link     https://github.com/guzzle/guzzle
  * @package  Spin
+ * @link     https://github.com/guzzle/guzzle
  */
 
 namespace Spin\Factories\Http;
@@ -15,17 +15,19 @@ namespace Spin\Factories\Http;
 use \InvalidArgumentException;
 use \Spin\Factories\AbstractFactory;
 
-# Guzzle
-use \GuzzleHttp\Psr7\Request;
-use \GuzzleHttp\Psr7\ServerRequest;
-use \GuzzleHttp\Psr7\LazyOpenStream;
 
 # PSR-7
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ServerRequestInterface;
+use \Psr\Http\Message\UriInterface;
 
 # PSR-17
 use \Psr\Http\Message\ServerRequestFactoryInterface;
+
+# Guzzle
+use \GuzzleHttp\Psr7\Request;
+use \GuzzleHttp\Psr7\ServerRequest;
+use \GuzzleHttp\Psr7\LazyOpenStream;
 
 
 class ServerRequestFactory extends AbstractFactory implements ServerRequestFactoryInterface
@@ -46,7 +48,7 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
 
     $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
     $headers = \function_exists('getallheaders') ? \getallheaders() : [];
-    $uri = $uri;
+    $uri = (string) $uri;
     $body = new LazyOpenStream('php://input', 'r+');
     $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? \str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';
 

@@ -37,9 +37,9 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
    *
    * @param      string  $name   Hook Name
    *
-   * @return     mixed
+   * @return     null|Hook
    */
-  public function getHook(string $name): Hook
+  public function getHook(string $name): ?Hook
   {
     # Find hook in list
     foreach ($this->hooks as $hook)
@@ -66,11 +66,11 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
 
     # If it exists, return with null
     if (!\is_null($exists)) {
-      return false;
+      return $this;
     }
 
     # Add it to the list
-    $this->hooks[$hook];
+    $this->hooks[$hook->getName()];
 
     return $this;
   }
@@ -82,7 +82,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
    *
    * @return     self
    */
-  public function removeHook(string $name): bool
+  public function removeHook(string $name)
   {
     foreach ($this->hooks as $idx => $hook)
     {
@@ -90,7 +90,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
         # Remove it
         unset( $this->hooks[$idx] );
 
-        return true;
+        return $this;
       }
     }
 

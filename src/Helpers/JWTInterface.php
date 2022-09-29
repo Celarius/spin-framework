@@ -23,11 +23,9 @@ interface JWTInterface
    *                                          'RS256'
    *
    * @return     object  The JWT's payload as a PHP object
-   * @throws     UnexpectedValueException   Provided JWT was invalid
-   * @throws     SignatureInvalidException  Provided JWT was invalid because the signature verification failed
-   * @throws     BeforeValidException       Provided JWT is trying to be used before it's eligible as defined by 'nbf'
-   * @throws     BeforeValidException       Provided JWT is trying to be used before it's been created as defined by 'iat'
-   * @throws     ExpiredException           Provided JWT has since expired, as defined by the 'exp' claim
+   * 
+   * @throws     \Exception                   Provided JWT was invalid
+   * 
    * @uses       jsonDecode
    * @uses       urlsafeB64Decode
    */

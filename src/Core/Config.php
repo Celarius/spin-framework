@@ -213,15 +213,15 @@ class Config extends AbstractBaseClass implements ConfigInterface
   /**
    * Recursively change the key names of array and subarrays to $case
    *
-   * @param      array  $input  The array to change
-   * @param      const  $case   Case to use CASE_LOWER or CASE_UPPER
+   * @param      array $input         The array to change
+   * @param      int  $case           Case to use CASE_LOWER or CASE_UPPER
    *
-   * @return     array  The resulting array
+   * @return     array                The resulting array
    */
-  protected function array_change_key_case_recursive(array $input, $case = CASE_LOWER): array
+  protected function array_change_key_case_recursive(array $input, int $case = \CASE_LOWER): array
   {
     # Check the CASE param
-    if (!in_array($case, array(CASE_UPPER, CASE_LOWER)))
+    if (!in_array($case, [\CASE_UPPER, \CASE_LOWER]))
     {
       return [];
     }

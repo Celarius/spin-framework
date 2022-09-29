@@ -150,22 +150,18 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
           'handler'=>$routeInfo[1],
           'args'=>$routeInfo[2]
         ];
-        break;
 
       # Nothing found
       case \FastRoute\Dispatcher::NOT_FOUND:
         return [];
-        break;
 
       # This should never happen to us ...
       case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         return [];
-        break;
 
       # Default we return empty
       default:
         return [];
-        break;
     }
   }
 
@@ -216,7 +212,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
    */
   public function getRoutes(): array
   {
-    return $this->middleware;
+    return $this->routes;
   }
 
 }

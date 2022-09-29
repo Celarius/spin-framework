@@ -6,8 +6,8 @@
  * This factory produces PSR-7 compliant objects using
  * the Guzzle framework.
  *
- * @link     https://github.com/guzzle/guzzle
  * @package  Spin
+ * @link     https://github.com/guzzle/guzzle
  */
 
 namespace Spin\Factories\Http;
@@ -23,7 +23,7 @@ use \GuzzleHttp\Psr7\LazyOpenStream;
 use \Psr\Http\Message\ResponseInterface;
 
 # PSR-17
-use Psr\Http\Message\ResponseFactoryInterface;
+use \Psr\Http\Message\ResponseFactoryInterface;
 
 class ResponseFactory extends AbstractFactory implements ResponseFactoryInterface
 {

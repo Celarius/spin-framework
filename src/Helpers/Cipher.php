@@ -49,7 +49,7 @@ class Cipher implements CipherInterface
     if ( !$result===false ) {
       return \base64_encode($iv.$result);
     } else {
-      return null;
+      return '';
     }
 
   }
@@ -61,7 +61,7 @@ class Cipher implements CipherInterface
    * @param      string  $secret     [description]
    * @param      string  $algorithm  [description]
    *
-   * @return     [type]  [description]
+   * @return     bool|string
    */
   public static function decrypt(string $data, string $secret='', string $algorithm='AES-256-CBC')
   {

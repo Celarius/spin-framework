@@ -6,8 +6,8 @@
  * This factory produces PSR-7 compliant objects using
  * the Guzzle framework.
  *
- * @link     https://github.com/guzzle/guzzle
  * @package  Spin
+ * @link     https://github.com/guzzle/guzzle
  */
 
 namespace Spin\Factories\Http;
@@ -24,7 +24,7 @@ use \Psr\Http\Message\StreamInterface;
 use \Psr\Http\Message\UtilsInterface;
 
 # PSR-17
-use Psr\Http\Message\StreamFactoryInterface;
+use \Psr\Http\Message\StreamFactoryInterface;
 
 class StreamFactory extends AbstractFactory implements StreamFactoryInterface
 {

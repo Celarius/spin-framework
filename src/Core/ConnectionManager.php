@@ -35,7 +35,7 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
    * @param      string  $name    Name of the connection
    * @param      array   $params  The connection parameters
    *
-   * @return     null    | PdoConnection
+   * @return     null|PdoConnection
    */
   public function getConnection(string $name=null, array $params=[])
   {
@@ -62,7 +62,7 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
    *
    * @param      string  $name   Name of the connection (from Config)
    *
-   * @return     null    | PdoConnection
+   * @return     null|PdoConnection
    */
   public function findConnection(string $name=null)
   {
@@ -131,7 +131,7 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
    * @param      string  $connectionName  A name for the connection
    * @param      array   $params          The connection parameters
    *
-   * @return     null  | PdoConnection
+   * @return     null|PdoConnection
    */
   protected function createConnection(string $connectionName, array $params=[])
   {

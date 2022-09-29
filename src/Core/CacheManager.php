@@ -34,7 +34,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    *
    * @param      string  $name   Name of the Cache (from Config)
    *
-   * @return     null | object
+   * @return     null|object
    */
   public function getCache(string $name='')
   {
@@ -61,7 +61,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    *
    * @param      string  $name   Name of the cache (from Config)
    *
-   * @return     null | AbstractCacheAdapter
+   * @return     null|AbstractCacheAdapter
    */
   public function findCache(string $name='')
   {
@@ -102,7 +102,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
   public function removeCache(string $name)
   {
     # Sanity check
-    if (empty($name)) return false;
+    if (empty($name)) return $this;
 
     $cache = $this->findCache($name);
 
@@ -123,7 +123,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    * list.
    *
    * @param      string  $name   [description]
-   * @return     null | AbstractCacheAdapter
+   * @return     null|AbstractCacheAdapter
    */
   protected function createCache(string $name)
   {

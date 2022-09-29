@@ -12,7 +12,7 @@ interface ConnectionManagerInterface
    *
    * @param      string  $name   Name of the connection (from Config)
    * 
-   * @return     null  | object
+   * @return     null|PdoConnection
    */
   function findConnection(string $name);
 
@@ -21,7 +21,7 @@ interface ConnectionManagerInterface
    *
    * @param      string  $name   Name of the connection (from Config)
    *
-   * @return     null  | object
+   * @return     null|PdoConnection
    */
   function getConnection(string $name=null);
 
@@ -30,7 +30,7 @@ interface ConnectionManagerInterface
    *
    * @param      [type]  $connection  [description]
    *
-   * @return     connection
+   * @return     PdoConnection
    */
   function addConnection(PdoConnectionInterface $connection);
 

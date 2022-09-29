@@ -33,6 +33,9 @@
   function mime_content_type($filename)
  */
 
+use \Psr\Http\Message\RequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+
 use Spin\Database\PdoConnection;
 use Spin\helpers\ArrayToXml;
 use \Spin\Core\Logger;
@@ -417,7 +420,7 @@ if (!\function_exists('response')) {
    * @param      integer   $code     Optional HTTP response code
    * @param      array     $headers  Optional extra HTTP headers
    *
-   * @return     \Psr\Http\ResponseInterface
+   * @return     Response
    */
   function response(string $body='', int $code=200, array $headers=[])
   {
@@ -466,7 +469,7 @@ if (!\function_exists('responseJson')) {
    * @param      integer   $options  Optional JSON formatting options (\JSON_PRETTY_PRINT etc.)
    * @param      array     $headers  Optional extra HTTP headers
    *
-   * @return     \Psr\Http\ResponseInterface
+   * @return     Response
    */
   function responseJson(array $data=[], int $code=200, int $options=0, array $headers=[])
   {
@@ -488,7 +491,7 @@ if (!\function_exists('responseXml')) {
    * @param      integer   $code     Optional HTTP response code
    * @param      array     $headers  Optional extra HTTP headers
    *
-   * @return     \Psr\Http\ResponseInterface
+   * @return     Response
    */
   function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
   {
@@ -510,7 +513,7 @@ if (!\function_exists('responseHtml')) {
    * @param      integer   $code     Optional HTTP response code
    * @param      array     $headers  Optional extra HTTP headers
    *
-   * @return     \Psr\Http\ResponseInterface
+   * @return     Response
    */
   function responseHtml(string $body='', int $code=200, array $headers=[])
   {
@@ -531,7 +534,7 @@ if (!\function_exists('responseFile')) {
    * @param      array    $headers   The headers
    * @param      bool     $remove    True to remove the file after sending
    *
-   * @return     \Psr\Http\ResponseInterface
+   * @return     Response
    */
   function responseFile(string $filename, int $code=200, array $headers=[], bool $remove=false)
   {
@@ -607,11 +610,11 @@ if(!\function_exists('mime_content_type_ex')) {
   /**
    * { function_description }
    *
-   * @param      <type>        $filename  The filename
+   * @param      string $filename     The filename
    *
-   * @return     array|string  The mime type(s) of the file
+   * @return     array|string         The mime type(s) of the file
    */
-  function mime_content_type_ex($filename)
+  function mime_content_type_ex(string $filename)
   {
     $mime_types = [
       'txt' => 'text/plain',
