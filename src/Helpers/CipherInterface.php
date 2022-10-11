@@ -38,26 +38,27 @@ interface CipherInterface
   *
   * @param  mixed  	            $data 
   * @param  string	            $secret 
+  * @param int		              $ttl      time to live default 30 seconds
   * @param  string	            $cipher   read more: https://www.php.net/manual/en/function.openssl-get-cipher-methods.php
   * @param  string	            $hashAlgo read more: https://www.php.net/manual/en/function.hash-hmac-algos.php
   * @return string|Exception	  `cipher[hashAlgo]:base64(iv).base64(encrypted $data).base64(hash)`
   */ 
 
-  public static function encryptEx(mixed $data, string $secret, string $cipher='aes-256-ctr', string $hashAlgo='sha3-512');
+  public static function encryptEx(mixed $data, string $secret, int $ttl = 30, string $cipher='aes-256-ctr', string $hashAlgo='sha3-512');
 
   
- /**
-  * Extended Decryption method
-  * 
-  * Decrypts data with $secret, implements dynamic time to live
-  * 
-  * @param string	          $input    format: `cipher[hashAlgo]:base64(iv).base64(encrypted).base64(hash)`
-  * @param string	          $secret   salt
-  * @param int		          $ttl      time to live default 30 seconds
-  * @return mixed|Exception	          decrypted data or FALSE on failure
-  */
+/**
+ * Extended Decryption method
+ * 
+ * Decrypts data with $secret, return original input if not encrypted
+ * 
+ * @param   string	          $input    format: `cipher[hashAlgo]:base64(iv).base64(encrypted).base64(hash)`
+ * @param   string	          $secret   salt
+ * @return  mixed|Exception	            decrypted data or FALSE on failure
+ */
 
-  public static function decryptEx(string $input, string $secret, int $ttl = 30);
+  public static function decryptEx(string $input, string $secret);
+
 
   /**
    * Return array of Cipher methods available
