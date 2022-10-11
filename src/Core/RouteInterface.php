@@ -11,23 +11,32 @@ namespace Spin\Core;
 interface RouteInterface
 {
   /**
-   * Return Method
+   * Constructor
    *
-   * @return     string
+   * @param   string $method          The method
+   * @param   string $path            The path
+   * @param   string $handler         The handler
    */
-  public function getMethod();
+  function __construct(string $method, string $path, string $handler);
 
   /**
-   * Return Path
+   * Gets the handler method name
    *
-   * @return     string
+   * @return  string  The method.
    */
-  public function getPath();
+  function getMethod();
 
   /**
-   * Return Handler
+   * Gets the handler path
    *
-   * @return     string
+   * @return  string
    */
-  public function getHandler();
+  function getPath();
+
+  /**
+   * Gets the handler name (classname)
+   *
+   * @return  string
+   */
+  function getHandler();
 }

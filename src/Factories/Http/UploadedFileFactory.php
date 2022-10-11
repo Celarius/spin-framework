@@ -41,7 +41,7 @@ class UploadedFileFactory extends AbstractFactory implements UploadedFileFactory
    * @param      string                 $clientFilename
    * @param      string                 $clientMediaType
    *
-   * @return     null|UploadedFileInterface
+   * @return     null|UploadedFileFactoryInterface
    *
    * @throws     \InvalidArgumentException  If the file resource is not readable.
    */

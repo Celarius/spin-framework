@@ -12,9 +12,10 @@ use \Spin\Helpers\EWT;
 
 class HelpersTest extends TestCase
 {
-  /** @var        string          Application object */
+  /** @var  string                    Application object */
   protected $app;
 
+  /** @var  string                    String used for encryption */
   protected $secret;
 
   /**
@@ -73,7 +74,7 @@ class HelpersTest extends TestCase
   {
     $a = UUID::v4();
 
-    $this->assertTrue( strlen($a)>0 );
+    $this->assertTrue( \mb_strlen($a)>0 );
   }
 
   /**
