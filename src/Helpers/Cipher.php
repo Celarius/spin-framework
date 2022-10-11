@@ -109,14 +109,18 @@ class Cipher implements CipherInterface
     }
     
     # check if we have a secret
-    if(empty($secret)) {
+    if(\mb_strlen($secret ?? '') == 0) {
       throw new \Exception('Secret is empty');
     }
-    
+
     # data has to exist
-    if(empty($data)) {
-      throw new \Exception('No data provided');
+    if(\mb_strlen($data ?? '') == 0) {
+      throw new \Exception('Data is empty');
     }
+
+    # lowercase cipher & hashAlgo
+    $cipher   = \mb_strtolower($cipher);
+    $hashAlgo = \mb_strtolower($hashAlgo);
 
     # get cipher iv length
     $iv_length = \openssl_cipher_iv_length($cipher);
@@ -148,6 +152,16 @@ class Cipher implements CipherInterface
 
   public static function decryptEx(string $input, string $secret)
   {
+    # check if we have a secret
+    if(\mb_strlen($secret ?? '') == 0) {
+      throw new \Exception('Secret is empty');
+    }
+
+    # input has to exist
+    if(\mb_strlen($input ?? '') == 0) {
+      throw new \Exception('Input is empty');
+    }
+
     # regex pattern
     $pattern = '/([[:graph:]]+)\[([[:graph:]]+)\]/';
 
@@ -161,8 +175,8 @@ class Cipher implements CipherInterface
 
     # get the whole match cipher and hashAlgo
     $match      = $matches[0];
-    $cipher     = $matches[1];
-    $hashAlgo   = $matches[2];
+    $cipher     = \mb_strtolower($matches[1]);
+    $hashAlgo   = \mb_strtolower($matches[2]);
 
     # check if cipher is supported
     if (!\in_array($cipher, \openssl_get_cipher_methods())) {
@@ -173,10 +187,10 @@ class Cipher implements CipherInterface
     if (!\in_array($hashAlgo, \hash_hmac_algos())) {
       throw new \Exception('Hash algorithm not supported');
     }
-
+    
     # remove the match from the input
-    $length             = \strlen($match);
-    $encodedString      = \substr($input, $length);
+    $length             = \mb_strlen($match);
+    $encodedString      = \mb_substr($input, $length);
     $mix                = \explode('.', $encodedString);
 
     # create a list of the encoded values
@@ -188,7 +202,6 @@ class Cipher implements CipherInterface
     $hash   = \base64_decode($hash);
 
     try {
-
       # try to run decryption
       $payload = \openssl_decrypt($string, $cipher, $secret, 0, $iv);
 
@@ -196,11 +209,7 @@ class Cipher implements CipherInterface
       $hashedData = \hash_hmac($hashAlgo, $payload, $secret, TRUE);
 
       # if the newly created hash matches old hash, data is valid
-      if (\hash_equals($hash, $hashedData)) {
-        # decode payload
-        $data = \json_decode($payload, true);
-
-      } else {
+      if (!\hash_equals($hash, $hashedData)) {
         # throw error on invalid token
         throw new \Exception('Invalid hash');
       }
@@ -209,7 +218,7 @@ class Cipher implements CipherInterface
       throw $e;
     }
 
-    return $data;
+    return $payload;
   }
 
   /**
