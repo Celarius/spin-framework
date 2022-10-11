@@ -42,6 +42,18 @@ class HelpersTest extends TestCase
     $this->assertEquals($plain, $a);
   }
 
+ /**
+  * Test OpenSSL Encryption / Decryption
+  */
+  public function testExtendedCipher()
+  {
+    $plain = 'Let this be the light';
+    $encrypted = Cipher::encryptEx( $plain, $this->secret );
+    $a = Cipher::decryptEx( $encrypted, $this->secret );
+
+    $this->assertEquals($plain, $a);
+  }
+  
   /**
    * Test OpenSSL Message Digest (SHA256)
    */
