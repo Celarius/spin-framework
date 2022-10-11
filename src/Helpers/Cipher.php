@@ -98,6 +98,10 @@ class Cipher implements CipherInterface
 
   public static function encryptEx(string $data, string $secret, string $cipher='aes-256-ctr', string $hashAlgo='sha3-512')
   {
+    # lowercase cipher & hashAlgo
+    $cipher   = \mb_strtolower($cipher);
+    $hashAlgo = \mb_strtolower($hashAlgo);
+
     # check if cipher is supported
     if(!\in_array($cipher, \openssl_get_cipher_methods())) {
       throw new \Exception('Cipher method not supported');
@@ -117,10 +121,6 @@ class Cipher implements CipherInterface
     if(\mb_strlen($data ?? '') == 0) {
       throw new \Exception('Data is empty');
     }
-
-    # lowercase cipher & hashAlgo
-    $cipher   = \mb_strtolower($cipher);
-    $hashAlgo = \mb_strtolower($hashAlgo);
 
     # get cipher iv length
     $iv_length = \openssl_cipher_iv_length($cipher);
@@ -187,7 +187,7 @@ class Cipher implements CipherInterface
     if (!\in_array($hashAlgo, \hash_hmac_algos())) {
       throw new \Exception('Hash algorithm not supported');
     }
-    
+
     # remove the match from the input
     $length             = \mb_strlen($match);
     $encodedString      = \mb_substr($input, $length);
