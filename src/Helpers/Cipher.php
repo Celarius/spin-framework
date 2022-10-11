@@ -89,15 +89,14 @@ class Cipher implements CipherInterface
   /**
   * Extended encryption with $data & $secret
   *
-  * @param  mixed  	            $data 
+  * @param  string  	          $data 
   * @param  string	            $secret 
-  * @param int		              $ttl      time to live in seconds, default 30 seconds
   * @param  string	            $cipher   read more: https://www.php.net/manual/en/function.openssl-get-cipher-methods.php
   * @param  string	            $hashAlgo read more: https://www.php.net/manual/en/function.hash-hmac-algos.php
   * @return string|Exception	  `cipher[hashAlgo]:base64(iv).base64(encrypted $data).base64(hash)`
   */ 
 
-  public static function encryptEx(mixed $data, string $secret, int $ttl = 30, string $cipher='aes-256-ctr', string $hashAlgo='sha3-512')
+  public static function encryptEx(string $data, string $secret, string $cipher='aes-256-ctr', string $hashAlgo='sha3-512')
   {
     # check if cipher is supported
     if(!\in_array($cipher, \openssl_get_cipher_methods())) {
@@ -119,9 +118,6 @@ class Cipher implements CipherInterface
       throw new \Exception('No data provided');
     }
 
-    # create a base data model with timestamp
-    $input = \json_encode(["data" => $data, "expires_dt" => (new \DateTime('now'))->getTimestamp() + $ttl]);
-    
     # get cipher iv length
     $iv_length = \openssl_cipher_iv_length($cipher);
 
@@ -129,10 +125,10 @@ class Cipher implements CipherInterface
     $iv = \openssl_random_pseudo_bytes($iv_length);
     
     # create encryption
-    $encrypted = \openssl_encrypt($input,$cipher,$secret, 0 ,$iv);
+    $encrypted = \openssl_encrypt($data, $cipher, $secret, 0, $iv);
 
     # create a hash from the data
-    $hash = \hash_hmac($hashAlgo, $input, $secret, TRUE);
+    $hash = \hash_hmac($hashAlgo, $data, $secret, TRUE);
               
     # data in format ciper[hashAlgo]:base64(iv).base64(encrypted).base64(hash)
     $output = $cipher . "[".$hashAlgo."]:" . \base64_encode($iv) . '.' . \base64_encode($encrypted) . '.' . \base64_encode($hash);
@@ -160,7 +156,7 @@ class Cipher implements CipherInterface
 
     # if $input has no matches, return original string
     if (count($matches) < 3) {
-      return $input;
+      throw new \Exception('Encryption pattern not found');
     }
 
     # get the whole match cipher and hashAlgo
@@ -191,9 +187,9 @@ class Cipher implements CipherInterface
     $string = \base64_decode($string);
     $hash   = \base64_decode($hash);
 
-    # try to run decryption
     try {
 
+      # try to run decryption
       $payload = \openssl_decrypt($string, $cipher, $secret, 0, $iv);
 
       # create a new hash
@@ -202,19 +198,7 @@ class Cipher implements CipherInterface
       # if the newly created hash matches old hash, data is valid
       if (\hash_equals($hash, $hashedData)) {
         # decode payload
-        $json = \json_decode($payload, true);
-
-        # get expires date
-        $expires_dt = $json['expires_dt'];
-
-        # check if timestamp is older than a ttl
-        if ($expires_dt < (new \DateTime('now'))->getTimestamp()) {
-          # throw error on invalid token
-          throw new \Exception('Encryption has expired');
-        }
-
-        # payload data
-        $data = $json["data"];
+        $data = \json_decode($payload, true);
 
       } else {
         # throw error on invalid token

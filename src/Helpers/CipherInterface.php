@@ -36,15 +36,14 @@ interface CipherInterface
  /**
   * Extended encryption with $data & $secret
   *
-  * @param  mixed  	            $data 
+  * @param  string  	          $data 
   * @param  string	            $secret 
-  * @param int		              $ttl      time to live default 30 seconds
   * @param  string	            $cipher   read more: https://www.php.net/manual/en/function.openssl-get-cipher-methods.php
   * @param  string	            $hashAlgo read more: https://www.php.net/manual/en/function.hash-hmac-algos.php
   * @return string|Exception	  `cipher[hashAlgo]:base64(iv).base64(encrypted $data).base64(hash)`
   */ 
 
-  public static function encryptEx(mixed $data, string $secret, int $ttl = 30, string $cipher='aes-256-ctr', string $hashAlgo='sha3-512');
+  public static function encryptEx(string $data, string $secret, string $cipher='aes-256-ctr', string $hashAlgo='sha3-512');
 
   
 /**
@@ -52,12 +51,12 @@ interface CipherInterface
  * 
  * Decrypts data with $secret, return original input if not encrypted
  * 
- * @param   string	          $input    format: `cipher[hashAlgo]:base64(iv).base64(encrypted).base64(hash)`
+ * @param   string	          $data     format: `cipher[hashAlgo]:base64(iv).base64(encrypted).base64(hash)`
  * @param   string	          $secret   salt
  * @return  mixed|Exception	            decrypted data or FALSE on failure
  */
 
-  public static function decryptEx(string $input, string $secret);
+  public static function decryptEx(string $data, string $secret);
 
 
   /**
