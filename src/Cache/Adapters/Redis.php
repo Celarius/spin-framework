@@ -14,11 +14,12 @@
 // Redis connection details
 
 $redis = new Redis([
-    'host' => '127.0.0.1',
-    'port' => 6379,
-    'connectTimeout' => 2.5,
-    'auth' => ['phpredis', 'phpredis'],
-    'ssl' => ['verify_peer' => false],
+    'scheme'          => 'tcp',
+    'host'            => '127.0.0.1',
+    'port'            => 6379,
+    'connectTimeout'  => 2.5,
+    'auth'            => ['phpredis', 'phpredis'],
+    'ssl'             => ['verify_peer' => false],
 ]);
 */
 
@@ -34,13 +35,13 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
   protected $redisClient;
 
 
-  public function __construct(array $options=[])
+  public function __construct(array $connectionDetails=[], array $redisOptions=[])
   {
-    # Set $driver and $options
-    parent::__construct('Redis', $options);
+    # Set $driver and $connectionDetails
+    parent::__construct('Redis', $connectionDetails);
 
     # Create the client
-    $this->redisClient = new RedisClient($options);
+    $this->redisClient = new RedisClient($connectionDetails, $redisOptions);
 
     # Set the version
     $this->setVersion( $this->redisClient::VERSION );
