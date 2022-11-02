@@ -16,6 +16,8 @@ interface RouteInterface
    * @param   string $method          The method
    * @param   string $path            The path
    * @param   string $handler         The handler
+   * 
+   * @return  void
    */
   function __construct(string $method, string $path, string $handler);
 
@@ -24,19 +26,19 @@ interface RouteInterface
    *
    * @return  string  The method.
    */
-  function getMethod();
+  function getMethod(): string;
 
   /**
    * Gets the handler path
    *
    * @return  string
    */
-  function getPath();
+  function getPath(): string;
 
   /**
    * Gets the handler name (classname)
    *
    * @return  string
    */
-  function getHandler();
+  function getHandler(): string;
 }
