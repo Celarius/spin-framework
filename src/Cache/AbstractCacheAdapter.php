@@ -12,7 +12,6 @@ use Psr\SimpleCache\CacheInterface;
 use Spin\Cache\AbstractCacheAdapterInterface;
 
 abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
-
 {
   /** @var  array       Driver Options from Config */
   protected $options = [];
