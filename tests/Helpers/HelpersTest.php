@@ -113,4 +113,52 @@ class HelpersTest extends TestCase
     $this->assertEquals($payload,'abc123');
   }
 
+  /**
+   * testUuidVersion3
+   */
+  public function testUuidVersion3()
+  {
+    # version-3
+    $a = UUID::is_uuid_valid("0e3b156d-a0fe-35a5-a54f-ede569c67c46");
+
+    # assertion
+    $this->assertTrue($a);
+  }
+
+  /**
+   * testUuidVersion4
+   */
+  public function testUuidVersion4()
+  {
+    # version-4
+    $a = UUID::is_uuid_valid("14a7ed96-88c8-44cd-b054-70e675a5636a");
+
+    # assertion
+    $this->assertTrue($a);
+  }
+
+  /**
+   * testUuidVersion5
+   */
+  public function testUuidVersion5()
+  {
+    # version-5
+    $a = UUID::is_uuid_valid("d3ddb111-41d0-5baf-96de-301a2dda8272");
+
+    # assertion
+    $this->assertTrue($a);
+  }
+
+  /**
+   * testUuidVersion6
+   */
+  public function testUuidVersion6()
+  {
+    # version-6
+    $a = UUID::is_uuid_valid("1ed5c346-a174-6370-9b32-00090faa0001");
+
+    # assertion
+    $this->assertTrue($a);
+  }
+
 }
