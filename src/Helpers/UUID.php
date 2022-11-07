@@ -80,4 +80,29 @@ class UUID implements UUIDInterface
   {
     return RamseyUUID::isValid($uuid);
   }
+  
+  /**
+   * Checks if an UUID is valid
+   *
+   * @param   void  $uuid
+   *
+   * @return  bool  True if valid
+   */
+  public function is_uuid_valid($uuid): bool
+  {
+    # make sure uuid is not null & empty
+    if (!$uuid || \mb_strlen($uuid) == 0) return false;
+
+    # always compare uuid with lowercase
+    $uuid = \strtolower($uuid);
+
+    # validate
+    if (\preg_match('/^[0-9A-F]{8}-[0-9A-F]{4}-[3-6][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i', $uuid) !== 1) {
+      return false;
+    }
+
+    # assume fine
+    return true;
+  }
+
 }
