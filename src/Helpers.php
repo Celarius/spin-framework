@@ -431,11 +431,6 @@ if (!\function_exists('response')) {
     # Build response object
     $response = \app()->getResponse();
 
-    if ( \is_array($response) ) {
-      \http_response_code($code);
-      die;
-    }
-
     # Set status and Body
     $response = $response->withStatus($code)
                          ->withBody($bStream);
