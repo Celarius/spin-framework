@@ -71,7 +71,7 @@ interface PdoConnectionInterface
    *
    * @return     array   Array with fetched rows
    */
-  public function rawQuery(string $sql, array $params=[], bool $autoTransactions=true): array
+  public function rawQuery(string $sql, array $params=[], bool $autoTransactions=true): array;
 
   /**
    * Execute an INSERT, UPDATE or DELETE statement
@@ -82,5 +82,5 @@ interface PdoConnectionInterface
    *
    * @return     bool    True if rows affected > 0
    */
-  public function rawExec(string $sql, array $params=[], bool $autoTransactions=true): bool
+  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true): bool;
 }
