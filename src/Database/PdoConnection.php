@@ -573,8 +573,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
       # If we had a loacl transaction, commit it
       if ($autoCommit) $this->commit();
+
     } catch (\Exception $e) {
-      # If we had a loacl transaction, commit it
+      # If we had a loacl transaction, rollback
       if ($autoCommit) $this->rollBack();
 
       throw $e;
@@ -625,7 +626,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
       if ($autoCommit) $this->commit();
 
     } catch (\Exception $e) {
-      # If we had a loacl transaction, commit it
+      # If we had a loacl transaction, rollback
       if ($autoCommit) $this->rollBack();
 
       throw $e;
