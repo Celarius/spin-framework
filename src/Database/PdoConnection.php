@@ -522,12 +522,13 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Execute a SELECT statement
    *
-   * @param      string  $sql     SQL statement to execute (SELECT ...)
-   * @param      array   $params  Bind params
+   * @param      string  $sql                 SQL statement to execute (SELECT ...)
+   * @param      array   $params              Array with Bind params
+   * @param      bool    $autoTransactions    Optional. TRUE enables automatic transaction handling
    *
    * @return     array   Array with fetched rows
    */
-  public function rawQuery(string $sql, array $params=[]): array
+  public function rawQuery(string $sql, array $params=[], bool $autoTransactions=true): array
   {
     $rows = [];
 
@@ -539,7 +540,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     try {
       # Obtain transaction, unelss already in a transaction
       $autoCommit = false;
-      if (!$this->inTransaction()) {
+      if ($autoTransactions && !$this->inTransaction()) {
         $autoCommit = $this->beginTransaction();
       }
 
@@ -572,11 +573,11 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
       }
 
       # If we had a loacl transaction, commit it
-      if ($autoCommit) $this->commit();
+      if ($autoTransactions && $autoCommit) $this->commit();
 
     } catch (\Exception $e) {
       # If we had a loacl transaction, rollback
-      if ($autoCommit) $this->rollBack();
+      if ($autoTransactions && $autoCommit) $this->rollBack();
 
       throw $e;
     }
@@ -587,13 +588,13 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   /**
    * Execute an INSERT, UPDATE or DELETE statement
    *
-   * @param      string  $sql     SQL statement to execute (INSERT, UPDATE,
-   *                              DELETE ...)
-   * @param      array   $params  Bind params
+   * @param      string  $sql                 SQL statement to execute (INSERT, UPDATE, DELETE ...)
+   * @param      array   $params              Array with Bind params
+   * @param      bool    $autoTransactions    Optional. TRUE enables automatic transaction handling
    *
    * @return     bool    True if rows affected > 0
    */
-  public function rawExec(string $sql, array $params=[]): bool
+  public function rawExec(string $sql, array $params=[], bool $autoTransactions=true): bool
   {
     $result = false;
 
@@ -605,7 +606,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     try {
       # Obtain transaction, unelss already in a transaction
       $autoCommit = false;
-      if (!$this->inTransaction()) {
+      if ($autoTransactions && !$this->inTransaction()) {
         $autoCommit = $this->beginTransaction();
       }
 
@@ -626,11 +627,11 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
       }
 
       # If we had a loacl transaction, commit it
-      if ($autoCommit) $this->commit();
+      if ($autoTransactions && $autoCommit) $this->commit();
 
     } catch (\Exception $e) {
       # If we had a loacl transaction, rollback
-      if ($autoCommit) $this->rollBack();
+      if ($autoTransactions && $autoCommit) $this->rollBack();
 
       throw $e;
     }

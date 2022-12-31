@@ -63,23 +63,24 @@ interface PdoConnectionInterface
   function setClientVersion(string $clientVersion);
 
   /**
-   * Execute a raw SELECT statement
+   * Execute a SELECT statement
    *
-   * @param      string  $sql     SQL statement to execute (SELECT ...)
-   * @param      array   $params  Bind params
+   * @param      string  $sql                 SQL statement to execute (SELECT ...)
+   * @param      array   $params              Array with Bind params
+   * @param      bool    $autoTransactions    Optional. TRUE enables automatic transaction handling
    *
    * @return     array   Array with fetched rows
    */
-  public function rawQuery(string $sql, array $params=[]): array;
+  public function rawQuery(string $sql, array $params=[], bool $autoTransactions=true): array
 
   /**
-   * Execute an raw INSERT, UPDATE or DELETE statement
+   * Execute an INSERT, UPDATE or DELETE statement
    *
-   * @param      string  $sql     SQL statement to execute (INSERT, UPDATE,
-   *                              DELETE ...)
-   * @param      array   $params  Bind params
+   * @param      string  $sql                 SQL statement to execute (INSERT, UPDATE, DELETE ...)
+   * @param      array   $params              Array with Bind params
+   * @param      bool    $autoTransactions    Optional. TRUE enables automatic transaction handling
    *
    * @return     bool    True if rows affected > 0
    */
-  public function rawExec(string $sql, array $params=[]): bool;
+  public function rawExec(string $sql, array $params=[], bool $autoTransactions=true): bool
 }
