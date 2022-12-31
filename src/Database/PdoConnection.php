@@ -536,42 +536,49 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
       return $rows;
     }
 
-    # Obtain transaction, unelss already in a transaction
-    $autoCommit = false;
-    if (!$this->inTransaction()) {
-      $autoCommit = $this->beginTransaction();
-    }
+    try {
+      # Obtain transaction, unelss already in a transaction
+      $autoCommit = false;
+      if (!$this->inTransaction()) {
+        $autoCommit = $this->beginTransaction();
+      }
 
-    # Prepare
-    if ($sth = $this->prepare($sql)) {
+      # Prepare
+      if ($sth = $this->prepare($sql)) {
 
-      # Binds
-      foreach ($params as $bind=>$value)
-      {
-        if (\is_int($value)) {
-          $sth->bindValue( ':'.\ltrim($bind,':'), (int)$value, \PDO::PARAM_INT); // INT !
-        } else
-        if (\is_bool($value)) {
-          $sth->bindValue( ':'.\ltrim($bind,':'), (bool)$value, \PDO::PARAM_BOOL);
-        } else
-        if (\is_null($value)) {
-          $sth->bindValue( ':'.\ltrim($bind,':'), null, \PDO::PARAM_NULL);
-        } else {
-          $sth->bindValue( ':'.\ltrim($bind,':'), $value, \PDO::PARAM_STR);
+        # Binds
+        foreach ($params as $bind=>$value)
+        {
+          if (\is_int($value)) {
+            $sth->bindValue( ':'.\ltrim($bind,':'), (int)$value, \PDO::PARAM_INT); // INT !
+          } else
+          if (\is_bool($value)) {
+            $sth->bindValue( ':'.\ltrim($bind,':'), (bool)$value, \PDO::PARAM_BOOL);
+          } else
+          if (\is_null($value)) {
+            $sth->bindValue( ':'.\ltrim($bind,':'), null, \PDO::PARAM_NULL);
+          } else {
+            $sth->bindValue( ':'.\ltrim($bind,':'), $value, \PDO::PARAM_STR);
+          }
         }
+
+        # Execute statement
+        if ($sth->execute()) {
+          $rows = $sth->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        # Close the cursor
+        $sth->closeCursor();
       }
 
-      # Execute statement
-      if ($sth->execute()) {
-        $rows = $sth->fetchAll(\PDO::FETCH_ASSOC);
-      }
+      # If we had a loacl transaction, commit it
+      if ($autoCommit) $this->commit();
+    } catch (\Exception $e) {
+      # If we had a loacl transaction, commit it
+      if ($autoCommit) $this->rollBack();
 
-      # Close the cursor
-      $sth->closeCursor();
+      throw $e;
     }
-
-    # If we had a loacl transaction, commit it
-    if ($autoCommit) $this->commit();
 
     return $rows;
   }
@@ -594,27 +601,35 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
       return $result;
     }
 
-    # Obtain transaction, unelss already in a transaction
-    $autoCommit = $this->beginTransaction();
+    try {
+      # Obtain transaction, unelss already in a transaction
+      $autoCommit = $this->beginTransaction();
 
-    # Prepare
-    if ($sth = $this->prepare($sql)) {
-      # Binds
-      foreach ($params as $bind=>$value) {
-        $sth->bindValue( ':'.\ltrim($bind,':'), $value);
+      # Prepare
+      if ($sth = $this->prepare($sql)) {
+        # Binds
+        foreach ($params as $bind=>$value) {
+          $sth->bindValue( ':'.\ltrim($bind,':'), $value);
+        }
+
+        # Execute statement
+        if ($sth->execute()) {
+          $result = $sth->rowCount() > 0;
+        }
+
+        # Close cursor
+        $sth->closeCursor();
       }
 
-      # Execute statement
-      if ($sth->execute()) {
-        $result = $sth->rowCount() > 0;
-      }
+      # If we had a loacl transaction, commit it
+      if ($autoCommit) $this->commit();
 
-      # Close cursor
-      $sth->closeCursor();
+    } catch (\Exception $e) {
+      # If we had a loacl transaction, commit it
+      if ($autoCommit) $this->rollBack();
+
+      throw $e;
     }
-
-    # If we had a loacl transaction, commit it
-    if ($autoCommit) $this->commit();
 
     return $result;
   }
