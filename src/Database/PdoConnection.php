@@ -604,7 +604,10 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
     try {
       # Obtain transaction, unelss already in a transaction
-      $autoCommit = $this->beginTransaction();
+      $autoCommit = false;
+      if (!$this->inTransaction()) {
+        $autoCommit = $this->beginTransaction();
+      }
 
       # Prepare
       if ($sth = $this->prepare($sql)) {
