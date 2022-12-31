@@ -65,22 +65,26 @@ interface PdoConnectionInterface
   /**
    * Execute a SELECT statement
    *
-   * @param      string  $sql                 SQL statement to execute (SELECT ...)
-   * @param      array   $params              Array with Bind params
-   * @param      bool    $autoTransactions    Optional. TRUE enables automatic transaction handling
+   * @param   string  $sql                SQL statement to execute (SELECT ...)
+   * @param   array   $params             Array with Bind params
+   * @param   bool    $autoTransactions   Optional. TRUE enables automatic transaction handling
    *
-   * @return     array   Array with fetched rows
+   * @return  array                       Array with fetched rows
+   *
+   * @throws  \Exception
    */
   public function rawQuery(string $sql, array $params=[], bool $autoTransactions=true): array;
 
   /**
    * Execute an INSERT, UPDATE or DELETE statement
    *
-   * @param      string  $sql                 SQL statement to execute (INSERT, UPDATE, DELETE ...)
-   * @param      array   $params              Array with Bind params
-   * @param      bool    $autoTransactions    Optional. TRUE enables automatic transaction handling
+   * @param   string  $sql                SQL statement to execute (INSERT, UPDATE, DELETE ...)
+   * @param   array   $params             Array with Bind params
+   * @param   bool    $autoTransactions   Optional. TRUE enables automatic transaction handling
    *
-   * @return     bool    True if rows affected > 0
+   * @return  bool                        True if rows affected > 0
+   *
+   * @throws  \Exception
    */
   public function rawExec(string $sql, array $params = [], bool $autoTransactions = true): bool;
 }
