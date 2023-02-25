@@ -92,7 +92,7 @@ class HelpersTest extends TestCase
    */
   public function testUuidV6()
   {
-    $this->assertNotNull(UUID::v6);
+    $this->assertNotNull(UUID::v6());
   }
 
   /**
@@ -100,7 +100,7 @@ class HelpersTest extends TestCase
    */
   public function testUuidV7()
   {
-    $this->assertNotNull(UUID::v7);
+    $this->assertNotNull(UUID::v7());
   }
 
   /**
