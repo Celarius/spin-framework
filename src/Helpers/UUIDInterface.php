@@ -11,7 +11,7 @@ namespace Spin\Helpers;
 interface UUIDInterface
 {
   /**
-   * Generate v4 UUID
+   * Generate v7 UUID
    *
    * @return     string
    */
@@ -33,6 +33,20 @@ interface UUIDInterface
    * @return     string
    */
   public static function v5(string $namespace, string $name): string;
+
+  /**
+   * Generate a v6 UUID, based on time
+   *
+   * @return     string
+   */
+  public static function v6(): string;
+
+    /**
+   * Generate a v7 UUID, based on time
+   *
+   * @return     string
+   */
+  public static function v7(): string;
 
   /**
    * Checks if an UUID is valid (v3,v4 and v5)

@@ -54,7 +54,7 @@ class HelpersTest extends TestCase
 
     $this->assertEquals($plain, $a);
   }
-  
+
   /**
    * Test OpenSSL Message Digest (SHA256)
    */
@@ -85,6 +85,30 @@ class HelpersTest extends TestCase
     $a = UUID::v5( 'fe590d59-b698-4246-98a0-521e31427ee4', 'Glorius');
 
     $this->assertEquals('0eeda2f3-b68c-5ae7-a0ab-cc14eac039db', $a);
+  }
+
+  /**
+   * Test UUID v6 generation
+   */
+  public function testUuidV6()
+  {
+    $this->assertNotNull(UUID::v6);
+  }
+
+  /**
+   * Test UUID v7 generation
+   */
+  public function testUuidV7()
+  {
+    $this->assertNotNull(UUID::v7);
+  }
+
+  /**
+   * Test valid UUID
+   */
+  public function testIsValid()
+  {
+    $this->assertNotNull(UUID::is_valid('0eeda2f3-b68c-5ae7-a0ab-cc14eac039db'));
   }
 
   /**
