@@ -25,7 +25,7 @@ interface AbstractCacheAdapterInterface extends CacheInterface
    *
    * @return  bool
    */
-  function set(string $key, mixed $value, mixed $ttl = null): bool;
+  function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool;
 
   /**
    * Delete the $key
@@ -57,11 +57,11 @@ interface AbstractCacheAdapterInterface extends CacheInterface
    * Set multiple values at the same time
    *
    * @param   iterable $values        A list of key => value pairs for a multiple-set operation.
-   * @param   mixed $ttl              Number of seconds to live. 0=infinite
+   * @param   null|int|\DateInterval $ttl              Number of seconds to live. 0=infinite
    *
    * @return  array
    */
-  function setMultiple(iterable $values, mixed $ttl = null): bool;
+  function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool;
 
   /**
    * Delete multiple keys at once

@@ -84,7 +84,7 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
     return $this->redisClient->get( $key ) ?? $default;
   }
 
-  public function set(string $key, mixed $value, mixed $ttl = null): bool
+  public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
   {
     return $this->redisClient->set( $key, $value, null, (\is_null($ttl) ? 0 : (int) $ttl) );
   }
@@ -109,7 +109,7 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
     return $values;
   }
 
-  public function setMultiple(iterable $values, mixed $ttl = null): bool
+  public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool
   {
     foreach ($values as $key=>$value) {
       $this->set($key, $value, (\is_null($ttl) ? 0 : (int) $ttl));

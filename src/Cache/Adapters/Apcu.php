@@ -39,7 +39,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
     return ( $success ? $value : $default );
   }
 
-  public function set(string $key, mixed $value, mixed $ttl = null): bool
+  public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
   {
     return \apcu_store( $key, $value, (\is_null($ttl) ? 0 : (int) $ttl) );
   }
@@ -64,7 +64,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
     return $values;
   }
 
-  public function setMultiple(iterable $values, mixed $ttl = null): bool
+  public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool
   {
     foreach ($values as $key=>$value) {
       $this->set($key, $value, (\is_null($ttl) ? 0 : (int) $ttl));
