@@ -40,11 +40,11 @@ abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
   }
 
   abstract public function get(string $key, mixed $default = null): mixed;
-  abstract public function set(string $key, mixed $value, \DateInterval|int|null $ttl = null): bool;
+  abstract public function set(string $key, mixed $value, mixed $ttl = null): bool;
   abstract public function delete(string $key): bool;
   abstract public function clear(): bool;
   abstract public function getMultiple(iterable $keys, mixed $default = null): iterable;
-  abstract public function setMultiple(iterable $values, \DateInterval|int|null $ttl = null): bool;
+  abstract public function setMultiple(iterable $values, mixed $ttl = null): bool;
   abstract public function deleteMultiple(iterable $keys): bool;
   abstract public function has(string $key): bool;
   abstract public function inc(string $key, int $amount=1);
