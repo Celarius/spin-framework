@@ -59,7 +59,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Application/Framework version
    * @var  string */
-  const VERSION = '0.0.23';
+  const VERSION = '0.0.24';
 
   /**
    * Application Environment (from ENV vars)
