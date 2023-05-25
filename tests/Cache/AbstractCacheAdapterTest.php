@@ -13,7 +13,7 @@ class TestAdapter extends AbstractCacheAdapter
     return '';
   }
 
-  public function set(string $key, mixed $value, \DateInterval|int|null $ttl = null): bool
+  public function set(string $key, mixed $value, mixed $ttl = null): bool
   {
     return false;
   }
@@ -33,7 +33,7 @@ class TestAdapter extends AbstractCacheAdapter
     return [];
   }
 
-  public function setMultiple(iterable $values, \DateInterval|int|null $ttl = null): bool
+  public function setMultiple(iterable $values, mixed $ttl = null): bool
   {
     return false;
   }
