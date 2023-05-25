@@ -14,22 +14,17 @@ interface JWTInterface
    * Decodes a JWT string into a PHP object.
    *
    * @param      string        $jwt           The JWT
-   * @param      string|array  $key           The key, or map of keys. If the
-   *                                          algorithm used is asymmetric, this
-   *                                          is the public key
-   * @param      array         $allowed_algs  List of supported verification
-   *                                          algorithms Supported algorithms
-   *                                          are 'HS256', 'HS384', 'HS512' and
-   *                                          'RS256'
+   * @param      string|array  $key           The key, or map of keys. If the algorithm used is asymmetric, this is the public key
+   * @param      array         $allowed_algs  List of supported verification algorithms Supported algorithms are 'HS256', 'HS384', 'HS512' and 'RS256'
    *
-   * @return     object  The JWT's payload as a PHP object
-   * 
+   * @return     object                       The JWT's payload as a PHP object
+   *
    * @throws     \Exception                   Provided JWT was invalid
-   * 
+   *
    * @uses       jsonDecode
    * @uses       urlsafeB64Decode
    */
-  static function decode($jwt, $key, array $allowed_algs = array());
+  static function decode($jwt, $key, array $allowed_algs = []);
 
   /**
    * Converts and signs a PHP object or array into a JWT string.

@@ -39,14 +39,14 @@ abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
     return $this;
   }
 
-  abstract public function get($key, $default = null);
-  abstract public function set($key, $value, $ttl = null);
-  abstract public function delete($key);
-  abstract public function clear();
-  abstract public function getMultiple($keys, $default = null);
-  abstract public function setMultiple($items, $ttl = null);
-  abstract public function deleteMultiple($keys);
-  abstract public function has($key);
+  abstract public function get(string $key, mixed $default = null): mixed;
+  abstract public function set(string $key, mixed $value, \DateInterval|int|null $ttl = null): bool;
+  abstract public function delete(string $key): bool;
+  abstract public function clear(): bool;
+  abstract public function getMultiple(iterable $keys, mixed $default = null): iterable;
+  abstract public function setMultiple(iterable $values, \DateInterval|int|null $ttl = null): bool;
+  abstract public function deleteMultiple(iterable $keys): bool;
+  abstract public function has(string $key): bool;
   abstract public function inc(string $key, int $amount=1);
   abstract public function dec(string $key, int $amount=1);
   abstract public function statistics(): array;

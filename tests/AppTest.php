@@ -27,4 +27,11 @@ class AppTest extends TestCase
     $this->assertSame($this->app->getBasePath(), \realpath(__DIR__));
   }
 
+  public function test_ApplictionLogger()
+  {
+    \logger()->notice('Tihs is a logline', ['a'=>'1']);
+
+    $this->assertTrue(true);
+  }
+
 }

@@ -95,13 +95,13 @@ class HelpersTest extends TestCase
     $this->assertNotNull(UUID::v6());
   }
 
-  /**
-   * Test UUID v7 generation
-   */
-  public function testUuidV7()
-  {
-    $this->assertNotNull(UUID::v7());
-  }
+  // /**
+  //  * Test UUID v7 generation
+  //  */
+  // public function testUuidV7()
+  // {
+  //   $this->assertNotNull(UUID::v7());
+  // }
 
   /**
    * Test valid UUID

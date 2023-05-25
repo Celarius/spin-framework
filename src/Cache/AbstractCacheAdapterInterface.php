@@ -9,68 +9,68 @@ interface AbstractCacheAdapterInterface extends CacheInterface
   /**
    * Get $key from cache
    *
-   * @param   mixed $key            Name of KEY
-   * @param   mixed $default        Optional. Value to return if Key is missing
+   * @param   string $key             Name of KEY
+   * @param   mixed $default          Optional. Value to return if Key is missing
    *
    * @return  mixed
    */
-  function get($key, $default = null);
+  function get(string $key, mixed $default = null): mixed;
 
   /**
    * Set the $key to $value, with $ttl (default 0)
    *
-   * @param   mixed  $key           Name of KEY
-   * @param   mixed  $value         Value to set
-   * @param   mixed  $ttl           TimeToLive in seconds. 0=Infinite
+   * @param   mixed $key              Name of KEY
+   * @param   mixed $value            Value to set
+   * @param   \DateInterval|int|null $ttl  TimeToLive in seconds. 0=Infinite
    *
    * @return  bool
    */
-  function set($key, $value, $ttl = null);
+  function set(string $key, mixed $value, \DateInterval|int|null $ttl = null): bool;
 
   /**
    * Delete the $key
    *
-   * @param   mixed   $key          Name of KEY
+   * @param   string $key             Name of KEY
    *
    * @return  bool
    */
-  function delete($key);
+  function delete(string $key): bool;
 
   /**
    * Clear cache
    *
    * @return  bool
    */
-  function clear();
+  function clear(): bool;
 
   /**
    * Get multiple values at the same time
    *
-   * @param   array   $keys         A list of key => value pairs for a multiple-set operation.
-   * @param   mixed   $default      Default value to return if the key does not exist
+   * @param   iterable $keys          A list of key => value pairs for a multiple-set operation.
+   * @param   mixed $default          Default value to return if the key does not exist
    *
-   * @return  array                 Key=>value array with keys and the values retreived
+   * @return  iterable                Key=>value array with keys and the values retreived
    */
-  function getMultiple($keys, $default = null);
+  function getMultiple(iterable $keys, mixed $default = null): iterable;
 
   /**
    * Set multiple values at the same time
    *
-   * @param   array   $keys         A list of key => value pairs for a multiple-set operation.
-   * @param   int     $ttl          Number of seconds to live. 0=infinite
+   * @param   iterable $values        A list of key => value pairs for a multiple-set operation.
+   * @param   \DateInterval|int|null $ttl  Number of seconds to live. 0=infinite
    *
    * @return  array
    */
-  function setMultiple($items, $ttl = null);
+  function setMultiple(iterable $values, \DateInterval|int|null $ttl = null): bool;
 
   /**
    * Delete multiple keys at once
    *
-   * @param   array   $keys         Array of keynames to delete
+   * @param   iterable $keys          Array of keynames to delete
    *
    * @return  bool
    */
-  function deleteMultiple($keys);
+  function deleteMultiple(iterable $keys): bool;
 
   /**
    * Check if $key is in cache
@@ -79,7 +79,7 @@ interface AbstractCacheAdapterInterface extends CacheInterface
    *
    * @return  bool
    */
-  function has($key);
+  function has(string $key): bool;
 
   /**
    * Increment a $key's value and return the new value.

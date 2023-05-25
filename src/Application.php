@@ -56,92 +56,151 @@ class RequestIdClass
 
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
-  /** @var  string                  Application/Framework version */
+  /**
+   * Application/Framework version
+   * @var  string */
   const VERSION = '0.0.23';
 
-  /** @var  string                  Application Environment (from ENV vars) */
+  /**
+   * Application Environment (from ENV vars)
+   * @var  string */
   protected $environment;
 
-  /** @var  string                  Base path to application folder */
+  /**
+   * Base path to application folder
+   * @var  string */
   protected $basePath;
 
-  /** @var  string                  Path to $basePath.'/app' folder */
+  /**
+   * Path to $basePath.'/app' folder
+   * @var  string */
   protected $appPath;
 
-  /** @var  string                  Path to $basePath.'/storage' folder */
+  /**
+   * Path to $basePath.'/storage' folder
+   * @var  string */
   protected $storagePath;
 
-  /** @var  string                  Path to shared storage */
+  /**
+   * Path to shared storage
+   * @var  string */
   protected $sharedStoragePath;
 
-  /** @var  array                   List of Route Groups */
+  /**
+   * List of Route Groups
+   * @var  array */
   protected $routeGroups;
 
-  /** @var  array                   List of Global Before Middleware */
+  /**
+   * List of Global Before Middleware
+   * @var  array */
   protected $beforeMiddleware;
 
-  /** @var  array                   List of Global After Middleware */
+  /**
+   * List of Global After Middleware
+   * @var  array */
   protected $afterMiddleware;
 
-  /** @var  int                     PHP Error Level we are using */
+  /**
+   * PHP Error Level we are using
+   * @var  int */
   protected $errorLevel = \E_ALL;
 
-  /** @var  Config                  Config object */
+  /**
+   * Config object
+   * @var  Config */
   protected $config;
 
-  /** @var  array                   Name, Code and Version of App */
+  /**
+   * Name, Code and Version of App
+   * @var  array */
   protected $version;
 
-  /** @var  Logger                  PSR-3 compatible Logger object */
+  /**
+   * PSR-3 compatible Logger object
+   * @var  Logger */
   protected $logger;
 
-  /** @var  Object                  HTTP Factory */
+  /**
+   * HTTP Factory
+   * @var  object */
   protected $httpServerRequestFactory;
 
-  /** @var  Object                  HTTP Factory */
+  /**
+   * HTTP Factory
+   * @var  object */
   protected $httpResponseFactory;
 
-  /** @var  Object                  HTTP Factory */
+  /**
+   * HTTP Factory
+   * @var  object */
   protected $httpStreamFactory;
 
-  /** @var  Object                  Container Factory */
+  /**
+   * Container Factory
+   * @var  object */
   protected $containerFactory;
 
-  /** @var  array                   List of cookies to send with response */
+  /**
+   * List of cookies to send with response
+   * @var  array */
   protected $cookies;
 
-  /** @var  Request                 PSR-7 compatible HTTP Server Request */
+  /**
+   * PSR-7 compatible HTTP Server Request
+   * @var  Request */
   protected $request;
 
-  /** @var  Response                PSR-7 compatible HTTP Response */
+  /**
+   * PSR-7 compatible HTTP Response
+   * @var  Response */
   protected $response;
 
-  /** @var  string                  Name of file to send as response */
+  /**
+   * Name of file to send as response
+   * @var  string */
   protected $responseFile;
 
-  /** @var  bool                    True/False for removing the file after sending to client */
+  /**
+   * True/False for removing the file after sending to client
+   * @var  bool */
   protected $responseFileRemove;
 
-  /** @var  array                   PSR-11 compatible Container for Dependencies */
+  /**
+   * PSR-11 compatible Container for Dependencies
+   * @var  array */
   protected $container;
 
-  /** @var  CacheManager            Manager that handles all caches */
+  /**
+   * Manager that handles all caches
+   * @var  CacheManager */
   protected $cacheManager;
 
-  /** @var  ConnectionManager       DB Connections manager */
+  /**
+   * DB Connections manager
+   * @var  ConnectionManager */
   protected $connectionManager;
 
-  /** @var  UploadedFilesManager    Uploaded files manager */
+  /**
+   * Uploaded files manager
+   * @var  UploadedFilesManager */
   protected $uploadedFilesManager;
 
-  /** @var  array                   Error Controllers, key=http code, value=Controller class[@handler] */
+  /**
+   * Error Controllers, key=http code, value=Controller class[@handler]
+   * @var  array */
   protected $errorControllers;
 
-  /** @var  int                     Initial memory usage when SPIN starts */
+  /**
+   * Initial memory usage when SPIN starts
+   * @var  int */
   protected $initialMemUsage;
 
-  /** @var  array                   Application controlled global vars */
+  /**
+   * Application controlled global vars
+   * @var  array */
   protected $globalVars;
+
 
   /**
    * Constructor
@@ -628,13 +687,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           return $routeHandler->$handlerMethod([]);
 
         } else {
-          logger()->error('Failed to create error controller',[
+          \logger()->error('Failed to create error controller',[
             'class'=>$handlerClass
           ]);
         }
 
       } else {
-        logger()->notice('Error controller class does not exist',[
+        \logger()->notice('Error controller class does not exist',[
           'class'=>$handlerClass,
           'httpCode'=>$httpCode
         ]);
@@ -682,7 +741,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   protected function setErrorHandlers()
   {
     # Report all PHP errors (see changelog)
-    $this->errorLevel = \error_reporting( E_ALL | E_STRICT);
+    $this->errorLevel = \error_reporting( \E_ALL | \E_STRICT);
 
     # set to the user defined error handler
     $old_error_handler = \set_error_handler( array($this,'errorHandler'), E_ALL );
@@ -767,7 +826,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * Handles any Exceptions from the application. This is set as the default
    * exception handler for all exceptions.
    *
-   * @param      Object  $exception  [description]
+   * @param      object  $exception  [description]
    *
    * @return     null
    */
@@ -1299,7 +1358,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return $this->globalVars[$id] ?? null;
   }
 
-    /**
+  /**
    * Set one global var
    *
    * @return  self

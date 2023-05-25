@@ -1,6 +1,13 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.24
+- Composer packages updated to newer versions
+- Redis adapter fixes
+- Tests updated
+- Docblock corrections
+- VERSION file added
+
 ## 0.0.23
 - Added extended cipher methods
 
