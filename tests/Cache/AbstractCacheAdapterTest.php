@@ -8,42 +8,42 @@ use \Spin\Cache\AbstractCacheAdapter;
 # TestAdapter to extend the AbstractCacheAdapter class
 class TestAdapter extends AbstractCacheAdapter
 {
-  public function get(string $key, mixed $default = null): mixed
+  public function get($key, $default = null)
   {
     return '';
   }
 
-  public function set(string $key, mixed $value, mixed $ttl = null): bool
+  public function set($key, $value, $ttl = null)
   {
     return false;
   }
 
-  public function delete(string $key): bool
+  public function delete($key)
   {
     return false;
   }
 
-  public function clear(): bool
+  public function clear()
   {
     return false;
   }
 
-  public function getMultiple(iterable $keys, mixed $default = null): iterable
+  public function getMultiple($keys, $default = null)
   {
     return [];
   }
 
-  public function setMultiple(iterable $values, mixed $ttl = null): bool
+  public function setMultiple($values, $ttl = null)
   {
     return false;
   }
 
-  public function deleteMultiple(iterable $keys): bool
+  public function deleteMultiple($keys)
   {
     return false;
   }
 
-  public function has(string $key): bool
+  public function has($key)
   {
     return false;
   }

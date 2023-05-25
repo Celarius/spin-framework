@@ -79,27 +79,27 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
     return !$this->redisClient->isConnected();
   }
 
-  public function get(string $key, mixed $default = null): mixed
+  public function get($key, $default = null)
   {
     return $this->redisClient->get( $key ) ?? $default;
   }
 
-  public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
+  public function set($key, $value, $ttl = null)
   {
     return $this->redisClient->set( $key, $value, null, (\is_null($ttl) ? 0 : (int) $ttl) );
   }
 
-  public function delete(string $key): bool
+  public function delete($key)
   {
     return  $this->redisClient->del( $key ) != 0;
   }
 
-  public function clear(): bool
+  public function clear()
   {
     return true;
   }
 
-  public function getMultiple(iterable $keys, mixed $default = null): iterable
+  public function getMultiple($keys, $default = null)
   {
     $values = array();
     foreach ($keys as $key) {
@@ -109,7 +109,7 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
     return $values;
   }
 
-  public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool
+  public function setMultiple($values, $ttl = null)
   {
     foreach ($values as $key=>$value) {
       $this->set($key, $value, (\is_null($ttl) ? 0 : (int) $ttl));
@@ -118,7 +118,7 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
     return true;
   }
 
-  public function deleteMultiple(iterable $keys): bool
+  public function deleteMultiple($keys)
   {
     foreach ($keys as $key) {
       $this->delete($key);
@@ -127,7 +127,7 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
     return true;
   }
 
-  public function has($key): bool
+  public function has($key)
   {
     return $this->redisClient->exists( $key ) != 0;
   }
