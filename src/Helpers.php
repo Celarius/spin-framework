@@ -33,8 +33,8 @@
   function mime_content_type($filename)
  */
 
-use \Psr\Http\Message\RequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+ use \GuzzleHttp\Psr7\Request;
+ use \GuzzleHttp\Psr7\Response;
 
 use Spin\Database\PdoConnection;
 use Spin\helpers\ArrayToXml;
