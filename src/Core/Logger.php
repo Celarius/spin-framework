@@ -35,6 +35,10 @@ class Logger extends MonoLogger
     $logDateFormat = $options['drivers'][$logDriver]['line_datetime'] ?? 'Y-m-d H:i:s';
     $logLineFormat = $options['drivers'][$logDriver]['line_format'] ?? '[%channel%] [%level_name%] %message% %context% %extra%';
 
+    # Buffer and Overflow parameters
+    $Log_max_buffered_lines = $options['drivers'][$logDriver]['max_buffered_lines'] ?? 0; // Default = 0 - buffer everything
+    $Log_flush_overflow_to_disk = $options['drivers'][$logDriver]['flush_overflow_to_disk'] ?? false; // Default = false - Discard overflow (if bufferd lines >0)
+
     # Create a Line formatter
     $formatter = new LineFormatter($logLineFormat, $logDateFormat);
 
@@ -61,7 +65,7 @@ class Logger extends MonoLogger
     $handler->setFormatter($formatter);
 
     # Push Buffer Handler that buffers before the actual user-defined handler
-    $this->pushHandler(new BufferHandler($handler));
+    $this->pushHandler(new BufferHandler($handler, $Log_max_buffered_lines, $this->toMonologLevel($logLevel), true, $Log_flush_overflow_to_disk));
 
     # Add a log entry
     $this->debug('Logger created successfully');
