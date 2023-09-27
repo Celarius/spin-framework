@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.25
+- New options for logging. "max_buffered_lines" and "flush_overflow_to_disk"
+
 ## 0.0.24
 - Composer packages updated to newer versions
 - Redis adapter fixes
