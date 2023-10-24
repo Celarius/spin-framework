@@ -20,7 +20,7 @@ class UUID implements UUIDInterface
    */
   public static function generate(): string
   {
-    return self::v6();
+    return self::v7();
   }
 
   /**
@@ -69,15 +69,15 @@ class UUID implements UUIDInterface
     return RamseyUUID::uuid6()->toString();
   }
 
-  // /**
-  //  * Generate a v7 UUID, based on time
-  //  *
-  //  * @return     string
-  //  */
-  // public static function v7(): string
-  // {
-  //   return RamseyUUID::uuid7()->toString();
-  // }
+  /**
+   * Generate a v7 UUID, based on time
+   *
+   * @return     string
+   */
+  public static function v7(): string
+  {
+    return RamseyUUID::uuid7()->toString();
+  }
 
   /**
    * Checks if an UUID is valid

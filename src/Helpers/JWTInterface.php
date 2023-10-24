@@ -13,86 +13,108 @@ interface JWTInterface
   /**
    * Decodes a JWT string into a PHP object.
    *
-   * @param      string        $jwt           The JWT
-   * @param      string|array  $key           The key, or map of keys. If the algorithm used is asymmetric, this is the public key
-   * @param      array         $allowed_algs  List of supported verification algorithms Supported algorithms are 'HS256', 'HS384', 'HS512' and 'RS256'
+   * @param string                 $jwt             The JWT
+   * @param string                 $key             The Key or associative array of key IDs
+   *                                                kid) to Key objects.
+   *                                                If the algorithm used is asymmetric, this is
+   *                                                the public key.
+   *                                                Each Key object contains an algorithm and
+   *                                                matching key.
+   * @param string                 $algo            Supported algorithms are 'ES384','ES256',
+   *                                                HS256', 'HS384', 'HS512', 'RS256', 'RS384'
+   *                                                and 'RS512'.
    *
-   * @return     object                       The JWT's payload as a PHP object
+   * @return array                                  The JWT's payload as a PHP object
    *
-   * @throws     \Exception                   Provided JWT was invalid
-   *
-   * @uses       jsonDecode
-   * @uses       urlsafeB64Decode
+   * @throws \Exception                             On errors
    */
-  static function decode($jwt, $key, array $allowed_algs = []);
+  public static function decode(
+    string $jwt,
+    $key,
+    $algo = 'HS256'
+  );
 
   /**
-   * Converts and signs a PHP object or array into a JWT string.
+   * Converts and signs a PHP array into a JWT string.
    *
-   * @param      object|array  $payload  PHP object or array
-   * @param      string        $key      The secret key. If the algorithm used
-   *                                     is asymmetric, this is the private key
-   * @param      string        $alg      The signing algorithm. Supported
-   *                                     algorithms are 'HS256', 'HS384',
-   *                                     'HS512' and 'RS256'
-   * @param      mixed         $keyId
-   * @param      array         $head     An array with header elements to attach
+   * @param array<mixed>          $payload PHP array
+   * @param string|resource|\OpenSSLAsymmetricKey|\OpenSSLCertificate $key The secret key.
+   * @param string                $alg     Supported algorithms are 'ES384','ES256', 'ES256K', 'HS256',
+   *                                       'HS384', 'HS512', 'RS256', 'RS384', and 'RS512'
+   * @param string                $keyId
+   * @param array<string, string> $head    An array with header elements to attach
    *
-   * @return     string  A signed JWT
-   * @uses       jsonEncode
-   * @uses       urlsafeB64Encode
+   * @return string A signed JWT
+   *
+   * @uses jsonEncode
+   * @uses urlsafeB64Encode
    */
-  static function encode($payload, $key, $alg = 'HS256', $keyId = null, $head = null);
+  public static function encode(
+    array $payload,
+    $key,
+    string $alg,
+    string $keyId = null,
+    array $head = null
+  ): string;
 
   /**
    * Sign a string with a given key and algorithm.
    *
-   * @param      string           $msg    The message to sign
-   * @param      string|resource  $key    The secret key
-   * @param      string           $alg    The signing algorithm. Supported
-   *                                      algorithms are 'HS256', 'HS384',
-   *                                      'HS512' and 'RS256'
-   * @return     string  An encrypted message
-   * @throws     DomainException  Unsupported algorithm was specified
+   * @param string $msg  The message to sign
+   * @param string|resource|\OpenSSLAsymmetricKey|\OpenSSLCertificate  $key  The secret key.
+   * @param string $alg  Supported algorithms are 'EdDSA', 'ES384', 'ES256', 'ES256K', 'HS256',
+   *                    'HS384', 'HS512', 'RS256', 'RS384', and 'RS512'
+   *
+   * @return string An encrypted message
+   *
+   * @throws \DomainException Unsupported algorithm or bad key was specified
    */
-  static function sign($msg, $key, $alg = 'HS256');
+  public static function sign(
+    string $msg,
+    $key,
+    string $alg
+  ): string;
 
   /**
    * Decode a JSON string into a PHP object.
    *
-   * @param      string  $input  JSON string
+   * @param string $input JSON string
    *
-   * @return     object  Object representation of JSON string
-   * @throws     DomainException  Provided string was invalid JSON
+   * @return mixed The decoded JSON string
+   *
+   * @throws \DomainException Provided string was invalid JSON
    */
-  static function jsonDecode($input);
+  public static function jsonDecode(string $input);
 
   /**
-   * Encode a PHP object into a JSON string.
+   * Encode a PHP array into a JSON string.
    *
-   * @param      object|array  $input  A PHP object or array
+   * @param array<mixed> $input A PHP array
    *
-   * @return     string  JSON representation of the PHP object or array
-   * @throws     DomainException  Provided object could not be encoded to valid JSON
+   * @return string JSON representation of the PHP array
+   *
+   * @throws \DomainException Provided object could not be encoded to valid JSON
    */
-  static function jsonEncode($input);
+  public static function jsonEncode(array $input): string;
 
   /**
    * Decode a string with URL-safe Base64.
    *
-   * @param      string  $input  A Base64 encoded string
+   * @param string $input A Base64 encoded string
    *
-   * @return     string  A decoded string
+   * @return string A decoded string
+   *
+   * @throws \InvalidArgumentException invalid base64 characters
    */
-  static function urlsafeB64Decode($input);
+  public static function urlsafeB64Decode(string $input): string;
 
   /**
    * Encode a string with URL-safe Base64.
    *
-   * @param      string  $input  The string you want encoded
+   * @param string $input The string you want encoded
    *
-   * @return     string  The base64 encode of what you passed in
+   * @return string The base64 encode of what you passed in
    */
-  static function urlsafeB64Encode($input);
+  public static function urlsafeB64Encode(string $input): string;
 
  }

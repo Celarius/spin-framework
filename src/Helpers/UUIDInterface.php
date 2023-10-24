@@ -39,14 +39,14 @@ interface UUIDInterface
    *
    * @return     string
    */
-  // public static function v6(): string;
+  public static function v6(): string;
 
-  //   /**
-  //  * Generate a v7 UUID, based on time
-  //  *
-  //  * @return     string
-  //  */
-  // public static function v7(): string;
+    /**
+   * Generate a v7 UUID, based on time
+   *
+   * @return     string
+   */
+  public static function v7(): string;
 
   /**
    * Checks if an UUID is valid (v3,v4 and v5)
