@@ -31,7 +31,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
     $this->setVersion( \phpversion('apcu') );
   }
 
-  public function get($key, $default = null)
+  public function get($key, mixed $default = null): mixed
   {
     $success = false;
     $value = \apcu_fetch( $key, $success );
@@ -39,22 +39,22 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
     return ( $success ? $value : $default );
   }
 
-  public function set($key, $value, $ttl = null)
+  public function set($key, $value, \DateInterval|int|null $ttl = null): bool
   {
     return \apcu_store( $key, $value, (\is_null($ttl) ? 0 : (int) $ttl) );
   }
 
-  public function delete($key)
+  public function delete($key): bool
   {
     return  \apcu_delete( $key );
   }
 
-  public function clear()
+  public function clear(): bool
   {
     return \apcu_clear_cache();
   }
 
-  public function getMultiple($keys, $default = null)
+  public function getMultiple($keys, mixed $default = null): iterable
   {
     $values = array();
     foreach ($keys as $key) {
@@ -64,7 +64,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
     return $values;
   }
 
-  public function setMultiple($values, $ttl = null)
+  public function setMultiple($values, \DateInterval|int|null $ttl = null): bool
   {
     foreach ($values as $key=>$value) {
       $this->set($key, $value, (\is_null($ttl) ? 0 : (int) $ttl));
@@ -73,7 +73,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
     return true;
   }
 
-  public function deleteMultiple($keys)
+  public function deleteMultiple(iterable $keys): bool
   {
     foreach ($keys as $key) {
       $this->delete($key);
@@ -82,7 +82,7 @@ class Apcu extends AbstractCacheAdapter implements CacheInterface
     return true;
   }
 
-  public function has($key)
+  public function has(string $key): bool
   {
     return \apcu_exists( $key );
   }
