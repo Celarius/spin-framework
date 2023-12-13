@@ -87,15 +87,15 @@ interface JWTInterface
   public static function jsonDecode(string $input);
 
   /**
-   * Encode a PHP array into a JSON string.
+   * Decode a string with URL-safe Base64.
    *
-   * @param array<mixed> $input A PHP array
+   * @param string $input A Base64 encoded string
    *
-   * @return string JSON representation of the PHP array
+   * @return string A decoded string
    *
-   * @throws \DomainException Provided object could not be encoded to valid JSON
+   * @throws \InvalidArgumentException invalid base64 characters
    */
-  public static function jsonEncode(array $input): string;
+  public static function jsonEncode(string $input): string;
 
   /**
    * Decode a string with URL-safe Base64.
