@@ -119,7 +119,7 @@ class HelpersTest extends TestCase
   public function testJwtEncodeDecode()
   {
     $jwt = JWT::encode(['abc123'],'xyz987','HS256');
-    $payload = JWT::decode($jwt,'xyz987');
+    $payload = JWT::decode($jwt,'xyz987','HS256');
 
     $this->assertEquals($payload,['abc123']);
   }
