@@ -114,7 +114,7 @@ class JWT implements JWTInterface
    *
    * @throws \DomainException Provided object could not be encoded to valid JSON
    */
-  public static function jsonEncode(string $input)
+  public static function jsonEncode(string $input): string
   {
     return JWTClient::jsonEncode($input);
   }
@@ -128,7 +128,7 @@ class JWT implements JWTInterface
    *
    * @throws \InvalidArgumentException invalid base64 characters
    */
-  public static function urlsafeB64Decode(string $input)
+  public static function urlsafeB64Decode(string $input): string
   {
     return JWTClient::urlsafeB64Decode($input);
   }
