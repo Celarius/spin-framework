@@ -8,6 +8,9 @@
 
 namespace Spin;
 
+use \GuzzleHttp\Psr7\Request;
+use \GuzzleHttp\Psr7\Response;
+
 use \Spin\Core\AbstractBaseClass;
 use \Spin\ApplicationInterface;
 use \Spin\Core\Config;
@@ -17,8 +20,6 @@ use \Spin\Core\ConnectionManager;
 use \Spin\Core\CacheManager;
 use \Spin\Core\UploadedFilesManager;
 use \Spin\Exceptions\SpinException;
-use \Psr\Http\Message\RequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
 
 
 /**
@@ -59,7 +60,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Application/Framework version
    * @var  string */
-  const VERSION = '0.0.26';
+  const VERSION = '0.0.27';
 
   /**
    * Application Environment (from ENV vars)
@@ -88,17 +89,17 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
   /**
    * List of Route Groups
-   * @var  array */
+   * @var  array<mixed> */
   protected $routeGroups;
 
   /**
    * List of Global Before Middleware
-   * @var  array */
+   * @var  array<mixed> */
   protected $beforeMiddleware;
 
   /**
    * List of Global After Middleware
-   * @var  array */
+   * @var  array<mixed> */
   protected $afterMiddleware;
 
   /**
@@ -113,7 +114,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
   /**
    * Name, Code and Version of App
-   * @var  array */
+   * @var  array<mixed> */
   protected $version;
 
   /**
@@ -143,7 +144,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
   /**
    * List of cookies to send with response
-   * @var  array */
+   * @var  array<mixed> */
   protected $cookies;
 
   /**
@@ -168,7 +169,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
   /**
    * PSR-11 compatible Container for Dependencies
-   * @var  array */
+   * @var  array<mixed> */
   protected $container;
 
   /**
@@ -188,7 +189,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
   /**
    * Error Controllers, key=http code, value=Controller class[@handler]
-   * @var  array */
+   * @var  array<mixed> */
   protected $errorControllers;
 
   /**
@@ -198,14 +199,14 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
   /**
    * Application controlled global vars
-   * @var  array */
+   * @var  array<mixed> */
   protected $globalVars;
 
 
   /**
    * Constructor
    *
-   * @param      string  $basePath  The base path to the application folder
+   * @param   string  $basePath                                 The base path to the application folder
    */
   public function __construct(string $basePath)
   {
@@ -315,10 +316,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Run the application
    *
-   * @param      array  $serverRequest  Optional array with server request
-   *                                    variables like $_SERVER
+   * @param   array<mixed> $serverRequest                       Optional array with server request variables like $_SERVER
    *
-   * @return     bool
+   * @return  bool
    */
   public function run(array $serverRequest=null): bool
   {
@@ -363,7 +363,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Checks and Reports on config variables
    *
-   * @return void
+   * @return  void
    */
   protected function checkAndReportConfigVars(): void
   {
@@ -386,11 +386,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Load the $filename routes file and create all RouteGroups
    *
-   * @param      string                          $filename  [description]
+   * @param   string $filename                                  Filename to load
    *
-   * @throws     \Spin\Exceptions\SpinException
+   * @return  bool                                              True if routes loaded
    *
-   * @return     bool
+   * @throws  \Spin\Exceptions\SpinException                    If the routes file is invalid
    */
   protected function loadRoutes(string $filename='')
   {
@@ -446,7 +446,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Matches & runs route handler matching the Server Request
    *
-   * @return     Response|null  The matching route group
+   * @return  Response|null                                     The matching route group
    */
   protected function runRoute()
   {
@@ -646,12 +646,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * Execute the HandlerMethod of one of the Error Controllers defined in
    * rotues-{env].json}
    *
-   * @param      string       $body      An optional body to send if $httpCode
-   *                                     handler not found
-   * @param      int|integer  $httpCode  HTTP response code to run controller
-   *                                     for
+   * @param   string $body                                      An optional body to send if $httpCode handler not found
+   * @param   int|integer $httpCode                             Optional HTTP response code to the run controller
    *
-   * @return     Response
+   * @return  Response                                          The response object
    */
   public function runErrorController(string $body, int $httpCode=400)
   {
@@ -707,12 +705,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Loads a Factory class
    *
-   * @param      string  $params  The params found in the config file under the
-   *                              factory
+   * @param   string  $params                                   The params found in the config file under the factory
    *
-   * @throws     \Exception
+   * @return  object|null                                       Loaded factory object
    *
-   * @return     object|null
+   * @throws  \Exception                                        If the factory class is not found
    */
   protected function loadFactory(?array $params=[])
   {
@@ -736,7 +733,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Set the Error Handler
    *
-   * @return     bool
+   * @return  bool                                              True if set
    */
   protected function setErrorHandlers()
   {
@@ -759,13 +756,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * Handles all errors from the code. This is set as the default error handler.
    *
-   * @param      string $errNo        [description]
-   * @param      string $errStr       [description]
-   * @param      string $errFile      [description]
-   * @param      string $errLine      [description]
-   * @param      array  $errContext   [description]
+   * @param   string $errNo                                     Error Number
+   * @param   string $errStr                                    Error String
+   * @param   string $errFile                                   Error File
+   * @param   string $errLine                                   Error Line
+   * @param   array<mixed> $errContext                          Error Context
    *
-   * @return     bool
+   * @return  bool                                              True if handled
    */
   public function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext=[])
   {
@@ -826,9 +823,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * Handles any Exceptions from the application. This is set as the default
    * exception handler for all exceptions.
    *
-   * @param      object  $exception  [description]
    *
-   * @return     null
+   * @param   object $exception                                 The exception object
+   *
+   * @return  null                                              Null
    */
   public function exceptionHandler($exception)
   {
@@ -861,7 +859,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * This includes "maximum tmeout", "out of memory", "undefined variable" situations.
    *
-   * @return     bool
+   * @return  bool                                             True if handled
    */
   public function fatalErrorhandler()
   {
@@ -893,15 +891,15 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * Defaults to setting 'samesite'='Strict' to prevent CSRF.
    *
-   * @param      string        $name      [description]
-   * @param      string|null   $value     [description]
-   * @param      int|integer   $expire    [description]
-   * @param      string        $path      [description]
-   * @param      string        $domain    [description]
-   * @param      bool|boolean  $secure    [description]
-   * @param      bool|boolean  $httpOnly  [description]
+   * @param   string $name                                      The cookie name
+   * @param   string|null $value                                The cookie value
+   * @param   int|integer $expire                               The cookie expiration time
+   * @param   string $path                                      The cookie path
+   * @param   string $domain                                    The cookie domain
+   * @param   bool|boolean $secure                              The cookie secure flag
+   * @param   bool|boolean $httpOnly                            The cookie httpOnly flag
    *
-   * @return     mixed
+   * @return  mixed
    */
   public function setCookie(string $name, string $value=null, int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httpOnly=false)
   {
@@ -928,7 +926,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * getBasePath returns the full path to the application root folder
    *
-   * @return     string
+   * @return  string                                            The base path
    */
   public function getBasePath(): string
   {
@@ -938,7 +936,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * getAppPath returns the full path to the application folder + "/app"
    *
-   * @return     string
+   * @return  string                                            The app path
    */
   public function getAppPath(): string
   {
@@ -948,7 +946,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * getConfigPath returns the full path to the application folder + "/app/Config"
    *
-   * @return     string
+   * @return  string                                            The config path
    */
   public function getConfigPath(): string
   {
@@ -958,7 +956,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * getStoragePath returns the full path to the application folder + "/storage"
    *
-   * @return     string
+   * @return  string                                            The storage path
    */
   public function getStoragePath(): string
   {
@@ -970,7 +968,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * If the config does not contain an entry for the shared storage, the result is the same
    * as `getStoragePath()`
    *
-   * @return     string
+   * @return  string                                            The shared storage path
    */
   public function getSharedStoragePath(): string
   {
@@ -982,10 +980,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Returns a $app object property if it exists
    *
-   * @param      string      $property  The property name, or container name to
-   *                                    return
+   * @param   string $property                                  The property name, or container name to return
    *
-   * @return     mixed|null  Null if nothing was found
+   * @return  mixed|null                                        Null if nothing was found
    */
   public function getProperty(string $property)
   {
@@ -999,7 +996,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get Application Name - from config-*.json
    *
-   * @return     string
+   * @return  string                                            The application name
    */
   public function getAppName(): string
   {
@@ -1009,7 +1006,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get Application Code - from config-*.json
    *
-   * @return     string
+   * @return  string                                            The application code
    */
   public function getAppCode(): string
   {
@@ -1019,7 +1016,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get Application Version - from config-*.json
    *
-   * @return     string
+   * @return  string                                            The application version
    */
   public function getAppVersion(): string
   {
@@ -1029,7 +1026,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the HTTP Request (ServerRequest)
    *
-   * @return     null|Request
+   * @return  null|Request                                      The request object
    */
   public function getRequest()
   {
@@ -1039,7 +1036,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the HTTP Response (ServerResponse)
    *
-   * @return     null|Response
+   * @return null|Response                                      The response object
    */
   public function getResponse()
   {
@@ -1047,11 +1044,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
-   * Get the HTTP Response (ServerResponse)
+   * Set the HTTP Response (ServerResponse)
    *
-   * @param      Response  $response
+   * @param   Response $response                                The response object
    *
-   * @return     self
+   * @return  self                                              The current object
    */
   public function setResponse(Response $response)
   {
@@ -1063,7 +1060,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the Config object
    *
-   * @return     object
+   * @return  object                                            The config object
    */
   public function getConfig()
   {
@@ -1073,7 +1070,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the PSR-3 Logger object
    *
-   * @return     Logger
+   * @return  Logger                                            The logger object
    */
   public function getLogger()
   {
@@ -1083,7 +1080,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the PSR-11 Container object
    *
-   * @return     object
+   * @return  object                                            The container object
    */
   public function getContainer()
   {
@@ -1093,7 +1090,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the DB Manager
    *
-   * @return     ConnectionManager
+   * @return  ConnectionManager                                 The connection manager
    */
   public function getConnectionManager(): ?ConnectionManager
   {
@@ -1103,9 +1100,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the Cache Object via CacheManager
    *
-   * @param      string  $driverName  The driver name
+   * @param   string  $driverName                               The driver name
    *
-   * @return     object
+   * @return  object                                            The cache object
    */
   public function getCache(string $driverName='')
   {
@@ -1115,7 +1112,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the Environment as set in ENV vars
    *
-   * @return     string
+   * @return  string                                            The environment
    */
   public function getEnvironment(): string
   {
@@ -1123,15 +1120,15 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
-   * Set the Environment
+   * Set the Environment where app is running
    *
-   * @param      string  $environment  The environment
+   * @param   string $environment                               The environment name
    *
-   * @return     self
+   * @return  self                                              The current object
    */
   public function setEnvironment(string $environment)
   {
-    $this->environment = strtolower($environment);
+    $this->environment = \strtolower($environment);
 
     return $this;
   }
@@ -1139,9 +1136,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get a RouteGroup by Name
    *
-   * @param      string  $groupName  [description]
+   * @param   string $groupName                                 The group name
    *
-   * @return     null|RouteGroup
+   * @return  null|RouteGroup                                   `null` if not found or The route group
    */
   public function getRouteGroup(string $groupName)
   {
@@ -1158,7 +1155,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get all RouteGroups
    *
-   * @return    array
+   * @return  array<mixed>                                      The route groups
    */
   public function getRouteGroups(): array
   {
@@ -1168,11 +1165,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get or Set a Container value.
    *
-   * @param      string      $name   Dependency name
-   * @param      mixed|null  $value  Value to SET. if Omitted, then $name is
-   *                                 returned (if found)
+   * @param   string $name                                      Dependency name to get or set
+   * @param   mixed|null $value                                 Value to SET
    *
-   * @return     mixed|null
+   * @return  mixed|null                                        `null` if not found or the value for `$name` in the container
    */
   public function container(string $name, $value=null)
   {
@@ -1201,10 +1197,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Set the file to send as response
    *
-   * @param      string  $filename  Filename to send
-   * @param      bool    $remove    True to remove the file after sending
+   * @param   string $filename                                  Filename to send
+   * @param   bool $remove                                      Optional. Default `false`. Set to `True` to remove the file after sending
    *
-   * @return     self
+   * @return  self                                              The current object
    */
   public function setFileResponse(string $filename, bool $remove=false)
   {
@@ -1217,7 +1213,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Send Response back to client
    *
-   * @return self
+   * @return  self                                              The current object
    */
   public function sendResponse()
   {
@@ -1313,7 +1309,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the UploadedFilesManager
    *
-   * @return     UploadedFilesManager
+   * @return  UploadedFilesManager                              The uploaded files manager
    */
   public function getUploadedFilesManager()
   {
@@ -1322,6 +1318,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
   /**
    * Get the value of initialMemUsage
+   *
+   * @return  int                                               The initial memory usage
    */
   public function getInitialMemUsage()
   {
@@ -1330,6 +1328,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
   /**
    * Get the value of globalVars
+   *
+   * @return  array<mixed>                                      The global vars
    */
   public function getGlobalVars()
   {
@@ -1339,7 +1339,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Set the value of globalVars
    *
-   * @return  self
+   * @return  self                                              The current object
    */
   public function setGlobalVars($globalVars)
   {
@@ -1351,7 +1351,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get one global var
    *
-   * @return  null|mixed
+   * @param   string $id                                        The global variable id
+   *
+   * @return  null|mixed                                        The global variable
    */
   public function getGlobalVar(string $id)
   {
@@ -1361,7 +1363,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Set one global var
    *
-   * @return  self
+   * @param   string $id                                        The global variable id
+   * @param   mixed $value                                      The global variable value
+   *
+   * @return  self                                              The current object
    */
   public function setGlobalVar(string $id, $value)
   {
