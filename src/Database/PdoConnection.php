@@ -598,7 +598,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    *
    * @throws  \Exception
    */
-  public function rawExec(string $sql, array $params=[], bool $autoTransactions=true): ?int
+  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true)
   {
     $result = null;
 
@@ -623,7 +623,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
 
         # Execute statement
         if ($sth->execute()) {
-          $result = $sth->rowCount() > 0;
+          $result = $sth->rowCount();
         }
 
         # Close cursor

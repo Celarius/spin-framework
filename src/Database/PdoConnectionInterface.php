@@ -86,5 +86,5 @@ interface PdoConnectionInterface
    *
    * @throws  \Exception
    */
-  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true): ?int;
+  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true);
 }
