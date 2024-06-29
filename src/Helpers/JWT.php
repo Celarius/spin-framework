@@ -31,7 +31,7 @@ class JWT implements JWTInterface
    *                                                HS256', 'HS384', 'HS512', 'RS256', 'RS384'
    *                                                and 'RS512'.
    *
-   * @return array                                  The JWT's payload as a PHP object
+   * @return array                                 The JWT's payload as Array
    *
    * @throws \Exception                             On errors
    */
