@@ -82,9 +82,9 @@ interface PdoConnectionInterface
    * @param   array   $params             Array with Bind params
    * @param   bool    $autoTransactions   Optional. TRUE enables automatic transaction handling
    *
-   * @return  bool                        True if rows affected > 0
+   * @return  null|int                    `null` or number of rows affected
    *
    * @throws  \Exception
    */
-  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true): bool;
+  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true): ?int;
 }
