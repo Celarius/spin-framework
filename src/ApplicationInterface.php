@@ -8,32 +8,37 @@
 
 namespace Spin;
 
-use \Psr\Http\Message\RequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+use \GuzzleHttp\Psr7\Request;
+use \GuzzleHttp\Psr7\Response;
+
+use \Spin\Core\Config;
+use \Spin\Core\Logger;
+use \Spin\Core\RouteGroup;
+use \Spin\Core\ConnectionManager;
+use \Spin\Core\CacheManager;
+use \Spin\Core\UploadedFilesManager;
+use \Spin\Exceptions\SpinException;
+
 
 interface ApplicationInterface
 {
-
   /**
    * Run the application
    *
-   * @param      array  $serverRequest  Optional array with server request
-   *                                    variables
+   * @param   array<mixed> $serverRequest                       Optional array with server request variables like $_SERVER
    *
-   * @return     bool
+   * @return  bool
    */
   function run(array $serverRequest=null): bool;
 
   /**
    * Execute the HandlerMethod of one of the Error Controllers defined in
-   * rotues-{env}.json
+   * rotues-{env].json}
    *
-   * @param      string       $body      An optional body to send if $httpCode
-   *                                     handler not found
-   * @param      int|integer  $httpCode  HTTP response code to run controller
-   *                                     for
+   * @param   string $body                                      An optional body to send if $httpCode handler not found
+   * @param   int|integer $httpCode                             Optional HTTP response code to the run controller
    *
-   * @return     Response
+   * @return  Response                                          The response object
    */
   function runErrorController(string $body, int $httpCode=400);
 
@@ -42,13 +47,13 @@ interface ApplicationInterface
    *
    * Handles all errors from the code. This is set as the default error handler.
    *
-   * @param      [type]  $errNo       [description]
-   * @param      [type]  $errStr      [description]
-   * @param      [type]  $errFile     [description]
-   * @param      [type]  $errLine     [description]
-   * @param      array   $errContext  [description]
+   * @param   string $errNo                                     Error Number
+   * @param   string $errStr                                    Error String
+   * @param   string $errFile                                   Error File
+   * @param   string $errLine                                   Error Line
+   * @param   array<mixed> $errContext                          Error Context
    *
-   * @return     bool
+   * @return  bool                                              True if handled
    */
   function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext);
 
@@ -58,30 +63,38 @@ interface ApplicationInterface
    * Handles any Exceptions from the application. This is set as the default
    * exception handler for all exceptions.
    *
-   * @param      [type]  $exception  [description]
    *
-   * @return     [type]  [description]
+   * @param   object $exception                                 The exception object
+   *
+   * @return  null                                              Null
    */
   function exceptionHandler($exception);
 
   /**
-   * getBasePath returns the full path to the application folder
+   * getBasePath returns the full path to the application root folder
    *
-   * @return     string
+   * @return  string                                            The base path
    */
   function getBasePath(): string;
 
   /**
    * getAppPath returns the full path to the application folder + "/app"
    *
-   * @return     string
+   * @return  string                                            The app path
    */
   function getAppPath(): string;
 
   /**
+   * getConfigPath returns the full path to the application folder + "/app/Config"
+   *
+   * @return  string                                            The config path
+   */
+  public function getConfigPath(): string;
+
+  /**
    * getStoragePath returns the full path to the application folder + "/storage"
    *
-   * @return     string
+   * @return  string                                            The storage path
    */
   function getStoragePath(): string;
 
@@ -90,148 +103,156 @@ interface ApplicationInterface
    * If the config does not contain an entry for the shared storage, the result is the same
    * as `getStoragePath()`
    *
-   * @return     string
+   * @return  string                                            The shared storage path
    */
   function getSharedStoragePath(): string;
 
   /**
    * Returns a $app object property if it exists
    *
-   * @param      string  $property  The property name, or container name to
-   *                                return
+   * @param   string $property                                  The property name, or container name to return
    *
-   * @return     mixed|null  Null if nothing was found
+   * @return  mixed|null                                        Null if nothing was found
    */
   function getProperty(string $property);
 
   /**
    * Get Application Name - from config-*.json
    *
-   * @return     string
+   * @return  string                                            The application name
    */
   function getAppName(): string;
 
   /**
    * Get Application Code - from config-*.json
    *
-   * @return     string
+   * @return  string                                            The application code
    */
   function getAppCode(): string;
 
   /**
    * Get Application Version - from config-*.json
    *
-   * @return     string
+   * @return  string                                            The application version
    */
   function getAppVersion(): string;
 
   /**
    * Get the HTTP Request (ServerRequest)
    *
-   * @return     null|Request
+   * @return  null|Request                                      The request object
    */
   function getRequest();
 
   /**
    * Get the HTTP Response (ServerResponse)
    *
-   * @return     null|Response
+   * @return null|Response                                      The response object
    */
   function getResponse();
 
   /**
-   * Get the HTTP Response (ServerResponse)
+   * Set the HTTP Response (ServerResponse)
    *
-   * @param      Response  $response
+   * @param   Response $response                                The response object
    *
-   * @return     self
+   * @return  self                                              The current object
    */
   function setResponse(Response $response);
 
   /**
    * Get the Config object
    *
-   * @return     object
+   * @return  object                                            The config object
    */
   function getConfig();
 
   /**
    * Get the PSR-3 Logger object
    *
-   * @return     object
+   * @return  Logger                                            The logger object
    */
   function getLogger();
 
   /**
    * Get the PSR-11 Container object
    *
-   * @return     object
+   * @return  object                                            The container object
    */
   function getContainer();
 
   /**
    * Get the DB Manager
    *
-   * @return     object
+   * @return  ConnectionManager                                 The connection manager
    */
   function getConnectionManager();
 
   /**
    * Get the Cache Object via CacheManager
    *
-   * @param      string  $driverName  The driver name
+   * @param   string  $driverName                               The driver name
    *
-   * @return     object
+   * @return  object                                            The cache object
    */
   function getCache(string $driverName='');
 
   /**
    * Get the Environment as set in ENV vars
    *
-   * @return     string
+   * @return  string                                            The environment
    */
   function getEnvironment(): string;
 
   /**
+   * Set the Environment where app is running
+   *
+   * @param   string $environment                               The environment name
+   *
+   * @return  self                                              The current object
+   */
+  public function setEnvironment(string $environment);
+
+  /**
    * Get a RouteGroup by Name
    *
-   * @param      string  $groupName  [description]
+   * @param   string $groupName                                 The group name
    *
-   * @return     null  | RouteGroup
+   * @return  null|RouteGroup                                   `null` if not found or The route group
    */
   function getRouteGroup(string $groupName);
 
   /**
    * Get all RouteGroups
    *
-   * @return     null  | array
+   * @return  array<mixed>                                      The route groups
    */
   function getRouteGroups(): array;
 
   /**
    * Get or Set a Container value.
    *
-   * @param      string      $name   Dependency name
-   * @param      mixed|null  $value  Value to SET. if Omitted, then $name is
-   *                                 returned (if found)
+   * @param   string $name                                      Dependency name to get or set
+   * @param   mixed|null $value                                 Value to SET
    *
-   * @return     mixed|null
+   * @return  mixed|null                                        `null` if not found or the value for `$name` in the container
    */
   function container(string $name, $value=null);
 
   /**
    * Set the file to send as response
    *
-   * @param      string  $filename  [description]
+   * @param   string $filename                                  Filename to send
+   * @param   bool $remove                                      Optional. Default `false`. Set to `True` to remove the file after sending
    *
-   * @return     self
+   * @return  self                                              The current object
    */
   function setFileResponse(string $filename);
 
   /**
    * Send Response back to client
    *
-   * @return     bool
+   * @return  self                                              The current object
    */
   function sendResponse();
 
