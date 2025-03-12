@@ -83,19 +83,33 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
 
   public function get($key, mixed $default = null): mixed
   {
-    return $this->redisClient->get( $key ) ?? $default;
+    $result = $this->redisClient->get($key);
+    if ($result) {
+      return unserialize($result);
+    }
+    return $default;
+  }
+
+  /**
+   * Returns raw values from Redis without unserializing the data.
+   * If an object needs to be unserialized against its original class
+   * the client should handle it.
+   */
+  public function getRaw($key, mixed $default = null): mixed
+  {
+    return $this->redisClient->get($key) ?? $default;
   }
 
   public function set($key, $value, \DateInterval|int|null $ttl = null): bool
   {
     if (is_null($ttl)) {
-      return (bool)$this->redisClient->set($key, $value);
+      return (bool)$this->redisClient->set($key, serialize($value));
     }
     if ($ttl instanceof \DateInterval) {
       $now = (new \DateTime('now'))->getTimestamp();
       $ttl = (new \DateTime('now'))->add($ttl)->getTimestamp() - $now;
     }
-    return (bool)$this->redisClient->set($key, $value, 'ex', $ttl);
+    return (bool)$this->redisClient->set($key, serialize($value), 'ex', $ttl);
   }
 
   public function delete($key): bool
