@@ -26,11 +26,10 @@
   function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
   function responseHtml(string $body='', int $code=200, array $headers=[])
   function responseFile(string $filename, int $code=200, array $headers=[])
-
   function getClientIp()
-
   function getConfigPath()
   function mime_content_type($filename)
+  function mime_content_type_ex($filename)
  */
 
  use \GuzzleHttp\Psr7\Request;
@@ -570,6 +569,26 @@ if (!\function_exists('getClientIp')) {
     return '0.0.0.0'; // Could not determine address/invalid
   }
 }
+
+/* ************************************************************************************************************** */
+
+if (!function_exists("generateRefId")) {
+  /**
+   * Generates a `reference id` string, based on the current date and time in microseconds
+   *
+   * @param   string $prefix            Optional prefix to prepend to result, default is empty string
+   *
+   * @return  string                    String with reference id. ex. `<prefix>49p7qs0n3t0ks`
+   */
+  function generateRefId(string $prefix=''): string
+  {
+    $refId = (new \DateTIme('', new \DateTImeZone('UTC')))->format('YmdHisu'); // `u` = Microsecond precision
+
+    return $prefix . \baseConvert($refId, 10, 36);
+  }
+}
+
+/* ************************************************************************************************************** */
 
 if (!\function_exists("getConfigPath")) {
   /**

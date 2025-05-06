@@ -1,70 +1,58 @@
 <?php declare(strict_types=1);
 
-namespace Spin\Database;
+/**
+ * AbstractBaseDao
+ *
+ * @package DaoGen
+ */
 
+namespace App\Models;
+
+use \Spin\Database\PdoConnection;
+use \Spin\Database\PdoConnectionInterface;
+use \App\Models\AbstractBaseEntity;
+
+/**
+ * AbstraceBaseDao Interface
+ */
 interface AbstractBaseDaoInterface
 {
-  /**
-   * Constructor
-   *
-   * @param      string  $connectionName
-   */
-  function __construct(string $connectionName);
+  function makeEntity(array $fields=[]): AbstractBaseEntity;
+  function fetchCustom(string $sql,array $params=[]);
+  function fetchBy(string $field, $value);
+  function fetchAllBy(string $field, $value);
+  function execCustom(string $sql, array $params=[]): bool;
+  function execCustomRowCount(string $sql, array $params=[]): int;
+  function execCustomGetLastId(string $sql, array $params=[]): int;
+  function fetchCount(string $field,array $params=[]): int;
 
-  /**
-   * Get the DB connection assinged to this DAO object
-   *
-   * @return     null|PdoConnection
-   */
-  function getConnection();
+  function insert(AbstractBaseEntity &$item): bool;
+  function update(AbstractBaseEntity $item): bool;
+  function delete(AbstractBaseEntity &$item): bool;
 
-  /**
-   * Get the DB connection assinged to this DAO object
-   *
-   * @return     null|PdoConnection
-   * @deprecated 0.5.6 Removed in version 0.5.6
-   */
-  function db();
+  function getConnection(string $connectionName=''): ?PdoConnection;
+  function setConnection(?PdoConnection $connection);
 
-  /**
-   * Begin transaction if not already started
-   *
-   * @return     bool
-   */
   function beginTransaction();
-
-  /**
-   * Commit active transaction
-   *
-   * @return     bool
-   */
   function commit();
-
-  /**
-   * Rollback active transaction
-   *
-   * @return     bool
-   */
   function rollback();
 
-  /**
-   * Execute a SELECT statement
-   *
-   * @param      string  $sql     SQL statement to execute (SELECT ...)
-   * @param      array   $params  Bind params
-   * 
-   * @return     array  Array with fetched rows
-   */
   function rawQuery(string $sql, array $params=[]);
-
-  /**
-   * Execute an INSERT, UPDATE or DELETE statement
-   *
-   * @param      string  $sql     SQL statement to execute (INSERT, UPDATE,
-   *                              DELETE ...)
-   * @param      array   $params  Bind params
-   * 
-   * @return     bool  True if rows affected > 0
-   */
   function rawExec(string $sql, array $params=[]);
+
+  function getTable(): string;
+  function setTable(string $table);
+  function getCacheTTL(): int;
+  function setCacheTTL(int $cacheTTL=-1);
+
+  # Protected Cache methods
+  // protected function cacheSetItem(AbstractBaseEntity $item, $ttl=null )
+  // protected function cacheGetItemByField(string $field, string $value)
+  // protected function cacheGetById(string $id)
+  // protected function cacheGetByCode(string $code)
+  // protected function cacheGetByUuid(string $uuid)
+  // protected function cacheSetAll(array $items, $ttl=null)
+  // protected function cacheClearAll()
+  // protected function cacheGetAll()
+  // protected function cacheDelete(AbstractBaseEntity $item)
 }
