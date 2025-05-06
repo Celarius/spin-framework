@@ -8,7 +8,7 @@
  * @package   Spin
  *
  * @link      https://github.com/predis/predis
-*/
+ */
 
 /*
 // Redis connection details
@@ -37,12 +37,14 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
 
   public function __construct(array $connectionDetails=[], array $redisOptions=[])
   {
+    if (($connectionDetails['options'] ?? null) === null) {
+      throw new \Exception("Empty Redis connection options");
+    }
+
     # Set $driver and $connectionDetails
     parent::__construct('Redis', $connectionDetails);
-
     # Create the client
-    $this->redisClient = new RedisClient($connectionDetails, $redisOptions);
-
+    $this->redisClient = new RedisClient($connectionDetails['options']);
     # Set the version
     $this->setVersion( $this->redisClient::VERSION );
 
@@ -81,17 +83,38 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
 
   public function get($key, mixed $default = null): mixed
   {
-    return $this->redisClient->get( $key ) ?? $default;
+    $result = $this->redisClient->get($key);
+    if ($result) {
+      return unserialize($result);
+    }
+    return $default;
+  }
+
+  /**
+   * Returns raw values from Redis without unserializing the data.
+   * If an object needs to be unserialized against its original class
+   * the client should handle it.
+   */
+  public function getRaw($key, mixed $default = null): mixed
+  {
+    return $this->redisClient->get($key) ?? $default;
   }
 
   public function set($key, $value, \DateInterval|int|null $ttl = null): bool
   {
-    return $this->redisClient->set( $key, $value, null, (\is_null($ttl) ? 0 : (int) $ttl) );
+    if (is_null($ttl)) {
+      return (bool)$this->redisClient->set($key, serialize($value));
+    }
+    if ($ttl instanceof \DateInterval) {
+      $now = (new \DateTime('now'))->getTimestamp();
+      $ttl = (new \DateTime('now'))->add($ttl)->getTimestamp() - $now;
+    }
+    return (bool)$this->redisClient->set($key, serialize($value), 'ex', $ttl);
   }
 
   public function delete($key): bool
   {
-    return  $this->redisClient->del( $key ) != 0;
+    return $this->redisClient->del( $key ) != 0;
   }
 
   public function clear(): bool
