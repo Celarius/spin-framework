@@ -156,7 +156,6 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
       # Type="PDO"
       if ( \strcasecmp($params['type'] ?? '','PDO')==0 ) {
         # Build the Classname
-        // $className = '\\Spin\\Database\\Drivers\\'.\ucfirst($params['type'] ?? '').'\\'.\ucfirst($params['driver'] ?? '') ;
         $className = '\\Spin\\Database\\Drivers\\'.\ucfirst($params['type'] ?? '').'\\'.($params['driver'] ?? '') ;
 
         try {
@@ -168,17 +167,12 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
           $trace              = $e->getTraceAsString();
           $trace              = \str_replace($params['password'], "", $trace);
 
-          # add trace
-          \logger()->critical( $e->getMessage(), ['trace'=>$trace] );
-
           # throw new exception only if trace is modified
           if($beforeTraceLength != \strlen($trace)) {
             # new exception
             throw new \Exception($e->getMessage(), $e->getCode());
-          } else {
-            # just re-throw exception
-            throw $e;
           }
+          throw $e;
         }
       }
     }
