@@ -32,12 +32,12 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   /**
    * Get or Create a connection
    *
-   * @param      string  $name    Name of the connection
+   * @param      null|string  $name    Name of the connection
    * @param      array   $params  The connection parameters
    *
    * @return     null|PdoConnection
    */
-  public function getConnection(string $name=null, array $params=[])
+  public function getConnection(?string $name=null, array $params=[])
   {
     # Find the connection - null if it's not created
     $connection = $this->findConnection($name);
@@ -60,11 +60,11 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
    * If the $name is empty/null we'll return the 1st connection in the internal
    * connection list (if there is one)
    *
-   * @param      string  $name   Name of the connection (from Config)
+   * @param      null|string  $name   Name of the connection (from Config)
    *
    * @return     null|PdoConnection
    */
-  public function findConnection(string $name=null)
+  public function findConnection(?string $name=null)
   {
     if ( empty($name) ) {
       # Take first available connection
