@@ -1,6 +1,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.28
+- Support for PHP 8.4
+
 ## 0.0.26
 - Updated composer.json with newver versions of packages
 

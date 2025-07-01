@@ -60,7 +60,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Application/Framework version
    * @var  string */
-  const VERSION = '0.0.27';
+  const VERSION = '0.0.28';
 
   /**
    * Application Environment (from ENV vars)
@@ -778,10 +778,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       # Alert
 
-      # Critical
-      case E_STRICT:
-        $this->getLogger()->critical("$errStr in file $errFile on line $errLine",$errContext);
-        exit(1);
+      // # Critical
+      // case E_STRICT:
+      //   $this->getLogger()->critical("$errStr in file $errFile on line $errLine",$errContext);
+      //   exit(1);
 
       # Error
       case E_ERROR:
