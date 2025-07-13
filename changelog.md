@@ -2,7 +2,6 @@
 # Changelog
 SPIN Framework Changelog
 
-
 ## 0.0.29
 - Extracted `RequestIdClass` from `Application.php` into its own file under `src/Classes/RequestIdClass.php`.
 - Updated all usages to reference the new class location and namespace.
@@ -10,6 +9,9 @@ SPIN Framework Changelog
 - Fixed Redis adapter test to pass connection options in the correct structure (`options` key).
 - Fixed Redis adapter to throw clear exception if connection options are missing.
 - Updated container test to use correct `RequestIdClass` namespace and string casting for assertion.
+
+## 0.0.28
+- Support for PHP 8.4
 
 ## 0.0.26
 - Updated composer.json with newver versions of packages
