@@ -53,8 +53,8 @@ interface JWTInterface
     array $payload,
     $key,
     string $alg,
-    string $keyId = null,
-    array $head = null
+    ?string $keyId = null,
+    ?array $head = null
   ): string;
 
   /**

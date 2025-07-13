@@ -11,7 +11,12 @@ class RedisTest extends TestCase
 
   public function setup(): void
   {
-    $this->cacheObj = new Redis([]);
+    $this->cacheObj = new Redis([
+      'options' => [
+        'host' => '127.0.0.1',
+        'port' => 6379
+      ]
+    ]);
   }
 
   public function testRedisAdapterCreated()

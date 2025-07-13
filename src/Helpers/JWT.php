@@ -63,8 +63,8 @@ class JWT implements JWTInterface
     array $payload,
     $key,
     string $alg,
-    string $keyId = null,
-    array $head = null
+    ?string $keyId = null,
+    ?array $head = null
   ): string
   {
     return JWTClient::encode($payload, $key, $alg, $keyId, $head);

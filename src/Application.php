@@ -18,41 +18,12 @@ use \Spin\Core\Logger;
 use \Spin\Core\RouteGroup;
 use \Spin\Core\ConnectionManager;
 use \Spin\Core\CacheManager;
+
 use \Spin\Core\UploadedFilesManager;
 use \Spin\Exceptions\SpinException;
+use \Spin\Classes\RequestIdClass;
 
 
-/**
- * Class representing the 'requestId'
- */
-class RequestIdClass
-{
-  protected $id='';
-
-  public function __construct()
-  {
-    $this->generateId();
-  }
-
-  public function __toString()
-  {
-    return (string) $this->id;
-  }
-
-  public function generateId()
-  {
-    $this->id = \md5((string)\microtime(true));
-
-    return $this->id;
-  }
-
-  public function setId($value)
-  {
-    $this->id = $value;
-
-    return $this;
-  }
-}
 
 
 class Application extends AbstractBaseClass implements ApplicationInterface
@@ -325,11 +296,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     // try {
     //   # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
     //   \container('requestId', new RequestIdClass());
-
     // } catch (\Exception $e) {
     //   $this->getLogger()
     //        ->critical('Failed to create/load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
-
     //   die;
     // }
 
@@ -509,7 +478,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
         # Make sure we have a requestId at this stage
         if (\is_null(\container('requestId'))) {
-          \container('requestId', \md5((string)\microtime(true))); // Setting this is a ONE-TIME-OPERATION
+          \container('requestId', new RequestIdClass()); // Setting this is a ONE-TIME-OPERATION
         }
 
 
