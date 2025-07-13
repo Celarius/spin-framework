@@ -3,7 +3,7 @@
 SPIN Framework Changelog
 
 
-## 0.0.27
+## 0.0.29
 - Extracted `RequestIdClass` from `Application.php` into its own file under `src/Classes/RequestIdClass.php`.
 - Updated all usages to reference the new class location and namespace.
 - Added comprehensive class and method docblocks to `RequestIdClass` for improved code documentation and IDE support.
