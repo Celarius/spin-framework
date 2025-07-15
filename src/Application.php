@@ -30,147 +30,176 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /**
    * Application/Framework version
-   * @var  string */
+   * @var  string
+   */
   const VERSION = '0.0.29';
 
   /**
    * Application Environment (from ENV vars)
-   * @var  string */
+   * @var  string
+   */
   protected $environment;
 
   /**
    * Base path to application folder
-   * @var  string */
+   * @var  string
+   */
   protected $basePath;
 
   /**
    * Path to $basePath.'/app' folder
-   * @var  string */
+   * @var  string
+   */
   protected $appPath;
 
   /**
    * Path to $basePath.'/storage' folder
-   * @var  string */
+   * @var  string
+   */
   protected $storagePath;
 
   /**
    * Path to shared storage
-   * @var  string */
+   * @var  string
+   */
   protected $sharedStoragePath;
 
   /**
    * List of Route Groups
-   * @var  array<mixed> */
+   * @var  array<mixed>
+   */
   protected $routeGroups;
 
   /**
    * List of Global Before Middleware
-   * @var  array<mixed> */
+   * @var  array<mixed>
+   */
   protected $beforeMiddleware;
 
   /**
    * List of Global After Middleware
-   * @var  array<mixed> */
+   * @var  array<mixed>
+   */
   protected $afterMiddleware;
 
   /**
    * PHP Error Level we are using
-   * @var  int */
+   * @var  int
+   */
   protected $errorLevel = \E_ALL;
 
   /**
    * Config object
-   * @var  Config */
+   * @var  Config
+   */
   protected $config;
 
   /**
    * Name, Code and Version of App
-   * @var  array<mixed> */
+   * @var  array<mixed>
+   */
   protected $version;
 
   /**
    * PSR-3 compatible Logger object
-   * @var  Logger */
+   * @var  Logger
+   */
   protected $logger;
 
   /**
    * HTTP Factory
-   * @var  object */
+   * @var  object
+   */
   protected $httpServerRequestFactory;
 
   /**
    * HTTP Factory
-   * @var  object */
+   * @var  object
+   */
   protected $httpResponseFactory;
 
   /**
    * HTTP Factory
-   * @var  object */
+   * @var  object
+   */
   protected $httpStreamFactory;
 
   /**
    * Container Factory
-   * @var  object */
+   * @var  object
+   */
   protected $containerFactory;
 
   /**
    * List of cookies to send with response
-   * @var  array<mixed> */
+   * @var  array<mixed>
+   */
   protected $cookies;
 
   /**
    * PSR-7 compatible HTTP Server Request
-   * @var  Request */
+   * @var  Request
+   */
   protected $request;
 
   /**
    * PSR-7 compatible HTTP Response
-   * @var  Response */
+   * @var  Response
+   */
   protected $response;
 
   /**
    * Name of file to send as response
-   * @var  string */
+   * @var  string
+   */
   protected $responseFile;
 
   /**
    * True/False for removing the file after sending to client
-   * @var  bool */
+   * @var  bool
+   */
   protected $responseFileRemove;
 
   /**
    * PSR-11 compatible Container for Dependencies
-   * @var  array<mixed> */
+   * @var  mixed
+   */
   protected $container;
 
   /**
    * Manager that handles all caches
-   * @var  CacheManager */
+   * @var  CacheManager
+   */
   protected $cacheManager;
 
   /**
    * DB Connections manager
-   * @var  ConnectionManager */
+   * @var  ConnectionManager
+   */
   protected $connectionManager;
 
   /**
    * Uploaded files manager
-   * @var  UploadedFilesManager */
+   * @var  UploadedFilesManager
+   */
   protected $uploadedFilesManager;
 
   /**
    * Error Controllers, key=http code, value=Controller class[@handler]
-   * @var  array<mixed> */
+   * @var  array<mixed>
+   */
   protected $errorControllers;
 
   /**
    * Initial memory usage when SPIN starts
-   * @var  int */
+   * @var  int
+   */
   protected $initialMemUsage;
 
   /**
    * Application controlled global vars
-   * @var  array<mixed> */
+   * @var  array<mixed>
+   */
   protected $globalVars;
 
 
@@ -287,11 +316,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Run the application
    *
-   * @param   array<mixed> $serverRequest                       Optional array with server request variables like $_SERVER
+   * @param   array<mixed> $requestVars                       Optional array with server request variables like $_SERVER
    *
-   * @return  bool
+   * @return  bool                                            True if application ran successfully
    */
-  public function run(array $serverRequest=null): bool
+  public function run(array $requestVars=null): bool
   {
     // try {
     //   # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
@@ -305,10 +334,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     # Check and Report on config variables
     $this->checkAndReportConfigVars();
 
-    # Load Routes
-    $ok = $this->loadRoutes();
-
-    if ( $ok ) {
+    if ( $this->loadRoutes() ) {
       # Match Route & Run
       $response = $this->runRoute();
 
