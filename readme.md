@@ -61,9 +61,9 @@ running `composer update -o` in the folder. This will download all needed packag
 configs, routes, controllers and many other things.
 
 ## 2.2. Testing
-Having PHPUnit installed simply type
+On Windows based systems simply type
 ```txt
-phpunit
+.\phpunit.cmd
 ```
 At the command prompt and all tests will be executed.
 

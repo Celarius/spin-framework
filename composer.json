@@ -58,5 +58,8 @@
   },
   "scripts": {
     "test": "phpunit"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.2"
   }
 }

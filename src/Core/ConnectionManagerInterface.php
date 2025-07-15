@@ -11,7 +11,7 @@ interface ConnectionManagerInterface
    * Find a connection based on name
    *
    * @param      string  $name   Name of the connection (from Config)
-   * 
+   *
    * @return     null|PdoConnection
    */
   function findConnection(string $name);
@@ -19,11 +19,11 @@ interface ConnectionManagerInterface
   /**
    * Get or Create a connection
    *
-   * @param      string  $name   Name of the connection (from Config)
+   * @param      null|string  $name   Name of the connection (from Config)
    *
    * @return     null|PdoConnection
    */
-  function getConnection(string $name=null);
+  function getConnection(?string $name=null);
 
   /**
    * Adds the Connection to the Pool

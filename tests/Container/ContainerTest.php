@@ -88,12 +88,12 @@ class ContainerTest extends TestCase
   public function testContainerRequestIdClass()
   {
     # Create class
-    container('requestId', new \Spin\RequestIdClass() );
+    container('requestId', new \Spin\Classes\RequestIdClass() );
 
     # set new value
     container('requestId')->setId('abc123');
 
-    $this->assertEquals('abc123', container('requestId'));
+    $this->assertEquals('abc123', (string)container('requestId'));
   }
 
 }
