@@ -867,7 +867,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     }
 
     # Log the Fatal Error
-    $this->getLogger()->critical('PHP Fatal error', array_merge($lastErrorArray,['trace'=>debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)]));
+    $this->getLogger()->critical('PHP Fatal error', array_merge($lastErrorArray,['trace'=>debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)]));
 
     # Run the Error Controller
     $response = $this->runErrorController($lastErrorArray['message'] ?? 'Unknown',500);
