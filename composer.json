@@ -26,8 +26,8 @@
     "ext-mbstring": "*",
     "ext-openssl": "*",
 
-    "psr/log": "^3",
-    "psr/container": "^2",
+    "psr/log": "*",
+    "psr/container": "*",
     "psr/http-factory": "^1",
     "psr/http-message": "^2",
     "psr/simple-cache": "^3",
