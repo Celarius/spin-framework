@@ -32,7 +32,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * Application/Framework version
    * @var  string
    */
-  const VERSION = '0.0.29';
+  const VERSION = '0.0.30';
 
   /**
    * Application Environment (from ENV vars)
@@ -730,14 +730,14 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  bool                                              True if set
    */
-  protected function setErrorHandlers()
+  protected function setErrorHandlers(): bool
   {
     # Report all PHP errors (see changelog)
-    $this->errorLevel = \error_reporting( \E_ALL | \E_STRICT);
+    $this->errorLevel = \error_reporting( \E_ALL);
 
     # set to the user defined error handler
-    $old_error_handler = \set_error_handler( array($this,'errorHandler'), E_ALL );
-    $old_exception_handler = \set_exception_handler( array($this,'exceptionHandler') );
+    $old_error_handler = \set_error_handler(array($this,'errorHandler'));
+    $old_exception_handler = \set_exception_handler(array($this,'exceptionHandler'));
 
     \register_shutdown_function( array($this,'fatalErrorhandler') );
 
@@ -769,15 +769,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     }
 
     switch ($errNo) {
-      # Emergency
-
-      # Alert
-
-      // # Critical
-      // case E_STRICT:
-      //   $this->getLogger()->critical("$errStr in file $errFile on line $errLine",$errContext);
-      //   exit(1);
-
       # Error
       case E_ERROR:
       case E_USER_ERROR:
