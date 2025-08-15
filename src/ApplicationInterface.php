@@ -25,29 +25,29 @@ interface ApplicationInterface
   /**
    * Run the application
    *
-   * @param   array<mixed> $serverRequest                       Optional array with server request variables like $_SERVER
+   * @param   ?array $serverRequest                       Optional array with server request variables like $_SERVER
    *
    * @return  bool
    */
-  function run(array $serverRequest=null): bool;
+  public function run(?array $serverRequest): bool;
 
   /**
    * Execute the HandlerMethod of one of the Error Controllers defined in
-   * rotues-{env].json}
+   * routes-{env].json}
    *
    * @param   string $body                                      An optional body to send if $httpCode handler not found
-   * @param   int|integer $httpCode                             Optional HTTP response code to the run controller
+   * @param   int $httpCode                                     Optional HTTP response code to the run controller
    *
    * @return  Response                                          The response object
    */
-  function runErrorController(string $body, int $httpCode=400);
+  public function runErrorController(string $body, int $httpCode = 400): Response;
 
   /**
    * Error Handler
    *
    * Handles all errors from the code. This is set as the default error handler.
    *
-   * @param   string $errNo                                     Error Number
+   * @param   int $errNo                                        Error Number
    * @param   string $errStr                                    Error String
    * @param   string $errFile                                   Error File
    * @param   string $errLine                                   Error Line
@@ -55,7 +55,7 @@ interface ApplicationInterface
    *
    * @return  bool                                              True if handled
    */
-  function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext);
+  public function errorHandler(int $errNo, $errStr, $errFile, $errLine, array $errContext);
 
   /**
    * Exception Handler
@@ -64,25 +64,25 @@ interface ApplicationInterface
    * exception handler for all exceptions.
    *
    *
-   * @param   object $exception                                 The exception object
+   * @param   \Exception $exception                             The exception object
    *
-   * @return  null                                              Null
+   * @return  mixed                                             Null on error or callback to error handler
    */
-  function exceptionHandler($exception);
+  public function exceptionHandler(\Exception $exception);
 
   /**
    * getBasePath returns the full path to the application root folder
    *
    * @return  string                                            The base path
    */
-  function getBasePath(): string;
+  public function getBasePath(): string;
 
   /**
    * getAppPath returns the full path to the application folder + "/app"
    *
    * @return  string                                            The app path
    */
-  function getAppPath(): string;
+  public function getAppPath(): string;
 
   /**
    * getConfigPath returns the full path to the application folder + "/app/Config"
@@ -96,7 +96,7 @@ interface ApplicationInterface
    *
    * @return  string                                            The storage path
    */
-  function getStoragePath(): string;
+  public function getStoragePath(): string;
 
   /**
    * getSharedStoragePath returns the full path to the configured shared storage path.
@@ -105,51 +105,51 @@ interface ApplicationInterface
    *
    * @return  string                                            The shared storage path
    */
-  function getSharedStoragePath(): string;
+  public function getSharedStoragePath(): string;
 
   /**
    * Returns a $app object property if it exists
    *
    * @param   string $property                                  The property name, or container name to return
    *
-   * @return  mixed|null                                        Null if nothing was found
+   * @return  mixed                                             Null if nothing was found
    */
-  function getProperty(string $property);
+  public function getProperty(string $property): mixed;
 
   /**
    * Get Application Name - from config-*.json
    *
    * @return  string                                            The application name
    */
-  function getAppName(): string;
+  public function getAppName(): string;
 
   /**
    * Get Application Code - from config-*.json
    *
    * @return  string                                            The application code
    */
-  function getAppCode(): string;
+  public function getAppCode(): string;
 
   /**
    * Get Application Version - from config-*.json
    *
    * @return  string                                            The application version
    */
-  function getAppVersion(): string;
+  public function getAppVersion(): string;
 
   /**
    * Get the HTTP Request (ServerRequest)
    *
    * @return  null|Request                                      The request object
    */
-  function getRequest();
+  public function getRequest(): ?Request;
 
   /**
    * Get the HTTP Response (ServerResponse)
    *
    * @return null|Response                                      The response object
    */
-  function getResponse();
+  public function getResponse();
 
   /**
    * Set the HTTP Response (ServerResponse)
@@ -158,35 +158,35 @@ interface ApplicationInterface
    *
    * @return  self                                              The current object
    */
-  function setResponse(Response $response);
+  public function setResponse(Response $response);
 
   /**
    * Get the Config object
    *
    * @return  object                                            The config object
    */
-  function getConfig();
+  public function getConfig();
 
   /**
    * Get the PSR-3 Logger object
    *
    * @return  Logger                                            The logger object
    */
-  function getLogger();
+  public function getLogger();
 
   /**
    * Get the PSR-11 Container object
    *
    * @return  object                                            The container object
    */
-  function getContainer();
+  public function getContainer();
 
   /**
    * Get the DB Manager
    *
    * @return  ConnectionManager                                 The connection manager
    */
-  function getConnectionManager();
+  public function getConnectionManager();
 
   /**
    * Get the Cache Object via CacheManager
@@ -195,14 +195,14 @@ interface ApplicationInterface
    *
    * @return  object                                            The cache object
    */
-  function getCache(string $driverName='');
+  public function getCache(string $driverName='');
 
   /**
    * Get the Environment as set in ENV vars
    *
    * @return  string                                            The environment
    */
-  function getEnvironment(): string;
+  public function getEnvironment(): string;
 
   /**
    * Set the Environment where app is running
@@ -220,14 +220,14 @@ interface ApplicationInterface
    *
    * @return  null|RouteGroup                                   `null` if not found or The route group
    */
-  function getRouteGroup(string $groupName);
+  public function getRouteGroup(string $groupName);
 
   /**
    * Get all RouteGroups
    *
    * @return  array<mixed>                                      The route groups
    */
-  function getRouteGroups(): array;
+  public function getRouteGroups(): array;
 
   /**
    * Get or Set a Container value.
@@ -237,7 +237,7 @@ interface ApplicationInterface
    *
    * @return  mixed|null                                        `null` if not found or the value for `$name` in the container
    */
-  function container(string $name, $value=null);
+  public function container(string $name, $value=null): mixed;
 
   /**
    * Set the file to send as response
@@ -247,13 +247,13 @@ interface ApplicationInterface
    *
    * @return  self                                              The current object
    */
-  function setFileResponse(string $filename);
+  public function setFileResponse(string $filename);
 
   /**
    * Send Response back to client
    *
    * @return  self                                              The current object
    */
-  function sendResponse();
+  public function sendResponse();
 
 }

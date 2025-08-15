@@ -40,9 +40,9 @@ interface ConfigInterface
    *
    * @param      string  $filename
    *
-   * @return     self
+   * @return     bool
    */
-  function save(string $filename=null): bool;
+  function save(string $filename = ''): bool;
 
   /**
    * Get a config item

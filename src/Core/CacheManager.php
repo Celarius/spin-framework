@@ -34,9 +34,9 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
    *
    * @param      string  $name   Name of the Cache (from Config)
    *
-   * @return     null|object
+   * @return     null|AbstractCacheAdapterInterface
    */
-  public function getCache(string $name='')
+  public function getCache(string $name=''): ?AbstractCacheAdapterInterface
   {
     # Find the cache (if we already have it created)
     $cache = $this->findCache($name);

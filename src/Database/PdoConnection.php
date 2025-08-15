@@ -8,51 +8,72 @@
 
 namespace Spin\Database;
 
-use \Spin\Database\PdoConnectionInterface;
-
-abstract class PdoConnection extends \PDO implements PdoConnectionInterface
+class PdoConnection extends \PDO implements PdoConnectionInterface
 {
-  /** @var  string          Connection name */
-  protected $name = '';
+  /**
+   * @var string Connection name
+   */
+  protected string $name = '';
 
-  /** @var  string          Connection type */
-  protected $type = '';
+  /**
+   * @var string Connection type
+   */
+  protected string $type = '';
 
-  /** @var  string          Connection driver name ('MySql','Firebird','Sqlite'...) */
-  protected $driver = '';
+  /**
+   * @var string Connection driver name ('MySql','Firebird','Sqlite'...)
+   */
+  protected string $driver = '';
 
-  /** @var  bool            Connection state. */
-  protected $connected = false;
+  /**
+   * @var string
+   */
+  protected string $schema = '';
 
-  /** @var  string          Connection property string */
-  protected $schema = '';
+  /**
+   * @var string
+   */
+  protected string $host = '';
 
-  /** @var  string          Connection property string */
-  protected $host = '';
+  /**
+   * @var int
+   */
+  protected int $port = 0;
 
-  /** @var  int             Connection property string */
-  protected $port = 0;
+  /**
+   * @var string
+   */
+  protected string $username = '';
 
-  /** @var  string          Connection property string */
-  protected $username = '';
+  /**
+   * @var string
+   */
+  protected string $password = '';
 
-  /** @var  string          Connection property string */
-  protected $password = '';
+  /**
+   * @var string
+   */
+  protected string $charset = '';
 
-  /** @var  string          Connection property string */
-  protected $charset = '';
+  /**
+   * @var array PDO options array
+   */
+  protected array $options = [];
 
-  /** @var array            PDO options array */
-  protected $options = [];
+  /**
+   * @var string Full DSN of PDO connection
+   */
+  protected string $dsn = '';
 
-  /** @var string           Full DSN of PDO connection */
-  protected $dsn = '';
+  /**
+   * @var string Database Engine Version we connect to
+   */
+  protected string $serverVersion = '';
 
-  /** @var string           Database Engine Version we connect to */
-  protected $serverVersion = '';
-
-  /** @var string           Client Driver Version we connect to */
-  protected $clientVersion = '';
+  /**
+   * @var string Client Driver Version we connect to
+   */
+  protected string $clientVersion = '';
 
 
   /**
@@ -61,7 +82,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
    * @param      string  $connectionName    Name of the connection
    * @param      array   $params            Array with connection parameters
    */
-  public function __construct(string $connectionName, array $params=[])
+  public function __construct(string $connectionName, array $params = [])
   {
     # Extract the needed parameters
     $this->setName($connectionName);
@@ -80,23 +101,19 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     $pdoOptions = [];
 
     # Convert the PDO params into PDO constants
-    foreach ($pdoParams as $pdoOptionName => $pdoValue)
-    {
+    foreach ($pdoParams as $pdoOptionName => $pdoValue) {
       # Convert PDO-OPTION to a number
       if (!\is_numeric($pdoOptionName)) {
-        $pdoOption = \constant('\PDO::'.\strtoupper($pdoOptionName)); // PDO Option name constant
+        $pdoOption = \constant('\PDO::' . \strtoupper($pdoOptionName)); // PDO Option name constant
       }
 
       # Convert PDO-VALUE to a number
       if (\is_numeric($pdoValue)) {
         $pdoValue = (float) $pdoValue; // Its a number
-
       } else if (\is_bool($pdoValue)) {
         $pdoValue = (int) $pdoValue; // Its a BOOLEAN, convert to int
-
       } else if (!empty($pdoValue)) {
-
-        if (\mb_substr($pdoOptionName,0,6)=='MYSQL_') {
+        if (\mb_substr($pdoOptionName,0,6) === 'MYSQL_') {
           // MySQL values, do not prepend with `PDO::`
           // Just fallthrough with the value as is
           $pdoValue = (string) $pdoValue;
@@ -109,11 +126,11 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
       }
 
       # Set the Option
-      $pdoOptions[ (int)$pdoOption ] = $pdoValue;
+      $pdoOptions[(int)$pdoOption] = $pdoValue;
     }
 
     # Default PDO options for all drivers if none given
-    if (\count($pdoOptions)==0) {
+    if (\count($pdoOptions) === 0) {
       $pdoOptions = [
           \PDO::ATTR_PERSISTENT => (int)TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
@@ -128,14 +145,14 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     parent::__construct($this->getDsn(),$this->getUsername(),$this->getPassword(),$this->getOptions());
 
     try {
-      # Retreive the Client Library Version (if supported)
+      # Retrieve the Client Library Version (if supported)
       $this->setClientVersion($this->getAttribute(\PDO::ATTR_CLIENT_VERSION));
     } catch (\Exception $e) {
       // error_log($e->getMessage().' | '.$e->getTraceAsString());
     }
 
     try {
-      # Retreive the DB Server Version (if supported)
+      # Retrieve the DB Server Version (if supported)
       $this->setServerVersion($this->getAttribute(\PDO::ATTR_SERVER_VERSION));
     } catch (\Exception $e) {
       // error_log($e->getMessage().' | '.$e->getTraceAsString());
@@ -145,14 +162,11 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     \error_clear_last();
 
     # Debug log
-    \logger()->debug( 'Created Connection', ['connection'=>$this->getName()] );
-
-    # Set connected
-    $this->connected = true;
+    \logger()->debug( 'Created Connection', ['connection' => $this->getName()] );
   }
 
   /**
-   * Destrctor
+   * Destructor
    */
   public function __destruct()
   {
@@ -161,49 +175,20 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Connect to Database
-   *
-   * This does not work in PDO as the connection is always open as long as the
-   * object (this) exists.
-   *
-   * @return     bool
-   */
-  public function connect(): bool
-  {
-    return $this->connected();
-  }
-
-  /**
-   * Disconnect from database
-   *
-   * This does not work in PDO since there is no disconnect() feature in PDO
-   *
-   * @return     bool
+   * @inheritDoc
    */
   public function disconnect(): bool
   {
     # Rollback any open transactions
-    if ($this->inTransaction()) $this->rollback();
+    if ($this->inTransaction()) {
+      $this->rollback();
+    }
 
     return true;
   }
 
   /**
-   * Checks if Connected to a Database
-   *
-   * @return     bool  True for connected, false if not
-   */
-  public function connected(): bool
-  {
-    return $this->connected;
-  }
-
-  /**
-   * Get DSN - Return the default formatted DSN
-   *
-   * This method needs to be overridden in DB specific driver
-   *
-   * @return     string  [description]
+   * @inheritDoc
    */
   public function getDsn(): string
   {
@@ -217,9 +202,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get the Name
-   *
-   * @return     string
+   * @inheritDoc
    */
   public function getName(): string
   {
@@ -227,9 +210,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get the Type
-   *
-   * @return     string
+   * @inheritDoc
    */
   public function getType(): string
   {
@@ -237,9 +218,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get the Driver
-   *
-   * @return     string
+   * @inheritDoc
    */
   public function getDriver(): string
   {
@@ -247,9 +226,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get the Schema
-   *
-   * @return     string
+   * @inheritDoc
    */
   public function getSchema(): string
   {
@@ -257,9 +234,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get the Host
-   *
-   * @return     string
+   * @inheritDoc
    */
   public function getHost(): string
   {
@@ -267,9 +242,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get the Port
-   *
-   * @return     int
+   * @inheritDoc
    */
   public function getPort(): int
   {
@@ -277,9 +250,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get Username
-   *
-   * @return     string
+   * @inheritDoc
    */
   public function getUsername(): string
   {
@@ -287,9 +258,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get Password
-   *
-   * @return     string
+   * @inheritDoc
    */
   public function getPassword(): string
   {
@@ -297,9 +266,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get Charset
-   *
-   * @return     string
+   * @inheritDoc
    */
   public function getCharset(): string
   {
@@ -307,9 +274,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get Options
-   *
-   * @return     array
+   * @inheritDoc
    */
   public function getOptions(): array
   {
@@ -317,9 +282,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get Server Version
-   *
-   * @return     array
+   * @inheritDoc
    */
   public function getServerVersion(): string
   {
@@ -327,9 +290,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Get Client Version
-   *
-   * @return     array
+   * @inheritDoc
    */
   public function getClientVersion(): string
   {
@@ -337,13 +298,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set DSN connection string
-   *
-   * @param      [type]  $dsn    [description]
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setDsn(string $dsn)
+  public function setDsn(string $dsn): self
   {
     $this->dsn = $dsn;
 
@@ -351,13 +308,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set Connection Name
-   *
-   * @param      string  $name
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setName(string $name)
+  public function setName(string $name): self
   {
     $this->name = $name;
 
@@ -365,13 +318,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set Type
-   *
-   * @param      string  $type
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setType(string $type)
+  public function setType(string $type): self
   {
     $this->type = $type;
 
@@ -379,13 +328,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set Connection host
-   *
-   * @param      string  $host
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setHost(string $host)
+  public function setHost(string $host): self
   {
     $this->host = $host;
 
@@ -393,13 +338,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set port
-   *
-   * @param      int    $port
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setPort(int $port)
+  public function setPort(int $port): self
   {
     $this->port = $port;
 
@@ -407,13 +348,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set Driver
-   *
-   * @param      string  $driver
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setDriver(string $driver)
+  public function setDriver(string $driver): self
   {
     $this->driver = $driver;
 
@@ -421,13 +358,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set Schema
-   *
-   * @param      string  $schema
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setSchema(string $schema)
+  public function setSchema(string $schema): self
   {
     $this->schema = $schema;
 
@@ -435,13 +368,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set Username
-   *
-   * @param      string  $username  [description]
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setUsername(string $username)
+  public function setUsername(string $username): self
   {
     $this->username = $username;
 
@@ -449,13 +378,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set Password
-   *
-   * @param      string  $password  [description]
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setPassword(string $password)
+  public function setPassword(string $password): self
   {
     $this->password = $password;
 
@@ -463,13 +388,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set Charset
-   *
-   * @param      string  $charset  Charset to use
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setCharset(string $charset)
+  public function setCharset(string $charset): self
   {
     $this->charset = $charset;
 
@@ -477,13 +398,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set ServerVersion
-   *
-   * @param      string  $serverVersion
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setServerVersion(string $serverVersion)
+  public function setServerVersion(string $serverVersion): self
   {
     $this->serverVersion = $serverVersion;
 
@@ -491,14 +408,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set clientVersion
-   *
-   * @param      ?string  $clientVersion  The client version
-   * @param      string  $serverVersio
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setClientVersion(string $clientVersion)
+  public function setClientVersion(string $clientVersion): self
   {
     $this->clientVersion = $clientVersion;
 
@@ -506,13 +418,9 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Set Connection Options
-   *
-   * @param      array  $options  [description]
-   *
-   * @return     self
+   * @inheritDoc
    */
-  public function setOptions(array $options)
+  public function setOptions(array $options): self
   {
     $this->options = $options;
 
@@ -520,15 +428,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Execute a SELECT statement
-   *
-   * @param   string  $sql                SQL statement to execute (SELECT ...)
-   * @param   array   $params             Array with Bind params
-   * @param   bool    $autoTransactions   Optional. TRUE enables automatic transaction handling
-   *
-   * @return  array                       Array with fetched rows
-   *
-   * @throws  \Exception
+   * @inheritDoc
    */
   public function rawQuery(string $sql, array $params=[], bool $autoTransactions=true): array
   {
@@ -540,7 +440,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
     }
 
     try {
-      # Obtain transaction, unelss already in a transaction
+      # Obtain transaction, unless already in a transaction
       $autoCommit = false;
       if ($autoTransactions && !$this->inTransaction()) {
         $autoCommit = $this->beginTransaction();
@@ -550,8 +450,7 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
       if ($sth = $this->prepare($sql)) {
 
         # Binds
-        foreach ($params as $bind=>$value)
-        {
+        foreach ($params as $bind => $value) {
           if (\is_int($value)) {
             $sth->bindValue( ':'.\ltrim($bind,':'), (int)$value, \PDO::PARAM_INT); // INT !
           } else
@@ -574,12 +473,16 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
         $sth->closeCursor();
       }
 
-      # If we had a loacl transaction, commit it
-      if ($autoTransactions && $autoCommit) $this->commit();
+      # If we had a local transaction, commit it
+      if ($autoTransactions && $autoCommit) {
+        $this->commit();
+      }
 
     } catch (\Exception $e) {
-      # If we had a loacl transaction, rollback
-      if ($autoTransactions && $autoCommit) $this->rollBack();
+      # If we had a local transaction, rollback
+      if ($autoTransactions && $autoCommit) {
+        $this->rollBack();
+      }
 
       throw $e;
     }
@@ -588,27 +491,18 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
   }
 
   /**
-   * Execute an INSERT, UPDATE or DELETE statement
-   *
-   * @param   string  $sql                SQL statement to execute (INSERT, UPDATE, DELETE ...)
-   * @param   array   $params             Array with Bind params
-   * @param   bool    $autoTransactions   Optional. TRUE enables automatic transaction handling
-   *
-   * @return  null|int                    `null` or number of rows affected
-   *
-   * @throws  \Exception
+   * @inheritDoc
    */
-  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true)
+  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true): ?int
   {
-    $result = null;
-
     # Sanity check
     if (empty($sql)) {
-      return $result;
+      return null;
     }
 
+    $result = null;
     try {
-      # Obtain transaction, unelss already in a transaction
+      # Obtain transaction, unless already in a transaction
       $autoCommit = false;
       if ($autoTransactions && !$this->inTransaction()) {
         $autoCommit = $this->beginTransaction();
@@ -630,12 +524,16 @@ abstract class PdoConnection extends \PDO implements PdoConnectionInterface
         $sth->closeCursor();
       }
 
-      # If we had a loacl transaction, commit it
-      if ($autoTransactions && $autoCommit) $this->commit();
+      # If we had a local transaction, commit it
+      if ($autoTransactions && $autoCommit) {
+        $this->commit();
+      }
 
     } catch (\Exception $e) {
-      # If we had a loacl transaction, rollback
-      if ($autoTransactions && $autoCommit) $this->rollBack();
+      # If we had a local transaction, rollback
+      if ($autoTransactions && $autoCommit) {
+        $this->rollBack();
+      }
 
       throw $e;
     }
