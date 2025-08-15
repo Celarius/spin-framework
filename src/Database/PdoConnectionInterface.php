@@ -28,39 +28,229 @@ interface PdoConnectionInterface
   // function setAttribute(int $attribute, $value): bool;
 
   # Custom additions
-  function connect(): bool;
-  function disconnect(): bool;
+
+  /**
+   * Disconnect from database
+   *
+   * This does not work in PDO since there is no disconnect() feature in PDO
+   *
+   * @return     bool
+   */
+  public function disconnect(): bool;
 
   # Getters
-  function connected(): bool;
-  function getDsn(): string;
-  function getName(): string;
-  function getType(): string;
-  function getDriver(): string;
-  function getSchema(): string;
-  function getHost(): string;
-  function getPort(): int;
-  function getUsername(): string;
-  function getPassword(): string;
-  function getCharset(): string;
-  function getOptions(): array;
-  function getServerVersion(): string;
-  function getClientVersion(): string;
+
+  /**
+   * Get DSN - Return the default formatted DSN
+   *
+   * This method needs to be overridden in DB specific driver
+   *
+   * @return     string
+   */
+  public function getDsn(): string;
+
+  /**
+   * Get the Name
+   *
+   * @return     string
+   */
+  public function getName(): string;
+
+  /**
+   * Get the Type
+   *
+   * @return     string
+   */
+  public function getType(): string;
+
+  /**
+   * Get the Driver
+   *
+   * @return     string
+   */
+  public function getDriver(): string;
+
+  /**
+   * Get the Schema
+   *
+   * @return     string
+   */
+  public function getSchema(): string;
+
+  /**
+   * Get the Host
+   *
+   * @return     string
+   */
+  public function getHost(): string;
+
+  /**
+   * Get the Port
+   *
+   * @return     int
+   */
+  public function getPort(): int;
+
+  /**
+   * Get Username
+   *
+   * @return     string
+   */
+  public function getUsername(): string;
+
+  /**
+   * Get Password
+   *
+   * @return     string
+   */
+  public function getPassword(): string;
+
+  /**
+   * Get Charset
+   *
+   * @return     string
+   */
+  public function getCharset(): string;
+
+  /**
+   * Get Options
+   *
+   * @return     array
+   */
+  public function getOptions(): array;
+
+  /**
+   * Get Server Version
+   *
+   * @return     string
+   */
+  public function getServerVersion(): string;
+
+  /**
+   * Get Client Version
+   *
+   * @return     string
+   */
+  public function getClientVersion(): string;
 
   # Setters
-  function setDsn(string $dsn);
-  function setName(string $name);
-  function setType(string $type);
-  function setHost(string $host);
-  function setPort(int $port);
-  function setDriver(string $driver);
-  function setSchema(string $schema);
-  function setUsername(string $username);
-  function setPassword(string $password);
-  function setCharset(string $charset);
-  function setOptions(array $options);
-  function setServerVersion(string $serverVersion);
-  function setClientVersion(string $clientVersion);
+
+  /**
+   * Set DSN connection string
+   *
+   * @param      string $dsn
+   *
+   * @return     self
+   */
+  public function setDsn(string $dsn): PdoConnectionInterface;
+
+  /**
+   * Set Connection Name
+   *
+   * @param      string  $name
+   *
+   * @return     self
+   */
+  public function setName(string $name): PdoConnectionInterface;
+
+  /**
+   * Set Type
+   *
+   * @param      string  $type
+   *
+   * @return     self
+   */
+  public function setType(string $type): PdoConnectionInterface;
+
+  /**
+   * Set Connection host
+   *
+   * @param      string  $host
+   *
+   * @return     self
+   */
+  public function setHost(string $host): PdoConnectionInterface;
+
+  /**
+   * Set port
+   *
+   * @param      int    $port
+   *
+   * @return     self
+   */
+  public function setPort(int $port): PdoConnectionInterface;
+
+  /**
+   * Set Driver
+   *
+   * @param      string  $driver
+   *
+   * @return     self
+   */
+  public function setDriver(string $driver): PdoConnectionInterface;
+
+  /**
+   * Set Schema
+   *
+   * @param      string  $schema
+   *
+   * @return     self
+   */
+  public function setSchema(string $schema): PdoConnectionInterface;
+
+  /**
+   * Set Username
+   *
+   * @param      string  $username  [description]
+   *
+   * @return     self
+   */
+  public function setUsername(string $username): PdoConnectionInterface;
+
+  /**
+   * Set Password
+   *
+   * @param      string  $password  [description]
+   *
+   * @return     self
+   */
+  public function setPassword(string $password): PdoConnectionInterface;
+
+  /**
+   * Set Charset
+   *
+   * @param      string  $charset  Charset to use
+   *
+   * @return     self
+   */
+  public function setCharset(string $charset): PdoConnectionInterface;
+
+  /**
+   * Set Connection Options
+   *
+   * @param      array  $options
+   *
+   * @return     self
+   */
+  public function setOptions(array $options): PdoConnectionInterface;
+
+  /**
+   * Set ServerVersion
+   *
+   * @param      string  $serverVersion
+   *
+   * @return     self
+   */
+  public function setServerVersion(string $serverVersion): PdoConnectionInterface;
+
+  /**
+   * Set clientVersion
+   *
+   * @param      string  $clientVersion  The client version
+   *
+   * @return     self
+   */
+  public function setClientVersion(string $clientVersion): PdoConnectionInterface;
 
   /**
    * Execute a SELECT statement
@@ -73,7 +263,7 @@ interface PdoConnectionInterface
    *
    * @throws  \Exception
    */
-  public function rawQuery(string $sql, array $params=[], bool $autoTransactions=true): array;
+  public function rawQuery(string $sql, array $params = [], bool $autoTransactions = true): array;
 
   /**
    * Execute an INSERT, UPDATE or DELETE statement
@@ -86,5 +276,5 @@ interface PdoConnectionInterface
    *
    * @throws  \Exception
    */
-  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true);
+  public function rawExec(string $sql, array $params = [], bool $autoTransactions = true): ?int;
 }
