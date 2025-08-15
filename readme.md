@@ -25,7 +25,8 @@ for most things, and allows for plugging in almost any PSR compatible component,
   - [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
   - [2.2. Testing](#22-testing)
 - [3. Technical Details](#3-technical-details)
-  - [3.1. Apache VHost configuration](#31-apache-vhost-configuration)
+  - [3.1. Apache configuration](#31-apache-configuration)
+  - [3.2. Nginx configuration](#32-nginx-configuration)
 
 <!-- /MarkdownTOC -->
 
@@ -75,7 +76,7 @@ At the command prompt and all tests will be executed.
 * [Storage folders](doc/Storage-folders.md)
 
 
-## 3.1. Apache VHost configuration
+## 3.1. Apache configuration
 VHost for running the application under Apache with domain-name recognition.
 
 If Port number based applications are desired the `<VirtualHost:80>` needs to change to
@@ -128,4 +129,41 @@ the corresponding port, and the `domain.name` removed from the config.
         RewriteRule ^ bootstrap.php [QSA,L]
     </Directory>
 </VirtualHost>
+```
+
+## 3.2. Nginx configuration
+
+```txt
+server {
+    listen 80;
+    server_name mydomain.com www.mydomain.com;
+
+    root C:/Path/Project/src/public;  # Nginx on Windows still uses forward slashes
+    index bootstrap.php index.php index.html;
+
+    access_log logs/mydomain.com.access.log;
+    error_log logs/mydomain.com.error.log;
+
+    # Set environment variable for PHP-FPM
+    fastcgi_param ENVIRONMENT DEV;
+
+    # Default caching headers for static content
+    location ~* \.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$ {
+        add_header Cache-Control "public, max-age=604800, must-revalidate";
+        try_files $uri =404;
+    }
+
+    # Deny directory listings
+    location / {
+        try_files $uri $uri/ /bootstrap.php?$query_string;
+    }
+
+    # PHP handling (adjust the socket/path to your PHP-FPM setup)
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass 127.0.0.1:9000; # or unix:/var/run/php/php8.1-fpm.sock
+        fastcgi_index bootstrap.php;
+    }
+}
 ```
