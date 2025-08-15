@@ -187,7 +187,7 @@ if (!\function_exists('logger')) {
    *
    * @return  Logger
    */
-  function logger(): ?Logger
+  function logger(): Logger
   {
     global $app;
 

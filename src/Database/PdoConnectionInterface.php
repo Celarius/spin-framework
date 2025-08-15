@@ -28,7 +28,7 @@ interface PdoConnectionInterface
   // function setAttribute(int $attribute, $value): bool;
 
   # Custom additions
-  function connect(): bool;
+  static function connect(string $dsn, ?string $username = null, ?string $password = null, ?array $options = null): static;
   function disconnect(): bool;
 
   # Getters
