@@ -737,7 +737,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * @inheritDoc
    */
-  public function exceptionHandler($exception): null
+  public function exceptionHandler($exception)
   {
     if (!\is_null($this->getResponse())) {
       # Run the Error Controller

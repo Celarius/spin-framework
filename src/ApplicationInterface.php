@@ -68,7 +68,7 @@ interface ApplicationInterface
    *
    * @return  mixed                                             Null on error or callback to error handler
    */
-  public function exceptionHandler(\Exception $exception): mixed;
+  public function exceptionHandler(\Exception $exception);
 
   /**
    * getBasePath returns the full path to the application root folder
