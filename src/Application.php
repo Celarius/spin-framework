@@ -8,11 +8,12 @@
 
 namespace Spin;
 
+use \Exception;
 use \GuzzleHttp\Psr7\Request;
 use \GuzzleHttp\Psr7\Response;
 
+use \Spin\Cache\AbstractCacheAdapterInterface;
 use \Spin\Core\AbstractBaseClass;
-use \Spin\ApplicationInterface;
 use \Spin\Core\Config;
 use \Spin\Core\Logger;
 use \Spin\Core\RouteGroup;
@@ -24,189 +25,182 @@ use \Spin\Exceptions\SpinException;
 use \Spin\Classes\RequestIdClass;
 
 
-
-
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
-  /**
-   * Application/Framework version
-   * @var  string
-   */
-  const VERSION = '0.0.29';
-
   /**
    * Application Environment (from ENV vars)
    * @var  string
    */
-  protected $environment;
+  protected string $environment;
 
   /**
    * Base path to application folder
-   * @var  string
+   * @var  string|false
    */
-  protected $basePath;
+  protected string|false $basePath;
 
   /**
    * Path to $basePath.'/app' folder
    * @var  string
    */
-  protected $appPath;
+  protected string $appPath;
 
   /**
    * Path to $basePath.'/storage' folder
    * @var  string
    */
-  protected $storagePath;
+  protected string $storagePath;
 
   /**
    * Path to shared storage
-   * @var  string
+   * @var  mixed
    */
-  protected $sharedStoragePath;
+  protected mixed $sharedStoragePath;
 
   /**
    * List of Route Groups
    * @var  array<mixed>
    */
-  protected $routeGroups;
+  protected array $routeGroups;
 
   /**
    * List of Global Before Middleware
    * @var  array<mixed>
    */
-  protected $beforeMiddleware;
+  protected array $beforeMiddleware;
 
   /**
    * List of Global After Middleware
    * @var  array<mixed>
    */
-  protected $afterMiddleware;
+  protected array $afterMiddleware;
 
   /**
    * PHP Error Level we are using
    * @var  int
    */
-  protected $errorLevel = \E_ALL;
+  protected int $errorLevel = \E_ALL;
 
   /**
    * Config object
-   * @var  Config
+   * @var  ?Config
    */
-  protected $config;
+  protected ?Config $config = null;
 
   /**
    * Name, Code and Version of App
    * @var  array<mixed>
    */
-  protected $version;
+  protected mixed $version;
 
   /**
    * PSR-3 compatible Logger object
-   * @var  Logger
+   * @var  ?Logger
    */
-  protected $logger;
+  protected ?Logger $logger = null;
+
+  /**
+   * HTTP Server Request Factory
+   * @var  ?object
+   */
+  protected ?object $httpServerRequestFactory;
+
+  /**
+   * HTTP Response Factory
+   * @var  ?object
+   */
+  protected ?object $httpResponseFactory;
 
   /**
    * HTTP Factory
-   * @var  object
+   * @var  ?object
    */
-  protected $httpServerRequestFactory;
-
-  /**
-   * HTTP Factory
-   * @var  object
-   */
-  protected $httpResponseFactory;
-
-  /**
-   * HTTP Factory
-   * @var  object
-   */
-  protected $httpStreamFactory;
+  protected ?object $httpStreamFactory;
 
   /**
    * Container Factory
-   * @var  object
+   * @var  ?object
    */
-  protected $containerFactory;
+  protected ?object $containerFactory;
 
   /**
    * List of cookies to send with response
    * @var  array<mixed>
    */
-  protected $cookies;
+  protected array $cookies = [];
 
   /**
    * PSR-7 compatible HTTP Server Request
    * @var  Request
    */
-  protected $request;
+  protected Request $request;
 
   /**
    * PSR-7 compatible HTTP Response
    * @var  Response
    */
-  protected $response;
+  protected Response $response;
 
   /**
    * Name of file to send as response
    * @var  string
    */
-  protected $responseFile;
+  protected string $responseFile;
 
   /**
    * True/False for removing the file after sending to client
    * @var  bool
    */
-  protected $responseFileRemove;
+  protected bool $responseFileRemove;
 
   /**
    * PSR-11 compatible Container for Dependencies
    * @var  mixed
    */
-  protected $container;
+  protected mixed $container;
 
   /**
    * Manager that handles all caches
    * @var  CacheManager
    */
-  protected $cacheManager;
+  protected CacheManager $cacheManager;
 
   /**
    * DB Connections manager
    * @var  ConnectionManager
    */
-  protected $connectionManager;
+  protected ConnectionManager $connectionManager;
 
   /**
    * Uploaded files manager
    * @var  UploadedFilesManager
    */
-  protected $uploadedFilesManager;
+  protected UploadedFilesManager $uploadedFilesManager;
 
   /**
    * Error Controllers, key=http code, value=Controller class[@handler]
    * @var  array<mixed>
    */
-  protected $errorControllers;
+  protected array $errorControllers;
 
   /**
    * Initial memory usage when SPIN starts
    * @var  int
    */
-  protected $initialMemUsage;
+  protected int $initialMemUsage;
 
   /**
    * Application controlled global vars
    * @var  array<mixed>
    */
-  protected $globalVars;
+  protected array $globalVars;
 
 
   /**
    * Constructor
    *
    * @param   string  $basePath                                 The base path to the application folder
+   * @throws Exception
    */
   public function __construct(string $basePath)
   {
@@ -223,7 +217,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       require __DIR__ . '/Helpers.php';
 
       # Extract Environment
-      $this->setEnvironment( \env('ENVIRONMENT','dev') );
+      $this->setEnvironment(\env('ENVIRONMENT', 'dev'));
 
       # Set paths
       $this->basePath = \realpath($basePath);
@@ -231,11 +225,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->storagePath = $this->basePath . '/storage';
 
       # Create config
-      $this->config = new Config( $this->appPath, $this->getEnvironment() );
+      $this->config = new Config($this->appPath, $this->getEnvironment());
 
       # Load & Decode the version file
       $verFile = \app()->getConfigPath() . '/version.json';
-      $this->version = (\file_exists($verFile) ? \json_decode(\file_get_contents($verFile),true) : []);
+      $this->version = (\file_exists($verFile) ? \json_decode(\file_get_contents($verFile), true, 512, JSON_THROW_ON_ERROR) : []);
       if (empty($this->version['application']['version'] ?? '')) {
         # Backwards compatible with pre "version.json" Spin apps
         $this->version['application']['code'] = \config('application.code');
@@ -247,7 +241,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->sharedStoragePath = \config('storage.shared');
       if (!empty($this->sharedStoragePath)) {
         # Append the environment to the path
-        $this->sharedStoragePath = $this->sharedStoragePath.'/'.\strtolower($this->getEnvironment()).'/'.\strtolower($this->getAppCode());
+        $this->sharedStoragePath .= \DIRECTORY_SEPARATOR
+          . \strtolower($this->getEnvironment())
+          . \DIRECTORY_SEPARATOR
+          . \strtolower($this->getAppCode());
       } else {
         # Just use the local storage path instead
         $this->sharedStoragePath = $this->storagePath;
@@ -258,7 +255,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       \date_default_timezone_set($timeZone);
 
       # Create logger
-      $this->logger = new Logger( $this->getAppCode(), $this->getConfig()->get('logger'), $this->basePath );
+      $this->logger = new Logger($this->getAppCode(), $this->getConfig()->get('logger'), $this->basePath);
 
       # Set error handlers to use Logger component
       $this->setErrorHandlers();
@@ -269,16 +266,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->afterMiddleware = [];
 
       $this->responseFile = '';
-      $this->cookies = [];
-      // $this->containerFactory = null;
-      // $this->request = null;
-      // $this->response = null;
-      // $this->container = null;
 
       # Initialize Objects
-      $this->httpServerRequestFactory = $this->loadFactory( $this->getConfig()->get('factories.http.serverRequest') ?? ['class'=>'\\Spin\\Factories\\Http\\ServerRequestFactory'] );
-      $this->httpResponseFactory = $this->loadFactory( $this->getConfig()->get('factories.http.response') ?? ['class'=>'\\Spin\\Factories\\Http\\ResponseFactory'] );
-      $this->httpStreamFactory = $this->loadFactory( $this->getConfig()->get('factories.http.stream') ?? ['class'=>'\\Spin\\Factories\\Http\\StreamFactory'] );
+      $this->httpServerRequestFactory = $this->loadFactory($this->getConfig()->get('factories.http.serverRequest') ?? ['class' => '\\Spin\\Factories\\Http\\ServerRequestFactory']);
+      $this->httpResponseFactory = $this->loadFactory($this->getConfig()->get('factories.http.response') ?? ['class' => '\\Spin\\Factories\\Http\\ResponseFactory']);
+      $this->httpStreamFactory = $this->loadFactory($this->getConfig()->get('factories.http.stream') ?? ['class' => '\\Spin\\Factories\\Http\\StreamFactory']);
 
       # Create Cache Manager
       $this->cacheManager = new CacheManager();
@@ -287,11 +279,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->connectionManager = new ConnectionManager();
 
       # HTTP Factories
-      $this->request = $this->httpServerRequestFactory->createServerRequestFromArray($serverRequest ?? $_SERVER);
+      $this->request = $this->httpServerRequestFactory->createServerRequestFromArray($_SERVER);
       $this->response = $this->httpResponseFactory->createResponse(404);
 
       # Container
-      $this->containerFactory = $this->loadFactory( ($this->getConfig()->get('factories.container') ?? ['class'=>'\\Spin\\Factories\\ContainerFactory']) );
+      $this->containerFactory = $this->loadFactory(($this->getConfig()->get('factories.container') ?? ['class' => '\\Spin\\Factories\\ContainerFactory']));
       $this->container = $this->containerFactory->createContainer();
 
       # Create & Process UploadedFiles structure
@@ -301,9 +293,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $this->responseFile = '';
       $this->responseFileRemove = false;
 
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       if ($this->logger) {
-        $this->logger->critical('Failed to create core objects',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
+        $this->logger->critical('Failed to create core objects',['msg' => $e->getMessage(),'trace' => $e->getTraceAsString()]);
       } else {
         \error_log('CRITICAL: '.$e->getMessage().' - '.$e->getTraceAsString());
       }
@@ -316,40 +308,26 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Run the application
    *
-   * @param   array<mixed> $requestVars                       Optional array with server request variables like $_SERVER
+   * @param   ?array $serverRequest                             Optional array with server request variables like $_SERVER
    *
    * @return  bool                                            True if application ran successfully
+   * @throws SpinException
    */
-  public function run(array $requestVars=null): bool
+  public function run(?array $serverRequest): bool
   {
-    // try {
-    //   # Set the Request ID (may be overridden by user specified "RequestIdBeforeMiddleware" if used)
-    //   \container('requestId', new RequestIdClass());
-    // } catch (\Exception $e) {
-    //   $this->getLogger()
-    //        ->critical('Failed to create/load module(s)',['msg'=>$e->getMessage(),'trace'=>$e->getTraceAsString()]);
-    //   die;
-    // }
-
     # Check and Report on config variables
     $this->checkAndReportConfigVars();
 
-    if ( $this->loadRoutes() ) {
+    if ($this->loadRoutes()) {
       # Match Route & Run
       $response = $this->runRoute();
 
       # Set the returned response (Controllers should return Response objects)
-      if ( \is_object($response) ) {
+      if ($response instanceof Response) {
         $this->setResponse($response);
 
         return true;
       }
-
-      # Set the boolean response (old style)
-      if (\is_bool($response)){
-        return $response;
-      }
-
     }
 
     return false;
@@ -371,40 +349,42 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       # if it is not found, then report warning
       if (!$ok) {
-        $this->getLogger()->warning('config: {shared.storage} path not found',['path'=>$this->sharedStoragePath]);
+        $this->getLogger()->warning('config: {shared.storage} path not found', [
+          'path' => $this->sharedStoragePath
+        ]);
       }
     }
-
-    return ;
   }
 
   /**
    * Load the $filename routes file and create all RouteGroups
    *
-   * @param   string $filename                                  Filename to load
+   * @param string $filename Filename to load
    *
    * @return  bool                                              True if routes loaded
    *
-   * @throws  \Spin\Exceptions\SpinException                    If the routes file is invalid
+   * @throws  SpinException                                     If the routes file is invalid
    */
-  protected function loadRoutes(string $filename='')
+  protected function loadRoutes(string $filename = ''): bool
   {
     # If no filename given, default to "app/Config/routes.json"
     if (empty($filename)) {
       $filename = $this->appPath . \DIRECTORY_SEPARATOR . 'Config' . \DIRECTORY_SEPARATOR . 'routes-' . $this->getEnvironment() . '.json';
     }
 
-    if ( \file_exists($filename) ) {
-      $routesFile = \json_decode( \file_get_contents($filename), true );
+    if (\file_exists($filename)) {
+      try {
+        $routesFile = \json_decode(\file_get_contents($filename), true, 512, JSON_THROW_ON_ERROR);
+      } catch (\JsonException $e) {
+        throw new SpinException(sprintf("Invalid routes file %s, error was %s", $filename, $e->getMessage()));
+      }
 
       if ($routesFile) {
-
         # Take the GROUPS section
         $routeGroups = $routesFile['groups'] ?? [];
 
         # Add each RouteGroup
-        foreach ($routeGroups as $routeGroupDef)
-        {
+        foreach ($routeGroups as $routeGroupDef) {
           # Create new Route Group
           $routeGroup = new RouteGroup($routeGroupDef);
 
@@ -421,19 +401,15 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       } else {
         throw new SpinException('Invalid routes file "'.$filename.'"');
-
       }
 
       # Debug log
-      $this->getLogger()->debug('Loaded routes',['file'=>$filename]);
+      $this->getLogger()->debug('Loaded routes',['file' => $filename]);
 
       return true; // routes loaded
-
-    } else {
-      # Log
-      $this->getLogger()->error('Routes file not found',['file'=>$filename]);
-
     }
+
+    $this->getLogger()->error('Routes file not found',['file' => $filename]);
 
     return false;
   }
@@ -443,13 +419,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  Response|null                                     The matching route group
    */
-  protected function runRoute()
+  protected function runRoute(): ?Response
   {
     # Get Method and URI
     $httpMethod = $this->getRequest()->getMethod();
     $path = $this->getRequest()->getUri()->getPath();
-    $routeInfo = null;
-    $response = null;
 
     # Find route match in groups
     foreach ($this->getRouteGroups() as $routeGroup)
@@ -457,36 +431,30 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       # Match the METHOD and URI to the routes in this group
       $routeInfo = $routeGroup->matchRoute($httpMethod,$path);
 
-      if ( \count($routeInfo)>0 ) {
+      if (\count($routeInfo) > 0) {
         # Debug log
-        $this->getLogger()->debug('Route matched ',['path'=>$path,'handler'=>$routeInfo['handler']]);
-
-        # Run Before Hooks
-        // $ok = $this->runHooks('OnBeforeRequest');
+        $this->getLogger()->debug('Route matched ', [
+          'path'    => $path,
+          'handler' => $routeInfo['handler']
+        ]);
 
         $beforeResult = true; // assume all before handlers succeed
-        $routeResult = false;
-        $afterResult = true; // assume all after handlers succeed
 
-
-        #
         # Run the Common AND Groups Before Middlewares (ServerRequestInterface)
-        #
         $beforeMiddleware = \array_merge($this->beforeMiddleware, $routeGroup->getBeforeMiddleware());
 
-        foreach ($beforeMiddleware as $middleware)
-        {
+        foreach ($beforeMiddleware as $middleware) {
           if (\class_exists($middleware) ) {
             $beforeHandler = new $middleware($routeInfo['args']);
 
             # Debug log
-            $this->getLogger()->debug('Initialize Before middleware',['middleware'=>$middleware]);
+            $this->getLogger()->debug('Initialize Before middleware',['middleware' => $middleware]);
 
             # Initialize
             $beforeHandler->initialize($routeInfo['args']);
 
             # Debug log
-            $this->getLogger()->debug('Running Before middleware',['middleware'=>$middleware]);
+            $this->getLogger()->debug('Running Before middleware',['middleware' => $middleware]);
 
             if (!$beforeHandler->handle($routeInfo['args'])) {
               # Record outcome
@@ -507,25 +475,20 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           \container('requestId', new RequestIdClass()); // Setting this is a ONE-TIME-OPERATION
         }
 
-
-        #
         # Create & Run the Controller Class - If the Before Middlewares where ok!
-        #
         if ($beforeResult) {
           # Extract class & method
-          $arr = \explode('@',$routeInfo['handler']);
+          $arr = \explode('@', $routeInfo['handler']);
           $handlerClass = $arr[0];
           $handlerMethod = ($arr[1] ?? 'handle');
 
-          # Check existance of handler class
-          if (\class_exists($handlerClass))
-          {
+          # Check existence of handler class
+          if (\class_exists($handlerClass)) {
             # Create the class
             $routeHandler = new $handlerClass( $routeInfo['args'] );
 
-            # Check method existance
-            if ($routeHandler && \method_exists($routeHandler,'initialize') && \method_exists($routeHandler,$handlerMethod))
-            {
+            # Check method existence
+            if ($routeHandler && \method_exists($routeHandler,'initialize') && \method_exists($routeHandler,$handlerMethod)) {
               # Debug log
               $this->getLogger()->debug('Running controller->initialize()',[
                 'controller' => $handlerClass,
@@ -545,45 +508,39 @@ class Application extends AbstractBaseClass implements ApplicationInterface
               $response = $routeHandler->$handlerMethod($routeInfo['args']);
 
               # Set it
-              if ($response)
+              if ($response) {
                 $this->setResponse($response);
-
+              }
             } else {
-              # Log
               $this->getLogger()->error('Method not found in controller',[
                 'controller' => $handlerClass,
                 'method' => $handlerMethod,
                 'rid' => \container('requestId'),
               ]);
             }
-
           } else {
-            # Debug log
             $this->getLogger()->error('Controller not found',[
-              'method' => $this->getRequest()->getMethod(),
-              'path' => $path,
+              'method'     => $this->getRequest()->getMethod(),
+              'path'       => $path,
               'controller' => $handlerClass,
-              'rid' => \container('requestId'),
+              'rid'        => \container('requestId'),
             ]);
 
             # Attempt to run the 404 error controller (if set by user in config)
-            $this->runErrorController('',404);
+            $this->runErrorController('', 404);
           }
         }
 
-        #
         # Run the After Middlewares (ServerRequestInterface)
-        #
         $afterMiddleware = \array_merge($this->afterMiddleware,$routeGroup->getAfterMiddleware());
-        foreach ($afterMiddleware as $middleware)
-        {
-          if (\class_exists($middleware) ) {
+        foreach ($afterMiddleware as $middleware) {
+          if (\class_exists($middleware)) {
             $afterHandler = new $middleware($routeInfo['args']);
 
             # Debug log
             $this->getLogger()->debug('Initialize After middleware',[
               'middleware' => $middleware,
-              'rid' => \container('requestId'),
+              'rid'        => \container('requestId'),
             ]);
 
             # Initialize
@@ -592,16 +549,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
             # Debug log
             $this->getLogger()->debug('Running After middleware',[
               'middleware' => $middleware,
-              'rid' => \container('requestId'),
+              'rid'        => \container('requestId'),
             ]);
 
             if (!$afterHandler->handle($routeInfo['args'])) {
-
               return null;
             }
-
           } else {
-            # Log
             $this->getLogger()->warning('After Middleware not found',[
               'middleware' => $middleware,
               'rid' => \container('requestId'),
@@ -638,28 +592,19 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
-   * Execute the HandlerMethod of one of the Error Controllers defined in
-   * rotues-{env].json}
-   *
-   * @param   string $body                                      An optional body to send if $httpCode handler not found
-   * @param   int|integer $httpCode                             Optional HTTP response code to the run controller
-   *
-   * @return  Response                                          The response object
+   * @inheritDoc
    */
-  public function runErrorController(string $body, int $httpCode=400)
+  public function runErrorController(string $body, int $httpCode = 400): Response
   {
     $class = '';
 
     # Determine the Controller Class to run
-    if (!\is_null($this->errorControllers) && \array_key_exists($httpCode, $this->errorControllers)) {
+    if (\array_key_exists($httpCode, $this->errorControllers)) {
       $class = $this->errorControllers[$httpCode];
-    } else {
-      if ($httpCode>=400 && $httpCode<500) {
-        $class = $this->errorControllers['4xx'] ?? '';
-      } else
-      if ($httpCode>=500) {
-        $class = $this->errorControllers['5xx'] ?? '';
-      }
+    } else if ($httpCode >= 400 && $httpCode < 500) {
+      $class = $this->errorControllers['4xx'] ?? '';
+    } else  if ($httpCode >= 500) {
+      $class = $this->errorControllers['5xx'] ?? '';
     }
 
     if (!empty($class)) {
@@ -678,13 +623,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
           # Run Controller's handler
           return $routeHandler->$handlerMethod([]);
-
-        } else {
-          \logger()->error('Failed to create error controller',[
-            'class'=>$handlerClass
-          ]);
         }
-
+        \logger()->error('Failed to create error controller',[
+          'class'=>$handlerClass
+        ]);
       } else {
         \logger()->notice('Error controller class does not exist',[
           'class'=>$handlerClass,
@@ -694,19 +636,19 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     }
 
     # Return a generic empty HTTP response with the $httpCode
-    return \response('',$httpCode);
+    return \response('', $httpCode);
   }
 
   /**
    * Loads a Factory class
    *
-   * @param   string  $params                                   The params found in the config file under the factory
+   * @param   array  $params                                    The params found in the config file under the factory
    *
-   * @return  object|null                                       Loaded factory object
+   * @return  ?object                                           Loaded factory object
    *
-   * @throws  \Exception                                        If the factory class is not found
+   * @throws  Exception                                        If the factory class is not found
    */
-  protected function loadFactory(?array $params=[])
+  protected function loadFactory(array $params = []): ?object
   {
     if (\is_array($params) && !empty($params['class']) && \class_exists($params['class'])) {
       $factory = new $params['class']($params['options'] ?? []);
@@ -715,12 +657,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       ]);
 
       return $factory;
-    } else {
-      $this->getLogger()->error('Factory not found',[
-        'params'=>$params
-      ]);
-
     }
+
+    $this->getLogger()->error('Factory not found',[
+      'params'=>$params
+    ]);
 
     return null;
   }
@@ -736,8 +677,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     $this->errorLevel = \error_reporting( \E_ALL);
 
     # set to the user defined error handler
-    $old_error_handler = \set_error_handler(array($this,'errorHandler'));
-    $old_exception_handler = \set_exception_handler(array($this,'exceptionHandler'));
+    \set_error_handler(array($this, 'errorHandler'));
+    \set_exception_handler(array($this, 'exceptionHandler'));
 
     \register_shutdown_function( array($this,'fatalErrorhandler') );
 
@@ -747,25 +688,15 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
-   * Error Handler
-   *
-   * Handles all errors from the code. This is set as the default error handler.
-   *
-   * @param   string $errNo                                     Error Number
-   * @param   string $errStr                                    Error String
-   * @param   string $errFile                                   Error File
-   * @param   string $errLine                                   Error Line
-   * @param   array<mixed> $errContext                          Error Context
-   *
-   * @return  bool                                              True if handled
+   * @inheritDoc
    */
-  public function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext=[])
+  public function errorHandler(int $errNo, $errStr, $errFile, $errLine, array $errContext = []): bool
   {
-    if (!(\error_reporting() && $errNo)) {
-        // This error code is not included in error_reporting, so let it fall
-        // through to the standard PHP error handler
-        // Example all @ prefixed functions
-        return false;
+    if (!(\error_reporting())) {
+      // This error code is not included in error_reporting, so let it fall
+      // through to the standard PHP error handler
+      // Example all @ prefixed functions
+      return false;
     }
 
     switch ($errNo) {
@@ -804,17 +735,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   }
 
   /**
-   * Exception Handler
-   *
-   * Handles any Exceptions from the application. This is set as the default
-   * exception handler for all exceptions.
-   *
-   *
-   * @param   object $exception                                 The exception object
-   *
-   * @return  null                                              Null
+   * @inheritDoc
    */
-  public function exceptionHandler($exception)
+  public function exceptionHandler($exception): null
   {
     if (!\is_null($this->getResponse())) {
       # Run the Error Controller
@@ -825,15 +748,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     } else {
       # Set HTTP Response Code - we dont even have a response object yet ..
       \http_response_code(500);
-
     }
 
     # Log the exception
-    $this->getLogger()
-         ->critical(
-            $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
-            $exception->getTrace()
-          );
+    $this->getLogger()->critical(
+      $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
+      $exception->getTrace()
+    );
 
     return null;
   }
@@ -843,11 +764,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * Handles any PHP Fatal Errors.
    *
-   * This includes "maximum tmeout", "out of memory", "undefined variable" situations.
+   * This includes "maximum timeout", "out of memory", "undefined variable" situations.
    *
    * @return  bool                                             True if handled
    */
-  public function fatalErrorhandler()
+  public function fatalErrorhandler(): bool
   {
     # Get last PHP error
     $lastErrorArray = \error_get_last();
@@ -858,10 +779,15 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     }
 
     # Log the Fatal Error
-    $this->getLogger()->critical('PHP Fatal error', array_merge($lastErrorArray,['trace'=>debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)]));
+    $this->getLogger()->critical('PHP Fatal error',
+      array_merge($lastErrorArray, [
+        'rid'   => \container('requestId'),
+        'trace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
+      ])
+    );
 
     # Run the Error Controller
-    $response = $this->runErrorController($lastErrorArray['message'] ?? 'Unknown',500);
+    $response = $this->runErrorController($lastErrorArray['message'] ?? 'Unknown', 500);
 
     # Set the error response
     $this->setResponse($response);
@@ -878,18 +804,24 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * Defaults to setting 'samesite'='Strict' to prevent CSRF.
    *
    * @param   string $name                                      The cookie name
-   * @param   string|null $value                                The cookie value
-   * @param   int|integer $expire                               The cookie expiration time
+   * @param   string $value                                     The cookie value
+   * @param   int $expire                                       The cookie expiration time
    * @param   string $path                                      The cookie path
    * @param   string $domain                                    The cookie domain
-   * @param   bool|boolean $secure                              The cookie secure flag
-   * @param   bool|boolean $httpOnly                            The cookie httpOnly flag
+   * @param   bool $secure                                      The cookie secure flag
+   * @param   bool $httpOnly                                    The cookie httpOnly flag
    *
-   * @return  mixed
+   * @return  bool
    */
-  public function setCookie(string $name, string $value=null, int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httpOnly=false)
+  public function setCookie(string $name,
+                            string $value = '',
+                            int $expire = 0,
+                            string $path = '',
+                            string $domain = '',
+                            bool $secure = false,
+                            bool $httpOnly = false): bool
   {
-    if ( \array_key_exists($name,$this->cookies) && \is_null($value) ) {
+    if (\array_key_exists($name, $this->cookies) && \is_null($value)) {
       # Remove the Cookie
       $this->cookies = \array_diff_key($this->cookies,[$name=>'']);
     } else {
@@ -958,25 +890,23 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function getSharedStoragePath(): string
   {
-    if (empty($this->sharedStoragePath)) return $this->getStoragepath();
+    if (empty($this->sharedStoragePath)) {
+      return $this->getStoragepath();
+    }
 
     return $this->sharedStoragePath;
   }
 
   /**
-   * Returns a $app object property if it exists
-   *
-   * @param   string $property                                  The property name, or container name to return
-   *
-   * @return  mixed|null                                        Null if nothing was found
+   * @inheritDoc
    */
-  public function getProperty(string $property)
+  public function getProperty(string $property): mixed
   {
     if (\property_exists(__CLASS__, $property)) {
       return $this->$property;
     }
 
-    return $this->container($property) ?? null;
+    return $this->container($property);
   }
 
   /**
@@ -1012,9 +942,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the HTTP Request (ServerRequest)
    *
-   * @return  null|Request                                      The request object
+   * @return  Request                                           The request object
    */
-  public function getRequest()
+  public function getRequest(): Request
   {
     return $this->request;
   }
@@ -1022,9 +952,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the HTTP Response (ServerResponse)
    *
-   * @return null|Response                                      The response object
+   * @return Response                                           The response object
    */
-  public function getResponse()
+  public function getResponse(): Response
   {
     return $this->response;
   }
@@ -1036,7 +966,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  self                                              The current object
    */
-  public function setResponse(Response $response)
+  public function setResponse(Response $response): self
   {
     $this->response = $response;
 
@@ -1046,9 +976,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the Config object
    *
-   * @return  object                                            The config object
+   * @return  ?Config                                          The config object
    */
-  public function getConfig()
+  public function getConfig(): ?Config
   {
     return $this->config;
   }
@@ -1058,7 +988,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  Logger                                            The logger object
    */
-  public function getLogger()
+  public function getLogger(): Logger
   {
     return $this->logger;
   }
@@ -1066,9 +996,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the PSR-11 Container object
    *
-   * @return  object                                            The container object
+   * @return  mixed                                            The container object
    */
-  public function getContainer()
+  public function getContainer(): mixed
   {
     return $this->container;
   }
@@ -1076,9 +1006,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   /**
    * Get the DB Manager
    *
-   * @return  ConnectionManager                                 The connection manager
+   * @return ConnectionManager The connection manager
    */
-  public function getConnectionManager(): ?ConnectionManager
+  public function getConnectionManager(): ConnectionManager
   {
     return $this->connectionManager;
   }
@@ -1088,9 +1018,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @param   string  $driverName                               The driver name
    *
-   * @return  object                                            The cache object
+   * @return  ?AbstractCacheAdapterInterface The cache object
    */
-  public function getCache(string $driverName='')
+  public function getCache(string $driverName = ''): ?AbstractCacheAdapterInterface
   {
     return $this->cacheManager->getCache($driverName);
   }
@@ -1112,7 +1042,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  self                                              The current object
    */
-  public function setEnvironment(string $environment)
+  public function setEnvironment(string $environment): self
   {
     $this->environment = \strtolower($environment);
 
@@ -1126,16 +1056,9 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  null|RouteGroup                                   `null` if not found or The route group
    */
-  public function getRouteGroup(string $groupName)
+  public function getRouteGroup(string $groupName): ?RouteGroup
   {
-    foreach ($this->routeGroups as $routeGroup)
-    {
-      if ( \strcasecmp($routeGroup->getName(),$groupName)==0 ) {
-        return $routeGroup;
-      }
-    }
-
-    return null;
+    return array_find($this->routeGroups, static fn($routeGroup) => \strcasecmp($routeGroup->getName(), $groupName) === 0);
   }
 
   /**
@@ -1152,11 +1075,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * Get or Set a Container value.
    *
    * @param   string $name                                      Dependency name to get or set
-   * @param   mixed|null $value                                 Value to SET
+   * @param   mixed $value                                      Value to SET
    *
-   * @return  mixed|null                                        `null` if not found or the value for `$name` in the container
+   * @return  mixed                                             `null` if not found or the value for `$name` in the container
    */
-  public function container(string $name, $value=null)
+  public function container(string $name, $value=null): mixed
   {
     # Getting or Setting the value?
     if (\is_null($value)) {
@@ -1188,7 +1111,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  self                                              The current object
    */
-  public function setFileResponse(string $filename, bool $remove=false)
+  public function setFileResponse(string $filename, bool $remove = false): self
   {
     $this->responseFile = $filename;
     $this->responseFileRemove = $remove;
@@ -1201,7 +1124,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  self                                              The current object
    */
-  public function sendResponse()
+  public function sendResponse(): self
   {
     # Set HTTP Response Code
     \http_response_code($this->getResponse()->getStatusCode());
@@ -1218,11 +1141,12 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     }
 
     # Remove the "x-powered-by" header set by PHP
-    if (\function_exists('header_remove')) \header_remove('x-powered-by');
+    if (\function_exists('header_remove')) {
+      \header_remove('x-powered-by');
+    }
 
     # Set Cookies
-    foreach ($this->cookies as $cookie)
-    {
+    foreach ($this->cookies as $cookie) {
       $cookieOptions = [
         'expires'   => $cookie['expire'] ?? 0,
         'path'      => $cookie['path'] ?? '',
@@ -1233,16 +1157,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       ];
 
       # Set cookie using $options array (PHP 7.3.0+)
-      \setCookie( $cookie['name'],
-                  $cookie['value'],
-                  $cookieOptions );
+      \setCookie($cookie['name'], $cookie['value'], $cookieOptions);
     }
 
     ##
     ## Send a file or a body?
     ##
-    if ( !empty($this->responseFile) ) {
-
+    if (!empty($this->responseFile)) {
       if (\file_exists($this->responseFile)) {
         # Debug log
         $this->getLogger()->debug('Sending file',[
@@ -1252,7 +1173,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         ]);
 
         # If we have output buffering on, flush it
-        if (\ob_get_level()>0 && \ob_get_length()>0) while (@\ob_end_flush());
+        if (\ob_get_level()>0 && \ob_get_length()>0) {
+          do {
+            $flush = @\ob_end_flush();
+          } while ($flush !== false);
+        }
 
         # Send the file
         \readfile($this->responseFile);
@@ -1268,7 +1193,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       } else {
         # Log warning
-        $this->getLogger()->warning('File not found',['file'=>$this->responseFile]);
+        $this->getLogger()->warning('File not found',['file' => $this->responseFile]);
 
         # Fake a response
         \response('',404);
@@ -1297,7 +1222,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  UploadedFilesManager                              The uploaded files manager
    */
-  public function getUploadedFilesManager()
+  public function getUploadedFilesManager(): UploadedFilesManager
   {
     return $this->uploadedFilesManager;
   }
@@ -1307,7 +1232,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  int                                               The initial memory usage
    */
-  public function getInitialMemUsage()
+  public function getInitialMemUsage(): int
   {
     return $this->initialMemUsage;
   }
@@ -1317,7 +1242,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  array<mixed>                                      The global vars
    */
-  public function getGlobalVars()
+  public function getGlobalVars(): array
   {
     return $this->globalVars;
   }
@@ -1327,7 +1252,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  self                                              The current object
    */
-  public function setGlobalVars($globalVars)
+  public function setGlobalVars($globalVars): self
   {
     $this->globalVars = $globalVars;
 
@@ -1341,7 +1266,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  null|mixed                                        The global variable
    */
-  public function getGlobalVar(string $id)
+  public function getGlobalVar(string $id): mixed
   {
     return $this->globalVars[$id] ?? null;
   }
@@ -1354,7 +1279,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    *
    * @return  self                                              The current object
    */
-  public function setGlobalVar(string $id, $value)
+  public function setGlobalVar(string $id, mixed $value): self
   {
     $this->globalVars[$id] = $value;
 
