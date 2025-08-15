@@ -81,11 +81,7 @@ jobs:
             CHANGELOG="Release $VERSION"
           fi
           
-          # Escape special characters for GitHub Actions
-          CHANGELOG="${CHANGELOG//'%'/'%25'}"
-          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-          
+          # Use EOF delimiter to preserve newlines in multiline output
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -95,7 +91,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.get_version.outputs.version }}
-          name: Release ${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.version }}
           body: |
             ${{ steps.changelog.outputs.changelog }}
           draft: false
