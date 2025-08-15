@@ -114,7 +114,7 @@ class HelpersTest extends TestCase
   /**
    * Test JWT Encoding
    *
-   * @covers \EWT
+   * @covers \Spin\Helpers\EWT
    */
   public function testJwtEncodeDecode()
   {
@@ -127,7 +127,7 @@ class HelpersTest extends TestCase
   /**
    * Test EWT Encoding
    *
-   * @covers \EWT
+   * @covers \Spin\Helpers\EWT
    */
   public function testEwtEncodeDecode()
   {
