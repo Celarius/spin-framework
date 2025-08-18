@@ -37,7 +37,6 @@ class Redis extends AbstractCacheAdapter
 
   /**
    * @param array $connectionDetails
-   * @param array $redisOptions
    */
   public function __construct(array $connectionDetails = [])
   {
@@ -85,6 +84,9 @@ class Redis extends AbstractCacheAdapter
   {
     $result = $this->redisClient->get($key);
     if ($result) {
+      if (\is_int($result)) {
+        return $result;
+      }
       return unserialize($result);
     }
     return $default;
@@ -100,16 +102,20 @@ class Redis extends AbstractCacheAdapter
     return $this->redisClient->get($key) ?? $default;
   }
 
-  public function set($key, $value, \DateInterval|int|null $ttl = null): bool
+  public function set(string $key, mixed $value, \DateInterval|int|null $ttl = null): bool
   {
-    if (is_null($ttl)) {
-      return (bool)$this->redisClient->set($key, serialize($value));
+    if (!\is_int($value)) {
+      $value = serialize($value);
     }
+    if (is_null($ttl)) {
+      return (bool)$this->redisClient->set($key, $value);
+    }
+
     if ($ttl instanceof \DateInterval) {
       $now = (new \DateTime('now'))->getTimestamp();
       $ttl = (new \DateTime('now'))->add($ttl)->getTimestamp() - $now;
     }
-    return (bool)$this->redisClient->set($key, serialize($value), 'ex', $ttl);
+    return (bool)$this->redisClient->set($key, $value, 'ex', $ttl);
   }
 
   public function delete($key): bool
@@ -135,7 +141,7 @@ class Redis extends AbstractCacheAdapter
   public function setMultiple($values, \DateInterval|int|null $ttl = null): bool
   {
     foreach ($values as $key=>$value) {
-      $this->set($key, $value, (\is_null($ttl) ? 0 : (int) $ttl));
+      $this->set($key, $value, $ttl);
     }
 
     return true;
@@ -152,7 +158,7 @@ class Redis extends AbstractCacheAdapter
 
   public function has(string $key): bool
   {
-    return $this->redisClient->exists( $key ) !== 0;
+    return $this->redisClient->exists($key) !== 0;
   }
 
   public function inc(string $key, int $amount = 1): bool|int
@@ -162,7 +168,7 @@ class Redis extends AbstractCacheAdapter
 
   public function dec(string $key, int $amount = 1): bool|int
   {
-    return $this->redisClient->dec( $key, $amount);
+    return $this->redisClient->decrby($key, $amount);
   }
 
   public function statistics(): array
