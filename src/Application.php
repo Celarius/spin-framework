@@ -313,7 +313,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * @return  bool                                            True if application ran successfully
    * @throws SpinException
    */
-  public function run(?array $serverRequest): bool
+  public function run(?array $serverRequest = []): bool
   {
     # Check and Report on config variables
     $this->checkAndReportConfigVars();
