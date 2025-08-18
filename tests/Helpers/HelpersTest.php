@@ -12,11 +12,15 @@ use \Spin\Helpers\EWT;
 
 class HelpersTest extends TestCase
 {
-  /** @var  string                    Application object */
-  protected $app;
+  /**
+   * @var \Spin\Application
+   */
+  protected \Spin\Application $app;
 
-  /** @var  string                    String used for encryption */
-  protected $secret;
+  /**
+   * @var string used for encryption
+   */
+  protected string $secret;
 
   /**
    * Setup test
@@ -34,7 +38,7 @@ class HelpersTest extends TestCase
   /**
    * Test OpenSSL Encryption / Decryption
    */
-  public function testCipher()
+  public function testCipher(): void
   {
     $plain = 'Let this be the light';
     $encrypted = Cipher::encrypt( $plain, $this->secret );
@@ -43,10 +47,12 @@ class HelpersTest extends TestCase
     $this->assertEquals($plain, $a);
   }
 
- /**
-  * Test OpenSSL Encryption / Decryption
-  */
-  public function testExtendedCipher()
+  /**
+   * Test OpenSSL Encryption / Decryption
+   *
+   * @throws \Exception
+   */
+  public function testExtendedCipher(): void
   {
     $plain = 'Let this be the light';
     $encrypted = Cipher::encryptEx( $plain, $this->secret );
@@ -58,7 +64,7 @@ class HelpersTest extends TestCase
   /**
    * Test OpenSSL Message Digest (SHA256)
    */
-  public function testHash()
+  public function testHash(): void
   {
     $plain = 'Let this be the light';
     $hash  = '3c47c0efe106197074e89d6eb28babb90d2ad6fcc5dd7b37fec77b3bb00003d0';
@@ -70,19 +76,19 @@ class HelpersTest extends TestCase
   /**
    * Test UUID v4 generation
    */
-  public function testUuidV4()
+  public function testUuidV4(): void
   {
     $a = UUID::v4();
 
-    $this->assertTrue( \mb_strlen($a)>0 );
+    $this->assertTrue(\mb_strlen($a) > 0);
   }
 
   /**
    * Test UUID v5 generation
    */
-  public function testUuidV5()
+  public function testUuidV5(): void
   {
-    $a = UUID::v5( 'fe590d59-b698-4246-98a0-521e31427ee4', 'Glorius');
+    $a = UUID::v5('fe590d59-b698-4246-98a0-521e31427ee4', 'Glorius');
 
     $this->assertEquals('0eeda2f3-b68c-5ae7-a0ab-cc14eac039db', $a);
   }
@@ -90,23 +96,23 @@ class HelpersTest extends TestCase
   /**
    * Test UUID v6 generation
    */
-  public function testUuidV6()
+  public function testUuidV6(): void
   {
     $this->assertNotNull(UUID::v6());
   }
 
-  // /**
-  //  * Test UUID v7 generation
-  //  */
-  // public function testUuidV7()
-  // {
-  //   $this->assertNotNull(UUID::v7());
-  // }
+   /**
+    * Test UUID v7 generation
+    */
+   public function testUuidV7(): void
+   {
+     $this->assertNotNull(UUID::v7());
+   }
 
   /**
    * Test valid UUID
    */
-  public function testIsValid()
+  public function testIsValid(): void
   {
     $this->assertNotNull(UUID::is_valid('0eeda2f3-b68c-5ae7-a0ab-cc14eac039db'));
   }
@@ -115,13 +121,14 @@ class HelpersTest extends TestCase
    * Test JWT Encoding
    *
    * @covers \Spin\Helpers\EWT
+   * @throws \Exception
    */
-  public function testJwtEncodeDecode()
+  public function testJwtEncodeDecode(): void
   {
     $jwt = JWT::encode(['abc123'],'xyz987','HS256');
     $payload = JWT::decode($jwt,'xyz987','HS256');
 
-    $this->assertEquals($payload,['abc123']);
+    $this->assertEquals(['abc123'], $payload);
   }
 
   /**
@@ -129,12 +136,12 @@ class HelpersTest extends TestCase
    *
    * @covers \Spin\Helpers\EWT
    */
-  public function testEwtEncodeDecode()
+  public function testEwtEncodeDecode(): void
   {
     $ewt = EWT::encode('abc123',\config('application.secret') ?? 'xyz987');
     $payload = EWT::decode($ewt,\config('application.secret') ?? 'xyz987');
 
-    $this->assertEquals($payload,'abc123');
+    $this->assertEquals('abc123', $payload);
   }
 
 }
