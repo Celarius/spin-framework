@@ -4,6 +4,11 @@
     bootstrap="tests/bootstrap.php"
     colors="true"
 >
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </source>
     <testsuites>
         <testsuite name="Spin Framework Test Suite">
             <directory>tests</directory>

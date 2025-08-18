@@ -1,0 +1,96 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+jobs:
+  create-release:
+    # Only run when PR is merged or direct push to master
+    if: github.event_name == 'push' || (github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version from composer.json
+        id: get_version
+        run: |
+          VERSION=$(jq -r '.version' composer.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected version: $VERSION"
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          if git rev-parse "v${{ steps.get_version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag v${{ steps.get_version.outputs.version }} already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Tag v${{ steps.get_version.outputs.version }} does not exist"
+          fi
+
+      - name: Create tag
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          git tag -a "v${{ steps.get_version.outputs.version }}" -m "Release version ${{ steps.get_version.outputs.version }}"
+
+      - name: Extract changelog for version
+        id: changelog
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          echo "Extracting changelog for version $VERSION"
+          
+          # Read the changelog.md file and extract content for this version
+          if [ -f "changelog.md" ]; then
+            # Extract the section for this version
+            # Look for the version header and get all content until the next version header
+            CHANGELOG=$(awk -v ver="## $VERSION" '
+              $0 ~ ver {flag=1; next}
+              /^## [0-9]+\.[0-9]+\.[0-9]+/ && flag {exit}
+              flag {print}
+            ' changelog.md)
+            
+            # Trim empty lines at the beginning and end
+            CHANGELOG=$(echo "$CHANGELOG" | sed -e '/^[[:space:]]*$/d' | sed -e :a -e '/^\n*$/{$d;N;ba' -e '}')
+            
+            if [ -z "$CHANGELOG" ]; then
+              echo "No changelog entry found for version $VERSION, using default message"
+              CHANGELOG="Release $VERSION"
+            else
+              echo "Found changelog entry for version $VERSION"
+            fi
+          else
+            echo "changelog.md not found, using default message"
+            CHANGELOG="Release $VERSION"
+          fi
+          
+          # Use EOF delimiter to preserve newlines in multiline output
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.version }}
+          body: |
+            ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}

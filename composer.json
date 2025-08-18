@@ -1,7 +1,7 @@
 {
   "name": "celarius/spin-framework",
   "description": "A super lightweight PHP UI/REST Framework",
-  "version": "0.0.24",
+  "version": "0.0.31",
   "keywords": [
     "php7",
     "php-framework",
@@ -60,6 +60,6 @@
     "test": "phpunit"
   },
   "require-dev": {
-    "phpunit/phpunit": "^12.2"
+    "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
   }
 }

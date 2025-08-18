@@ -1,0 +1,27 @@
+name: Unit Tests
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.1', '8.2', '8.3', '8.4']
+
+    name: Unit Test with PHP ${{ matrix.php-versions }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: dom, gd, mbstring, pdo_mysql, zip
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-ansi --no-interaction --no-progress
+
+      - name: Run PHPUnit test suite
+        run: php -d xdebug.mode=coverage ./vendor/phpunit/phpunit/phpunit --debug --coverage-text --stderr --coverage-cobertura=coverage.cobertura.xml

@@ -8,29 +8,29 @@
 
 namespace Spin\Core;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\ConfigInterface;
+use \Exception;
 use \Spin\Exceptions\SpinException;
 
 class Config extends AbstractBaseClass implements ConfigInterface
 {
   /** @var  array         Configuration Array */
-  protected $confValues = array();
+  protected array $confValues = array();
 
   /** @var  string        Config file name */
-  protected $filename;
+  protected string $filename;
 
   /**
    * Constructor
    *
    * Load config file based on $appPath and $environment
    *
-   * @param      string  $appPath      Path to the /app folder
-   * @param      string  $environment  Name of the environment
+   * @param string $appPath     Path to the /app folder
+   * @param string $environment Name of the environment
+   * @throws Exception
    */
   public function __construct(string $appPath, string $environment)
   {
-    # Clear all values
+    parent::__construct();
     $this->clear();
 
     # Build $filename based on $appPath and $environment
@@ -46,7 +46,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
    *
    * @return     self
    */
-  public function clear()
+  public function clear(): self
   {
     $this->confValues = array();
 
@@ -62,21 +62,24 @@ class Config extends AbstractBaseClass implements ConfigInterface
    *
    * @return     self
    */
-  public function load(string $filename)
+  public function load(string $filename): self
   {
     # Attempt to load config file
-    if ( \file_exists($filename) ) {
+    if (\file_exists($filename)) {
       # Set filename
       $this->filename = $filename;
 
       # Load the config
-      $configArray = \json_decode( \file_get_contents($filename), true);
+      try {
+        $configArray = \json_decode(\file_get_contents($filename), true, 512, JSON_THROW_ON_ERROR);
+      } catch (\JsonException $e) {
+        throw new SpinException(sprintf("Invalid JSON file %s, error was %s", $filename, $e->getMessage()));
+      }
 
       if ($configArray) {
         $this->confValues = $configArray;
       } else {
-        throw new SpinException('Invalid JSON file "'.$filename.'"');
-
+        throw new SpinException('Invalid JSON file "' . $filename . '"');
       }
     }
 
@@ -92,21 +95,24 @@ class Config extends AbstractBaseClass implements ConfigInterface
    *
    * @return     self
    */
-  public function loadAndMerge(string $filename)
+  public function loadAndMerge(string $filename): self
   {
     # Attempt to load config file
     if ( \file_exists($filename) ) {
       # Set filename
       $this->filename = $filename;
       # Load the config
-      $configArray = \json_decode( \file_get_contents($filename), true);
+      try {
+        $configArray = \json_decode(\file_get_contents($filename), true, 512, JSON_THROW_ON_ERROR);
+      } catch (\JsonException $e) {
+        throw new SpinException(sprintf("Invalid JSON file %s, error was %s", $filename, $e->getMessage()));
+      }
+
       if ($configArray) {
         # Merge the Config with existing config
         $this->confValues = \array_replace_recursive($this->confValues, $configArray);
-
       } else {
-        throw new SpinException('Invalid JSON file "'.$filename.'"');
-
+        throw new SpinException('Invalid JSON file "' . $filename . '"');
       }
     }
 
@@ -120,11 +126,20 @@ class Config extends AbstractBaseClass implements ConfigInterface
    *
    * @return     bool
    */
-  function save(string $filename=null): bool
+  function save(string $filename = ''): bool
   {
-    if (!empty($filename)) $this->filename = $filename;
+    if (!empty($filename)) {
+      $this->filename = $filename;
+    }
 
-    return (\file_put_contents($this->filename,\json_encode($this->confValues,JSON_PRETTY_PRINT))!==false);
+    try {
+      $content = \json_encode($this->confValues, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+
+      return (\file_put_contents($this->filename, $content) !== false);
+    } catch (\JsonException) {
+      // Skip logging since might not be instantiated at this point
+      return false;
+    }
   }
 
   /**
@@ -134,20 +149,22 @@ class Config extends AbstractBaseClass implements ConfigInterface
    *
    * Example: get('application.code')
    *
-   * @param      string  $key      "." notation key to retreive
+   * @param      string  $key      "." notation key to retrieve
    * @param      mixed   $default  Optional Default value if group::section::key
    *                               not found
    *
    * @return     mixed
    */
-  public function get(string $key, $default=null)
+  public function get(string $key, $default = null): mixed
   {
     $keys = \explode('.',$key);
     $val = $this->confValues;
 
-    for ($i=0; $i<\count($keys); $i++) {
-      $val = ( $val[ $keys[$i] ] ?? null);
-      if (\is_null($val)) break;
+    foreach ($keys as $value) {
+      $val = ($val[$value] ?? null);
+      if (\is_null($val)) {
+        break;
+      }
     }
 
     return $val ?? $default;
@@ -160,29 +177,32 @@ class Config extends AbstractBaseClass implements ConfigInterface
    *
    * Example: set('application.code','theValue');
    *
-   * @param      string  $key    Key to update/set. Dot notaition
+   * @param      string  $key Key to update/set. Dot notation
    * @param      mixed   $value
    *
    * @return     self
    */
-  public function set(string $key, $value)
+  public function set(string $key, mixed $value): self
   {
-    $keys = \explode('.',$key);
+    $keys = \explode('.', $key);
     $arr = &$this->confValues;
     $arrParent = null;
 
     # Walk the structure
-    foreach ($keys as $key) {
+    $lastKey = null;
+    foreach ($keys as $internalKey) {
       $arrParent = &$arr;
-      $lastKey = $key;
-      if (!isset($arr[$key])) {
-        $arr[$key]=[];
+      $lastKey = $internalKey;
+      if (!isset($arr[$internalKey])) {
+        $arr[$internalKey] = [];
       }
-      $arr = &$arr[$key];
+      $arr = &$arr[$internalKey];
     }
 
     if (\is_null($value)) {
-      unset($arrParent[$lastKey]); // delete the key
+      if ($lastKey !== null) {
+        unset($arrParent[$lastKey]); // delete the key
+      }
     } else {
       $arr = $value; // set the value in the original confArray
     }
@@ -221,8 +241,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
   protected function array_change_key_case_recursive(array $input, int $case = \CASE_LOWER): array
   {
     # Check the CASE param
-    if (!in_array($case, [\CASE_UPPER, \CASE_LOWER]))
-    {
+    if (!in_array($case, [\CASE_UPPER, \CASE_LOWER], true)) {
       return [];
     }
 
@@ -230,9 +249,11 @@ class Config extends AbstractBaseClass implements ConfigInterface
     $input = \array_change_key_case($input, $case);
 
     # Loop all keys in all sub-arrays
-    foreach($input as $key => $array)
-      if (\is_array($array))
+    foreach($input as $key => $array) {
+      if (\is_array($array)) {
         $input[$key] = $this->array_change_key_case_recursive($array, $case);
+      }
+    }
 
     return $input;
   }
