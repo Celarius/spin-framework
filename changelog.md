@@ -2,6 +2,10 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.30
+- Remove deprecated error constant E_STRICT usage 
+- Remove AbstractBaseDaos
+
 ## 0.0.29
 - Extracted `RequestIdClass` from `Application.php` into its own file under `src/Classes/RequestIdClass.php`.
 - Updated all usages to reference the new class location and namespace.
