@@ -8,8 +8,10 @@ use \Spin\Core\UploadedFilesManager;
 
 class UploadedFilesManagerTest extends TestCase
 {
-  /** @var        string          Application object */
-  protected $app;
+  /**
+   * @var \Spin\Application
+   */
+  protected \Spin\Application $app;
 
   /**
    * Setup
@@ -23,23 +25,23 @@ class UploadedFilesManagerTest extends TestCase
   /**
    * Test
    */
-  public function testUploadedFilesManager()
+  public function testUploadedFilesManager(): void
   {
     $manager = new UploadedFilesManager($_FILES);
 
-    $this->assertTrue( !is_null($manager) );
+    $this->assertNotNull($manager);
   }
 
   /**
    * Test
    */
-  public function testUploadedFilesManagerFiles()
+  public function testUploadedFilesManagerFiles(): void
   {
     $manager = new UploadedFilesManager($_FILES);
 
     $files = $manager->getFiles();
 
-    $this->assertTrue( is_array($files) );
+    $this->assertIsArray($files);
   }
 
 }

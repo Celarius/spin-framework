@@ -3,11 +3,14 @@
 namespace Spin\tests;
 
 use PHPUnit\Framework\TestCase;
+use Spin\Exceptions\SpinException;
 
 class AppTest extends TestCase
 {
-  /** @var        string          Application object */
-  protected $app;
+  /**
+   * @var \Spin\Application
+   */
+  protected \Spin\Application $app;
 
   /**
    * Setup test
@@ -22,16 +25,24 @@ class AppTest extends TestCase
   /**
    * Test Application object creation
    */
-  public function testAppCreate()
+  public function testAppCreate(): void
   {
     $this->assertSame($this->app->getBasePath(), \realpath(__DIR__));
   }
 
-  public function test_ApplictionLogger()
+  public function test_ApplicationLogger(): void
   {
-    \logger()->notice('Tihs is a logline', ['a'=>'1']);
+    \logger()->notice('This is a logline', ['a' => '1']);
 
     $this->assertTrue(true);
+  }
+
+  /**
+   * @throws SpinException
+   */
+  public function testRun(): void
+  {
+    $this->assertTrue($this->app->run());
   }
 
 }

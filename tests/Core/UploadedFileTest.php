@@ -8,8 +8,10 @@ use \Spin\Core\UploadedFile;
 
 class UploadedFileTest extends TestCase
 {
-  /** @var        string          Application object */
-  protected $app;
+  /**
+   * @var \Spin\Application
+   */
+  protected \Spin\Application $app;
 
   /**
    * Setup test
@@ -23,11 +25,11 @@ class UploadedFileTest extends TestCase
   /**
    * Test OpenSSL Encryption / Decryption
    */
-  public function testUploadedFile()
+  public function testUploadedFile(): void
   {
     $uFile = new UploadedFile([]);
 
-    $this->assertTrue( !is_null($uFile) );
+    $this->assertNotNull($uFile);
   }
 
 }
