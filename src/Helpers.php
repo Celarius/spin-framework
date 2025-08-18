@@ -8,35 +8,12 @@
  * @package   Spin
  */
 
-/*
-  Helpers
-  -------
-  function env(string $var, $default=null)
-  function app(string $property=null)
-  function config(string $key=null, string $value=null)
-  function container(string $id=null, $value=null)
+use \GuzzleHttp\Psr7\Request;
+use \GuzzleHttp\Psr7\Response;
 
-  function db(string $connectionName='')
-  function cache(string $driverName='')
-  function request()
-
-  function redirect($to = null, $status = 302, $headers = [])
-  function response(string $body='', int $code=200, array $headers=[]))
-  function responseJson(array $data=[], int $code=200, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK, array $headers=[])
-  function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
-  function responseHtml(string $body='', int $code=200, array $headers=[])
-  function responseFile(string $filename, int $code=200, array $headers=[])
-  function getClientIp()
-  function getConfigPath()
-  function mime_content_type($filename)
-  function mime_content_type_ex($filename)
- */
-
- use \GuzzleHttp\Psr7\Request;
- use \GuzzleHttp\Psr7\Response;
-
-use Spin\Database\PdoConnection;
-use Spin\helpers\ArrayToXml;
+use \Spin\Cache\AbstractCacheAdapterInterface;
+use \Spin\Database\PdoConnection;
+use \Spin\helpers\ArrayToXml;
 use \Spin\Core\Logger;
 
 if (!\function_exists('env')) {
@@ -49,14 +26,15 @@ if (!\function_exists('env')) {
    *
    * @return     mixed
    */
-  function env(string $var, $default=null)
+  function env(string $var, mixed $default = null): mixed
   {
     # Get from Environmental vars
     $val = \getenv($var);
 
     # If nothing found, return $default
-    if ($val === false)
+    if ($val === false) {
       return $default;
+    }
 
     # Modify "True","False","Null","Empty" values
     switch (\strtolower($val)) {
@@ -75,8 +53,8 @@ if (!\function_exists('env')) {
     }
 
     # Extract "" encapsulated values
-    if ( $val[0]==='"' && $val[-1]==='"' ) {
-      return \trim($val,'"');
+    if ($val[0] === '"' && $val[-1] === '"') {
+      return \trim($val, '"');
     }
 
     return $val;
@@ -85,13 +63,13 @@ if (!\function_exists('env')) {
 
 if (!\function_exists('app')) {
   /**
-   * Get the global $app "object" or a $property or a dependancy
+   * Get the global $app "object" or a $property or a dependency
    *
-   * @param      string  $property  The property
+   * @param      ?string  $property  The property
    *
    * @return     mixed
    */
-  function app(string $property=null)
+  function app(?string $property = null): mixed
   {
     global $app;
 
@@ -107,28 +85,32 @@ if (!\function_exists('config')) {
   /**
    * Get/Set a Config key/value
    *
-   * @param      string  $key    The key in DOt format
+   * @param      ?string  $key    The key in DOt format
    * @param      mixed   $value  The value to set
    *
    * @return     mixed
    */
-  function config(string $key=null, $value=null)
+  function config(?string $key = null, mixed $value = null): mixed
   {
     global $app;
 
+    $config = $app->getConfig();
+    if (!$config) {
+      return null;
+    }
+
     if (\is_null($key)) {
       # Return config object
-      return $app->getConfig();
-
-    } elseif (\is_null($value)) {
-      # Return config Key's value
-      return $app->getConfig()->get($key);
-
-    } else {
-      # Set config $key to $value
-      return $app->getConfig()->set($key,$value);
-
+      return $config;
     }
+
+    if (\is_null($value)) {
+      # Return config Key's value
+      return $config->get($key);
+    }
+
+    # Set config $key to $value
+    return $config->set($key,$value);
   }
 }
 
@@ -152,32 +134,30 @@ if (!\function_exists('container')) {
    * // Get the value
    * $value = container('MyKey');
    *
-   * @param      string  $id     The identifier
+   * @param      ?string  $id     The identifier
    * @param      mixed   $value  The value
    *
    * @return     mixed
    */
-  function container(string $id=null, $value=null)
+  function container(?string $id = null, mixed $value = null): mixed
   {
     global $app;
 
     if (\is_null($id)) {
       # Return the container
       return $app->getContainer();
-
-    } elseif (\is_null($value)) {
-      # Return the $id in the container
-      if ( $app->getContainer()->has($id) ) {
-        return $app->getContainer()->get($id);
-      } else {
-        return null;
-      }
-
-    } else {
-      # Set $id in container to $value
-      return $app->getContainer()->share($id,$value);
-
     }
+
+    if (\is_null($value)) {
+      # Return the $id in the container
+      if ($app->getContainer()->has($id)) {
+        return $app->getContainer()->get($id);
+      }
+      return null;
+    }
+
+    # Set $id in container to $value
+    return $app->getContainer()->share($id, $value);
   }
 }
 
@@ -185,7 +165,7 @@ if (!\function_exists('logger')) {
   /**
    * Get the Logger object
    *
-   * @return  Logger
+   * @return  ?Logger
    */
   function logger(): ?Logger
   {
@@ -218,9 +198,9 @@ if (!\function_exists('cache')) {
    *
    * @param      string  $driverName  The driver name
    *
-   * @return     object
+   * @return     ?AbstractCacheAdapterInterface
    */
-  function cache(string $driverName='')
+  function cache(string $driverName=''): ?AbstractCacheAdapterInterface
   {
     global $app;
 
@@ -232,9 +212,9 @@ if (!\function_exists('getRequest')) {
   /**
    * Get the Request object
    *
-   * @return     object
+   * @return Request
    */
-  function getRequest()
+  function getRequest(): Request
   {
     global $app;
 
@@ -246,9 +226,9 @@ if (!\function_exists('getResponse')) {
   /**
    * Get the getResponse object
    *
-   * @return     object
+   * @return Response
    */
-  function getResponse()
+  function getResponse(): Response
   {
     global $app;
 
@@ -265,7 +245,7 @@ if (!\function_exists('queryParam')) {
    *
    * @return     mixed
    */
-  function queryParam(string $paramName, $default=null)
+  function queryParam(string $paramName, mixed $default = null): mixed
   {
     global $app;
 
@@ -279,7 +259,7 @@ if (!\function_exists('queryParams')) {
    *
    * @return     array
    */
-  function queryParams()
+  function queryParams(): array
   {
     global $app;
 
@@ -296,7 +276,7 @@ if (!\function_exists('postParam')) {
    *
    * @return     mixed
    */
-  function postParam(string $paramName, $default=null)
+  function postParam(string $paramName, mixed $default = null): mixed
   {
     global $app;
 
@@ -310,7 +290,7 @@ if (!\function_exists('postParams')) {
    *
    * @return     array
    */
-  function postParams()
+  function postParams(): array
   {
     return $_POST;
   }
@@ -325,7 +305,7 @@ if (!\function_exists('cookieParam')) {
    *
    * @return     mixed
    */
-  function cookieParam(string $paramName, $default=null)
+  function cookieParam(string $paramName, mixed $default = null): mixed
   {
     global $app;
 
@@ -339,7 +319,7 @@ if (!\function_exists('cookieParams')) {
    *
    * @return     array
    */
-  function cookieParams()
+  function cookieParams(): array
   {
     global $app;
 
@@ -352,7 +332,7 @@ if (!\function_exists('cookie')) {
    * Get/Set Cookies depending on values
    *
    * @param      string   $name      The name
-   * @param      ?string  $value     The value
+   * @param      string   $value     The value
    * @param      integer  $expire    The expire
    * @param      string   $path      The path
    * @param      string   $domain    The domain
@@ -361,7 +341,13 @@ if (!\function_exists('cookie')) {
    *
    * @return     mixed
    */
-  function cookie(string $name, ?string $value=null, int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httpOnly=false)
+  function cookie(string $name,
+                  string $value = '',
+                  int $expire = 0,
+                  string $path = '',
+                  string $domain = '',
+                  bool $secure = false,
+                  bool $httpOnly = false): mixed
   {
     global $app;
 
@@ -371,7 +357,7 @@ if (!\function_exists('cookie')) {
     }
 
     # Set the cookie
-    return \app()->setCookie($name,$value,$expire,$path,$domain,$secure,$httpOnly);
+    return $app->setCookie($name,$value,$expire,$path,$domain,$secure,$httpOnly);
   }
 }
 
@@ -386,18 +372,18 @@ if (!\function_exists('redirect')) {
    *
    * @param      string  $uri      Where to redirect to. FQDN or relative path
    * @param      int     $status   Status code, defaults to 302
-   * @param      array   $headers  Additinal headers
+   * @param      array   $headers  Additional headers
    *
    * @return     object
    */
-  function redirect(string $uri, $status=302, $headers = [])
+  function redirect(string $uri, int $status = 302, array $headers = []): object
   {
     global $app;
 
     # Build response object
     $response = \getResponse()
                 ->withStatus($status)
-                ->withHeader('Location',$uri);
+                ->withHeader('Location', $uri);
 
     # Set all the headers the user sent
     foreach($headers as $header => $values) {
@@ -421,7 +407,7 @@ if (!\function_exists('response')) {
    *
    * @return     Response
    */
-  function response(string $body='', int $code=200, array $headers=[])
+  function response(string $body = '', int $code = 200, array $headers = []): Response
   {
     global $app;
 
@@ -439,7 +425,7 @@ if (!\function_exists('response')) {
       $response = $response->withHeader($header,$values);
     }
 
-    if (\mb_strlen($body)>0) {
+    if ($body !== '') {
       # Empty the response file if we are sending back content
       $app->setFileResponse('');
     }
@@ -463,11 +449,19 @@ if (!\function_exists('responseJson')) {
    *
    * @return     Response
    */
-  function responseJson(array $data=[], int $code=200, int $options=0, array $headers=[])
+  function responseJson(array $data = [], int $code = 200, int $options = 0, array $headers = []): Response
   {
-    global $app;
+    try {
+      $body = \json_encode($data, JSON_THROW_ON_ERROR | $options);
+    } catch (\JsonException $e) {
+      \logger()->warning('Invalid payload for responseJson', [
+        'error'   => $e->getMessage(),
+        'rid' => container('rid')
+      ]);
 
-    $body = \json_encode($data, $options);
+      $body = '';
+    }
+
     $headers = \array_merge(['Content-Type'=>'application/json'],$headers);
 
     return \response($body, $code, $headers);
@@ -485,15 +479,15 @@ if (!\function_exists('responseXml')) {
    *
    * @return     Response
    */
-  function responseXml(array $data=[], string $root='xml', int $code=200, array $headers=[])
+  function responseXml(array $data = [], string $root = 'xml', int $code = 200, array $headers = []): Response
   {
-    $headers = \array_merge(['Content-Type'=>'application/xml'],$headers);
+    $headers = \array_merge(['Content-Type' => 'application/xml'], $headers);
 
     # Build the XML
     $xmlBuilder = new ArrayToXml();
-    $xml = $xmlBuilder->buildXml($data,$root);
+    $xml = $xmlBuilder->buildXml($data, $root);
 
-    return \response($xml,$code,$headers);
+    return \response($xml, $code, $headers);
   }
 }
 
@@ -507,13 +501,11 @@ if (!\function_exists('responseHtml')) {
    *
    * @return     Response
    */
-  function responseHtml(string $body='', int $code=200, array $headers=[])
+  function responseHtml(string $body = '', int $code = 200, array $headers = []): Response
   {
-    global $app;
+    $headers = \array_merge(['Content-Type' => 'text/html'], $headers);
 
-    $headers = \array_merge(['Content-Type'=>'text/html'],$headers);
-
-    return \response($body,$code,$headers);
+    return \response($body, $code, $headers);
   }
 }
 
@@ -528,7 +520,7 @@ if (!\function_exists('responseFile')) {
    *
    * @return     Response
    */
-  function responseFile(string $filename, int $code=200, array $headers=[], bool $remove=false)
+  function responseFile(string $filename, int $code=200, array $headers=[], bool $remove=false): Response
   {
     global $app;
 
@@ -537,9 +529,9 @@ if (!\function_exists('responseFile')) {
 
     # Determine Mime-Type for file (if not set)
     $mime_type = \mime_content_type_ex($filename);
-    $headers = \array_merge($headers,['Content-Type'=>$mime_type]);
+    $headers = \array_merge($headers, ['Content-Type' => $mime_type]);
 
-    return \response('',$code,$headers);
+    return \response('', $code,$headers);
   }
 }
 
@@ -554,13 +546,11 @@ if (!\function_exists('getClientIp')) {
    */
   function getClientIp(): string
   {
-    global $app;
-
     # Determine Clients IP address
     $ip = $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 
     # Validate it
-    $ok = \filter_var($ip,FILTER_VALIDATE_IP);
+    $ok = \filter_var($ip, FILTER_VALIDATE_IP);
 
     if ($ok) {
       return $ip;
@@ -576,19 +566,18 @@ if (!function_exists("generateRefId")) {
   /**
    * Generates a `reference id` string, based on the current date and time in microseconds
    *
-   * @param   string $prefix            Optional prefix to prepend to result, default is empty string
+   * @param string $prefix Optional prefix to prepend to result, default is empty string
    *
    * @return  string                    String with reference id. ex. `<prefix>49p7qs0n3t0ks`
+   * @throws Exception
    */
   function generateRefId(string $prefix=''): string
   {
-    $refId = (new \DateTIme('', new \DateTImeZone('UTC')))->format('YmdHisu'); // `u` = Microsecond precision
+    $refId = (new \DateTime('', new \DateTimeZone('UTC')))->format('YmdHisu'); // `u` = Microsecond precision
 
-    return $prefix . \baseConvert($refId, 10, 36);
+    return $prefix . \base_convert($refId, 10, 36);
   }
 }
-
-/* ************************************************************************************************************** */
 
 if (!\function_exists("getConfigPath")) {
   /**
@@ -608,11 +597,11 @@ if(!\function_exists('mime_content_type')) {
   /**
    * { function_description }
    *
-   * @param      <type>        $filename  The filename
+   * @param      string        $filename  The filename
    *
    * @return     array|string  The mime type(s) of the file
    */
-  function mime_content_type($filename)
+  function mime_content_type(string $filename): array|string
   {
     return \mime_content_type_ex($filename);
   }
@@ -626,7 +615,7 @@ if(!\function_exists('mime_content_type_ex')) {
    *
    * @return     array|string         The mime type(s) of the file
    */
-  function mime_content_type_ex(string $filename)
+  function mime_content_type_ex(string $filename): array|string
   {
     $mime_types = [
       'txt' => 'text/plain',
@@ -692,21 +681,19 @@ if(!\function_exists('mime_content_type_ex')) {
       $ext = '';
     }
 
-    // $ext = \strtolower(\array_pop(\explode('.',$filename)));
     if (\array_key_exists($ext, $mime_types)) {
       return $mime_types[$ext];
+    }
 
-    } elseif (\function_exists('finfo_open')) {
+    if (\function_exists('finfo_open')) {
       $finfo = \finfo_open(\FILEINFO_MIME_TYPE);
       $mimetype = \finfo_file($finfo, $filename);
       \finfo_close($finfo);
 
       return $mimetype;
-
-    } else {
-      return 'application/octet-stream';
-
     }
+
+    return 'application/octet-stream';
   }
 }
 
