@@ -112,8 +112,8 @@ class Redis extends AbstractCacheAdapter
     }
 
     if ($ttl instanceof \DateInterval) {
-      $now = new \DateTime('now')->getTimestamp();
-      $ttl = new \DateTime('now')->add($ttl)->getTimestamp() - $now;
+      $now = (new \DateTime('now'))->getTimestamp();
+      $ttl = (new \DateTime('now'))->add($ttl)->getTimestamp() - $now;
     }
     return (bool)$this->redisClient->set($key, $value, 'ex', $ttl);
   }
