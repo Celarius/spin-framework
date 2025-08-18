@@ -16,7 +16,8 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: dom, gd, mbstring, pdo_mysql, zip
+          ini-values: apc.enable_cli=1
+          extensions: dom, gd, mbstring, pdo_mysql, zip, apcu
           coverage: xdebug
           tools: composer:v2
 
