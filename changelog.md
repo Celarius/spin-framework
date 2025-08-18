@@ -25,7 +25,7 @@ SPIN Framework Changelog
 - Support for PHP 8.4
 
 ## 0.0.26
-- Updated composer.json with newver versions of packages
+- Updated composer.json with newer versions of packages
 
 ## 0.0.25
 - New options for logging. "max_buffered_lines" and "flush_overflow_to_disk"

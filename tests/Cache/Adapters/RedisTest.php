@@ -7,7 +7,7 @@ use \Spin\Cache\Adapters\Redis;
 
 class RedisTest extends TestCase
 {
-  protected $cacheObj;
+  protected Redis $cacheObj;
 
   public function setup(): void
   {
@@ -21,7 +21,7 @@ class RedisTest extends TestCase
 
   public function testRedisAdapterCreated()
   {
-    $this->assertNotNull( $this->cacheObj );
+    $this->assertNotNull($this->cacheObj);
   }
 
 }

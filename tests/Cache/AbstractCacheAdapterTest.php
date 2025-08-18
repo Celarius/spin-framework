@@ -48,12 +48,12 @@ class TestAdapter extends AbstractCacheAdapter
     return false;
   }
 
-  public function inc(string $key, int $amount=1)
+  public function inc(string $key, int $amount=1): bool|int
   {
     return 0;
   }
 
-  public function dec(string $key, int $amount=1)
+  public function dec(string $key, int $amount=1): bool|int
   {
     return 0;
   }
