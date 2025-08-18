@@ -15,6 +15,21 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
+      
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: spin_test
+          MYSQL_USER: spin_user
+          MYSQL_PASSWORD: spin_password
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        ports:
+          - 3306:3306
     
     strategy:
       fail-fast: false
