@@ -26,19 +26,23 @@ $redis = new Redis([
 namespace Spin\Cache\Adapters;
 
 use Spin\Cache\AbstractCacheAdapter;
-use Psr\SimpleCache\CacheInterface;
 use Predis\Client as RedisClient;
 
-class Redis extends AbstractCacheAdapter implements CacheInterface
+class Redis extends AbstractCacheAdapter
 {
-  /** @var  RedisClient         The Redis Client connection */
-  protected $redisClient;
+  /**
+   * @var  RedisClient The Redis Client connection
+   */
+  protected RedisClient $redisClient;
 
-
-  public function __construct(array $connectionDetails=[], array $redisOptions=[])
+  /**
+   * @param array $connectionDetails
+   * @param array $redisOptions
+   */
+  public function __construct(array $connectionDetails = [])
   {
     if (($connectionDetails['options'] ?? null) === null) {
-      throw new \Exception("Empty Redis connection options");
+      throw new \RuntimeException("Empty Redis connection options");
     }
 
     # Set $driver and $connectionDetails
@@ -46,15 +50,7 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
     # Create the client
     $this->redisClient = new RedisClient($connectionDetails['options']);
     # Set the version
-    $this->setVersion( $this->redisClient::VERSION );
-
-    // # Connect
-    // $this->connect();      // Connections are established lazily on 1st command
-  }
-
-  public function initialize()
-  {
-    return parent::initialize();
+    $this->setVersion((string)$this->redisClient::VERSION);
   }
 
   /**
@@ -62,9 +58,11 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
    *
    * @return bool
    */
-  protected function connect()
+  protected function connect(): bool
   {
-    if (!$this->redisClient->isConnected()) $this->redisClient->connect();
+    if (!$this->redisClient->isConnected()) {
+      $this->redisClient->connect();
+    }
 
     return $this->redisClient->isConnected();
   }
@@ -74,9 +72,11 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
    *
    * @return bool
    */
-  protected function disconnect()
+  protected function disconnect(): bool
   {
-    if ($this->redisClient->isConnected()) $this->redisClient->disconnect();
+    if ($this->redisClient->isConnected()) {
+      $this->redisClient->disconnect();
+    }
 
     return !$this->redisClient->isConnected();
   }
@@ -114,7 +114,7 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
 
   public function delete($key): bool
   {
-    return $this->redisClient->del( $key ) != 0;
+    return $this->redisClient->del($key) !== 0;
   }
 
   public function clear(): bool
@@ -152,15 +152,15 @@ class Redis extends AbstractCacheAdapter implements CacheInterface
 
   public function has(string $key): bool
   {
-    return $this->redisClient->exists( $key ) != 0;
+    return $this->redisClient->exists( $key ) !== 0;
   }
 
-  public function inc(string $key, int $amount=1)
+  public function inc(string $key, int $amount = 1): bool|int
   {
     return $this->redisClient->incrby($key, $amount);
   }
 
-  public function dec(string $key, int $amount=1)
+  public function dec(string $key, int $amount = 1): bool|int
   {
     return $this->redisClient->dec( $key, $amount);
   }

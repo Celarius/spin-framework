@@ -8,19 +8,22 @@
 
 namespace Spin\Cache;
 
-use Psr\SimpleCache\CacheInterface;
-use Spin\Cache\AbstractCacheAdapterInterface;
-
 abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
 {
-  /** @var  array       Driver Options from Config */
-  protected $options = [];
+  /**
+   * @var  array Driver Options from Config
+   */
+  protected array $options = [];
 
-  /** @var  string      Driver name */
-  protected $driver = '';
+  /**
+   * @var  string Driver name
+   */
+  protected string $driver = '';
 
-  /** @var  string      Driver Version */
-  protected $version = '';
+  /**
+   * @var  string Driver Version
+   */
+  protected string $version = '';
 
   /**
    * Constructor
@@ -34,53 +37,59 @@ abstract class AbstractCacheAdapter implements AbstractCacheAdapterInterface
     $this->setOptions($options);
   }
 
-  public function initialize()
+  public function initialize(): self
   {
     return $this;
   }
 
-  // abstract public function get($key, $default = null);
-  // abstract public function set($key, $value, $ttl = null);
-  // abstract public function delete($key);
-  // abstract public function clear();
-  // abstract public function getMultiple($keys, $default = null);
-  // abstract public function setMultiple($values, $ttl = null);
-  // abstract public function deleteMultiple($keys);
-  // abstract public function has($key);
-  // abstract public function inc(string $key, int $amount=1);
-  // abstract public function dec(string $key, int $amount=1);
-  // abstract public function statistics(): array;
-
+  /**
+   * @inheritDoc
+   */
   public function getOptions(): array
   {
       return $this->options;
   }
 
-  public function setOptions(array $options)
+  /**
+   * @inheritDoc
+   */
+  public function setOptions(array $options): \Spin\Cache\AbstractCacheAdapterInterface|self
   {
       $this->options = $options;
 
       return $this;
   }
 
+  /**
+   * @inheritDoc
+   */
   public function getDriver(): string
   {
       return $this->driver;
   }
 
-  public function setDriver(string $driver)
+  /**
+   * @inheritDoc
+   */
+  public function setDriver(string $driver): \Spin\Cache\AbstractCacheAdapterInterface|self
   {
       $this->driver = $driver;
 
       return $this;
   }
 
+  /**
+   * @inheritDoc
+   */
   public function getVersion(): string
   {
       return $this->version;
   }
 
-  public function setVersion(string $version)
+  /**
+   * @inheritDoc
+   */
+  public function setVersion(string $version): \Spin\Cache\AbstractCacheAdapterInterface|self
   {
       $this->version = $version;
 
