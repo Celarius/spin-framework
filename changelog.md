@@ -2,6 +2,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.32
+- Update League/Container usage preventing Spin from booting up
+
 ## 0.0.31
 - Better compatibility with PHP 8.1
 - Fix MySQL PDO driver compatibility (Removal of overridden connect base method)

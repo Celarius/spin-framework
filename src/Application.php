@@ -181,7 +181,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * Error Controllers, key=http code, value=Controller class[@handler]
    * @var  array<mixed>
    */
-  protected array $errorControllers;
+  protected array $errorControllers = [];
 
   /**
    * Initial memory usage when SPIN starts
@@ -313,7 +313,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * @return  bool                                            True if application ran successfully
    * @throws SpinException
    */
-  public function run(?array $serverRequest): bool
+  public function run(?array $serverRequest = []): bool
   {
     # Check and Report on config variables
     $this->checkAndReportConfigVars();

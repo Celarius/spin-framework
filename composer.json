@@ -1,7 +1,7 @@
 {
   "name": "celarius/spin-framework",
   "description": "A super lightweight PHP UI/REST Framework",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "keywords": [
     "php7",
     "php-framework",
@@ -37,7 +37,7 @@
     "guzzlehttp/guzzle": "^7.4",
     "monolog/monolog": "^3",
     "firebase/php-jwt": "^6",
-    "league/container": "^3",
+    "league/container": "^5",
     "ramsey/uuid": "^4",
     "predis/predis": "^2"
   },

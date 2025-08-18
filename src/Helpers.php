@@ -157,7 +157,7 @@ if (!\function_exists('container')) {
     }
 
     # Set $id in container to $value
-    return $app->getContainer()->share($id, $value);
+    return $app->getContainer()->addShared($id, $value);
   }
 }
 
