@@ -117,7 +117,7 @@ class MySqlTest extends TestCase
 
     $connection = new MySql('default_options_connection', $paramsNoOptions);
     $options = $connection->getOptions();
-
+    $this->assertArrayHasKey(\PDO::ATTR_PERSISTENT, $options);
     $this->assertArrayHasKey(\PDO::ATTR_ERRMODE, $options);
     $this->assertArrayHasKey(\PDO::ATTR_AUTOCOMMIT, $options);
 
