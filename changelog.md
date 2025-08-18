@@ -2,6 +2,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.33
+- More League/Container deprecated usage fix
+
 ## 0.0.32
 - Update League/Container usage preventing Spin from booting up
 
