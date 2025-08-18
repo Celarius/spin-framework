@@ -181,7 +181,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    * Error Controllers, key=http code, value=Controller class[@handler]
    * @var  array<mixed>
    */
-  protected array $errorControllers;
+  protected array $errorControllers = [];
 
   /**
    * Initial memory usage when SPIN starts
