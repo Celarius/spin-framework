@@ -56,7 +56,7 @@ class HelpersTest extends TestCase
   {
     $plain = 'Let this be the light';
     $encrypted = Cipher::encryptEx( $plain, $this->secret );
-    $a = Cipher::decryptEx( $encrypted, $this->secret );
+    $a = Cipher::decryptEx($encrypted, $this->secret);
 
     $this->assertEquals($plain, $a);
   }

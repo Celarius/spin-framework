@@ -165,9 +165,9 @@ if (!\function_exists('logger')) {
   /**
    * Get the Logger object
    *
-   * @return  ?Logger
+   * @return  Logger
    */
-  function logger(): ?Logger
+  function logger(): Logger
   {
     global $app;
 
