@@ -1,7 +1,7 @@
 {
   "name": "celarius/spin-framework",
   "description": "A super lightweight PHP UI/REST Framework",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "keywords": [
     "php7",
     "php-framework",
