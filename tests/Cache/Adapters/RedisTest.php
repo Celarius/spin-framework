@@ -19,7 +19,8 @@ class RedisTest extends TestCase
           'port' => 6379
         ]
       ]);
-      
+      // Force connectivity check; skip if not reachable
+      $this->cacheObj->statistics();
       // Clear any existing data before tests
       $this->cacheObj->clear();
     } catch (\Exception $e) {
