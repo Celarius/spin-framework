@@ -13,7 +13,7 @@ use \GuzzleHttp\Psr7\Response;
 
 use \Spin\Cache\AbstractCacheAdapterInterface;
 use \Spin\Database\PdoConnection;
-use \Spin\helpers\ArrayToXml;
+use \Spin\Helpers\ArrayToXml;
 use \Spin\Core\Logger;
 
 if (!\function_exists('env')) {
@@ -53,7 +53,8 @@ if (!\function_exists('env')) {
     }
 
     # Extract "" encapsulated values
-    if ($val[0] === '"' && $val[-1] === '"') {
+    $len = \strlen($val);
+    if ($len >= 2 && $val[0] === '"' && $val[$len - 1] === '"') {
       return \trim($val, '"');
     }
 
@@ -157,7 +158,7 @@ if (!\function_exists('container')) {
     }
 
     # Set $id in container to $value
-    return $app->getContainer()->addShared($id, $value);
+    return $app->getContainer()->share($id, $value);
   }
 }
 
@@ -454,7 +455,7 @@ if (!\function_exists('responseJson')) {
     try {
       $body = \json_encode($data, JSON_THROW_ON_ERROR | $options);
     } catch (\JsonException $e) {
-      \logger()->warning('Invalid payload for responseJson', [
+      \logger()?->warning('Invalid payload for responseJson', [
         'error'   => $e->getMessage(),
         'rid' => container('rid')
       ]);

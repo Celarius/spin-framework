@@ -63,7 +63,7 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
       # Default to ALL
       $methods = ['GET','POST','PUT','PATCH','DELETE','HEAD','OPTIONS'];
 
-      if (!isset($route['methods'])) {
+      if (isset($route['methods'])) {
         $methods = $route['methods'];
       }
 

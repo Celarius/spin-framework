@@ -221,8 +221,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       # Set paths
       $this->basePath = \realpath($basePath);
-      $this->appPath = $this->basePath . '/app';
-      $this->storagePath = $this->basePath . '/storage';
+      $this->appPath = $this->basePath . \DIRECTORY_SEPARATOR . 'app';
+      $this->storagePath = $this->basePath . \DIRECTORY_SEPARATOR . 'storage';
 
       # Create config
       $this->config = new Config($this->appPath, $this->getEnvironment());
@@ -624,11 +624,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           # Run Controller's handler
           return $routeHandler->$handlerMethod([]);
         }
-        \logger()->error('Failed to create error controller',[
+        \logger()?->error('Failed to create error controller',[
           'class'=>$handlerClass
         ]);
       } else {
-        \logger()->notice('Error controller class does not exist',[
+        \logger()?->notice('Error controller class does not exist',[
           'class'=>$handlerClass,
           'httpCode'=>$httpCode
         ]);
@@ -891,7 +891,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   public function getSharedStoragePath(): string
   {
     if (empty($this->sharedStoragePath)) {
-      return $this->getStoragepath();
+      return $this->getStoragePath();
     }
 
     return $this->sharedStoragePath;
@@ -1098,11 +1098,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
     } elseif (\is_callable($value)) {
       # Callable
-      $this->getContainer()->addShared($name,$value);
+      $this->getContainer()->share($name,$value);
 
     } else {
       # Variable
-      $this->getContainer()->addShared($name,$value);
+      $this->getContainer()->share($name,$value);
 
     }
 

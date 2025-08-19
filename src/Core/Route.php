@@ -14,13 +14,13 @@ use \Spin\Core\RouteInterface;
 abstract class Route extends AbstractBaseClass implements RouteInterface
 {
   /** @var  string        HTTP Method */
-  protected $method;
+  protected string $method;
 
   /** @var  string        URI path */
-  protected $path;
+  protected string $path;
 
   /** @var  string        Handler class name */
-  protected $handler;
+  protected string $handler;
 
   public function __construct(string $method, string $path, string $handler)
   {
@@ -29,17 +29,17 @@ abstract class Route extends AbstractBaseClass implements RouteInterface
     $this->handler = $handler;
   }
 
-  public function getMethod()
+  public function getMethod(): string
   {
     return $this->method;
   }
 
-  public function getPath()
+  public function getPath(): string
   {
     return $this->path;
   }
 
-  public function getHandler()
+  public function getHandler(): string
   {
     return $this->handler;
   }
