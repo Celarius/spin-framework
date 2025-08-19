@@ -6,14 +6,14 @@ use PHPUnit\Framework\TestCase;
 
 class ContainerObject
 {
-  protected $property = '';
+  protected string $property = '';
 
-  public function getProperty()
+  public function getProperty(): string
   {
     return $this->property;
   }
 
-  public function setProperty(string $value)
+  public function setProperty(string $value): void
   {
     $this->property = $value;
   }
@@ -29,7 +29,7 @@ class ContainerTest extends TestCase
   }
 
   /** Test Container STRING */
-  public function testContainerString()
+  public function testContainerString(): void
   {
     $a = 'My Container String';
 
@@ -43,9 +43,13 @@ class ContainerTest extends TestCase
   }
 
   /** Test Container ARRAY */
-  public function testContainerArray()
+  public function testContainerArray(): void
   {
-    $a = [ 'a'=>'a value','b'=>'b value','c'=>'c value' ];
+    $a = [
+      'a' => 'a value',
+      'b' => 'b value',
+      'c' => 'c value'
+    ];
 
     # Set it
     container('array', $a);
@@ -57,7 +61,7 @@ class ContainerTest extends TestCase
   }
 
   /** Test Container Object */
-  public function testContainerObject()
+  public function testContainerObject(): void
   {
     $a = new ContainerObject();
     $a->setProperty('I get set, therefore I exist');
@@ -72,20 +76,20 @@ class ContainerTest extends TestCase
   }
 
   /** Test Container Callable */
-  public function testContainerAnonymousFunction()
+  public function testContainerAnonymousFunction(): void
   {
     # Set it
     container('anon',
-      function() {
+      static function() {
         return 1234;
       }
     );
 
-    $this->assertEquals(1234, container('anon')); //$value);
+    $this->assertEquals(1234, container('anon'));
   }
 
   /** Test RequestId class */
-  public function testContainerRequestIdClass()
+  public function testContainerRequestIdClass(): void
   {
     # Create class
     container('requestId', new \Spin\Classes\RequestIdClass() );

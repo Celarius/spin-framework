@@ -16,4 +16,4 @@ use PHPUnit\Framework\TestCase;
 require __DIR__.'/../vendor/autoload.php';
 
 # Create application
-$app = new \Spin\Application( \realpath(__DIR__) );
+$app = new \Spin\Application(\realpath(__DIR__));

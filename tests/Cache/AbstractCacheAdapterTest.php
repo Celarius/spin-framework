@@ -8,7 +8,7 @@ use \Spin\Cache\AbstractCacheAdapter;
 # TestAdapter to extend the AbstractCacheAdapter class
 class TestAdapter extends AbstractCacheAdapter
 {
-  public function get($key, mixed $default = null): mixed
+  public function get($key, mixed $default = null): string
   {
     return '';
   }
@@ -48,12 +48,12 @@ class TestAdapter extends AbstractCacheAdapter
     return false;
   }
 
-  public function inc(string $key, int $amount=1)
+  public function inc(string $key, int $amount=1): bool|int
   {
     return 0;
   }
 
-  public function dec(string $key, int $amount=1)
+  public function dec(string $key, int $amount=1): bool|int
   {
     return 0;
   }

@@ -1058,7 +1058,13 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   public function getRouteGroup(string $groupName): ?RouteGroup
   {
-    return array_find($this->routeGroups, static fn($routeGroup) => \strcasecmp($routeGroup->getName(), $groupName) === 0);
+    foreach ($this->routeGroups as $routeGroup) {
+      if (\strcasecmp($routeGroup->getName(), $groupName) === 0) {
+        return $routeGroup;
+      }
+    }
+
+    return null;
   }
 
   /**

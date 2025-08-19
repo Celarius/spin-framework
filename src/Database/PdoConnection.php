@@ -103,6 +103,7 @@ class PdoConnection extends \PDO implements PdoConnectionInterface
     # Convert the PDO params into PDO constants
     foreach ($pdoParams as $pdoOptionName => $pdoValue) {
       # Convert PDO-OPTION to a number
+      $pdoOption = null;
       if (!\is_numeric($pdoOptionName)) {
         $pdoOption = \constant('\PDO::' . \strtoupper($pdoOptionName)); // PDO Option name constant
       }
@@ -126,15 +127,17 @@ class PdoConnection extends \PDO implements PdoConnectionInterface
       }
 
       # Set the Option
-      $pdoOptions[(int)$pdoOption] = $pdoValue;
+      if ($pdoOption) {
+        $pdoOptions[(int)$pdoOption] = $pdoValue;
+      }
     }
 
     # Default PDO options for all drivers if none given
     if (\count($pdoOptions) === 0) {
       $pdoOptions = [
-          \PDO::ATTR_PERSISTENT => (int)TRUE,
+          \PDO::ATTR_PERSISTENT => 1,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-          \PDO::ATTR_AUTOCOMMIT => (int)FALSE
+          \PDO::ATTR_AUTOCOMMIT => 0
         ];
     }
 

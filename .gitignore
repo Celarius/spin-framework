@@ -3,3 +3,4 @@
 /composer.lock
 desktop.ini
 .phpunit.result.cache
+/coverage.cobertura.xml
