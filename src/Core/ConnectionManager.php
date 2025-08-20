@@ -24,6 +24,11 @@ use \Spin\Core\ConnectionManagerInterface;
 use \Spin\Database\PdoConnection;
 use \Spin\Database\PdoConnectionInterface;
 
+/**
+ * Centralized factory/pool for database connections. Resolves connection
+ * definitions from configuration, instantiates the appropriate PDO driver
+ * implementation, and manages the lifecycle (create, reuse, disconnect).
+ */
 class ConnectionManager extends AbstractBaseClass implements ConnectionManagerInterface
 {
   /** @var  array         List of Instantiated Connections */
@@ -189,5 +194,4 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   {
     return $this->connections;
   }
-
 }

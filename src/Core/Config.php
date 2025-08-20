@@ -11,6 +11,10 @@ namespace Spin\Core;
 use \Exception;
 use \Spin\Exceptions\SpinException;
 
+/**
+ * Loads, merges, and persists environment-specific JSON configuration for the
+ * application. Provides dot-notation accessors and mutation helpers.
+ */
 class Config extends AbstractBaseClass implements ConfigInterface
 {
   /** @var  array         Configuration Array */
@@ -39,7 +43,6 @@ class Config extends AbstractBaseClass implements ConfigInterface
     # Load the config
     $this->load($filename);
   }
-
 
   /**
    * Clear all config values
@@ -257,5 +260,4 @@ class Config extends AbstractBaseClass implements ConfigInterface
 
     return $input;
   }
-
 }

@@ -11,7 +11,9 @@
 namespace Spin\Core;
 
 /**
- * Abstract Baseclass
+ * Common foundation for framework classes providing a minimal, consistent
+ * inheritance root. Extend this class to align with framework expectations
+ * around construction/destruction hooks and future shared concerns.
  */
 abstract class AbstractBaseClass
 {

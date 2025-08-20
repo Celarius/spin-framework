@@ -11,6 +11,10 @@ namespace Spin\Core;
 use \Spin\Cache\AbstractCacheAdapter;
 use \Spin\Cache\AbstractCacheAdapterInterface;
 
+/**
+ * Contract for a cache manager capable of resolving cache adapters by name,
+ * creating them on demand, and exposing the set of managed cache instances.
+ */
 interface CacheManagerInterface
 {
   /**

@@ -11,6 +11,10 @@ namespace Spin\Core;
 use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\HookInterface;
 
+/**
+ * Base abstraction for lifecycle hooks that can be registered and executed
+ * around framework events. Implementors provide the run() method.
+ */
 abstract class Hook extends AbstractBaseClass implements HookInterface
 {
   /** @var  string        Name of Hook */

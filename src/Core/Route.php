@@ -11,6 +11,11 @@ namespace Spin\Core;
 use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\RouteInterface;
 
+/**
+ * Base route definition capturing HTTP method, path and handler mapping.
+ * Concrete implementations can add metadata or behavior around route matching
+ * and invocation.
+ */
 abstract class Route extends AbstractBaseClass implements RouteInterface
 {
   /** @var  string        HTTP Method */
@@ -58,5 +63,4 @@ abstract class Route extends AbstractBaseClass implements RouteInterface
   {
     return $this->handler;
   }
-
 }

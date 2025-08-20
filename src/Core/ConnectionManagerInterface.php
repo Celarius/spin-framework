@@ -5,6 +5,10 @@ namespace Spin\Core;
 use \Spin\Database\PdoConnection;
 use \Spin\Database\PdoConnectionInterface;
 
+/**
+ * Contract for connection managers that resolve, create, and manage database
+ * connections, exposing a pool and lifecycle operations.
+ */
 interface ConnectionManagerInterface
 {
   /**
