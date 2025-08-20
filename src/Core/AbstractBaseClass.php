@@ -22,6 +22,9 @@ abstract class AbstractBaseClass
   {
   }
 
+  /**
+   * Destructor
+   */
   public function __destruct()
   {
   }

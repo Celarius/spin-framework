@@ -33,13 +33,7 @@ use \GuzzleHttp\Psr7\LazyOpenStream;
 class ServerRequestFactory extends AbstractFactory implements ServerRequestFactoryInterface
 {
   /**
-   * Create a new server request
-   *
-   * @param      string                  $method
-   * @param      UriInterface|string     $uri
-   * @param      array                   $serverParams  The server parameters
-   *
-   * @return     ServerRequestInterface
+   * @inheritDoc
    */
   public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
   {
@@ -63,8 +57,7 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
   /**
    * Create a new server request from server variables array
    *
-   * @param      array                   $server  Typically $_SERVER or similar
-   *                                              array
+   * @param      array|null              $server  Typically $_SERVER or similar array
    *
    * @return     ServerRequestInterface
    *

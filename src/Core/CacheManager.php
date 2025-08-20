@@ -179,9 +179,7 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
   }
 
   /**
-   * Get array of containers
-   *
-   * @return     array
+   * @return array
    */
   public function getCaches(): array
   {

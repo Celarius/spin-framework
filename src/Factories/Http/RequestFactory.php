@@ -28,12 +28,7 @@ use \GuzzleHttp\Psr7\Request;
 class RequestFactory extends AbstractFactory implements RequestFactoryInterface
 {
   /**
-   * Create a new request.
-   *
-   * @param      string               $method
-   * @param      UriInterface|string  $uri
-   *
-   * @return     RequestInterface
+   * @inheritDoc
    */
   public function createRequest(string $method, $uri): RequestInterface
   {

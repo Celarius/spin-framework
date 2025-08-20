@@ -91,13 +91,13 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
   }
 
   /**
-   * Add a new route in the route collector
+   * Add a new route to the collector
    *
-   * @param      array   $methods  The methods
-   * @param      string  $path     [description]
-   * @param      string  $handler  [description]
+   * @param array  $methods HTTP methods
+   * @param string $path    Route path
+   * @param string $handler Handler class@method
    *
-   * @return     self
+   * @return self
    */
   public function addRoute(array $methods, string $path, string $handler)
   {
@@ -123,6 +123,14 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
    * @param      string  $uri    [description]
    *
    * @return     array   Array with matching info
+   */
+  /**
+   * Match an incoming request against the group's routes
+   *
+   * @param string $method HTTP method
+   * @param string $uri    Request URI path
+   *
+   * @return array<mixed>
    */
   public function matchRoute( string $method, string $uri )
   {
@@ -170,6 +178,9 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
    *
    * @return     string
    */
+  /**
+   * @return string
+   */
   public function getName(): string
   {
     return $this->name;
@@ -179,6 +190,9 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
    * Get the RouteGroup Prefix
    *
    * @return     string
+   */
+  /**
+   * @return string
    */
   public function getPrefix(): string
   {
@@ -190,6 +204,9 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
    *
    * @return     array
    */
+  /**
+   * @return array
+   */
   public function getBeforeMiddleware(): array
   {
     return $this->beforeMiddleware;
@@ -200,6 +217,9 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
    *
    * @return     array
    */
+  /**
+   * @return array
+   */
   public function getAfterMiddleware(): array
   {
     return $this->afterMiddleware;
@@ -209,6 +229,9 @@ class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
    * Get the RouteGroup Routes array
    *
    * @return     array
+   */
+  /**
+   * @return array
    */
   public function getRoutes(): array
   {

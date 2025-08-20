@@ -29,16 +29,31 @@ abstract class Route extends AbstractBaseClass implements RouteInterface
     $this->handler = $handler;
   }
 
+  /**
+   * Get HTTP method
+   *
+   * @return string
+   */
   public function getMethod(): string
   {
     return $this->method;
   }
 
+  /**
+   * Get URI path
+   *
+   * @return string
+   */
   public function getPath(): string
   {
     return $this->path;
   }
 
+  /**
+   * Get handler class name
+   *
+   * @return string
+   */
   public function getHandler(): string
   {
     return $this->handler;
