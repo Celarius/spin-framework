@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * Abstract Route
+ * Abstract Route Base Class
+ *
+ * Base route definition capturing HTTP method, path and handler mapping.
+ * Concrete implementations can add metadata or behavior around route matching
+ * and invocation.
  *
  * @package  Spin
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

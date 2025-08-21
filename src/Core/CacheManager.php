@@ -1,11 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * CacheManager
+ * Cache Manager Class
  *
- * Manager for Cache integrations
+ * Central registry and factory for cache adapters. Resolves configured cache
+ * definitions on demand, instantiates adapters (e.g., APCu, Redis), and keeps
+ * a pool of instances for reuse across the application.
  *
  * @package   Spin
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 /*

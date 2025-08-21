@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * HookManager
+ * Hook Manager Class
  *
- * @package  Spin
+ * Manages the registration, execution, and lifecycle of framework hooks.
+ * Provides methods for adding, removing, and retrieving hooks by name,
+ * supporting both before and after request hook types.
+ *
+ * @package  Spin\Core
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;
@@ -37,9 +43,9 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
    *
    * @param      string  $name   Hook Name
    *
-   * @return     null|Hook
+   * @return     Hook
    */
-  public function getHook(string $name): ?Hook
+  public function getHook(string $name): Hook
   {
     # Find hook in list
     foreach ($this->hooks as $hook)
@@ -49,7 +55,8 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
       }
     }
 
-    return null;
+    # If hook not found, throw an exception
+    throw new \RuntimeException("Hook '{$name}' not found");
   }
 
   /**
@@ -80,9 +87,9 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
    *
    * @param      string  $name   Hook Name
    *
-   * @return     self
+   * @return     bool
    */
-  public function removeHook(string $name)
+  public function removeHook(string $name): bool
   {
     foreach ($this->hooks as $idx => $hook)
     {
@@ -90,11 +97,11 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
         # Remove it
         unset( $this->hooks[$idx] );
 
-        return $this;
+        return true;
       }
     }
 
-    return $this;
+    return false;
   }
 
 }

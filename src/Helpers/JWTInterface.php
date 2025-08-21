@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * JWTInterface
+ * JSON Web Token (JWT) Interface
  *
- * @package  Spin
+ * Defines the contract for JWT operations including encoding, decoding, signing,
+ * and utility functions. Provides a clean interface for working with JWTs
+ * in the Spin framework.
+ *
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Helpers;

@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * CipherInterface
+ * Encryption and Decryption Interface
  *
- * @package  Spin
+ * Defines the contract for cryptographic operations including basic and extended
+ * encryption/decryption methods. Provides a clean interface for working with
+ * encryption in the Spin framework.
+ *
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Helpers;

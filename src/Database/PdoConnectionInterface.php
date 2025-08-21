@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * PDO Connection Interface
+ * PDO Database Connection Interface
  *
- * @package   Spin
+ * Extends PDO functionality with additional metadata tracking and connection
+ * management features. Provides methods for accessing connection parameters,
+ * driver information, and custom connection lifecycle management.
+ *
+ * @package   Spin\Database
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 namespace Spin\Database;

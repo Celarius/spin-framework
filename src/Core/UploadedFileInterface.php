@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * UploadedFileInterface
+ * Uploaded File Interface
  *
- * @package  Spin
+ * Defines the contract for uploaded file implementations. Specifies methods
+ * for managing file uploads including moving files to destination directories.
+ * Implemented by UploadedFile to provide framework file upload capabilities.
+ *
+ * @package  Spin\Core
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

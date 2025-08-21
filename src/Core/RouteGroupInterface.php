@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * RouteGroupInterface
+ * Route Group Interface
  *
- * @package  Spin
+ * Defines the contract for route group implementations. Specifies methods for
+ * managing collections of related routes with shared middleware and path prefixes.
+ * Implemented by RouteGroup to provide framework route grouping capabilities.
+ *
+ * @package  Spin\Core
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

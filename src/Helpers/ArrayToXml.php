@@ -1,10 +1,16 @@
 <?php declare(strict_types=1);
 
 /**
- * Based on Stack-Overflow questions and answers
+ * Array to XML Conversion Helper Class
  *
+ * Converts PHP associative arrays to XML format with support for attributes,
+ * CDATA sections, and custom element handling. Based on Stack Overflow
+ * community solutions for array-to-XML conversion.
+ *
+ * @package   Spin\Helpers
+ * @author    Spin Framework Team
+ * @since     1.0.0
  * @link      http://stackoverflow.com/questions/99350/passing-php-associative-arrays-to-and-from-xml
- * @package   Spin
  */
 
 namespace Spin\Helpers;

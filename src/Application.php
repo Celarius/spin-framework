@@ -3,7 +3,14 @@
 /**
  * Spin Application Class
  *
+ * Main application class that orchestrates the framework lifecycle including
+ * routing, middleware execution, error handling, and dependency management.
+ * Provides the core application container and coordinates all framework
+ * components.
+ *
  * @package   Spin
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 namespace Spin;

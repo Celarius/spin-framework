@@ -1,5 +1,17 @@
 <?php declare(strict_types=1);
 
+/**
+ * Abstract Cache Adapter Interface
+ *
+ * Extends PSR-16 SimpleCache interface to provide additional cache operations
+ * including increment/decrement, statistics, and driver management. Implemented
+ * by AbstractCacheAdapter to provide framework cache adapter capabilities.
+ *
+ * @package  Spin\Cache
+ * @author   Spin Framework Team
+ * @since    1.0.0
+ */
+
 namespace Spin\Cache;
 
 use Psr\SimpleCache\CacheInterface;

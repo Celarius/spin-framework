@@ -1,11 +1,17 @@
 <?php declare(strict_types=1);
 /**
- * Creates global functions to make life easier. These functions use
- * the global variable $app to access the application.
+ * Global Helper Functions
  *
- * Also registers global dependencies
+ * Creates global functions to make life easier. These functions use
+ * the global variable $app to access the application. Provides convenient
+ * shortcuts for common framework operations like configuration access,
+ * caching, database connections, and logging.
+ *
+ * Also registers global dependencies and utility functions.
  *
  * @package   Spin
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 use \GuzzleHttp\Psr7\Request;

@@ -1,9 +1,16 @@
 <?php declare(strict_types=1);
 
 /**
- * PDO Connection class
+ * PDO Database Connection Class
  *
- * @package   Spin
+ * Extends PDO to provide enhanced database connection management with
+ * additional metadata tracking, connection pooling support, and framework
+ * integration features. Supports multiple database drivers and connection
+ * types.
+ *
+ * @package   Spin\Database
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 namespace Spin\Database;

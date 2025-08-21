@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * CacheManagerInterface
+ * Cache Manager Interface
  *
- * @package   Spin
+ * Defines the contract for cache management operations including cache
+ * resolution, creation, pooling, and lifecycle management. Implemented
+ * by CacheManager to provide centralized cache administration.
+ *
+ * @package   Spin\Core
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 namespace Spin\Core;

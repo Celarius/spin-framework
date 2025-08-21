@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * Config class
+ * Configuration Management Class
+ *
+ * Loads, merges, and persists environment-specific JSON configuration for the
+ * application. Provides dot-notation accessors and mutation helpers for
+ * managing application settings across different environments.
  *
  * @package   Spin
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 namespace Spin\Core;

@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * RouteGroup
+ * Route Group Management Class
+ *
+ * Aggregates a set of related routes with a common path prefix and shared
+ * before/after middleware. Provides matching utilities against the grouped
+ * FastRoute dispatcher for efficient route resolution.
  *
  * @package  Spin
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

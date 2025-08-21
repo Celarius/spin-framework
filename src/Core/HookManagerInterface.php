@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * HookManagerInterface
+ * Hook Manager Interface
  *
- * @package  Spin
+ * Defines the contract for hook management operations including hook registration,
+ * retrieval, and lifecycle management. Implemented by HookManager to provide
+ * centralized hook administration and execution coordination.
+ *
+ * @package  Spin\Core
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

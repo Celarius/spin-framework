@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * Hook
+ * Abstract Hook Base Class
+ *
+ * Base abstraction for lifecycle hooks that can be registered and executed
+ * around framework events. Implementors provide the run() method to define
+ * custom hook behavior.
  *
  * @package  Spin
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

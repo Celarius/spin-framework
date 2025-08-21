@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * UploadedFile
+ * HTTP File Upload Handler Class
+ *
+ * Manages individual uploaded files from HTTP requests. Provides methods for
+ * moving, copying, and validating uploaded files with proper error handling
+ * and security checks. Implements PSR-7 UploadedFileInterface.
  *
  * @package  Spin
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

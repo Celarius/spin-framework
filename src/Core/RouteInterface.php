@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * RouteInterface
+ * Route Interface
  *
- * @package  Spin
+ * Defines the contract for route implementations. Specifies methods for
+ * accessing route metadata including HTTP method, path, and handler class.
+ * Implemented by Route base class to provide framework routing capabilities.
+ *
+ * @package  Spin\Core
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

@@ -1,9 +1,16 @@
 <?php declare(strict_types=1);
 
 /**
- * Abstract Controller
+ * Abstract Controller Base Class
+ *
+ * Base controller providing default handlers for HTTP verbs and common
+ * conveniences for accessing request/response/config/logger/cache. Extend
+ * this class and override the relevant handle* methods to implement
+ * endpoint-specific behavior.
  *
  * @package  Spin
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;
