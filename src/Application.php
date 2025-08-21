@@ -1098,11 +1098,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
     } elseif (\is_callable($value)) {
       # Callable
-      $this->getContainer()->share($name,$value);
+      $this->getContainer()->addShared($name, $value);
 
     } else {
       # Variable
-      $this->getContainer()->share($name,$value);
+      $this->getContainer()->addShared($name, $value);
 
     }
 

@@ -19,8 +19,6 @@ Example:
 
 namespace Spin\Core;
 
-use \Spin\Core\AbstractBaseClass;
-use \Spin\Core\CacheManagerInterface;
 use \Spin\Cache\AbstractCacheAdapter;
 use \Spin\Cache\AbstractCacheAdapterInterface;
 
@@ -32,7 +30,7 @@ use \Spin\Cache\AbstractCacheAdapterInterface;
 class CacheManager extends AbstractBaseClass implements CacheManagerInterface
 {
 	/** @var  array         List of Instantiated Caches */
-	protected $caches = [];
+	protected array $caches = [];
 
 	/**
 	 * Get or Create a Cache
@@ -68,13 +66,14 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
 	 *
 	 * @return     null|AbstractCacheAdapter
 	 */
-	public function findCache(string $name='')
-	{
-		if ( empty($name) ) {
+	public function findCache(string $name=''): ?AbstractCacheAdapter
+  {
+		if (empty($name)) {
 			# Take first available
 			$cache = \reset($this->caches);
-			if ($cache === false)
-				return null;
+			if ($cache === false) {
+        return null;
+      }
 		} else {
 			# Attempt to find the cache from the list
 			$cache = ( $this->caches[\strtolower($name)] ?? null);
@@ -90,8 +89,8 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
 	 *
 	 * @return     self
 	 */
-	public function addCache(AbstractCacheAdapterInterface $cache)
-	{
+	public function addCache(AbstractCacheAdapterInterface $cache): self
+  {
 		$this->caches[\strtolower($cache->getDriver())] = $cache;
 
 		return $this;
@@ -104,15 +103,17 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
 	 *
 	 * @return     self
 	 */
-	public function removeCache(string $name)
-	{
+	public function removeCache(string $name): self
+  {
 		# Sanity check
-		if (empty($name)) return $this;
+		if (empty($name)) {
+      return $this;
+    }
 
 		$cache = $this->findCache($name);
 
 		if ($cache) {
-			unset( $this->caches[\strtolower($cache->getDriver())] );
+			unset($this->caches[\strtolower($cache->getDriver())]);
 			unset($cache);
 			$cache = null;
 		}
@@ -130,8 +131,8 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
 	 * @param      string  $name   [description]
 	 * @return     null|AbstractCacheAdapter
 	 */
-	protected function createCache(string $name)
-	{
+	protected function createCache(string $name): ?AbstractCacheAdapter
+  {
 		# Try to find the connection in the internal list, if it was created already
 		$cache = $this->caches[\strtolower($name)] ?? null;
 
@@ -151,10 +152,10 @@ class CacheManager extends AbstractBaseClass implements CacheManagerInterface
 			$conf = \config()->get('caches.'.$name);
 
 			# Instantiate either based on CLASS or the ADAPTER name
-			if (isset($conf['class']) && !empty($conf['class'])) {
+			if (!empty($conf['class'])) {
 				$className = $conf['class'];
 			} else {
-				$className = '\\Spin\\Cache\\Adapters\\'.\ucfirst($conf['adapter'] ?? '') ;
+				$className = '\\Spin\\Cache\\Adapters\\'.\ucfirst($conf['adapter'] ?? '');
 			}
 
 			# Create the Cache
