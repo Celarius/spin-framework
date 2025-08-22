@@ -55,129 +55,167 @@ cd my-spin-app
 composer install
 
 # Start development server
-php -S localhost:8000 -t public
+php -S localhost:8000 -t src/public
 ```
 
 ## 🏗️ Project Structure
 
 ```
 my-spin-app/
-├── app/
-│   ├── Config/           # Configuration files
-│   ├── Controllers/      # Application controllers
-│   ├── Middleware/       # Custom middleware
-│   └── Models/          # Data models
-├── public/               # Web root directory
-│   ├── bootstrap.php     # Application entry point
-│   ├── index.php         # Fallback entry point
-│   └── assets/          # CSS, JS, images
-├── storage/              # Application storage
-│   ├── logs/            # Log files
-│   ├── cache/           # Cache files
-│   └── uploads/         # Uploaded files
-├── vendor/               # Composer dependencies
-├── composer.json         # Project dependencies
-└── .env                  # Environment variables
+├── src/
+│   ├── app/
+│   │   ├── Config/           # JSON configuration files
+│   │   ├── Controllers/      # Application controllers
+│   │   ├── Middlewares/      # Custom middleware
+│   │   ├── Views/            # Template files
+│   │   └── Globals.php       # Global functions
+│   ├── public/               # Web root directory
+│   │   ├── bootstrap.php     # Application entry point
+│   │   └── assets/          # CSS, JS, images
+│   └── storage/              # Application storage
+│       ├── logs/            # Log files
+│       ├── cache/           # Cache files
+│       └── database/        # Database files
+├── vendor/                   # Composer dependencies
+├── composer.json             # Project dependencies
+└── .env                      # Environment variables
 ```
 
 ## 🚀 Getting Started
 
-### 1. Create Your First Route
+### 1. Configuration
 
-```php
-<?php
-// app/Config/routes.php
+SPIN uses JSON-based configuration files:
 
-return [
-    'routes' => [
-        [
-            'path' => '/',
-            'handler' => 'HomeController@index',
-            'methods' => ['GET']
-        ],
-        [
-            'path' => '/api/users',
-            'handler' => 'UserController@list',
-            'methods' => ['GET'],
-            'middleware' => ['auth']
-        ]
-    ]
-];
+```json
+{
+  "application": {
+    "global": {
+      "maintenance": false,
+      "timezone": "Europe/Stockholm"
+    },
+    "secret": "${APPLICATION_SECRET}"
+  },
+  "session": {
+    "cookie": "SID",
+    "timeout": 3600,
+    "driver": "apcu"
+  },
+  "logger": {
+    "level": "notice",
+    "driver": "php"
+  }
+}
 ```
 
-### 2. Create a Controller
+### 2. Routing
+
+Routes are defined in JSON configuration files:
+
+```json
+{
+  "common": {
+    "before": ["\\App\\Middlewares\\RequestIdBeforeMiddleware"],
+    "after": ["\\App\\Middlewares\\ResponseLogAfterMiddleware"]
+  },
+  "groups": [
+    {
+      "name": "Public API",
+      "prefix": "/api/v1",
+      "before": ["\\App\\Middlewares\\CorsBeforeMiddleware"],
+      "routes": [
+        { "methods": ["GET"], "path": "/health", "handler": "\\App\\Controllers\\Api\\HealthController" }
+      ]
+    },
+    {
+      "name": "Protected API",
+      "prefix": "/api/v1",
+      "before": ["\\App\\Middlewares\\AuthHttpBeforeMiddleware"],
+      "routes": [
+        { "methods": ["GET"], "path": "/users/{id}", "handler": "\\App\\Controllers\\Api\\UserController" }
+      ]
+    }
+  ]
+}
+```
+
+### 3. Controllers
+
+Controllers extend SPIN's base classes and use specific HTTP method handlers:
 
 ```php
-<?php
-// app/Controllers/HomeController.php
+<?php declare(strict_types=1);
 
 namespace App\Controllers;
 
-use Spin\Core\Controller;
-use Psr\Http\Message\ResponseInterface;
+use \App\Controllers\AbstractPlatesController;
 
-class HomeController extends Controller
+class IndexController extends AbstractPlatesController
 {
-    public function index(): ResponseInterface
+    public function handleGET(array $args)
     {
-        return response()->json([
-            'message' => 'Welcome to SPIN Framework!',
-            'version' => '1.0.0'
-        ]);
+        $model = ['title' => 'Welcome to SPIN', 'user' => 'Guest'];
+        $html = $this->engine->render('pages::index', $model);
+        return response($html);
     }
 }
 ```
 
-### 3. Add Middleware
+### 4. Middleware
+
+Middleware extends `Spin\Core\Middleware`:
 
 ```php
-<?php
-// app/Middleware/AuthMiddleware.php
+<?php declare(strict_types=1);
 
-namespace App\Middleware;
+namespace App\Middlewares;
 
 use Spin\Core\Middleware;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 class AuthMiddleware extends Middleware
 {
-    public function process(RequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
+    public function initialize(array $args): bool
     {
-        // Your authentication logic here
-        if (!$this->isAuthenticated($request)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $this->secret = config('application.secret');
+        return true;
+    }
+
+    public function handle(array $args): bool
+    {
+        $token = getRequest()->getHeaderLine('Authorization');
+        if (!$this->validateToken($token)) {
+            responseJson(['error' => 'Unauthorized'], 401);
+            return false;
         }
-        
-        return $next($request, $response);
+        return true;
     }
 }
 ```
 
 ## 🔧 Core Features
 
-### 🛣️ Advanced Routing
+### 🛣️ JSON-Based Routing
 - **Route Groups** - Organize routes with shared middleware and prefixes
 - **HTTP Method Support** - Full support for GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
-- **Dynamic Parameters** - Capture URL parameters with type validation
-- **Middleware Integration** - Apply middleware to individual routes or groups
+- **Dynamic Parameters** - Capture URL parameters with `{paramName}` syntax
+- **Middleware Integration** - Apply middleware at common, group, or route level
 
 ### 🔌 Middleware System
-- **Global Middleware** - Applied to all requests
-- **Route Middleware** - Applied to specific routes or groups
-- **PSR-15 Compatible** - Follows industry standards for maximum compatibility
-- **Easy to Extend** - Simple interface for creating custom middleware
+- **Common Middleware** - Applied to all requests globally
+- **Group Middleware** - Applied to specific route groups
+- **Route Middleware** - Applied to individual routes
+- **SPIN-Specific** - Uses `initialize()` and `handle()` methods
 
 ### 🗄️ Database Support
 - **Multiple Drivers** - MySQL, PostgreSQL, SQLite, CockroachDB, Firebird
 - **PDO Based** - Secure, prepared statements by default
-- **Connection Pooling** - Efficient database connection management
-- **Query Builder** - Fluent interface for building complex queries
+- **Connection Management** - Efficient database connection handling
+- **JSON Configuration** - Database settings in configuration files
 
 ### 💾 Caching
 - **PSR-16 Compatible** - Standard cache interface
 - **Multiple Adapters** - APCu, Redis, File-based caching
-- **Automatic Invalidation** - Smart cache management
+- **JSON Configuration** - Cache settings in configuration files
 - **Performance Optimized** - Minimal overhead for maximum speed
 
 ### 📁 File Management
@@ -189,6 +227,7 @@ class AuthMiddleware extends Middleware
 ## 📚 Documentation
 
 ### Core Concepts
+- **[Configuration](doc/Configuration.md)** - JSON-based application configuration
 - **[Routing & Controllers](doc/Routing.md)** - Learn how to handle HTTP requests
 - **[Middleware](doc/Middleware.md)** - Understand the middleware pipeline
 - **[Database Operations](doc/Databases.md)** - Working with databases
@@ -197,11 +236,9 @@ class AuthMiddleware extends Middleware
 - **[Storage Management](doc/Storage-folders.md)** - Managing application storage
 
 ### Advanced Topics
-- **[Configuration Management](doc/Configuration.md)** - Application configuration
-- **[Logging & Debugging](doc/Logging.md)** - Application monitoring
-- **[Security Best Practices](doc/Security.md)** - Security guidelines
-- **[Performance Optimization](doc/Performance.md)** - Speed optimization tips
+- **[Security Best Practices](doc/Security.md)** - Security guidelines and implementations
 - **[Testing](doc/Testing.md)** - Unit and integration testing
+- **[Helpers](doc/Helpers.md)** - Built-in helper functions and utilities
 
 ## 🧪 Testing
 
@@ -235,9 +272,9 @@ tests/
 ```apache
 <VirtualHost *:80>
     ServerName mydomain.com
-    DocumentRoot "/path/to/your/app/public"
+    DocumentRoot "/path/to/your/app/src/public"
     
-    <Directory "/path/to/your/app/public">
+    <Directory "/path/to/your/app/src/public">
         AllowOverride All
         Require all granted
         
@@ -255,7 +292,7 @@ tests/
 server {
     listen 80;
     server_name mydomain.com;
-    root /path/to/your/app/public;
+    root /path/to/your/app/src/public;
     index bootstrap.php;
     
     location / {
@@ -297,6 +334,8 @@ SPIN Framework is built on PSR standards for maximum compatibility:
 - **XSS Protection** - Automatic output escaping
 - **File Upload Security** - Secure file handling and validation
 - **Input Validation** - Comprehensive input sanitization
+- **JWT Support** - Built-in JWT token handling
+- **Rate Limiting** - Built-in request rate limiting
 
 ## 🌟 Community & Support
 
