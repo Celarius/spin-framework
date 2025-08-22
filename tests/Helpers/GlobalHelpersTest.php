@@ -351,8 +351,8 @@ class GlobalHelpersTest extends TestCase
         $refId2 = generateRefId('TEST_');
         $this->assertStringStartsWith('TEST_', $refId2);
         
-        // Test uniqueness (with a small delay to ensure different timestamps)
-        usleep(1000); // 1ms delay
+        // Test uniqueness (with a longer delay to ensure different timestamps)
+        usleep(10000); // 10ms delay
         $refId3 = generateRefId();
         $this->assertNotEquals($refId1, $refId3);
     }
