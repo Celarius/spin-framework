@@ -256,7 +256,12 @@ if (!\function_exists('queryParam')) {
   {
     global $app;
 
-    return $app->getRequest()->getQueryParams()[$paramName] ?? $default;
+    $request = $app->getRequest();
+    $uri = $request->getUri();
+    $query = $uri->getQuery();
+    parse_str($query, $queryParams);
+    
+    return $queryParams[$paramName] ?? $default;
   }
 }
 
@@ -270,7 +275,12 @@ if (!\function_exists('queryParams')) {
   {
     global $app;
 
-    return $app->getRequest()->getQueryParams() ?? [];
+    $request = $app->getRequest();
+    $uri = $request->getUri();
+    $query = $uri->getQuery();
+    parse_str($query, $queryParams);
+    
+    return $queryParams ?? [];
   }
 }
 
@@ -287,7 +297,14 @@ if (!\function_exists('postParam')) {
   {
     global $app;
 
-    return $app->getRequest()->getParsedBody()[$paramName] ?? $default;
+    $request = $app->getRequest();
+    $body = $request->getBody();
+    $contents = $body->getContents();
+    
+    // Parse POST data from request body
+    parse_str($contents, $postParams);
+    
+    return $postParams[$paramName] ?? $default;
   }
 }
 
@@ -299,7 +316,16 @@ if (!\function_exists('postParams')) {
    */
   function postParams(): array
   {
-    return $_POST;
+    global $app;
+
+    $request = $app->getRequest();
+    $body = $request->getBody();
+    $contents = $body->getContents();
+    
+    // Parse POST data from request body
+    parse_str($contents, $postParams);
+    
+    return $postParams ?? [];
   }
 }
 
@@ -316,7 +342,18 @@ if (!\function_exists('cookieParam')) {
   {
     global $app;
 
-    return $app->getRequest()->getCookieParams()[$paramName] ?? $default;
+    $request = $app->getRequest();
+    $cookies = $request->getHeader('Cookie');
+    
+    if (empty($cookies)) {
+      return $default;
+    }
+    
+    // Parse cookie header
+    $cookieString = $cookies[0];
+    parse_str(str_replace('; ', '&', $cookieString), $cookieParams);
+    
+    return $cookieParams[$paramName] ?? $default;
   }
 }
 
@@ -330,7 +367,18 @@ if (!\function_exists('cookieParams')) {
   {
     global $app;
 
-    return $app->getRequest()->getCookieParams() ?? [];
+    $request = $app->getRequest();
+    $cookies = $request->getHeader('Cookie');
+    
+    if (empty($cookies)) {
+      return [];
+    }
+    
+    // Parse cookie header
+    $cookieString = $cookies[0];
+    parse_str(str_replace('; ', '&', $cookieString), $cookieParams);
+    
+    return $cookieParams ?? [];
   }
 }
 
@@ -602,13 +650,13 @@ if (!\function_exists("getConfigPath")) {
 
 if(!\function_exists('mime_content_type')) {
   /**
-   * { function_description }
+   * Get MIME type for a file (alias for mime_content_type_ex)
    *
    * @param      string        $filename  The filename
    *
-   * @return     array|string  The mime type(s) of the file
+   * @return     string        The mime type of the file
    */
-  function mime_content_type(string $filename): array|string
+  function mime_content_type(string $filename): string
   {
     return \mime_content_type_ex($filename);
   }
@@ -616,13 +664,13 @@ if(!\function_exists('mime_content_type')) {
 
 if(!\function_exists('mime_content_type_ex')) {
   /**
-   * { function_description }
+   * Get MIME type for a file based on extension or file content
    *
    * @param      string $filename     The filename
    *
-   * @return     array|string         The mime type(s) of the file
+   * @return     string               The mime type of the file
    */
-  function mime_content_type_ex(string $filename): array|string
+  function mime_content_type_ex(string $filename): string
   {
     $mime_types = [
       'txt' => 'text/plain',
@@ -697,7 +745,10 @@ if(!\function_exists('mime_content_type_ex')) {
       $mimetype = \finfo_file($finfo, $filename);
       \finfo_close($finfo);
 
-      return $mimetype;
+      // Ensure we return a valid string, not false
+      if ($mimetype !== false && \is_string($mimetype)) {
+        return $mimetype;
+      }
     }
 
     return 'application/octet-stream';
