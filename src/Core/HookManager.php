@@ -25,7 +25,7 @@ class HookManager extends AbstractBaseClass implements HookManagerInterface
   const ON_AFTER_REQUEST = 2;
 
   /** @var  array      List of loaded Hook objects */
-  protected $hooks;
+  protected array $hooks;
 
   /**
    * Constructor

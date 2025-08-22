@@ -30,22 +30,22 @@ use \FastRoute\RouteParser\Std;
 class RouteGroup extends AbstractBaseClass implements RouteGroupInterface
 {
 	/** @var  string                Name of group */
-	protected $name;
+	protected string $name;
 
 	/** @var  string                Path prefix */
-	protected $prefix;
+	protected string $prefix;
 
 	/** @var  array                 Array of middleware */
-	protected $beforeMiddleware = array();
+	protected array $beforeMiddleware = [];
 
 	/** @var  array                 Array of middleware */
-	protected $afterMiddleware = array();
+	protected array $afterMiddleware = [];
 
 	/** @var  array                 Array of routes */
-	protected $routes;
+	protected array $routes;
 
-	/** @var  RouteCollector        Collector */
-	protected $routeCollector = null;
+	/** @var  \FastRoute\RouteCollector|null        Collector */
+	protected ?\FastRoute\RouteCollector $routeCollector = null;
 
 	/**
 	 * Constructor

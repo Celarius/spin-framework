@@ -20,7 +20,7 @@ use \Spin\Core\AbstractBaseClass;
 abstract class AbstractFactory extends AbstractBaseClass
 {
   /** @var  array           Factory Options */
-  protected $options;
+  protected array $options;
 
   /**
    * Factory Constructor

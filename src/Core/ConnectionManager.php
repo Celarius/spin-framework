@@ -36,7 +36,7 @@ use \Spin\Database\PdoConnectionInterface;
 class ConnectionManager extends AbstractBaseClass implements ConnectionManagerInterface
 {
   /** @var  array         List of Instantiated Connections */
-  protected $connections = [];
+  protected array $connections = [];
 
   /**
    * Get or Create a connection

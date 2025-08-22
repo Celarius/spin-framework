@@ -18,7 +18,7 @@ class RequestIdClass
    *
    * @var string
    */
-  protected $id = '';
+  protected string $id = '';
 
   /**
    * Constructor.

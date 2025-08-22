@@ -17,8 +17,11 @@ namespace Spin\Helpers;
 
 class ArrayToXml
 {
-    private $version;
-    private $encoding;
+    /** @var string XML version */
+    private string $version;
+    
+    /** @var string XML encoding */
+    private string $encoding;
 
     /**
      * Construct ArrayToXML object with selected version and encoding

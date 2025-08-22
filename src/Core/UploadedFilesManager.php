@@ -17,6 +17,7 @@
 
 namespace Spin\Core;
 
+use \Exception;
 use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\Config;
 use \Spin\Core\Logger;
@@ -28,8 +29,8 @@ use \Psr\Http\Message\Response;
 
 class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesManagerInterface
 {
-  /** @var  array          Array with \Spin\Core\File objects  */
-  protected $files;
+  /** @var  array          Array with \Spin\Core\UploadedFile objects  */
+  protected array $files;
 
   /**
    * Constructor
