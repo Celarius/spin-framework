@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * HashInterface
+ * Cryptographic Hash Interface
  *
- * @package  Spin
+ * Defines the contract for hash operations including generation, verification,
+ * and method listing. Provides a clean interface for working with cryptographic
+ * hashes in the Spin framework.
+ *
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Helpers;
@@ -11,7 +17,7 @@ namespace Spin\Helpers;
 interface HashInterface
 {
   /**
-   * Genreate a Hash (digest) of the $data using $method
+   * Generate a Hash (digest) of the $data using $method
    *
    * @param      string  $data    [description]
    * @param      string  $method  [description]

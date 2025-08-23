@@ -5,6 +5,17 @@ namespace Spin\Core;
 use \Spin\Database\PdoConnection;
 use \Spin\Database\PdoConnectionInterface;
 
+/**
+ * Database Connection Manager Interface
+ *
+ * Defines the contract for database connection management operations including
+ * connection resolution, creation, pooling, and lifecycle management. Implemented
+ * by ConnectionManager to provide centralized database connection administration.
+ *
+ * @package   Spin\Core
+ * @author    Spin Framework Team
+ * @since     1.0.0
+ */
 interface ConnectionManagerInterface
 {
   /**

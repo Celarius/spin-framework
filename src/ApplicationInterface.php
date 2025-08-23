@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * Spin Framework
+ * Spin Framework Application Interface
+ *
+ * Defines the contract for the main application class. Specifies methods
+ * for application lifecycle management, error handling, configuration
+ * access, and core framework operations.
  *
  * @package   Spin
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 namespace Spin;

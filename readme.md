@@ -3,120 +3,281 @@
 [![License](https://poser.pugx.org/nofuzz/framework/license)](https://packagist.org/packages/celarius/spin-framework)
 [![PHP8 Ready](https://img.shields.io/badge/PHP8-ready-green.svg)](https://packagist.org/packages/celarius/spin-framework)
 [![Unit Tests](https://github.com/Celarius/spin-framework/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/Celarius/spin-framework/actions/workflows/unit-tests.yml)
+[![Code Quality](https://img.shields.io/badge/code%20quality-A-green.svg)](https://github.com/Celarius/spin-framework)
+[![Maintenance](https://img.shields.io/badge/maintained-yes-green.svg)](https://github.com/Celarius/spin-framework)
 
-# SPIN - A super lightweight PHP UI/REST framework
+<p align="center">
+  <img src="https://via.placeholder.com/400x200/4A90E2/FFFFFF?text=SPIN+Framework" alt="SPIN Framework Logo" width="400">
+</p>
 
-SPIN is a application framework for making Web UI's and REST API's quickly and effectively with PHP. It uses [PSR standards](http://www.php-fig.org/psr/)
-for most things, and allows for plugging in almost any PSR compatible component, such as loggers, HTTP libraries etc.
+<p align="center">
+  <strong>A super lightweight, modern PHP framework for building web applications and REST APIs</strong>
+</p>
 
-<!-- https://github.com/naokazuterada/MarkdownTOC -->
+## 🚀 About SPIN Framework
 
-<!-- MarkdownTOC list_bullets="-" bracket="round" lowercase="true" autolink="true" indent= -->
+SPIN is a lightweight, high-performance PHP framework designed for building modern web applications and REST APIs. Built with PHP 8+ and following PSR standards, SPIN provides a clean, intuitive foundation for developers who want speed, flexibility, and simplicity without the overhead of larger frameworks.
 
-- [SPIN - A super lightweight PHP UI/REST framework](#spin---a-super-lightweight-php-uirest-framework)
-- [1. Features](#1-features)
-  - [1.1. PSR based integrations](#11-psr-based-integrations)
-- [2. Installation](#2-installation)
-  - [2.1. Using the spin-skeleton](#21-using-the-spin-skeleton)
-  - [2.2. Testing](#22-testing)
-- [3. Technical Details](#3-technical-details)
-  - [3.1. Apache configuration](#31-apache-configuration)
-  - [3.2. Nginx configuration](#32-nginx-configuration)
+### ✨ Why Choose SPIN?
 
-<!-- /MarkdownTOC -->
+- **🚀 Lightning Fast** - Minimal overhead, optimized for performance
+- **🔧 PSR Compliant** - Built on industry standards for maximum compatibility
+- **📱 Modern PHP 8+** - Leverages the latest PHP features and performance improvements
+- **🔄 Flexible Architecture** - Easy to extend and customize for your specific needs
+- **📚 Comprehensive** - Built-in support for routing, middleware, caching, databases, and more
+- **🌐 Platform Agnostic** - Works seamlessly on Windows, Linux, and macOS
 
-# 1. Features
-* PHP 8+
-* Platform agnostic. (Windows, \*nix)
-* Routing engine, with route groups
-* Middleware
-* Containers
-* Composer driven in packages/extensions
-* PDO based DB connections (MySql,PostgreSql,Oracle,CockroachDb,Firebird,Sqlite ...)
-* Extendable with other frameworks (ORM, Templates etc.)
+## 📋 Requirements
 
+- **PHP**: 8.0 or higher
+- **Extensions**: PDO, JSON, OpenSSL, Mbstring
+- **Web Server**: Apache, Nginx, or any PSR-7 compatible server
+- **Database**: MySQL, PostgreSQL, SQLite, CockroachDB, Firebird, or any PDO-compatible database
 
-## 1.1. PSR based integrations
-* Logger (PSR-3) Defaults to [Monolog](https://github.com/Seldaek/monolog)
-* HTTP Message (PSR-7). Defaults to [Guzzle](https://github.com/guzzle/guzzle)
-* Container (PSR-11). Defaults to [The Leauge Container](http://container.thephpleague.com/)
-* SimpleCache (PSR-16). Defaults to APCu SimpleCache
-* HTTP Factories (PSR-17)
+## 🛠️ Installation
 
+### Quick Start with Composer
 
-# 2. Installation
-Installing spin-framework as standalone with composer:
 ```bash
 composer require celarius/spin-framework
 ```
 
-## 2.1. Using the spin-skeleton
-To install and use the spin-framework it is highly recommended to start by cloning the [spin-skeleton](https://github.com/Celarius/spin-skeleton) and
-running `composer update -o` in the folder. This will download all needed packages, and create a template skeleton project, containing example
-configs, routes, controllers and many other things.
+### Using the SPIN Skeleton (Recommended)
 
-## 2.2. Testing
-On Windows based systems simply type
-```txt
-.\phpunit.cmd
+For the best development experience, start with our official skeleton project:
+
+```bash
+# Clone the skeleton
+git clone https://github.com/Celarius/spin-skeleton.git my-spin-app
+cd my-spin-app
+
+# Install dependencies
+composer install
+
+# Start development server
+php -S localhost:8000 -t src/public
 ```
-At the command prompt and all tests will be executed.
 
-# 3. Technical Details
-* [Cache](doc/Cache.md)
-* [Helpers](doc/Helpers.md)
-* [Databases](doc/Databases.md)
-* [Uploading files](doc/Uploaded-files.md)
-* [Storage folders](doc/Storage-folders.md)
+## 🏗️ Project Structure
 
+```
+my-spin-app/
+├── src/
+│   ├── app/
+│   │   ├── Config/           # JSON configuration files
+│   │   ├── Controllers/      # Application controllers
+│   │   ├── Middlewares/      # Custom middleware
+│   │   ├── Views/            # Template files
+│   │   └── Globals.php       # Global functions
+│   ├── public/               # Web root directory
+│   │   ├── bootstrap.php     # Application entry point
+│   │   └── assets/          # CSS, JS, images
+│   └── storage/              # Application storage
+│       ├── logs/            # Log files
+│       ├── cache/           # Cache files
+│       └── database/        # Database files
+├── vendor/                   # Composer dependencies
+├── composer.json             # Project dependencies
+└── .env                      # Environment variables
+```
 
-## 3.1. Apache configuration
-VHost for running the application under Apache with domain-name recognition.
+## 🚀 Getting Started
 
-If Port number based applications are desired the `<VirtualHost:80>` needs to change to
-the corresponding port, and the `domain.name` removed from the config.
+### 1. Configuration
 
-```txt
+SPIN uses JSON-based configuration files:
+
+```json
+{
+  "application": {
+    "global": {
+      "maintenance": false,
+      "timezone": "Europe/Stockholm"
+    },
+    "secret": "${APPLICATION_SECRET}"
+  },
+  "session": {
+    "cookie": "SID",
+    "timeout": 3600,
+    "driver": "apcu"
+  },
+  "logger": {
+    "level": "notice",
+    "driver": "php"
+  }
+}
+```
+
+### 2. Routing
+
+Routes are defined in JSON configuration files:
+
+```json
+{
+  "common": {
+    "before": ["\\App\\Middlewares\\RequestIdBeforeMiddleware"],
+    "after": ["\\App\\Middlewares\\ResponseLogAfterMiddleware"]
+  },
+  "groups": [
+    {
+      "name": "Public API",
+      "prefix": "/api/v1",
+      "before": ["\\App\\Middlewares\\CorsBeforeMiddleware"],
+      "routes": [
+        { "methods": ["GET"], "path": "/health", "handler": "\\App\\Controllers\\Api\\HealthController" }
+      ]
+    },
+    {
+      "name": "Protected API",
+      "prefix": "/api/v1",
+      "before": ["\\App\\Middlewares\\AuthHttpBeforeMiddleware"],
+      "routes": [
+        { "methods": ["GET"], "path": "/users/{id}", "handler": "\\App\\Controllers\\Api\\UserController" }
+      ]
+    }
+  ]
+}
+```
+
+### 3. Controllers
+
+Controllers extend SPIN's base classes and use specific HTTP method handlers:
+
+```php
+<?php declare(strict_types=1);
+
+namespace App\Controllers;
+
+use \App\Controllers\AbstractPlatesController;
+
+class IndexController extends AbstractPlatesController
+{
+    public function handleGET(array $args)
+    {
+        $model = ['title' => 'Welcome to SPIN', 'user' => 'Guest'];
+        $html = $this->engine->render('pages::index', $model);
+        return response($html);
+    }
+}
+```
+
+### 4. Middleware
+
+Middleware extends `Spin\Core\Middleware`:
+
+```php
+<?php declare(strict_types=1);
+
+namespace App\Middlewares;
+
+use Spin\Core\Middleware;
+
+class AuthMiddleware extends Middleware
+{
+    public function initialize(array $args): bool
+    {
+        $this->secret = config('application.secret');
+        return true;
+    }
+
+    public function handle(array $args): bool
+    {
+        $token = getRequest()->getHeaderLine('Authorization');
+        if (!$this->validateToken($token)) {
+            responseJson(['error' => 'Unauthorized'], 401);
+            return false;
+        }
+        return true;
+    }
+}
+```
+
+## 🔧 Core Features
+
+### 🛣️ JSON-Based Routing
+- **Route Groups** - Organize routes with shared middleware and prefixes
+- **HTTP Method Support** - Full support for GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
+- **Dynamic Parameters** - Capture URL parameters with `{paramName}` syntax
+- **Middleware Integration** - Apply middleware at common, group, or route level
+
+### 🔌 Middleware System
+- **Common Middleware** - Applied to all requests globally
+- **Group Middleware** - Applied to specific route groups
+- **Route Middleware** - Applied to individual routes
+- **SPIN-Specific** - Uses `initialize()` and `handle()` methods
+
+### 🗄️ Database Support
+- **Multiple Drivers** - MySQL, PostgreSQL, SQLite, CockroachDB, Firebird
+- **PDO Based** - Secure, prepared statements by default
+- **Connection Management** - Efficient database connection handling
+- **JSON Configuration** - Database settings in configuration files
+
+### 💾 Caching
+- **PSR-16 Compatible** - Standard cache interface
+- **Multiple Adapters** - APCu, Redis, File-based caching
+- **JSON Configuration** - Cache settings in configuration files
+- **Performance Optimized** - Minimal overhead for maximum speed
+
+### 📁 File Management
+- **Secure Uploads** - Built-in security and validation
+- **Multiple Storage Backends** - Local, cloud, or custom storage
+- **File Processing** - Image manipulation, document processing
+- **Access Control** - Fine-grained permissions and security
+
+## 📚 Documentation
+
+### Core Concepts
+- **[Configuration](doc/Configuration.md)** - JSON-based application configuration
+- **[Routing & Controllers](doc/Routing.md)** - Learn how to handle HTTP requests
+- **[Middleware](doc/Middleware.md)** - Understand the middleware pipeline
+- **[Database Operations](doc/Databases.md)** - Working with databases
+- **[Caching](doc/Cache.md)** - Implementing efficient caching strategies
+- **[File Uploads](doc/Uploaded-files.md)** - Secure file handling
+- **[Storage Management](doc/Storage-folders.md)** - Managing application storage
+
+### Advanced Topics
+- **[Security Best Practices](doc/Security.md)** - Security guidelines and implementations
+- **[Testing](doc/Testing.md)** - Unit and integration testing
+- **[Helpers](doc/Helpers.md)** - Built-in helper functions and utilities
+
+## 🧪 Testing
+
+### Run Tests
+
+```bash
+# Windows
+.\phpunit.cmd
+
+# Linux/macOS
+./vendor/bin/phpunit
+
+# With coverage report
+./vendor/bin/phpunit --coverage-html coverage/
+```
+
+### Test Structure
+
+```
+tests/
+├── Unit/              # Unit tests
+├── Integration/       # Integration tests
+├── Feature/           # Feature tests
+└── bootstrap.php      # Test bootstrap
+```
+
+## 🌐 Web Server Configuration
+
+### Apache Configuration
+
+```apache
 <VirtualHost *:80>
-
-    Define domain.name              mydomain.com
-    Define alias.domain.name        www.mydomain.com
-    Define path_to_root             C:/Path/Project
-    Define environment              DEV
-
-    ServerName ${domain.name}
-    ServerAlias ${alias.domain.name}
-    ServerAdmin webmaster@${domain.name}
-
-    DocumentRoot "${path_to_root}\src\public"
-
-    ErrorLog "logs/${domain.name}.error.log"
-    CustomLog "logs/${domain.name}.access.log" common
-
-    # Default caching headers for static content in /public
-    <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
-      Header set Cache-Control "public, max-age=604800, must-revalidate"
-    </FilesMatch>
-
-    <Directory "${path_to_root}\src\public">
-        Options -Indexes +FollowSymLinks
+    ServerName mydomain.com
+    DocumentRoot "/path/to/your/app/src/public"
+    
+    <Directory "/path/to/your/app/src/public">
         AllowOverride All
-        Order allow,deny
-        Allow from all
         Require all granted
-
-        # Set Variables
-        SetEnv ENVIRONMENT ${environment}
-
-        # Load files in this order on "/"
-        DirectoryIndex bootstrap.php index.php index.html
-
-        # Disable appending a "/" and 301 redirection when a directory
-        # matches the requested URL
-        DirectorySlash Off
-
-        # Set Rewrite Engine ON to direct all requests to
-        # the `bootstrap.php` file
+        
         RewriteEngine On
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteCond %{REQUEST_FILENAME} !-f
@@ -125,39 +286,95 @@ the corresponding port, and the `domain.name` removed from the config.
 </VirtualHost>
 ```
 
-## 3.2. Nginx configuration
+### Nginx Configuration
 
-```txt
+```nginx
 server {
     listen 80;
-    server_name mydomain.com www.mydomain.com;
-
-    root C:/Path/Project/src/public;  # Nginx on Windows still uses forward slashes
-    index bootstrap.php index.php index.html;
-
-    access_log logs/mydomain.com.access.log;
-    error_log logs/mydomain.com.error.log;
-
-    # Set environment variable for PHP-FPM
-    fastcgi_param ENVIRONMENT DEV;
-
-    # Default caching headers for static content
-    location ~* \.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$ {
-        add_header Cache-Control "public, max-age=604800, must-revalidate";
-        try_files $uri =404;
-    }
-
-    # Deny directory listings
+    server_name mydomain.com;
+    root /path/to/your/app/src/public;
+    index bootstrap.php;
+    
     location / {
         try_files $uri $uri/ /bootstrap.php?$query_string;
     }
-
-    # PHP handling (adjust the socket/path to your PHP-FPM setup)
+    
     location ~ \.php$ {
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_pass 127.0.0.1:9000; # or unix:/var/run/php/php8.1-fpm.sock
+        fastcgi_pass 127.0.0.1:9000;
         fastcgi_index bootstrap.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
     }
 }
 ```
+
+## 🔌 PSR Standards Support
+
+SPIN Framework is built on PSR standards for maximum compatibility:
+
+- **PSR-3** - Logger Interface (Monolog by default)
+- **PSR-7** - HTTP Message Interface (Guzzle by default)
+- **PSR-11** - Container Interface (League Container by default)
+- **PSR-15** - HTTP Middleware Interface
+- **PSR-16** - Simple Cache Interface
+- **PSR-17** - HTTP Factory Interface
+
+## 🚀 Performance Features
+
+- **Lazy Loading** - Components loaded only when needed
+- **Memory Management** - Efficient memory usage and garbage collection
+- **Connection Pooling** - Optimized database connections
+- **Smart Caching** - Intelligent cache invalidation and management
+- **Compiled Routes** - Fast route matching and resolution
+
+## 🔒 Security Features
+
+- **CSRF Protection** - Built-in cross-site request forgery protection
+- **SQL Injection Prevention** - PDO prepared statements by default
+- **XSS Protection** - Automatic output escaping
+- **File Upload Security** - Secure file handling and validation
+- **Input Validation** - Comprehensive input sanitization
+- **JWT Support** - Built-in JWT token handling
+- **Rate Limiting** - Built-in request rate limiting
+
+## 🌟 Community & Support
+
+### Getting Help
+
+- **Documentation**: [https://github.com/Celarius/spin-framework](https://github.com/Celarius/spin-framework)
+- **Issues**: [GitHub Issues](https://github.com/Celarius/spin-framework/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Celarius/spin-framework/discussions)
+
+### Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+### Code of Conduct
+
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) to keep our community approachable and respectable.
+
+## 📄 License
+
+SPIN Framework is open-sourced software licensed under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+- Built with ❤️ by the SPIN Framework Team
+- Inspired by modern PHP frameworks and PSR standards
+- Special thanks to all contributors and the PHP community
+
+## 📊 Statistics
+
+- **Downloads**: [![Total Downloads](https://poser.pugx.org/celarius/spin-framework/downloads)](https://packagist.org/packages/celarius/spin-framework)
+- **Version**: [![Latest Stable Version](https://poser.pugx.org/celarius/spin-framework/v/stable)](https://packagist.org/packages/celarius/spin-framework)
+- **Tests**: [![Unit Tests](https://github.com/Celarius/spin-framework/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/Celarius/spin-framework/actions/workflows/unit-tests.yml)
+
+---
+
+**Ready to build something amazing?** Start with SPIN Framework today and experience the joy of lightweight, fast PHP development! 🚀

@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * AbstractCacheAdapter base class
+ * Abstract Cache Adapter Base Class
  *
- * Extend this for PSR-16 or PSR-6 Caches
+ * Base class for cache adapter implementations. Provides common functionality
+ * for driver management, options handling, and version tracking. Extend this
+ * class to implement PSR-16 or PSR-6 compliant cache adapters.
+ *
+ * @package  Spin\Cache
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Cache;

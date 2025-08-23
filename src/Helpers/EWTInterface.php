@@ -1,11 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * EWTInterface
+ * Encrypted Web Token (EWT) Interface
  *
- * Encrypted Web Token Interface
+ * Defines the contract for EWT operations including encoding and decoding
+ * of encrypted web tokens. Provides a clean interface for working with
+ * encrypted tokens in the Spin framework.
  *
- * @package  Spin
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Helpers;

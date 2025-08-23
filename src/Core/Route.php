@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * Abstract Route
+ * Abstract Route Base Class
+ *
+ * Base route definition capturing HTTP method, path and handler mapping.
+ * Concrete implementations can add metadata or behavior around route matching
+ * and invocation.
  *
  * @package  Spin
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;
@@ -11,16 +17,21 @@ namespace Spin\Core;
 use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\RouteInterface;
 
+/**
+ * Base route definition capturing HTTP method, path and handler mapping.
+ * Concrete implementations can add metadata or behavior around route matching
+ * and invocation.
+ */
 abstract class Route extends AbstractBaseClass implements RouteInterface
 {
   /** @var  string        HTTP Method */
-  protected $method;
+  protected string $method;
 
   /** @var  string        URI path */
-  protected $path;
+  protected string $path;
 
   /** @var  string        Handler class name */
-  protected $handler;
+  protected string $handler;
 
   public function __construct(string $method, string $path, string $handler)
   {
@@ -29,19 +40,33 @@ abstract class Route extends AbstractBaseClass implements RouteInterface
     $this->handler = $handler;
   }
 
-  public function getMethod()
+  /**
+   * Get HTTP method
+   *
+   * @return string
+   */
+  public function getMethod(): string
   {
     return $this->method;
   }
 
-  public function getPath()
+  /**
+   * Get URI path
+   *
+   * @return string
+   */
+  public function getPath(): string
   {
     return $this->path;
   }
 
-  public function getHandler()
+  /**
+   * Get handler class name
+   *
+   * @return string
+   */
+  public function getHandler(): string
   {
     return $this->handler;
   }
-
 }

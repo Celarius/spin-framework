@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * AbstractFactory
+ * Abstract Factory Base Class
  *
- * @package  Spin
+ * Base class for factory implementations providing common options management
+ * and configuration handling. Extend this class to implement specific factory
+ * patterns for object creation.
+ *
+ * @package  Spin\Factories
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Factories;
@@ -14,7 +20,7 @@ use \Spin\Core\AbstractBaseClass;
 abstract class AbstractFactory extends AbstractBaseClass
 {
   /** @var  array           Factory Options */
-  protected $options;
+  protected array $options;
 
   /**
    * Factory Constructor

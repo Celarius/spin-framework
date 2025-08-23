@@ -1,12 +1,16 @@
 <?php declare(strict_types=1);
 
 /**
- * JWT
+ * JSON Web Token (JWT) Helper Class
  *
- * JSON Web Token Class
+ * Provides JWT encoding, decoding, and signing functionality using the Firebase
+ * JWT library. Supports multiple algorithms and provides a clean interface for
+ * working with JWTs in the Spin framework.
  *
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  * @link     https://github.com/firebase/php-jwt
- * @package  Spin
  */
 
 namespace Spin\Helpers;

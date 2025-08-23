@@ -1,36 +1,18 @@
 <?php declare(strict_types=1);
 
 /**
- * Encrypted Web Token Class
+ * Encrypted Web Token (EWT) Helper Class
  *
- * Builds on the concept of JWT's, but provides an encrypted payload so the user
- * who uses it does not see the contents of it. Also simpler than JWE tokens.
+ * Builds on the concept of JWT's but provides an encrypted payload so users cannot
+ * see the contents. Simpler than JWE tokens with built-in security against algorithm
+ * tampering through signature verification.
  *
- * Also does not allow for NONE as algorithm. Should be secure against user-changed
- * algorithm as all signatures are always verified.
+ * Supports both v1 (custom format) and v2 (JWT/JWE compatible) token formats with
+ * configurable encryption algorithms and HMAC signatures.
  *
- * Encoding
- * --------
- *   Encoding creates a JSON structure with data:
- *   {
- *     "i": "...",            // Initialization Vector
- *     "a": "aes-256-gcm",    // OpenSSL Cipher name (aes-256-gcm)
- *     "h": "sha256",         // MAC algorithm name (sha256)
- *     "s": "...",            // Signature = HMAC(algo, plain_payload + secret );
- *     "p": "..."             // Encrypted payload as binHex string
- *   }
- *
- *   This JSON document is then Base64 encoded and put as the header in the HTTP requests/responses.
- *   Header name used is up to the implementers. Possible header names "X-EWT", "X-EWToken"
- *
- *
- * Decoding
- * --------
- *   The decoding part takes the B64 encoded string produced in encode() and decodes the
- *   JSON structure and then the payload. If the Signature matches then the payload is
- *   returned, otherwise NULL is returned.
- *
- * @package  Spin
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 #################################################################################################################################
 /*

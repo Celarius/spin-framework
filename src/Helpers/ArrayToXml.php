@@ -1,18 +1,27 @@
 <?php declare(strict_types=1);
 
 /**
- * Based on Stack-Overflow questions and answers
+ * Array to XML Conversion Helper Class
  *
+ * Converts PHP associative arrays to XML format with support for attributes,
+ * CDATA sections, and custom element handling. Based on Stack Overflow
+ * community solutions for array-to-XML conversion.
+ *
+ * @package   Spin\Helpers
+ * @author    Spin Framework Team
+ * @since     1.0.0
  * @link      http://stackoverflow.com/questions/99350/passing-php-associative-arrays-to-and-from-xml
- * @package   Spin
  */
 
 namespace Spin\Helpers;
 
 class ArrayToXml
 {
-    private $version;
-    private $encoding;
+    /** @var string XML version */
+    private string $version;
+    
+    /** @var string XML encoding */
+    private string $encoding;
 
     /**
      * Construct ArrayToXML object with selected version and encoding
@@ -32,12 +41,10 @@ class ArrayToXml
     /**
      * Build an XML Data Set
      *
-     * @param      array   $data          Associative Array containing values to
-     *                                    be parsed into an XML Data Set(s)
-     * @param      string  $startElement  Root Opening Tag, default data
+     * @param array $data          Associative Array containing values to be parsed into an XML Data Set(s)
+     * @param string $startElement Root Opening Tag, default 'data'
      *
-     * @return     string  XML String containing values
-     * @return     mixed  Boolean false on failure, string XML result on success
+     * @return string|false Boolean false on failure, string XML result on success
      */
     public function buildXML(array $data, $startElement = 'data')
     {
@@ -60,14 +67,14 @@ class ArrayToXml
     }
 
     /**
-     * Write keys in $data prefixed with @ as XML attributes, if $data is an
-     * array. When an @ prefixed key is found, a '%' key is expected to indicate
+     * Write keys in $data prefixed with @ as XML attributes.
+     * When an @ prefixed key is found, a '%' key is expected to indicate
      * the element itself, and '#' prefixed key indicates CDATA content
      *
-     * @param      XMLWriter  $xml    object
-     * @param      array      $data   with attributes filtered out
+     * @param \XMLWriter $xml  XML writer instance
+     * @param array       $data Array with attributes filtered out
      *
-     * @return     array      $data | $nonAttributes
+     * @return array $nonAttributes
      */
     protected function writeAttr(\XMLWriter $xml, $data)
     {
@@ -101,8 +108,8 @@ class ArrayToXml
     /**
      * Write XML as per Associative Array
      *
-     * @param      XMLWriter  $xml    object
-     * @param      array      $data   Associative Data Array
+     * @param \XMLWriter $xml  XML writer instance
+     * @param array       $data Associative Data Array
      */
     protected function writeEl(\XMLWriter $xml, $data)
     {
@@ -132,12 +139,11 @@ class ArrayToXml
     }
 
     /**
-     * Check if array is associative with string based keys FROM:
-     * http://stackoverflow.com/questions/173400/php-arrays-a-good-way-to-check-if-an-array-is-associative-or-sequential/4254008#4254008
+     * Check if array is associative with string based keys
      *
-     * @param      array  $array  Array to check
+     * @param array $array Array to check
      *
-     * @return     bool
+     * @return bool
      */
     protected function isAssoc($array)
     {

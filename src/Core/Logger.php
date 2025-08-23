@@ -1,11 +1,16 @@
 <?php declare(strict_types=1);
 
 /**
- * Logger class that extends Monologger
+ * PSR-3 Compatible Logger Class
  *
- * Constructor will auto-configure based on configuration options
+ * Extends Monolog to provide a PSR-3 compliant logging implementation.
+ * Constructor auto-configures handlers, formatters, and buffering based on
+ * configuration options. Supports file and PHP error log drivers with
+ * configurable formatting and buffering.
  *
  * @package  Spin
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

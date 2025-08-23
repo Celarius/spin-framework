@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * HookInterface
+ * Hook Interface
  *
- * @package  Spin
+ * Defines the contract for lifecycle hook implementations. Specifies methods
+ * for executing hook code and managing hook metadata like names and arguments.
+ * Implemented by Hook base class to provide framework event hook capabilities.
+ *
+ * @package  Spin\Core
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;
