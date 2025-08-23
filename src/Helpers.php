@@ -429,9 +429,9 @@ if (!\function_exists('redirect')) {
    * @param      int     $status   Status code, defaults to 302
    * @param      array   $headers  Additional headers
    *
-   * @return     object
+   * @return     Response
    */
-  function redirect(string $uri, int $status = 302, array $headers = []): object
+  function redirect(string $uri, int $status = 302, array $headers = []): Response
   {
     global $app;
 
@@ -442,7 +442,11 @@ if (!\function_exists('redirect')) {
 
     # Set all the headers the user sent
     foreach($headers as $header => $values) {
-      $response = $response->withHeader($header,$values);
+      if (is_array($values)) {
+        $response = $response->withHeader($header, $values);
+      } else {
+        $response = $response->withHeader($header, (string)$values);
+      }
     }
 
     # Set it
@@ -477,7 +481,11 @@ if (!\function_exists('response')) {
 
     # Set all the headers the user sent
     foreach($headers as $header => $values) {
-      $response = $response->withHeader($header,$values);
+      if (is_array($values)) {
+        $response = $response->withHeader($header, $values);
+      } else {
+        $response = $response->withHeader($header, (string)$values);
+      }
     }
 
     if ($body !== '') {
