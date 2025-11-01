@@ -31,9 +31,11 @@ interface ApplicationInterface
   /**
    * Run the application
    *
-   * @param   ?array $serverRequest                       Optional array with server request variables like $_SERVER
+   * @param   ?array $serverRequest                             Optional array with server request variables like $_SERVER
    *
-   * @return  bool
+   * @return  bool                                              True if application ran successfully
+   *
+   * @throws  SpinException                                     If an error occurs during application run
    */
   public function run(?array $serverRequest): bool;
 
@@ -69,7 +71,6 @@ interface ApplicationInterface
    * Handles any Exceptions from the application. This is set as the default
    * exception handler for all exceptions.
    *
-   *
    * @param   \Exception $exception                             The exception object
    *
    * @return  mixed                                             Null on error or callback to error handler
@@ -77,35 +78,69 @@ interface ApplicationInterface
   public function exceptionHandler(\Exception $exception);
 
   /**
-   * getBasePath returns the full path to the application root folder
+   * PHP Fatal Error Handler
+   *
+   * Handles any PHP Fatal Errors.
+   *
+   * This includes "maximum timeout", "out of memory", "undefined variable" situations.
+   *
+   * @return  bool                                             True if handled
+   */
+  public function fatalErrorhandler(): bool;
+
+  /**
+   * Set a cookie for the next response
+   *
+   * Defaults to setting 'samesite'='Strict' to prevent CSRF.
+   *
+   * @param   string $name                                      The cookie name
+   * @param   string $value                                     The cookie value
+   * @param   int $expire                                       The cookie expiration time
+   * @param   string $path                                      The cookie path
+   * @param   string $domain                                    The cookie domain
+   * @param   bool $secure                                      The cookie secure flag
+   * @param   bool $httpOnly                                    The cookie httpOnly flag
+   *
+   * @return  bool
+   */
+  public function setCookie(string $name,
+                            string $value = '',
+                            int $expire = 0,
+                            string $path = '',
+                            string $domain = '',
+                            bool $secure = false,
+                            bool $httpOnly = false): bool;
+
+  /**
+   * Gets the full path to the application root folder
    *
    * @return  string                                            The base path
    */
   public function getBasePath(): string;
 
   /**
-   * getAppPath returns the full path to the application folder + "/app"
+   * Gets the full path to the application folder + "/app"
    *
    * @return  string                                            The app path
    */
   public function getAppPath(): string;
 
   /**
-   * getConfigPath returns the full path to the application folder + "/app/Config"
+   * Gets the full path to the application folder + "/app/Config"
    *
    * @return  string                                            The config path
    */
   public function getConfigPath(): string;
 
   /**
-   * getStoragePath returns the full path to the application folder + "/storage"
+   * Gets the full path to the application folder + "/storage"
    *
    * @return  string                                            The storage path
    */
   public function getStoragePath(): string;
 
   /**
-   * getSharedStoragePath returns the full path to the configured shared storage path.
+   * Gets the full path to the configured shared storage path.
    * If the config does not contain an entry for the shared storage, the result is the same
    * as `getStoragePath()`
    *
@@ -162,7 +197,7 @@ interface ApplicationInterface
    *
    * @param   Response $response                                The response object
    *
-   * @return  self                                              The current object
+   * @return  self                                              Self
    */
   public function setResponse(Response $response);
 
@@ -215,7 +250,7 @@ interface ApplicationInterface
    *
    * @param   string $environment                               The environment name
    *
-   * @return  self                                              The current object
+   * @return  self                                              Self
    */
   public function setEnvironment(string $environment);
 
@@ -251,15 +286,64 @@ interface ApplicationInterface
    * @param   string $filename                                  Filename to send
    * @param   bool $remove                                      Optional. Default `false`. Set to `True` to remove the file after sending
    *
-   * @return  self                                              The current object
+   * @return  self                                              Self
    */
   public function setFileResponse(string $filename);
 
   /**
    * Send Response back to client
    *
-   * @return  self                                              The current object
+   * @return  self                                              Self
    */
   public function sendResponse();
+
+  /**
+   * Get the UploadedFilesManager
+   *
+   * @return  UploadedFilesManager                              The uploaded files manager
+   */
+  public function getUploadedFilesManager(): UploadedFilesManager;
+
+  /**
+   * Get initial memory usage in bytes
+   *
+   * @return  int                                               The initial memory usage
+   */
+  public function getInitialMemUsage(): int;
+
+  /**
+   * Get globalVars
+   *
+   * @return  array<mixed>                                      The global vars
+   */
+  public function getGlobalVars(): array;
+
+  /**
+   * Set globalVars
+   *
+   * @param   array<mixed> $globalVars                          The global vars
+   *
+   * @return  self                                              Self
+   */
+  public function setGlobalVars($globalVars): self;
+
+  /**
+   * Get one global var
+   *
+   * @param   string $id                                        The global variable id
+   *
+   * @return  null|mixed                                        The global variable
+   */
+  public function getGlobalVar(string $id): mixed;
+
+  /**
+   * Set one global var
+   *
+   * @param   string $id                                        The global variable id
+   * @param   mixed $value                                      The global variable value
+   *
+   * @return  self                                              Self
+   */
+  public function setGlobalVar(string $id, mixed $value): self;
 
 }
