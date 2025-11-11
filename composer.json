@@ -60,7 +60,7 @@
     "test": "phpunit"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
+    "phpunit/phpunit": "^12"
   },
   "config": {
       "optimize-autoloader": true
