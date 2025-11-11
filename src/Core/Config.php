@@ -102,7 +102,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
       }
 
       if ($configArray) {
-        $this->confValues = $configArray;
+        $this->confValues = $this->replaceEnvMacros($configArray);
       } else {
         throw new SpinException('Invalid JSON file "' . $filename . '"');
       }
@@ -135,7 +135,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
 
       if ($configArray) {
         # Merge the Config with existing config
-        $this->confValues = \array_replace_recursive($this->confValues, $configArray);
+        $this->confValues = $this->replaceEnvMacros(\array_replace_recursive($this->confValues, $configArray));
       } else {
         throw new SpinException('Invalid JSON file "' . $filename . '"');
       }
@@ -291,12 +291,17 @@ class Config extends AbstractBaseClass implements ConfigInterface
    * note: Environment variable names are case-sensitive on Unix-like systems but aren't case-sensitive on Windows
    *
    * @param   array<mixed> $input           Config array to process
-   * @param   array<mixed> $envVars         Environment variables to use for replacement, KEY=VALUE pairs
+   * @param   array<mixed>|null $envVars    Optional Environment variables to use for replacement, KEY=VALUE pairs
    *
    * @return  array<mixed>                  Processed config array
    */
-  protected function replaceEnvMacros(array $input, array $envVars): array
+  protected function replaceEnvMacros(array $input, ?array $envVars=null): array
   {
+    if ($envVars === null) {
+      // Get all env vars into array
+      $envVars = array_merge($_ENV, getenv());
+    }
+
     foreach ($input as $key => $value) {
       if (\is_array($value)) {
         # Recurse into sub-array

@@ -2,6 +2,11 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.35
+- Unittests updated to support PHP 8.4 and PHPUnit 12
+- Docblocks refactores in many places
+- Config
+
 ## 0.0.34
 - Bugfix on PDO not correctly parsing default options
 - Add Redit and cache adapters unit tests with CI sidecar container
@@ -18,7 +23,7 @@ SPIN Framework Changelog
 - Fix MySQL PDO driver compatibility (Removal of overridden connect base method)
 
 ## 0.0.30
-- Remove deprecated error constant E_STRICT usage 
+- Remove deprecated error constant E_STRICT usage
 - Remove AbstractBaseDaos
 
 ## 0.0.29
