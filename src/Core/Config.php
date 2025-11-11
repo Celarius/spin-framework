@@ -23,20 +23,28 @@ use \Spin\Exceptions\SpinException;
  */
 class Config extends AbstractBaseClass implements ConfigInterface
 {
-  /** @var  array         Configuration Array */
-  protected array $confValues = array();
+  /**
+   * Configuration Array
+   * @var  array<mixed>
+   */
+  protected array $confValues = [];
 
-  /** @var  string        Config file name */
+  /**
+   * Config file name
+   * @var  string
+   */
   protected string $filename;
+
 
   /**
    * Constructor
    *
    * Load config file based on $appPath and $environment
    *
-   * @param string $appPath     Path to the /app folder
-   * @param string $environment Name of the environment
-   * @throws Exception
+   * @param   string $appPath             Path to the /app folder
+   * @param   string $environment         Name of the environment
+   *
+   * @throws  Exception
    */
   public function __construct(string $appPath, string $environment)
   {
@@ -51,13 +59,21 @@ class Config extends AbstractBaseClass implements ConfigInterface
   }
 
   /**
+   * Destructor
+   */
+  public function __destruct()
+  {
+    $this->clear();
+  }
+
+  /**
    * Clear all config values
    *
    * @return     self
    */
   public function clear(): self
   {
-    $this->confValues = array();
+    $this->confValues = [];
 
     return $this;
   }
@@ -261,6 +277,38 @@ class Config extends AbstractBaseClass implements ConfigInterface
     foreach($input as $key => $array) {
       if (\is_array($array)) {
         $input[$key] = $this->array_change_key_case_recursive($array, $case);
+      }
+    }
+
+    return $input;
+  }
+
+  /**
+   * Requirsively replaces `${env:<envVar>}` with the environment variabe <envVar>.
+   *
+   * Missing environment variables are replaced with an empty string.
+   *
+   * note: Environment variable names are case-sensitive on Unix-like systems but aren't case-sensitive on Windows
+   *
+   * @param   array<mixed> $input           Config array to process
+   * @param   array<mixed> $envVars         Environment variables to use for replacement, KEY=VALUE pairs
+   *
+   * @return  array<mixed>                  Processed config array
+   */
+  protected function replaceEnvMacros(array $input, array $envVars): array
+  {
+    foreach ($input as $key => $value) {
+      if (\is_array($value)) {
+        # Recurse into sub-array
+        $input[$key] = $this->replaceEnvMacros($value, $envVars);
+      } elseif (\is_string($value)) {
+        # Replace all `${env:<envVar>}` with the environment variable value
+        $input[$key] = \preg_replace_callback(
+          '/\$\{env:([A-Za-z0-9_]+)\}/',
+          function ($matches) use ($envVars) {
+            $envVarName = $matches[1];
+            return $envVars[$envVarName] ?? '';
+          },$value);
       }
     }
 
