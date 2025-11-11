@@ -31,7 +31,6 @@ use \Spin\Core\UploadedFilesManager;
 use \Spin\Exceptions\SpinException;
 use \Spin\Classes\RequestIdClass;
 
-
 /**
  * Main Application Class
  */
@@ -568,10 +567,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           }
         }
 
-        # Run After Hooks
-        // $ok = $this->runHooks('OnAfterRequest');
-
-        # Return the generated response
         return $this->getResponse();
 
       } // if count() ...
