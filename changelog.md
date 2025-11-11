@@ -4,8 +4,9 @@ SPIN Framework Changelog
 
 ## 0.0.35
 - Unittests updated to support PHP 8.4 and PHPUnit 12
-- Docblocks refactores in many places
-- Config
+- Docblocks refactored in many places
+- Config automatically replaces ${env:VAR} environment macros on loading
+- Hook related things removed from codebase
 
 ## 0.0.34
 - Bugfix on PDO not correctly parsing default options
