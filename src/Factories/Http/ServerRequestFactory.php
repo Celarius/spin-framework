@@ -33,28 +33,19 @@ use \GuzzleHttp\Psr7\LazyOpenStream;
 class ServerRequestFactory extends AbstractFactory implements ServerRequestFactoryInterface
 {
   /**
-   * Create a new server request
-   *
-   * @param      string                  $method
-   * @param      UriInterface|string     $uri
-   * @param      array                   $serverParams  The server parameters
-   *
-   * @return     ServerRequestInterface
+   * @inheritDoc
    */
   public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
   {
-    # Copied from Guzzles ::fromGlobals(), but we need to support the $server array as
-    # paramter, so we use that instead of the $_SERVER array guzzle uses by default
-
-    $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+    # Use provided arguments, do not override with globals
     $headers = \function_exists('getallheaders') ? \getallheaders() : [];
-    $uri = (string) $uri;
+    $uriString = (string) $uri;
     $body = new LazyOpenStream('php://input', 'r+');
-    $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? \str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';
+    $protocol = isset($serverParams['SERVER_PROTOCOL']) ? \str_replace('HTTP/', '', $serverParams['SERVER_PROTOCOL']) : '1.1';
 
-    $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $_SERVER);
+    $serverRequest = new ServerRequest($method, $uriString, $headers, $body, $protocol, $serverParams);
 
-    \logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$uri.'") (Guzzle)');
+    \logger()?->debug('Created PSR-7 ServerRequest("'.$method.'","'.$uriString.'") (Guzzle)');
 
     return $serverRequest
         ->withCookieParams($_COOKIE)
@@ -66,8 +57,7 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
   /**
    * Create a new server request from server variables array
    *
-   * @param      array                   $server  Typically $_SERVER or similar
-   *                                              array
+   * @param      array|null              $server  Typically $_SERVER or similar array
    *
    * @return     ServerRequestInterface
    *
@@ -88,7 +78,7 @@ class ServerRequestFactory extends AbstractFactory implements ServerRequestFacto
 
     $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $server);
 
-    \logger()->debug('Created PSR-7 ServerRequest("'.$method.'","'.$uri.'") from array (Guzzle)');
+    \logger()?->debug('Created PSR-7 ServerRequest("'.$method.'","'.$uri.'") from array (Guzzle)');
 
     return $serverRequest
            ->withCookieParams($_COOKIE)

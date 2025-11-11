@@ -3,7 +3,14 @@
 /**
  * Spin Application Class
  *
+ * Main application class that orchestrates the framework lifecycle including
+ * routing, middleware execution, error handling, and dependency management.
+ * Provides the core application container and coordinates all framework
+ * components.
+ *
  * @package   Spin
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 namespace Spin;
@@ -24,7 +31,9 @@ use \Spin\Core\UploadedFilesManager;
 use \Spin\Exceptions\SpinException;
 use \Spin\Classes\RequestIdClass;
 
-
+/**
+ * Main Application Class
+ */
 class Application extends AbstractBaseClass implements ApplicationInterface
 {
   /**
@@ -196,11 +205,17 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   protected array $globalVars;
 
 
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+
+
   /**
    * Constructor
    *
    * @param   string  $basePath                                 The base path to the application folder
-   * @throws Exception
+   *
+   * @throws Exception                                          If initialization fails
    */
   public function __construct(string $basePath)
   {
@@ -221,8 +236,8 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
       # Set paths
       $this->basePath = \realpath($basePath);
-      $this->appPath = $this->basePath . '/app';
-      $this->storagePath = $this->basePath . '/storage';
+      $this->appPath = $this->basePath . \DIRECTORY_SEPARATOR . 'app';
+      $this->storagePath = $this->basePath . \DIRECTORY_SEPARATOR . 'storage';
 
       # Create config
       $this->config = new Config($this->appPath, $this->getEnvironment());
@@ -305,14 +320,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     }
   }
 
-  /**
-   * Run the application
-   *
-   * @param   ?array $serverRequest                             Optional array with server request variables like $_SERVER
-   *
-   * @return  bool                                            True if application ran successfully
-   * @throws SpinException
-   */
   public function run(?array $serverRequest = []): bool
   {
     # Check and Report on config variables
@@ -340,9 +347,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
    */
   protected function checkAndReportConfigVars(): void
   {
-    ##
-    ## Perform checks on some variables
-    ##
     if (!\is_dir($this->sharedStoragePath)) {
       # Attempt to create it
       $ok = \mkdir($this->sharedStoragePath, 0777, true);
@@ -563,10 +567,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           }
         }
 
-        # Run After Hooks
-        // $ok = $this->runHooks('OnAfterRequest');
-
-        # Return the generated response
         return $this->getResponse();
 
       } // if count() ...
@@ -591,9 +591,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return $this->runErrorController('', 404);
   }
 
-  /**
-   * @inheritDoc
-   */
   public function runErrorController(string $body, int $httpCode = 400): Response
   {
     $class = '';
@@ -624,11 +621,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           # Run Controller's handler
           return $routeHandler->$handlerMethod([]);
         }
-        \logger()->error('Failed to create error controller',[
+        \logger()?->error('Failed to create error controller',[
           'class'=>$handlerClass
         ]);
       } else {
-        \logger()->notice('Error controller class does not exist',[
+        \logger()?->notice('Error controller class does not exist',[
           'class'=>$handlerClass,
           'httpCode'=>$httpCode
         ]);
@@ -687,10 +684,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return true;
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function errorHandler(int $errNo, $errStr, $errFile, $errLine, array $errContext = []): bool
+  public function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext = [])
   {
     if (!(\error_reporting())) {
       // This error code is not included in error_reporting, so let it fall
@@ -699,7 +693,7 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       return false;
     }
 
-    switch ($errNo) {
+    switch ((int)$errNo) {
       # Error
       case E_ERROR:
       case E_USER_ERROR:
@@ -734,9 +728,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return true;
   }
 
-  /**
-   * @inheritDoc
-   */
   public function exceptionHandler($exception)
   {
     if (!\is_null($this->getResponse())) {
@@ -759,15 +750,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return null;
   }
 
-  /**
-   * PHP Fatal Error Handler
-   *
-   * Handles any PHP Fatal Errors.
-   *
-   * This includes "maximum timeout", "out of memory", "undefined variable" situations.
-   *
-   * @return  bool                                             True if handled
-   */
   public function fatalErrorhandler(): bool
   {
     # Get last PHP error
@@ -798,21 +780,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return true;
   }
 
-  /**
-   * Set a cookie for the next response
-   *
-   * Defaults to setting 'samesite'='Strict' to prevent CSRF.
-   *
-   * @param   string $name                                      The cookie name
-   * @param   string $value                                     The cookie value
-   * @param   int $expire                                       The cookie expiration time
-   * @param   string $path                                      The cookie path
-   * @param   string $domain                                    The cookie domain
-   * @param   bool $secure                                      The cookie secure flag
-   * @param   bool $httpOnly                                    The cookie httpOnly flag
-   *
-   * @return  bool
-   */
   public function setCookie(string $name,
                             string $value = '',
                             int $expire = 0,
@@ -841,65 +808,35 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return true;
   }
 
-  /**
-   * getBasePath returns the full path to the application root folder
-   *
-   * @return  string                                            The base path
-   */
   public function getBasePath(): string
   {
     return $this->basePath;
   }
 
-  /**
-   * getAppPath returns the full path to the application folder + "/app"
-   *
-   * @return  string                                            The app path
-   */
   public function getAppPath(): string
   {
     return $this->appPath;
   }
 
-  /**
-   * getConfigPath returns the full path to the application folder + "/app/Config"
-   *
-   * @return  string                                            The config path
-   */
   public function getConfigPath(): string
   {
     return $this->appPath . \DIRECTORY_SEPARATOR . 'Config';
   }
 
-  /**
-   * getStoragePath returns the full path to the application folder + "/storage"
-   *
-   * @return  string                                            The storage path
-   */
   public function getStoragePath(): string
   {
     return $this->storagePath;
   }
 
-  /**
-   * getSharedStoragePath returns the full path to the configured shared storage path.
-   * If the config does not contain an entry for the shared storage, the result is the same
-   * as `getStoragePath()`
-   *
-   * @return  string                                            The shared storage path
-   */
   public function getSharedStoragePath(): string
   {
     if (empty($this->sharedStoragePath)) {
-      return $this->getStoragepath();
+      return $this->getStoragePath();
     }
 
     return $this->sharedStoragePath;
   }
 
-  /**
-   * @inheritDoc
-   */
   public function getProperty(string $property): mixed
   {
     if (\property_exists(__CLASS__, $property)) {
@@ -909,139 +846,74 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return $this->container($property);
   }
 
-  /**
-   * Get Application Name - from config-*.json
-   *
-   * @return  string                                            The application name
-   */
   public function getAppName(): string
   {
     return $this->version['application']['name'] ?? '';
   }
 
-  /**
-   * Get Application Code - from config-*.json
-   *
-   * @return  string                                            The application code
-   */
   public function getAppCode(): string
   {
     return $this->version['application']['code'] ?? '';
   }
 
-  /**
-   * Get Application Version - from config-*.json
-   *
-   * @return  string                                            The application version
-   */
   public function getAppVersion(): string
   {
     return $this->version['application']['version'] ?? '';
   }
 
-  /**
-   * Get the HTTP Request (ServerRequest)
-   *
-   * @return  Request                                           The request object
-   */
   public function getRequest(): Request
   {
     return $this->request;
   }
 
-  /**
-   * Get the HTTP Response (ServerResponse)
-   *
-   * @return Response                                           The response object
-   */
   public function getResponse(): Response
   {
     return $this->response;
   }
 
-  /**
-   * Set the HTTP Response (ServerResponse)
-   *
-   * @param   Response $response                                The response object
-   *
-   * @return  self                                              The current object
-   */
-  public function setResponse(Response $response): self
+
+  public function setResponse($response): self
   {
     $this->response = $response;
 
     return $this;
   }
 
-  /**
-   * Get the Config object
-   *
-   * @return  ?Config                                          The config object
-   */
+
   public function getConfig(): ?Config
   {
     return $this->config;
   }
 
-  /**
-   * Get the PSR-3 Logger object
-   *
-   * @return  Logger                                            The logger object
-   */
+
   public function getLogger(): Logger
   {
     return $this->logger;
   }
 
-  /**
-   * Get the PSR-11 Container object
-   *
-   * @return  mixed                                            The container object
-   */
+
   public function getContainer(): mixed
   {
     return $this->container;
   }
 
-  /**
-   * Get the DB Manager
-   *
-   * @return ConnectionManager The connection manager
-   */
+
   public function getConnectionManager(): ConnectionManager
   {
     return $this->connectionManager;
   }
 
-  /**
-   * Get the Cache Object via CacheManager
-   *
-   * @param   string  $driverName                               The driver name
-   *
-   * @return  ?AbstractCacheAdapterInterface The cache object
-   */
+
   public function getCache(string $driverName = ''): ?AbstractCacheAdapterInterface
   {
     return $this->cacheManager->getCache($driverName);
   }
 
-  /**
-   * Get the Environment as set in ENV vars
-   *
-   * @return  string                                            The environment
-   */
   public function getEnvironment(): string
   {
     return $this->environment;
   }
 
-  /**
-   * Set the Environment where app is running
-   *
-   * @param   string $environment                               The environment name
-   *
-   * @return  self                                              The current object
-   */
   public function setEnvironment(string $environment): self
   {
     $this->environment = \strtolower($environment);
@@ -1049,13 +921,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return $this;
   }
 
-  /**
-   * Get a RouteGroup by Name
-   *
-   * @param   string $groupName                                 The group name
-   *
-   * @return  null|RouteGroup                                   `null` if not found or The route group
-   */
   public function getRouteGroup(string $groupName): ?RouteGroup
   {
     foreach ($this->routeGroups as $routeGroup) {
@@ -1067,24 +932,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return null;
   }
 
-  /**
-   * Get all RouteGroups
-   *
-   * @return  array<mixed>                                      The route groups
-   */
   public function getRouteGroups(): array
   {
     return $this->routeGroups;
   }
 
-  /**
-   * Get or Set a Container value.
-   *
-   * @param   string $name                                      Dependency name to get or set
-   * @param   mixed $value                                      Value to SET
-   *
-   * @return  mixed                                             `null` if not found or the value for `$name` in the container
-   */
   public function container(string $name, $value=null): mixed
   {
     # Getting or Setting the value?
@@ -1098,25 +950,17 @@ class Application extends AbstractBaseClass implements ApplicationInterface
 
     } elseif (\is_callable($value)) {
       # Callable
-      $this->getContainer()->addShared($name,$value);
+      $this->getContainer()->addShared($name, $value);
 
     } else {
       # Variable
-      $this->getContainer()->addShared($name,$value);
+      $this->getContainer()->addShared($name, $value);
 
     }
 
     return $value;
   }
 
-  /**
-   * Set the file to send as response
-   *
-   * @param   string $filename                                  Filename to send
-   * @param   bool $remove                                      Optional. Default `false`. Set to `True` to remove the file after sending
-   *
-   * @return  self                                              The current object
-   */
   public function setFileResponse(string $filename, bool $remove = false): self
   {
     $this->responseFile = $filename;
@@ -1125,11 +969,6 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return $this;
   }
 
-  /**
-   * Send Response back to client
-   *
-   * @return  self                                              The current object
-   */
   public function sendResponse(): self
   {
     # Set HTTP Response Code
@@ -1223,41 +1062,21 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return $this;
   }
 
-  /**
-   * Get the UploadedFilesManager
-   *
-   * @return  UploadedFilesManager                              The uploaded files manager
-   */
   public function getUploadedFilesManager(): UploadedFilesManager
   {
     return $this->uploadedFilesManager;
   }
 
-  /**
-   * Get the value of initialMemUsage
-   *
-   * @return  int                                               The initial memory usage
-   */
   public function getInitialMemUsage(): int
   {
     return $this->initialMemUsage;
   }
 
-  /**
-   * Get the value of globalVars
-   *
-   * @return  array<mixed>                                      The global vars
-   */
   public function getGlobalVars(): array
   {
     return $this->globalVars;
   }
 
-  /**
-   * Set the value of globalVars
-   *
-   * @return  self                                              The current object
-   */
   public function setGlobalVars($globalVars): self
   {
     $this->globalVars = $globalVars;
@@ -1265,26 +1084,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     return $this;
   }
 
-  /**
-   * Get one global var
-   *
-   * @param   string $id                                        The global variable id
-   *
-   * @return  null|mixed                                        The global variable
-   */
   public function getGlobalVar(string $id): mixed
   {
     return $this->globalVars[$id] ?? null;
   }
 
-  /**
-   * Set one global var
-   *
-   * @param   string $id                                        The global variable id
-   * @param   mixed $value                                      The global variable value
-   *
-   * @return  self                                              The current object
-   */
   public function setGlobalVar(string $id, mixed $value): self
   {
     $this->globalVars[$id] = $value;

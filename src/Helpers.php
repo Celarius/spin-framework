@@ -1,11 +1,17 @@
 <?php declare(strict_types=1);
 /**
- * Creates global functions to make life easier. These functions use
- * the global variable $app to access the application.
+ * Global Helper Functions
  *
- * Also registers global dependencies
+ * Creates global functions to make life easier. These functions use
+ * the global variable $app to access the application. Provides convenient
+ * shortcuts for common framework operations like configuration access,
+ * caching, database connections, and logging.
+ *
+ * Also registers global dependencies and utility functions.
  *
  * @package   Spin
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 use \GuzzleHttp\Psr7\Request;
@@ -13,7 +19,7 @@ use \GuzzleHttp\Psr7\Response;
 
 use \Spin\Cache\AbstractCacheAdapterInterface;
 use \Spin\Database\PdoConnection;
-use \Spin\helpers\ArrayToXml;
+use \Spin\Helpers\ArrayToXml;
 use \Spin\Core\Logger;
 
 if (!\function_exists('env')) {
@@ -53,7 +59,8 @@ if (!\function_exists('env')) {
     }
 
     # Extract "" encapsulated values
-    if ($val[0] === '"' && $val[-1] === '"') {
+    $len = \strlen($val);
+    if ($len >= 2 && $val[0] === '"' && $val[$len - 1] === '"') {
       return \trim($val, '"');
     }
 
@@ -249,7 +256,12 @@ if (!\function_exists('queryParam')) {
   {
     global $app;
 
-    return $app->getRequest()->getQueryParams()[$paramName] ?? $default;
+    $request = $app->getRequest();
+    $uri = $request->getUri();
+    $query = $uri->getQuery();
+    parse_str($query, $queryParams);
+    
+    return $queryParams[$paramName] ?? $default;
   }
 }
 
@@ -263,7 +275,12 @@ if (!\function_exists('queryParams')) {
   {
     global $app;
 
-    return $app->getRequest()->getQueryParams() ?? [];
+    $request = $app->getRequest();
+    $uri = $request->getUri();
+    $query = $uri->getQuery();
+    parse_str($query, $queryParams);
+    
+    return $queryParams ?? [];
   }
 }
 
@@ -280,7 +297,14 @@ if (!\function_exists('postParam')) {
   {
     global $app;
 
-    return $app->getRequest()->getParsedBody()[$paramName] ?? $default;
+    $request = $app->getRequest();
+    $body = $request->getBody();
+    $contents = $body->getContents();
+    
+    // Parse POST data from request body
+    parse_str($contents, $postParams);
+    
+    return $postParams[$paramName] ?? $default;
   }
 }
 
@@ -292,7 +316,16 @@ if (!\function_exists('postParams')) {
    */
   function postParams(): array
   {
-    return $_POST;
+    global $app;
+
+    $request = $app->getRequest();
+    $body = $request->getBody();
+    $contents = $body->getContents();
+    
+    // Parse POST data from request body
+    parse_str($contents, $postParams);
+    
+    return $postParams ?? [];
   }
 }
 
@@ -309,7 +342,18 @@ if (!\function_exists('cookieParam')) {
   {
     global $app;
 
-    return $app->getRequest()->getCookieParams()[$paramName] ?? $default;
+    $request = $app->getRequest();
+    $cookies = $request->getHeader('Cookie');
+    
+    if (empty($cookies)) {
+      return $default;
+    }
+    
+    // Parse cookie header
+    $cookieString = $cookies[0];
+    parse_str(str_replace('; ', '&', $cookieString), $cookieParams);
+    
+    return $cookieParams[$paramName] ?? $default;
   }
 }
 
@@ -323,7 +367,18 @@ if (!\function_exists('cookieParams')) {
   {
     global $app;
 
-    return $app->getRequest()->getCookieParams() ?? [];
+    $request = $app->getRequest();
+    $cookies = $request->getHeader('Cookie');
+    
+    if (empty($cookies)) {
+      return [];
+    }
+    
+    // Parse cookie header
+    $cookieString = $cookies[0];
+    parse_str(str_replace('; ', '&', $cookieString), $cookieParams);
+    
+    return $cookieParams ?? [];
   }
 }
 
@@ -374,9 +429,9 @@ if (!\function_exists('redirect')) {
    * @param      int     $status   Status code, defaults to 302
    * @param      array   $headers  Additional headers
    *
-   * @return     object
+   * @return     Response
    */
-  function redirect(string $uri, int $status = 302, array $headers = []): object
+  function redirect(string $uri, int $status = 302, array $headers = []): Response
   {
     global $app;
 
@@ -387,7 +442,11 @@ if (!\function_exists('redirect')) {
 
     # Set all the headers the user sent
     foreach($headers as $header => $values) {
-      $response = $response->withHeader($header,$values);
+      if (is_array($values)) {
+        $response = $response->withHeader($header, $values);
+      } else {
+        $response = $response->withHeader($header, (string)$values);
+      }
     }
 
     # Set it
@@ -422,7 +481,11 @@ if (!\function_exists('response')) {
 
     # Set all the headers the user sent
     foreach($headers as $header => $values) {
-      $response = $response->withHeader($header,$values);
+      if (is_array($values)) {
+        $response = $response->withHeader($header, $values);
+      } else {
+        $response = $response->withHeader($header, (string)$values);
+      }
     }
 
     if ($body !== '') {
@@ -454,7 +517,7 @@ if (!\function_exists('responseJson')) {
     try {
       $body = \json_encode($data, JSON_THROW_ON_ERROR | $options);
     } catch (\JsonException $e) {
-      \logger()->warning('Invalid payload for responseJson', [
+      \logger()?->warning('Invalid payload for responseJson', [
         'error'   => $e->getMessage(),
         'rid' => container('rid')
       ]);
@@ -595,13 +658,13 @@ if (!\function_exists("getConfigPath")) {
 
 if(!\function_exists('mime_content_type')) {
   /**
-   * { function_description }
+   * Get MIME type for a file (alias for mime_content_type_ex)
    *
    * @param      string        $filename  The filename
    *
-   * @return     array|string  The mime type(s) of the file
+   * @return     string        The mime type of the file
    */
-  function mime_content_type(string $filename): array|string
+  function mime_content_type(string $filename): string
   {
     return \mime_content_type_ex($filename);
   }
@@ -609,13 +672,13 @@ if(!\function_exists('mime_content_type')) {
 
 if(!\function_exists('mime_content_type_ex')) {
   /**
-   * { function_description }
+   * Get MIME type for a file based on extension or file content
    *
    * @param      string $filename     The filename
    *
-   * @return     array|string         The mime type(s) of the file
+   * @return     string               The mime type of the file
    */
-  function mime_content_type_ex(string $filename): array|string
+  function mime_content_type_ex(string $filename): string
   {
     $mime_types = [
       'txt' => 'text/plain',
@@ -690,7 +753,10 @@ if(!\function_exists('mime_content_type_ex')) {
       $mimetype = \finfo_file($finfo, $filename);
       \finfo_close($finfo);
 
-      return $mimetype;
+      // Ensure we return a valid string, not false
+      if ($mimetype !== false && \is_string($mimetype)) {
+        return $mimetype;
+      }
     }
 
     return 'application/octet-stream';

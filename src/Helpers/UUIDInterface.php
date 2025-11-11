@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * UUIDInterface
+ * Universally Unique Identifier (UUID) Interface
  *
- * @package  Spin
+ * Defines the contract for UUID operations including generation of different
+ * UUID versions and validation. Provides a clean interface for working with
+ * UUIDs in the Spin framework.
+ *
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Helpers;

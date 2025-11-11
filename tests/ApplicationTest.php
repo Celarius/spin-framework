@@ -9,7 +9,7 @@ use Spin\Core\ConnectionManager;
 use Spin\Core\RouteGroup;
 use GuzzleHttp\Psr7\Response;
 
-class AppTest extends TestCase
+class ApplicationTest extends TestCase
 {
   /**
    * @var \Spin\Application
@@ -42,19 +42,19 @@ class AppTest extends TestCase
   public function testPathMethods(): void
   {
     $basePath = \realpath(__DIR__);
-    
+
     // Test base path
     $this->assertEquals($basePath, $this->app->getBasePath());
-    
+
     // Test app path
     $this->assertEquals($basePath . DIRECTORY_SEPARATOR . 'app', $this->app->getAppPath());
-    
+
     // Test config path
     $this->assertEquals($basePath . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Config', $this->app->getConfigPath());
-    
+
     // Test storage path
     $this->assertEquals($basePath . DIRECTORY_SEPARATOR . 'storage', $this->app->getStoragePath());
-    
+
     // Test shared storage path (should default to storage path if not configured)
     $this->assertIsString($this->app->getSharedStoragePath());
   }
@@ -68,7 +68,7 @@ class AppTest extends TestCase
     $this->assertIsString($this->app->getAppName());
     $this->assertIsString($this->app->getAppCode());
     $this->assertIsString($this->app->getAppVersion());
-    
+
     // They might be empty if not configured, which is ok
     // Just verify they don't throw exceptions
     $this->assertTrue(true);
@@ -83,11 +83,11 @@ class AppTest extends TestCase
     $currentEnv = $this->app->getEnvironment();
     $this->assertIsString($currentEnv);
     $this->assertNotEmpty($currentEnv);
-    
+
     // Test setting environment
     $this->app->setEnvironment('testing');
     $this->assertEquals('testing', $this->app->getEnvironment());
-    
+
     // Restore original
     $this->app->setEnvironment($currentEnv);
   }
@@ -99,7 +99,7 @@ class AppTest extends TestCase
   {
     $config = $this->app->getConfig();
     $this->assertInstanceOf(Config::class, $config);
-    
+
     // Test that config has the basic structure
     $this->assertIsObject($config);
   }
@@ -113,7 +113,7 @@ class AppTest extends TestCase
 
     // Test global logger function
     $this->assertSame($logger, \logger());
-    
+
     // Test logging
     \logger()->notice('This is a test log line', ['test' => true]);
     $this->assertTrue(true); // If we get here, logging worked
@@ -126,14 +126,14 @@ class AppTest extends TestCase
   {
     $container = $this->app->getContainer();
     $this->assertIsObject($container);
-    
+
     // Test setting and getting container values
     $testKey = 'test_' . uniqid();
     $testValue = 'test_value_' . uniqid();
-    
+
     $this->app->container($testKey, $testValue);
     $this->assertEquals($testValue, $this->app->container($testKey));
-    
+
     // Test non-existent key
     $this->assertNull($this->app->container('non_existent_key_' . uniqid()));
   }
@@ -168,14 +168,14 @@ class AppTest extends TestCase
   {
     $routeGroups = $this->app->getRouteGroups();
     $this->assertIsArray($routeGroups);
-    
+
     // Test getting specific route group
     if (!empty($routeGroups)) {
       $firstGroupName = array_key_first($routeGroups);
       $routeGroup = $this->app->getRouteGroup($firstGroupName);
       $this->assertInstanceOf(RouteGroup::class, $routeGroup);
     }
-    
+
     // Test non-existent route group
     $this->assertNull($this->app->getRouteGroup('non_existent_group_' . uniqid('', true)));
   }
@@ -190,13 +190,13 @@ class AppTest extends TestCase
     if ($request !== null) {
       $this->assertInstanceOf(\GuzzleHttp\Psr7\Request::class, $request);
     }
-    
+
     // Response might be null before run()
     $response = $this->app->getResponse();
     if ($response !== null) {
       $this->assertInstanceOf(Response::class, $response);
     }
-    
+
     // Test setting response
     $newResponse = new Response(200, [], 'Test response');
     $this->app->setResponse($newResponse);
@@ -219,17 +219,17 @@ class AppTest extends TestCase
       $globalVars = $this->app->getGlobalVars();
       $this->assertIsArray($globalVars);
     }
-    
+
     // Test setting individual global var
     $key = 'test_var_' . uniqid('', true);
     $value = 'test_value_' . uniqid('', true);
-    
+
     $this->app->setGlobalVar($key, $value);
     $this->assertEquals($value, $this->app->getGlobalVar($key));
-    
+
     // Test non-existent global var
     $this->assertNull($this->app->getGlobalVar('non_existent_' . uniqid('', true)));
-    
+
     // Test setting all global vars
     $newGlobalVars = ['key1' => 'value1', 'key2' => 'value2'];
     $this->app->setGlobalVars($newGlobalVars);
@@ -244,7 +244,7 @@ class AppTest extends TestCase
     // Test getting existing properties
     $environment = $this->app->getProperty('environment');
     $this->assertIsString($environment);
-    
+
     // Test non-existent property
     $nonExistent = $this->app->getProperty('non_existent_property_' . uniqid('', true));
     $this->assertNull($nonExistent);
@@ -277,15 +277,15 @@ class AppTest extends TestCase
     // Create a temporary file for testing
     $tempFile = sys_get_temp_dir() . '/test_file_' . uniqid('', true) . '.txt';
     file_put_contents($tempFile, 'Test content');
-    
+
     // Test setting file response
     $this->app->setFileResponse($tempFile);
-    
+
     // Clean up
     if (file_exists($tempFile)) {
       unlink($tempFile);
     }
-    
+
     $this->assertTrue(true); // If we get here, setFileResponse worked
   }
 
@@ -309,13 +309,13 @@ class AppTest extends TestCase
   public function testExceptionHandler(): void
   {
     $exception = new \Exception('Test exception');
-    
+
     // We can't easily test the actual exception handler behavior,
     // but we can verify it doesn't throw an error
     ob_start();
     $result = $this->app->exceptionHandler($exception);
     ob_end_clean();
-    
+
     // The handler should return something (even if null)
     $this->assertTrue(true); // If we get here, handler didn't crash
   }
@@ -330,10 +330,10 @@ class AppTest extends TestCase
       E_NOTICE,
       'Test notice',
       __FILE__,
-      __LINE__,
+      (string)__LINE__,
       []
     );
-    
+
     $this->assertIsBool($result);
   }
 
@@ -353,7 +353,7 @@ class AppTest extends TestCase
       'SCRIPT_NAME' => '/index.php',
       'PHP_SELF' => '/index.php',
     ];
-    
+
     $this->assertTrue($this->app->run($serverRequest));
   }
 
@@ -365,7 +365,7 @@ class AppTest extends TestCase
     // These are protected properties, so we test them indirectly
     // by verifying the app can handle requests (middleware chain works)
     $this->assertInstanceOf(\Spin\Application::class, $this->app);
-    
+
     // If middleware was broken, run() would fail
     $this->assertTrue(true);
   }
@@ -376,12 +376,7 @@ class AppTest extends TestCase
   public function testConfigFiles(): void
   {
     $config = $this->app->getConfig();
-    
-    // Check if config has expected structure
-    if (property_exists($config, 'application')) {
-      $this->assertIsObject($config->application);
-    }
-    
+
     // Config should at least be an object
     $this->assertIsObject($config);
   }

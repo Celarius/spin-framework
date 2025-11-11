@@ -1,17 +1,23 @@
 <?php declare(strict_types=1);
 
 /**
- * Uploaded files manager
+ * HTTP File Uploads Manager Class
+ *
+ * Manages collections of uploaded files from HTTP requests. Parses the $_FILES
+ * superglobal, creates UploadedFile objects, and provides validation and
+ * management utilities for file upload handling.
  *
  * @package  Spin
- *
- * @link http://php.net/manual/en/reserved.variables.files.php
- * @link http://php.net/manual/en/features.file-upload.post-method.php
- * @link http://php.net/manual/en/features.file-upload.php
+ * @author   Spin Framework Team
+ * @since    1.0.0
+ * @link     http://php.net/manual/en/reserved.variables.files.php
+ * @link     http://php.net/manual/en/features.file-upload.post-method.php
+ * @link     http://php.net/manual/en/features.file-upload.php
  */
 
 namespace Spin\Core;
 
+use \Exception;
 use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\Config;
 use \Spin\Core\Logger;
@@ -23,8 +29,8 @@ use \Psr\Http\Message\Response;
 
 class UploadedFilesManager extends AbstractBaseClass implements UploadedFilesManagerInterface
 {
-  /** @var  array          Array with \Spin\Core\File objects  */
-  protected $files;
+  /** @var  array          Array with \Spin\Core\UploadedFile objects  */
+  protected array $files;
 
   /**
    * Constructor

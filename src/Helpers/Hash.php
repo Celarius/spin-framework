@@ -1,14 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * Hash
+ * Cryptographic Hash Helper Class
  *
- *   OpenSSL Hash Helper. Wraps the OpenSSL digest() method into easily usable helper method
+ * OpenSSL hash helper that wraps the OpenSSL digest() method into easily usable
+ * helper methods. Provides hash generation, verification, and available method
+ * listing capabilities.
  *
- * Example:
- *   $digest = \Spin\Helper\Hash::generate('This is the data','SHA256');
- *
- * @package  Spin
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Helpers;
@@ -19,7 +20,7 @@ class Hash implements HashInterface
 {
 
   /**
-   * Genreate a Hash (digest) of the $data using $method
+   * Generate a Hash (digest) of the $data using $method
    *
    * @param      string  $data    [description]
    * @param      string  $method  [description]

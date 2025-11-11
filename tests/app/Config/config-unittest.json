@@ -1,0 +1,33 @@
+{
+  "application": {
+    "global": {
+      "maintenance": false,
+      "timezone": "UTC"
+    },
+    "secret": "test-secret-key"
+  },
+  "session": {
+    "cookie": "SID",
+    "timeout": 3600,
+    "driver": "apcu"
+  },
+  "logger": {
+    "level": "debug",
+    "driver": "php"
+  },
+  "caches": {
+    "default": {
+      "adapter": "apcu",
+      "config": {}
+    }
+  },
+  "factories": {
+    "http": {
+      "stream": {
+        "class": "\\Spin\\Factories\\Http\\StreamFactory"
+      }
+    }
+  },
+  "hooks": [],
+  "connections": {}
+}

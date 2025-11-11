@@ -1,5 +1,18 @@
 <?php declare(strict_types=1);
 
+/**
+ * Uploaded Files Manager Interface
+ *
+ * Defines the contract for uploaded files manager implementations. Specifies
+ * methods for parsing file upload structures and managing collections of
+ * uploaded files. Implemented by UploadedFilesManager to provide framework
+ * file upload management capabilities.
+ *
+ * @package  Spin\Core
+ * @author   Spin Framework Team
+ * @since    1.0.0
+ */
+
 namespace Spin\Core;
 
 interface UploadedFilesManagerInterface

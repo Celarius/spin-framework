@@ -1,17 +1,23 @@
 <?php declare(strict_types=1);
 
 /**
- * AbstractBaseClass
+ * Abstract Base Class
  *
- * All Spin classes are based on this class
+ * Common foundation for all Spin framework classes providing a minimal,
+ * consistent inheritance root. Extend this class to align with framework
+ * expectations around construction/destruction hooks and future shared concerns.
  *
  * @package   Spin
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 namespace Spin\Core;
 
 /**
- * Abstract Baseclass
+ * Common foundation for framework classes providing a minimal, consistent
+ * inheritance root. Extend this class to align with framework expectations
+ * around construction/destruction hooks and future shared concerns.
  */
 abstract class AbstractBaseClass
 {
@@ -22,6 +28,9 @@ abstract class AbstractBaseClass
   {
   }
 
+  /**
+   * Destructor
+   */
   public function __destruct()
   {
   }

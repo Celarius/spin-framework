@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * Abstract Middleware
+ * Abstract Middleware Base Class
+ *
+ * Base abstraction for HTTP middleware components that can be executed
+ * before or after request handling. Provides initialization and handling
+ * hooks for custom middleware implementations.
  *
  * @package  Spin
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

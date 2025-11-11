@@ -28,17 +28,13 @@ use \Psr\Http\Message\ResponseFactoryInterface;
 class ResponseFactory extends AbstractFactory implements ResponseFactoryInterface
 {
   /**
-   * Create a new response.
-   *
-   * @param      integer            $code   HTTP status code
-   *
-   * @return     ResponseInterface
+   * @inheritDoc
    */
   public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
   {
     $response = new Response($code);
 
-    \logger()->debug('Created PSR-7 Response (Guzzle)');
+    \logger()?->debug('Created PSR-7 Response (Guzzle)');
 
     return $response;
   }
