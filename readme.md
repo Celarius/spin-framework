@@ -64,28 +64,25 @@ php -S localhost:8000 -t src/public
 my-spin-app/
 ├── src/
 │   ├── app/
-│   │   ├── Config/           # JSON configuration files
-│   │   ├── Controllers/      # Application controllers
+│   │   ├── Config/           # Configuration files
+│   │   ├── Controllers/      # Controllers
 │   │   ├── Middlewares/      # Custom middleware
 │   │   ├── Views/            # Template files
 │   │   └── Globals.php       # Global functions
 │   ├── public/               # Web root directory
 │   │   ├── bootstrap.php     # Application entry point
-│   │   └── assets/          # CSS, JS, images
 │   └── storage/              # Application storage
-│       ├── logs/            # Log files
-│       ├── cache/           # Cache files
-│       └── database/        # Database files
+│       ├── logs/             # Log files
+│       ├── cache/            # Optional. Cache files
 ├── vendor/                   # Composer dependencies
 ├── composer.json             # Project dependencies
-└── .env                      # Environment variables
 ```
 
 ## 🚀 Getting Started
 
 ### 1. Configuration
 
-SPIN uses JSON-based configuration files:
+SPIN uses JSON-based configuration files, in the `/Config` folder, named after the environment `config-<env>.json`:
 
 ```json
 {
@@ -94,7 +91,7 @@ SPIN uses JSON-based configuration files:
       "maintenance": false,
       "timezone": "Europe/Stockholm"
     },
-    "secret": "${APPLICATION_SECRET}"
+    "secret": "${env:APPLICATION_SECRET}"
   },
   "session": {
     "cookie": "SID",
@@ -107,6 +104,7 @@ SPIN uses JSON-based configuration files:
   }
 }
 ```
+_Configuration files support `${env:<varName>}` macros for environment variables in values_
 
 ### 2. Routing
 
@@ -273,11 +271,11 @@ tests/
 <VirtualHost *:80>
     ServerName mydomain.com
     DocumentRoot "/path/to/your/app/src/public"
-    
+
     <Directory "/path/to/your/app/src/public">
         AllowOverride All
         Require all granted
-        
+
         RewriteEngine On
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteCond %{REQUEST_FILENAME} !-f
@@ -294,11 +292,11 @@ server {
     server_name mydomain.com;
     root /path/to/your/app/src/public;
     index bootstrap.php;
-    
+
     location / {
         try_files $uri $uri/ /bootstrap.php?$query_string;
     }
-    
+
     location ~ \.php$ {
         fastcgi_pass 127.0.0.1:9000;
         fastcgi_index bootstrap.php;

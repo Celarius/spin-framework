@@ -6,6 +6,8 @@ SPIN Framework uses a JSON-based configuration system that's loaded at runtime a
 
 SPIN applications use JSON configuration files organized by environment (e.g., `config-dev.json`, `config-prod.json`). The configuration is structured hierarchically and supports environment variables.
 
+_Configuration files support `${env:<varName>}` macros for environment variables in values_
+
 ### Basic Configuration File Structure
 
 ```json
@@ -18,6 +20,7 @@ SPIN applications use JSON configuration files organized by environment (e.g., `
     },
     "secret": "${application-secret}"
   },
+
   "session": {
     "cookie": "SID",
     "timeout": 3600,
@@ -27,6 +30,7 @@ SPIN applications use JSON configuration files organized by environment (e.g., `
       "option": "value"
     }
   },
+
   "logger": {
     "level": "notice",
     "driver": "php",
@@ -43,18 +47,20 @@ SPIN applications use JSON configuration files organized by environment (e.g., `
       }
     }
   },
+
   "templates": {
     "extension": "html",
     "errors": "/Views/Errors",
     "pages": "/Views/Pages"
   },
+
   "caches": {
-    "local.apcu": {
+    "apcu": {
       "adapter": "APCu",
       "class": "\\Spin\\Cache\\Adapters\\Apcu",
       "options": {}
     },
-    "remote.redis": {
+    "redis": {
       "adapter": "Redis",
       "class": "\\Spin\\Cache\\Adapters\\Redis",
       "options": {
@@ -63,6 +69,26 @@ SPIN applications use JSON configuration files organized by environment (e.g., `
       }
     }
   },
+
+  "connections": {
+    "example_mysql": {
+      "type": "Pdo",
+      "driver": "mysql",
+      "schema": "${env:DB_DATABASE}",
+      "host": "${env:DB_HOST}",
+      "port": "${env:DB_PORT}",
+      "username": "${env:DB_USER}",
+      "password": "${env:DB_PASS}",
+      "charset": "UTF8",
+      "options": {
+        "ATTR_PERSISTENT": false,
+        "ATTR_ERRMODE": "ERRMODE_EXCEPTION",
+        "ATTR_AUTOCOMMIT": false,
+        "ATTR_EMULATE_PREPARES": false
+      }
+    }
+  },
+
   "factories": {
     "http": {
       "serverRequest": {
@@ -100,39 +126,6 @@ SPIN applications use JSON configuration files organized by environment (e.g., `
       "class": "\\Spin\\Factories\\EventFactory",
       "options": {}
     }
-  },
-  "hooks": [
-    {
-      "OnBeforeRequest": [
-        "\\App\\Hooks\\OnBeforeRequest"
-      ],
-      "OnAfterRequest": [
-        "\\App\\Hooks\\OnAfterRequest"
-      ]
-    }
-  ],
-  "connections": {
-    "example_mysql": {
-      "type": "Pdo",
-      "driver": "mysql",
-      "schema": "<db_schema_name>",
-      "host": "localhost",
-      "port": 3306,
-      "username": "root",
-      "password": "*****",
-      "charset": "UTF8",
-      "options": [
-        {
-          "ATTR_PERSISTENT": true
-        },
-        {
-          "ATTR_ERRMODE": "ERRMODE_EXCEPTION"
-        },
-        {
-          "ATTR_AUTOCOMMIT": false
-        }
-      ]
-    }
   }
 }
 ```
@@ -154,14 +147,14 @@ $dbHost = config('connections.example_mysql.host', 'localhost');
 
 ## Environment Variables
 
-SPIN supports environment variables in configuration using `${VARIABLE_NAME}` syntax:
+SPIN supports environment variables in configuration using `${env:VARIABLE_NAME}` syntax:
 
 ```json
 {
   "application": {
-    "secret": "${APPLICATION_SECRET}",
+    "secret": "${env:APPLICATION_SECRET}",
     "database": {
-      "password": "${DB_PASSWORD}"
+      "password": "${env:DB_PASS}"
     }
   }
 }
@@ -189,10 +182,10 @@ SPIN supports environment variables in configuration using `${VARIABLE_NAME}` sy
 ```json
 {
   "session": {
-    "cookie": "SID",
-    "timeout": 3600,
+    "cookie": "SID",      // Cookie name
+    "timeout": 3600,      // Timeout in seconds
     "refresh": 600,
-    "driver": "apcu",
+    "driver": "apcu",     // Driver name
     "apcu": {
       "option": "value"
     }
@@ -205,8 +198,8 @@ SPIN supports environment variables in configuration using `${VARIABLE_NAME}` sy
 ```json
 {
   "logger": {
-    "level": "notice",
-    "driver": "php",
+    "level": "notice",      // Log level
+    "driver": "php",        // Driver name
     "drivers": {
       "php": {
         "line_format": "[%channel%] [%level_name%] %message% %context%",
@@ -228,12 +221,12 @@ SPIN supports environment variables in configuration using `${VARIABLE_NAME}` sy
 ```json
 {
   "caches": {
-    "local.apcu": {
+    "apcu": {             // WebServer in-memory cache
       "adapter": "APCu",
       "class": "\\Spin\\Cache\\Adapters\\Apcu",
       "options": {}
     },
-    "remote.redis": {
+    "redis": {
       "adapter": "Redis",
       "class": "\\Spin\\Cache\\Adapters\\Redis",
       "options": {
@@ -247,29 +240,26 @@ SPIN supports environment variables in configuration using `${VARIABLE_NAME}` sy
 
 ### Database Connections
 
+The 1st connection in the `"connections"` array is the **default**, and does not need to be named when using `db()` funtions.
+
 ```json
 {
   "connections": {
     "example_mysql": {
       "type": "Pdo",
       "driver": "mysql",
-      "schema": "<db_schema_name>",
-      "host": "localhost",
-      "port": 3306,
-      "username": "root",
-      "password": "*****",
+      "schema": "${env:DB_DATABASE}",
+      "host": "${env:DB_HOST}",
+      "port": "${env:DB_PORT}",
+      "username": "${env:DB_USER}",
+      "password": "${env:DB_PASS}",
       "charset": "UTF8",
-      "options": [
-        {
-          "ATTR_PERSISTENT": true
-        },
-        {
-          "ATTR_ERRMODE": "ERRMODE_EXCEPTION"
-        },
-        {
-          "ATTR_AUTOCOMMIT": false
-        }
-      ]
+      "options": {
+        "ATTR_PERSISTENT": false,
+        "ATTR_ERRMODE": "ERRMODE_EXCEPTION",
+        "ATTR_AUTOCOMMIT": false,
+        "ATTR_EMULATE_PREPARES": false
+      }
     },
     "example_sqlite": {
       "type": "Pdo",
@@ -305,23 +295,6 @@ SPIN supports environment variables in configuration using `${VARIABLE_NAME}` sy
 }
 ```
 
-### Hooks Configuration
-
-```json
-{
-  "hooks": [
-    {
-      "OnBeforeRequest": [
-        "\\App\\Hooks\\OnBeforeRequest"
-      ],
-      "OnAfterRequest": [
-        "\\App\\Hooks\\OnAfterRequest"
-      ]
-    }
-  ]
-}
-```
-
 ## Configuration Best Practices
 
 1. **Environment Separation**: Use different configuration files for different environments (dev, staging, prod)
@@ -343,7 +316,3 @@ While SPIN primarily uses static JSON configuration, you can also set configurat
 config('application.global.maintenance', true);
 config('session.timeout', 7200);
 ```
-
-## Configuration Caching
-
-SPIN caches configuration in memory for performance. Changes to configuration files require an application restart to take effect.
