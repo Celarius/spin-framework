@@ -21,12 +21,14 @@ Welcome to the SPIN Framework documentation hub. This is your central navigation
 
 Start here if you're new to SPIN Framework or web framework development in general.
 
-- **What is SPIN?** — A lightweight PHP 8+ web framework for building web apps and REST APIs with minimal overhead
-- **Installation** — Get SPIN installed in your project
-- **Your First App** — Build a simple "Hello World" application
-- **Core Concepts** — Request/response lifecycle, routing, controllers, middleware
+- **[Quick-Start.md](Getting-Started/Quick-Start.md)** (~5 minutes) — Install SPIN, create a route, test your first endpoint
+- **[Project-Structure.md](Getting-Started/Project-Structure.md)** (~10 minutes) — Understand framework and application directory layout
+- **[Core-Concepts.md](Getting-Started/Core-Concepts.md)** (~15 minutes) — Request/response cycle, routing, middleware, global helpers
+- **[Your-First-App.md](Getting-Started/Your-First-App.md)** (~45 minutes) — Build a complete Task API with CRUD operations
 
-*Estimated reading time: 20-30 minutes*
+*Estimated total reading time: 75 minutes*
+
+**Where to start:** Begin with [Quick-Start.md](Getting-Started/Quick-Start.md) for the fastest path to your first running endpoint.
 
 **Related:** See [Getting-Started/](Getting-Started/) directory
 
