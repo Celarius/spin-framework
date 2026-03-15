@@ -125,8 +125,10 @@ class HelpersTest extends TestCase
    */
   public function testJwtEncodeDecode(): void
   {
-    $jwt = JWT::encode(['abc123'],'xyz987','HS256');
-    $payload = JWT::decode($jwt,'xyz987','HS256');
+    // Use a key that meets HS256 requirements (min 32 bytes for 256-bit algo)
+    $key = 'this-is-a-secret-key-of-at-least-32bytes!!';
+    $jwt = JWT::encode(['abc123'], $key, 'HS256');
+    $payload = JWT::decode($jwt, $key, 'HS256');
 
     $this->assertEquals(['abc123'], $payload);
   }
