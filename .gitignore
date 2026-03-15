@@ -4,3 +4,4 @@
 desktop.ini
 .phpunit.result.cache
 /coverage.cobertura.xml
+.claude/settings.local.json
