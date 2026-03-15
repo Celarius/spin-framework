@@ -19,6 +19,15 @@
     "default": {
       "adapter": "apcu",
       "config": {}
+    },
+    "redis": {
+      "adapter": "redis",
+      "config": {
+        "options": {
+          "host": "${env:REDIS_HOST|127.0.0.1}",
+          "port": "${env:REDIS_PORT|6379}"
+        }
+      }
     }
   },
   "factories": {
@@ -29,5 +38,26 @@
     }
   },
   "hooks": [],
-  "connections": {}
+  "connections": {
+    "mysql": {
+      "driver": "mysql",
+      "host": "${env:DB_HOST|127.0.0.1}",
+      "port": 3306,
+      "database": "${env:DB_NAME|spin_test}",
+      "username": "${env:DB_USER|spin_user}",
+      "password": "${env:DB_PASSWORD|spin_password}"
+    },
+    "postgres": {
+      "driver": "pgsql",
+      "host": "${env:POSTGRES_HOST|127.0.0.1}",
+      "port": 5432,
+      "database": "${env:POSTGRES_DB|spin_test}",
+      "username": "${env:POSTGRES_USER|spin_user}",
+      "password": "${env:POSTGRES_PASSWORD|spin_password}"
+    },
+    "sqlite": {
+      "driver": "sqlite",
+      "database": ":memory:"
+    }
+  }
 }
