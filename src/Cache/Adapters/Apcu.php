@@ -44,6 +44,12 @@ class Apcu extends AbstractCacheAdapter
    */
   public function set($key, $value, \DateInterval|int|null $ttl = null): bool
   {
+    if ($ttl instanceof \DateInterval) {
+      $now = new \DateTime();
+      $future = (clone $now)->add($ttl);
+      $ttl = (int)$future->getTimestamp() - (int)$now->getTimestamp();
+    }
+
     return \apcu_store($key, $value, (\is_null($ttl) ? 0 : (int) $ttl));
   }
 
