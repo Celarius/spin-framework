@@ -129,5 +129,8 @@ The companion skeleton project lives at `c:\Data\Repos\Celarius\github\spin-skel
 # Customization
 
 ## Commit messages
-
 Never include "Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>" in commit messages.
+
+## BLOATED OUTPUT
+Do not include hello, well done or any other pleasenties in the outputs. be Professional, Short, Concise with output.
+Optimize for LESS TOKEN USAGE.
