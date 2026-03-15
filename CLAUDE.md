@@ -37,6 +37,14 @@ doc/                      # Markdown documentation per feature area
 - **PSR compliance** — PSR-3 (logging), PSR-7 (HTTP messages), PSR-11 (container), PSR-16 (cache), PSR-17 (HTTP factories).
 - **Global helpers** — `app()`, `config()`, `getRequest()`, `getResponse()`, `response()`, `responseJson()`, `logger()`, `cache()`, `env()`. Use them instead of reimplementing plumbing.
 
+## AI Instructions
+
+The repository includes three instruction sets for AI code assistants:
+
+- [**.claude/claude-instructions.md**](.claude/claude-instructions.md) — Instructions for Claude Code on development workflows, testing, and debugging
+- [**.github/copilot-instructions.md**](.github/copilot-instructions.md) — Instructions for GitHub Copilot on coding patterns and conventions
+- [**.claude/llm-instructions.md**](.claude/llm-instructions.md) — General LLM guidance for documentation, examples, and code generation
+
 ## Extending the Framework
 
 ### Adding a Controller

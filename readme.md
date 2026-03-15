@@ -224,19 +224,18 @@ class AuthMiddleware extends Middleware
 
 ## 📚 Documentation
 
-### Core Concepts
-- **[Configuration](doc/Configuration.md)** - JSON-based application configuration
-- **[Routing & Controllers](doc/Routing.md)** - Learn how to handle HTTP requests
-- **[Middleware](doc/Middleware.md)** - Understand the middleware pipeline
-- **[Database Operations](doc/Databases.md)** - Working with databases
-- **[Caching](doc/Cache.md)** - Implementing efficient caching strategies
-- **[File Uploads](doc/Uploaded-files.md)** - Secure file handling
-- **[Storage Management](doc/Storage-folders.md)** - Managing application storage
+Complete documentation is available in the [**doc/** directory](doc/README.md). Quick navigation:
 
-### Advanced Topics
-- **[Security Best Practices](doc/Security.md)** - Security guidelines and implementations
-- **[Testing](doc/Testing.md)** - Unit and integration testing
-- **[Helpers](doc/Helpers.md)** - Built-in helper functions and utilities
+| Topic | Resources |
+|-------|-----------|
+| **Getting Started** | [Quick Start](doc/Getting-Started/Quick-Start.md) • [Core Concepts](doc/Getting-Started/Core-Concepts.md) • [Your First App](doc/Getting-Started/Your-First-App.md) |
+| **User Guide** | [Configuration](doc/User-Guide/Configuration.md) • [Routing](doc/User-Guide/Routing.md) • [Middleware](doc/User-Guide/Middleware.md) • [Databases](doc/User-Guide/Databases.md) • [Cache](doc/User-Guide/Cache.md) |
+| **Development** | [Security](doc/User-Guide/Security.md) • [Testing](doc/User-Guide/Testing.md) • [Helpers](doc/User-Guide/Helpers.md) • [File Uploads](doc/User-Guide/Uploaded-files.md) |
+| **Best Practices** | [Application Design](doc/Best-Practices/Application-Design.md) • [Error Handling](doc/Best-Practices/Error-Handling.md) • [Performance](doc/Best-Practices/Performance-Optimization.md) • [Database Patterns](doc/Best-Practices/Database-Patterns.md) |
+| **Recipes & Examples** | [Authentication](doc/Recipes/Authentication.md) • [CORS Handling](doc/Recipes/CORS-Handling.md) • [Rate Limiting](doc/Recipes/Rate-Limiting.md) • [Deployment](doc/Recipes/Deployment.md) |
+| **API Reference** | [Core Classes & Functions](doc/Reference/API-Reference.md) |
+
+Browse [doc/README.md](doc/README.md) for the complete documentation index.
 
 ## 🧪 Testing
 
