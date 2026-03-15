@@ -125,3 +125,9 @@ Document any breaking changes in [CHANGELOG.md](CHANGELOG.md).
 ## Related Repository
 
 The companion skeleton project lives at `c:\Data\Repos\Celarius\github\spin-skeleton` and demonstrates how an application uses this framework.
+
+# Customization
+
+## Commit messages
+
+Never include "Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>" in commit messages.
