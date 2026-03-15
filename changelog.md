@@ -2,6 +2,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.36
+- Cleanup
+
 ## 0.0.35
 - Unittests updated to support PHP 8.4 and PHPUnit 12
 - Docblocks refactored in many places
