@@ -3,7 +3,14 @@
 SPIN Framework Changelog
 
 ## 0.0.36
-- Cleanup
+- **Security:** Upgraded firebase/php-jwt from v6 to v7 (resolves PKSA-y2cr-5h3j-g3ys vulnerability)
+- **Bug Fix:** APCu cache adapter now properly handles DateInterval objects in set() method
+- **Bug Fix:** JWT test key length updated to meet firebase/php-jwt v7 stricter validation (32+ bytes for HS256)
+- **CI/CD:** Enhanced GitHub Actions pipeline with Redis, MySQL, and PostgreSQL sidecar services
+- **CI/CD:** Added memory overcommit configuration for reliable Redis startup in CI environments
+- **Testing:** Added database and cache adapter configurations to test suite (config-unittest.json)
+- **Testing:** Enabled autodiscovery of external services (Redis, MySQL, PostgreSQL) for conditional test execution
+- Code cleanup and refactoring
 
 ## 0.0.35
 - Unittests updated to support PHP 8.4 and PHPUnit 12
