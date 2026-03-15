@@ -4,7 +4,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     services:
       redis:
         image: redis:7-alpine
@@ -15,7 +15,7 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
-      
+
       mysql:
         image: mysql:8.0
         env:
@@ -30,6 +30,20 @@ jobs:
           --health-retries=5
         ports:
           - 3306:3306
+
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: spin_test
+          POSTGRES_USER: spin_user
+          POSTGRES_PASSWORD: spin_password
+        options: >-
+          --health-cmd "pg_isready -U spin_user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        ports:
+          - 5432:5432
     
     strategy:
       fail-fast: false
@@ -37,6 +51,19 @@ jobs:
         php-versions: ['8.1', '8.2', '8.3', '8.4']
 
     name: Unit Test with PHP ${{ matrix.php-versions }}
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_USER: spin_user
+      DB_PASSWORD: spin_password
+      DB_NAME: spin_test
+      REDIS_HOST: 127.0.0.1
+      REDIS_PORT: 6379
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_USER: spin_user
+      POSTGRES_PASSWORD: spin_password
+      POSTGRES_DB: spin_test
+
     steps:
       - uses: actions/checkout@v5
 
@@ -44,9 +71,48 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           ini-values: apc.enable_cli=1
-          extensions: dom, gd, mbstring, pdo_mysql, zip, apcu
+          extensions: dom, gd, mbstring, pdo_mysql, pdo_pgsql, pdo_sqlite, zip, apcu, redis
           coverage: xdebug
           tools: composer:v2
+
+      - name: Wait for Redis to be ready
+        run: |
+          for i in {1..30}; do
+            if redis-cli -h ${{ env.REDIS_HOST }} -p ${{ env.REDIS_PORT }} ping > /dev/null 2>&1; then
+              echo "Redis is ready!"
+              exit 0
+            fi
+            echo "Waiting for Redis... ($i/30)"
+            sleep 1
+          done
+          echo "Redis failed to start"
+          exit 1
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h ${{ env.DB_HOST }} -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} > /dev/null 2>&1; then
+              echo "MySQL is ready!"
+              exit 0
+            fi
+            echo "Waiting for MySQL... ($i/30)"
+            sleep 1
+          done
+          echo "MySQL failed to start"
+          exit 1
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..30}; do
+            if PGPASSWORD=${{ env.POSTGRES_PASSWORD }} psql -h ${{ env.POSTGRES_HOST }} -U ${{ env.POSTGRES_USER }} -d ${{ env.POSTGRES_DB }} -c "SELECT 1" > /dev/null 2>&1; then
+              echo "PostgreSQL is ready!"
+              exit 0
+            fi
+            echo "Waiting for PostgreSQL... ($i/30)"
+            sleep 1
+          done
+          echo "PostgreSQL failed to start"
+          exit 1
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-ansi --no-interaction --no-progress
