@@ -9,10 +9,7 @@ jobs:
       redis:
         image: redis:7-alpine
         options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --name redis-container
         ports:
           - 6379:6379
 
@@ -37,11 +34,12 @@ jobs:
           POSTGRES_DB: spin_test
           POSTGRES_USER: spin_user
           POSTGRES_PASSWORD: spin_password
+          POSTGRES_INITDB_ARGS: "--encoding=UTF8"
         options: >-
-          --health-cmd "pg_isready -U spin_user"
+          --health-cmd "pg_isready -U spin_user -d spin_test"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=10
         ports:
           - 5432:5432
     
@@ -81,7 +79,7 @@ jobs:
       - name: Wait for Redis to be ready
         run: |
           for i in {1..60}; do
-            if redis-cli -h ${{ env.REDIS_HOST }} -p ${{ env.REDIS_PORT }} ping 2>&1 | grep -q PONG; then
+            if redis-cli -h 127.0.0.1 -p 6379 ping 2>/dev/null | grep -q PONG; then
               echo "Redis is ready!"
               exit 0
             fi
