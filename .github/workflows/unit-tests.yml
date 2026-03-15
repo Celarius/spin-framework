@@ -65,6 +65,9 @@ jobs:
       POSTGRES_DB: spin_test
 
     steps:
+      - name: Enable memory overcommit for Redis
+        run: sudo sysctl -w vm.overcommit_memory=1
+
       - uses: actions/checkout@v5
 
       - uses: shivammathur/setup-php@v2
@@ -77,12 +80,12 @@ jobs:
 
       - name: Wait for Redis to be ready
         run: |
-          for i in {1..30}; do
-            if redis-cli -h ${{ env.REDIS_HOST }} -p ${{ env.REDIS_PORT }} ping > /dev/null 2>&1; then
+          for i in {1..60}; do
+            if redis-cli -h ${{ env.REDIS_HOST }} -p ${{ env.REDIS_PORT }} ping 2>&1 | grep -q PONG; then
               echo "Redis is ready!"
               exit 0
             fi
-            echo "Waiting for Redis... ($i/30)"
+            echo "Waiting for Redis... ($i/60)"
             sleep 1
           done
           echo "Redis failed to start"
