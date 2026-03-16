@@ -9,7 +9,7 @@ Guidance for Claude Code when working in this repository.
 - **Namespace:** `Spin\` → `src/`
 - **Author:** Kim Sandell (sandell@celarius.com)
 - **License:** MIT
-- **Current version:** 0.0.35 (pre-1.0, actively developed)
+- **Current version:** See `VERSION` file (pre-1.0, actively developed)
 
 ## Repository Layout
 

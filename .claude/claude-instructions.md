@@ -10,7 +10,7 @@ Comprehensive guidance for Claude Code when working in the SPIN Framework reposi
 - **Root namespace:** `Spin\` (maps to `src/` via PSR-4)
 - **Author:** Kim Sandell
 - **License:** MIT
-- **Current version:** 0.0.35+ (pre-1.0, actively developed)
+- **Current version:** See `VERSION` file (pre-1.0, actively developed)
 - **Repository:** GitHub at `celarius/spin-framework`
 - **Companion skeleton project:** `celarius/spin-skeleton` (demonstrates framework usage)
 
@@ -738,8 +738,9 @@ When adding new code:
 1. **Follow PSR-4** — Namespace and directory must align
 2. **Add tests** — Mirror the structure under `tests/`
 3. **Document public APIs** — Docblocks on all public methods
-4. **Update CHANGELOG.md** — Describe new features or breaking changes
-5. **Reference doc files** — Link to `doc/` for feature details
+4. **Update CHANGELOG.md** — Add a bullet under the current version heading using bold category prefixes: `**Feature:**`, `**Fix:**`, `**Breaking:**`, `**Documentation:**`
+5. **Bump the version** — When completing a release, update these three files consistently: `VERSION` (plain text), `composer.json` (`"version"` field), `package.json` (`"version"` field). Never update only a subset.
+6. **Reference doc files** — Link to `doc/` for feature details
 
 ## Development Workflow
 
@@ -747,9 +748,11 @@ When adding new code:
 2. Write code and tests
 3. Run full test suite: `./vendor/bin/phpunit`
 4. Run with coverage if modifying core: `./vendor/bin/phpunit --coverage-html coverage/`
-5. Commit with clear message: `git commit -m "feat: add new feature"`
-6. Create PR to `develop` branch
-7. Ensure tests pass and coverage is maintained
+5. Add a `CHANGELOG.md` entry under the current version section
+6. Bump `VERSION`, `composer.json`, and `package.json` to the new version (all three must stay in sync)
+7. Commit with clear message: `git commit -m "feat: add new feature"`
+8. Create PR to `develop` branch
+9. Ensure tests pass and coverage is maintained
 
 ## References
 

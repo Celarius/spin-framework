@@ -82,7 +82,7 @@ my-app/
 ├── vendor/                         Composer dependencies
 ├── composer.json
 ├── composer.lock
-└── .env                           Environment variables (optional, if using env() helper)
+└── .env                           Environment variables (optional, auto-loaded at startup)
 ```
 
 ## Configuration Files
@@ -249,7 +249,10 @@ $app->run();
 ```
 
 ### `.env` (optional)
-Store environment-specific secrets and settings:
+Store environment-specific secrets and settings. SPIN automatically loads this file at
+startup — variables become available to `${env:VAR}` macros in config files and to the
+`env()` helper function. Real environment variables (OS, Docker, CI) always take
+precedence over `.env` values.
 
 ```
 APP_ENV=dev

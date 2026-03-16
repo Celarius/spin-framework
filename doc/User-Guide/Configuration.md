@@ -147,7 +147,27 @@ $dbHost = config('connections.example_mysql.host', 'localhost');
 
 ## Environment Variables
 
-SPIN supports environment variables in configuration using `${env:VARIABLE_NAME}` syntax:
+### `.env` File Support
+
+SPIN automatically loads a `.env` file from the project root at startup, before any
+configuration is processed. Variables defined there become available to `${env:VAR}`
+macros and the `env()` helper function.
+
+```
+# .env (project root — never commit to version control)
+DB_HOST=localhost
+DB_USER=myuser
+DB_PASS=s3cr3t
+APP_ENV=dev
+```
+
+**Priority:** Real environment variables (OS, Docker, CI) always win. `.env` values are
+only applied when the variable is not already set in the process environment. This means
+container-injected or CI secrets are never overridden by a local `.env` file.
+
+### `${env:VAR}` Macro Syntax
+
+SPIN supports environment variable substitution in JSON config values using `${env:VARIABLE_NAME}` syntax:
 
 ```json
 {
@@ -159,6 +179,23 @@ SPIN supports environment variables in configuration using `${env:VARIABLE_NAME}
   }
 }
 ```
+
+### Inline Defaults
+
+Macros support a fallback value used when the variable is not set:
+
+```json
+{
+  "database": {
+    "driver":   "${env:DB_DRIVER:pdo}",
+    "host":     "${env:DB_HOST:localhost}",
+    "port":     "${env:DB_PORT:3306}"
+  }
+}
+```
+
+If `DB_DRIVER` is not in the environment (and not in `.env`), the value resolves to `pdo`.
+Missing variables with no inline default resolve to an empty string.
 
 ## Configuration Sections
 

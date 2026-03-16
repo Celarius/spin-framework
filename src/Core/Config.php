@@ -284,9 +284,10 @@ class Config extends AbstractBaseClass implements ConfigInterface
   }
 
   /**
-   * Requirsively replaces `${env:<envVar>}` with the environment variabe <envVar>.
+   * Recursively replaces `${env:<envVar>}` macros with the corresponding environment variable value.
    *
-   * Missing environment variables are replaced with an empty string.
+   * Supports an optional inline default: `${env:<envVar>:<default>}`.
+   * The default is used when the variable is not set; omitting it falls back to an empty string.
    *
    * note: Environment variable names are case-sensitive on Unix-like systems but aren't case-sensitive on Windows
    *
@@ -309,10 +310,10 @@ class Config extends AbstractBaseClass implements ConfigInterface
       } elseif (\is_string($value)) {
         # Replace all `${env:<envVar>}` with the environment variable value
         $input[$key] = \preg_replace_callback(
-          '/\$\{env:([A-Za-z0-9_]+)\}/',
+          '/\$\{env:([A-Za-z0-9_]+)(?::([^}]*))?\}/',
           function ($matches) use ($envVars) {
             $envVarName = $matches[1];
-            return $envVars[$envVarName] ?? '';
+            return $envVars[$envVarName] ?? $matches[2] ?? '';
           },$value);
       }
     }

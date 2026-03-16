@@ -83,4 +83,25 @@ class ConfigTest extends TestCase
 		$result = $config->publicReplaceEnvMacros($input, $envVars);
 		$this->assertEquals($expected, $result);
 	}
+
+	public function testReplaceEnvMacrosInlineDefaultUsedWhenVarMissing() {
+		$config = new ConfigTestReplaceEnvMacros('', '');
+		$input = [ 'driver' => '${env:MISSING_DRIVER:pdo}' ];
+		$result = $config->publicReplaceEnvMacros($input, []);
+		$this->assertEquals(['driver' => 'pdo'], $result);
+	}
+
+	public function testReplaceEnvMacrosInlineDefaultEmptyString() {
+		$config = new ConfigTestReplaceEnvMacros('', '');
+		$input = [ 'val' => '${env:MISSING_VAR:}' ];
+		$result = $config->publicReplaceEnvMacros($input, []);
+		$this->assertEquals(['val' => ''], $result);
+	}
+
+	public function testReplaceEnvMacrosInlineDefaultIgnoredWhenVarSet() {
+		$config = new ConfigTestReplaceEnvMacros('', '');
+		$input = [ 'driver' => '${env:SET_DRIVER:pdo}' ];
+		$result = $config->publicReplaceEnvMacros($input, ['SET_DRIVER' => 'mysql']);
+		$this->assertEquals(['driver' => 'mysql'], $result);
+	}
 }

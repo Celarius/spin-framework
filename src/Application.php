@@ -27,6 +27,7 @@ use \Spin\Core\RouteGroup;
 use \Spin\Core\ConnectionManager;
 use \Spin\Core\CacheManager;
 
+use \Spin\Core\DotEnv;
 use \Spin\Core\UploadedFilesManager;
 use \Spin\Exceptions\SpinException;
 use \Spin\Classes\RequestIdClass;
@@ -230,6 +231,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
     try {
       # Require the Global Helpers
       require __DIR__ . '/Helpers.php';
+
+      # Load .env file if present (must run before any env() calls so that
+      # ENVIRONMENT and other bootstrap vars can be sourced from .env)
+      DotEnv::load($basePath);
 
       # Extract Environment
       $this->setEnvironment(\env('ENVIRONMENT', 'dev'));

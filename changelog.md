@@ -2,6 +2,10 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.39
+- **Feature:** `.env` file auto-loading — `DotEnv::load()` reads `.env` from the project root at startup, populating environment variables before config macro expansion and `env()` calls; real process env vars always take precedence
+- **Fix:** `${env:VAR:default}` inline default syntax in config macros now works as documented; missing variables now resolve to the specified default instead of silently dropping to empty string
+
 ## 0.0.38
 - **Fix:** Removed incorrect route-level middleware documentation from recipes and user guide; middleware applies at common/group level only
 - **Fix:** CORS-Handling, Authentication, and Rate-Limiting recipe docs updated with correct group-scoped middleware patterns

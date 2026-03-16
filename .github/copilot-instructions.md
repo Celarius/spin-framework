@@ -485,12 +485,17 @@ try {
 }
 ```
 
-## Documentation
+## Documentation and Versioning
 
-When adding features, suggest appropriate documentation updates:
-- Feature changes → update `doc/` files
-- Breaking changes → update `CHANGELOG.md` with migration guidance
-- New extension points → add examples to relevant doc files
+When adding features or fixes, always suggest these updates:
+
+- **Feature/fix completion** → add a bullet to `CHANGELOG.md` under the current version heading using bold category prefix: `**Feature:**`, `**Fix:**`, `**Breaking:**`, or `**Documentation:**`
+- **Version release** → bump `VERSION` (plain text), `composer.json` (`"version"` field), and `package.json` (`"version"` field) — all three must stay in sync
+- **Feature changes** → update relevant `doc/` files
+- **Breaking changes** → update `CHANGELOG.md` with migration guidance
+- **New extension points** → add examples to relevant doc files
+
+Never hardcode a specific version number in documentation or instruction files.
 
 ## Key Files to Reference
 

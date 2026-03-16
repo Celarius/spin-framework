@@ -24,8 +24,10 @@ use \Spin\Core\Logger;
 
 if (!\function_exists('env')) {
   /**
-   * Gets the value of an environment variable. Supports boolean, empty and
-   * null.
+   * Gets the value of an environment variable. Supports boolean, empty and null coercion.
+   *
+   * Variables sourced from a `.env` file (auto-loaded by DotEnv at startup) are
+   * available here alongside any OS-level or process environment variables.
    *
    * @param      string  $var      Environment Variable to obtain
    * @param      mixed   $default  Default value if not found

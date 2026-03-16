@@ -8,7 +8,7 @@ Guidance for ChatGPT, Gemini, Claude, and other LLMs when assisting with the SPI
 
 - **Repository:** `celarius/spin-framework`
 - **Namespace:** `Spin\` (PSR-4 mapped to `src/`)
-- **Current version:** 0.0.35+ (pre-1.0, actively developed)
+- **Current version:** See `VERSION` file (pre-1.0, actively developed)
 - **License:** MIT
 - **Author:** Kim Sandell
 
@@ -611,3 +611,20 @@ When assisting with SPIN code:
 - Follow PSR-4 naming and strict typing
 - Test both success and failure paths
 - Document breaking changes explicitly
+
+## Versioning and Changelog
+
+After completing any feature or fix, always:
+
+1. **Add a `CHANGELOG.md` entry** under the current version heading using bold category prefixes:
+   - `**Feature:**` — new capabilities
+   - `**Fix:**` — bug corrections
+   - `**Breaking:**` — backwards-incompatible changes (include migration guidance)
+   - `**Documentation:**` — doc-only changes
+
+2. **Bump the version** in all three files consistently — they must always match:
+   - `VERSION` — plain semver string (e.g. `0.1.0`)
+   - `composer.json` — `"version"` field
+   - `package.json` — `"version"` field
+
+Never hardcode a specific version number in documentation or instruction files; always read the current version from the `VERSION` file.

@@ -63,7 +63,7 @@ config/
 Never commit `.env` files. Use environment variables or secret management:
 
 ```bash
-# Using .env (git-ignored)
+# Using .env (git-ignored — SPIN loads this automatically at startup)
 APP_ENV=production
 APP_KEY=your-secret-key-here
 APP_DEBUG=false
@@ -72,6 +72,11 @@ DB_USER=appuser
 DB_PASSWORD=super-secret-password
 JWT_SECRET=very-long-random-secret-key-min-32-chars
 ```
+
+SPIN loads `.env` from the project root before config files are parsed, so all variables
+defined there are available as `${env:VAR}` macros. Real environment variables (set by
+the OS, Docker, or CI) always take precedence — `.env` is never applied over an
+already-set variable.
 
 Production secret management options:
 
