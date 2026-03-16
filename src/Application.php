@@ -448,6 +448,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         $beforeMiddleware = \array_merge($this->beforeMiddleware, $routeGroup->getBeforeMiddleware());
 
         foreach ($beforeMiddleware as $middleware) {
+          # Short-name resolution: bare name → App\Middlewares\{Name}
+          if (!\class_exists($middleware) && \strpos($middleware, '\\') === false) {
+            $middleware = 'App\\Middlewares\\' . $middleware;
+          }
           if (\class_exists($middleware) ) {
             $beforeHandler = new $middleware($routeInfo['args']);
 
@@ -485,6 +489,11 @@ class Application extends AbstractBaseClass implements ApplicationInterface
           $arr = \explode('@', $routeInfo['handler']);
           $handlerClass = $arr[0];
           $handlerMethod = ($arr[1] ?? 'handle');
+
+          # Short-name resolution: bare name → App\Controllers\{Name}
+          if (!\class_exists($handlerClass) && \strpos($handlerClass, '\\') === false) {
+            $handlerClass = 'App\\Controllers\\' . $handlerClass;
+          }
 
           # Check existence of handler class
           if (\class_exists($handlerClass)) {
@@ -538,6 +547,10 @@ class Application extends AbstractBaseClass implements ApplicationInterface
         # Run the After Middlewares (ServerRequestInterface)
         $afterMiddleware = \array_merge($this->afterMiddleware,$routeGroup->getAfterMiddleware());
         foreach ($afterMiddleware as $middleware) {
+          # Short-name resolution: bare name → App\Middlewares\{Name}
+          if (!\class_exists($middleware) && \strpos($middleware, '\\') === false) {
+            $middleware = 'App\\Middlewares\\' . $middleware;
+          }
           if (\class_exists($middleware)) {
             $afterHandler = new $middleware($routeInfo['args']);
 
@@ -610,9 +623,14 @@ class Application extends AbstractBaseClass implements ApplicationInterface
       $handlerClass = $arr[0];
       $handlerMethod = ($arr[1] ?? 'handle');
 
+      # Short-name resolution: bare name → App\Controllers\{Name}
+      if (!\class_exists($handlerClass) && \strpos($handlerClass, '\\') === false) {
+        $handlerClass = 'App\\Controllers\\' . $handlerClass;
+      }
+
       if (\class_exists($handlerClass)) {
         # Create the class
-        $routeHandler = new $class();
+        $routeHandler = new $handlerClass();
 
         if ($routeHandler) {
           # Initialize

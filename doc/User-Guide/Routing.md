@@ -287,18 +287,7 @@ Applied to all routes in a specific group:
 }
 ```
 
-### Route-Specific Middleware
-
-Individual routes can specify additional middleware:
-
-```json
-{
-  "methods": ["POST"],
-  "path": "/users",
-  "handler": "\\App\\Controllers\\UserController",
-  "middleware": ["\\App\\Middlewares\\ValidationMiddleware"]
-}
-```
+> **Note:** Middleware can only be applied at the **common** (global) level or the **group** level. There is no route-level middleware — use a dedicated group with a prefix to scope middleware to specific routes.
 
 ## Error Handling
 

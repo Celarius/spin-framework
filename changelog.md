@@ -2,6 +2,19 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.38
+- **Fix:** Removed incorrect route-level middleware documentation from recipes and user guide; middleware applies at common/group level only
+- **Fix:** CORS-Handling, Authentication, and Rate-Limiting recipe docs updated with correct group-scoped middleware patterns
+- **Feature:** Controller short-name resolution — bare class names in route `handler` fields are resolved via `App\Controllers\{Name}` fallback
+- **Feature:** Middleware short-name resolution — bare class names in `before`/`after` arrays are resolved via `App\Middlewares\{Name}` fallback
+
+## 0.0.37
+- **Documentation:** Comprehensive developer documentation with Getting Started guides, Best Practices, Recipes, and Contributor Guide sections
+- **Documentation:** AI instructions for Claude Code, GitHub Copilot, and generic LLMs in dedicated instruction files
+- **Documentation:** Reorganized doc/ structure with navigation hub (doc/README.md) guiding users to appropriate sections
+- **Documentation:** Complete API reference documenting core framework classes, methods, and helper functions
+- **Documentation:** Updated CLAUDE.md and README.md with references to comprehensive documentation
+
 ## 0.0.36
 - **Security:** Upgraded firebase/php-jwt from v6 to v7 (resolves PKSA-y2cr-5h3j-g3ys vulnerability)
 - **Bug Fix:** APCu cache adapter now properly handles DateInterval objects in set() method

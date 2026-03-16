@@ -293,31 +293,38 @@ class SessionLoginController extends Controller
 
 ## Route Configuration
 
-Protect routes using middleware in your route JSON:
+Middleware in SPIN is applied at the **common** (global) level or **group** level — not per route. Use groups to scope authentication middleware to protected routes:
 
 ```json
 {
-  "routes": [
+  "common": {
+    "before": [],
+    "after": []
+  },
+  "groups": [
     {
-      "path": "/api/auth/login",
-      "method": "POST",
-      "controller": "AuthController",
-      "handler": "handlePOST",
-      "middleware": []
+      "name": "Public",
+      "prefix": "/api/auth",
+      "before": [],
+      "routes": [
+        { "methods": ["POST"], "path": "/login", "handler": "\\App\\Controllers\\AuthController" }
+      ]
     },
     {
-      "path": "/api/user/profile",
-      "method": "GET",
-      "controller": "UserController",
-      "handler": "handleGET",
-      "middleware": ["auth"]
+      "name": "Protected",
+      "prefix": "/api/user",
+      "before": ["\\App\\Middlewares\\AuthHttpBeforeMiddleware"],
+      "routes": [
+        { "methods": ["GET"], "path": "/profile", "handler": "\\App\\Controllers\\UserController" }
+      ]
     },
     {
-      "path": "/api/admin/users",
-      "method": "GET",
-      "controller": "AdminController",
-      "handler": "handleGET",
-      "middleware": ["auth", "authorize:admin"]
+      "name": "Admin",
+      "prefix": "/api/admin",
+      "before": ["\\App\\Middlewares\\AuthHttpBeforeMiddleware", "\\App\\Middlewares\\AuthorizeMiddleware"],
+      "routes": [
+        { "methods": ["GET"], "path": "/users", "handler": "\\App\\Controllers\\AdminController" }
+      ]
     }
   ]
 }

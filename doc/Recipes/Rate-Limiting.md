@@ -324,66 +324,42 @@ private function getTierForUser(array $user): string
 
 ---
 
-## Endpoint-Specific Limits
+## Group-Scoped Limits
 
-Configure different limits per endpoint:
+SPIN middleware applies at the **common** (global) or **group** level — not per route. To apply different rate limits to different endpoint sets, use separate groups each with their own `RateLimitMiddleware`:
 
 ```json
 {
   "groups": [
     {
-      "prefix": "/api/v1",
+      "name": "Search",
+      "prefix": "/api/v1/search",
+      "before": ["\\App\\Middlewares\\RateLimitSearchMiddleware"],
       "routes": [
-        {
-          "path": "/search",
-          "method": "GET",
-          "controller": "SearchController",
-          "handler": "handleGET",
-          "middleware": [
-            {
-              "name": "rate_limit",
-              "args": {
-                "max_requests": 30,
-                "window_seconds": 60
-              }
-            }
-          ]
-        },
-        {
-          "path": "/messages",
-          "method": "POST",
-          "controller": "MessageController",
-          "handler": "handlePOST",
-          "middleware": [
-            {
-              "name": "rate_limit",
-              "args": {
-                "max_requests": 5,
-                "window_seconds": 60
-              }
-            }
-          ]
-        },
-        {
-          "path": "/download",
-          "method": "GET",
-          "controller": "DownloadController",
-          "handler": "handleGET",
-          "middleware": [
-            {
-              "name": "rate_limit",
-              "args": {
-                "max_requests": 100,
-                "window_seconds": 3600
-              }
-            }
-          ]
-        }
+        { "methods": ["GET"], "path": "/", "handler": "\\App\\Controllers\\SearchController" }
+      ]
+    },
+    {
+      "name": "Messages",
+      "prefix": "/api/v1/messages",
+      "before": ["\\App\\Middlewares\\RateLimitMessagesMiddleware"],
+      "routes": [
+        { "methods": ["POST"], "path": "/", "handler": "\\App\\Controllers\\MessageController" }
+      ]
+    },
+    {
+      "name": "Downloads",
+      "prefix": "/api/v1/download",
+      "before": ["\\App\\Middlewares\\RateLimitDownloadMiddleware"],
+      "routes": [
+        { "methods": ["GET"], "path": "/", "handler": "\\App\\Controllers\\DownloadController" }
       ]
     }
   ]
 }
 ```
+
+Each middleware class reads its own limit values from configuration or hardcoded constants.
 
 ---
 

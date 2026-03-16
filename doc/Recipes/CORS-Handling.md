@@ -169,57 +169,27 @@ CORS_ALLOW_CREDENTIALS=false
 
 ---
 
-## Route-Specific CORS
+## Group-Scoped CORS
 
-Apply different CORS policies to different endpoint groups:
+Apply different CORS policies to different endpoint groups using the `before` key. Each group gets its own CORS middleware class configured for that group's policy:
 
 ```json
 {
   "groups": [
     {
+      "name": "Public",
       "prefix": "/api/public",
-      "middleware": [
-        {
-          "name": "cors",
-          "args": {
-            "allowed_origins": ["*"],
-            "allowed_methods": ["GET", "OPTIONS"],
-            "allow_credentials": false
-          }
-        }
-      ],
+      "before": ["\\App\\Middlewares\\CorsPublicMiddleware"],
       "routes": [
-        {
-          "path": "/posts",
-          "method": "GET",
-          "controller": "PostController",
-          "handler": "handleGET"
-        }
+        { "methods": ["GET", "OPTIONS"], "path": "/posts", "handler": "\\App\\Controllers\\PostController" }
       ]
     },
     {
+      "name": "Private",
       "prefix": "/api/v1",
-      "middleware": [
-        {
-          "name": "cors",
-          "args": {
-            "allowed_origins": [
-              "https://app.example.com",
-              "https://*.example.com"
-            ],
-            "allowed_methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-            "allow_credentials": true,
-            "exposed_headers": ["X-Total-Count", "X-RateLimit-Remaining"]
-          }
-        }
-      ],
+      "before": ["\\App\\Middlewares\\CorsPrivateMiddleware"],
       "routes": [
-        {
-          "path": "/users",
-          "method": "GET",
-          "controller": "UserController",
-          "handler": "handleGET"
-        }
+        { "methods": ["GET"], "path": "/users", "handler": "\\App\\Controllers\\UserController" }
       ]
     }
   ]
