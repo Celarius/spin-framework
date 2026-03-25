@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * MiddlewareInterface
+ * Middleware Interface
  *
- * @package  Spin
+ * Defines the contract for HTTP middleware implementations. Specifies methods
+ * for middleware initialization and request handling. Implemented by Middleware
+ * base class to provide framework middleware capabilities.
+ *
+ * @package  Spin\Core
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

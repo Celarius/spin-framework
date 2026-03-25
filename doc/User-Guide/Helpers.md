@@ -35,12 +35,15 @@
 The following is a list of helper functions available as global functions.
 
 ## 1.1. env()
-The `env()` function is used to retreive an environment variable from the underlaying OS.
+The `env()` function retrieves an environment variable. Variables from a `.env` file at
+the project root are auto-loaded at startup and are available alongside OS-level or
+process environment variables.
 ```php
 function env(string $var, $default=null)
 ```
 ```php
 $var = env('ENVIRONMENT');
+$host = env('DB_HOST', 'localhost');
 ```
 
 ## 1.2. app()

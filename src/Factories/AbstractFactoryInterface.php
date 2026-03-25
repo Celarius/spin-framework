@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * AbstractFactoryInterface
- * 
- * @package  Spin
+ * Abstract Factory Interface
+ *
+ * Defines the contract for factory implementations providing common options
+ * management and configuration handling. Implemented by AbstractFactory to
+ * provide framework factory capabilities.
+ *
+ * @package  Spin\Factories
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Factories;

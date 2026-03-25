@@ -15,7 +15,7 @@ use Spin\Database\PdoConnection;
 class SqLite extends PdoConnection
 {
   /** @var string SQLite DB Filename */
-  protected $filename;
+  protected string $filename;
 
   /**
    * Constructor

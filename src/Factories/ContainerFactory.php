@@ -1,12 +1,16 @@
 <?php declare(strict_types=1);
 
 /**
- * Container Factory
+ * PSR-11 Container Factory Class
  *
- * This factory produces PSR-11 compliant The Leauge Containers.
+ * Factory for creating PSR-11 compliant League Container instances with
+ * optional auto-wiring support. Provides dependency injection container
+ * creation with configurable options.
  *
+ * @package  Spin\Factories
+ * @author   Spin Framework Team
+ * @since    1.0.0
  * @link     http://container.thephpleague.com/
- * @package  Spin
  */
 
 namespace Spin\Factories;
@@ -38,7 +42,7 @@ class ContainerFactory extends AbstractFactory
       $container->delegate( new ReflectionContainer );
     }
 
-    \logger()->debug('Created PSR-11 Container (The Leauge Container)');
+    \logger()->debug('Created PSR-11 Container (The League Container)');
 
     return $container;
   }

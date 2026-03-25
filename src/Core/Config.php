@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * Config class
+ * Configuration Management Class
+ *
+ * Loads, merges, and persists environment-specific JSON configuration for the
+ * application. Provides dot-notation accessors and mutation helpers for
+ * managing application settings across different environments.
  *
  * @package   Spin
+ * @author    Spin Framework Team
+ * @since     1.0.0
  */
 
 namespace Spin\Core;
@@ -11,22 +17,34 @@ namespace Spin\Core;
 use \Exception;
 use \Spin\Exceptions\SpinException;
 
+/**
+ * Loads, merges, and persists environment-specific JSON configuration for the
+ * application. Provides dot-notation accessors and mutation helpers.
+ */
 class Config extends AbstractBaseClass implements ConfigInterface
 {
-  /** @var  array         Configuration Array */
-  protected array $confValues = array();
+  /**
+   * Configuration Array
+   * @var  array<mixed>
+   */
+  protected array $confValues = [];
 
-  /** @var  string        Config file name */
+  /**
+   * Config file name
+   * @var  string
+   */
   protected string $filename;
+
 
   /**
    * Constructor
    *
    * Load config file based on $appPath and $environment
    *
-   * @param string $appPath     Path to the /app folder
-   * @param string $environment Name of the environment
-   * @throws Exception
+   * @param   string $appPath             Path to the /app folder
+   * @param   string $environment         Name of the environment
+   *
+   * @throws  Exception
    */
   public function __construct(string $appPath, string $environment)
   {
@@ -40,6 +58,13 @@ class Config extends AbstractBaseClass implements ConfigInterface
     $this->load($filename);
   }
 
+  /**
+   * Destructor
+   */
+  public function __destruct()
+  {
+    $this->clear();
+  }
 
   /**
    * Clear all config values
@@ -48,7 +73,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
    */
   public function clear(): self
   {
-    $this->confValues = array();
+    $this->confValues = [];
 
     return $this;
   }
@@ -77,7 +102,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
       }
 
       if ($configArray) {
-        $this->confValues = $configArray;
+        $this->confValues = $this->replaceEnvMacros($configArray);
       } else {
         throw new SpinException('Invalid JSON file "' . $filename . '"');
       }
@@ -110,7 +135,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
 
       if ($configArray) {
         # Merge the Config with existing config
-        $this->confValues = \array_replace_recursive($this->confValues, $configArray);
+        $this->confValues = $this->replaceEnvMacros(\array_replace_recursive($this->confValues, $configArray));
       } else {
         throw new SpinException('Invalid JSON file "' . $filename . '"');
       }
@@ -258,4 +283,41 @@ class Config extends AbstractBaseClass implements ConfigInterface
     return $input;
   }
 
+  /**
+   * Recursively replaces `${env:<envVar>}` macros with the corresponding environment variable value.
+   *
+   * Supports an optional inline default: `${env:<envVar>:<default>}`.
+   * The default is used when the variable is not set; omitting it falls back to an empty string.
+   *
+   * note: Environment variable names are case-sensitive on Unix-like systems but aren't case-sensitive on Windows
+   *
+   * @param   array<mixed> $input           Config array to process
+   * @param   array<mixed>|null $envVars    Optional Environment variables to use for replacement, KEY=VALUE pairs
+   *
+   * @return  array<mixed>                  Processed config array
+   */
+  protected function replaceEnvMacros(array $input, ?array $envVars=null): array
+  {
+    if ($envVars === null) {
+      // Get all env vars into array
+      $envVars = array_merge($_ENV, getenv());
+    }
+
+    foreach ($input as $key => $value) {
+      if (\is_array($value)) {
+        # Recurse into sub-array
+        $input[$key] = $this->replaceEnvMacros($value, $envVars);
+      } elseif (\is_string($value)) {
+        # Replace all `${env:<envVar>}` with the environment variable value
+        $input[$key] = \preg_replace_callback(
+          '/\$\{env:([A-Za-z0-9_]+)(?::([^}]*))?\}/',
+          function ($matches) use ($envVars) {
+            $envVarName = $matches[1];
+            return $envVars[$envVarName] ?? $matches[2] ?? '';
+          },$value);
+      }
+    }
+
+    return $input;
+  }
 }

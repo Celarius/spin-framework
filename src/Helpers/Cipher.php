@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
 /**
- * Cipher
+ * Encryption and Decryption Helper Class
  *
- *   Wraps the OpenSSL encrypt() and decrypt() methods into easily usable static helper methods
- *   Note: Uses the Configuration setting "application.secret" as the default password.
+ * Wraps OpenSSL encrypt() and decrypt() methods into easily usable static helper methods.
+ * Provides both basic and extended encryption capabilities with configurable algorithms
+ * and initialization vectors. Uses the configuration setting "application.secret" as
+ * the default encryption key.
  *
- * Example:
- *   $encryptedValue = \Spin\Helper\Cipher::encrypt( $plain );
- *   $plain = \Spin\Helper\Cipher::decrypt( $encryptedValue );
- *
- * @package  Spin
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Helpers;

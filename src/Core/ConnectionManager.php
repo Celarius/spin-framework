@@ -1,11 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * ConnectionManager
+ * Database Connection Manager Class
  *
- * Manages all Database Connections
+ * Centralized factory and pool for database connections. Resolves connection
+ * definitions from configuration, instantiates the appropriate PDO driver
+ * implementation, and manages the lifecycle (create, reuse, disconnect).
  *
  * @package    Spin
+ * @author     Spin Framework Team
+ * @since      1.0.0
  */
 
 /*
@@ -24,10 +28,15 @@ use \Spin\Core\ConnectionManagerInterface;
 use \Spin\Database\PdoConnection;
 use \Spin\Database\PdoConnectionInterface;
 
+/**
+ * Centralized factory/pool for database connections. Resolves connection
+ * definitions from configuration, instantiates the appropriate PDO driver
+ * implementation, and manages the lifecycle (create, reuse, disconnect).
+ */
 class ConnectionManager extends AbstractBaseClass implements ConnectionManagerInterface
 {
   /** @var  array         List of Instantiated Connections */
-  protected $connections = [];
+  protected array $connections = [];
 
   /**
    * Get or Create a connection
@@ -189,5 +198,4 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
   {
     return $this->connections;
   }
-
 }

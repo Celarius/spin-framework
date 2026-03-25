@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Agent",
+      "Bash(composer install)",
+      "Bash(composer update)",
+      "Bash(composer require *)",
+      "Bash(composer dump-autoload)",
+      "Bash(composer test)",
+      "Bash(./vendor/bin/phpunit*)",
+      "Bash(.\\phpunit.cmd*)",
+      "Bash(git *)",
+      "Bash(find *)",
+      "Bash(ls*)",
+      "Glob",
+      "Grep",
+      "Read",
+      "Write",
+      "Edit",
+      "TodoWrite"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Read(vendor/**)",
+      "Edit(vendor/**)",
+      "Edit(composer.lock)"
+    ]
+  }
+}

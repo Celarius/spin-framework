@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * ControllerInterface
+ * Controller Interface
  *
- * @package  Spin
+ * Defines the contract for HTTP controller implementations. Specifies methods
+ * for handling different HTTP verbs (GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS)
+ * and provides initialization hooks for route-specific middleware.
+ *
+ * @package  Spin\Core
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Core;

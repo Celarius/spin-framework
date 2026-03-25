@@ -1,9 +1,15 @@
 <?php declare(strict_types=1);
 
 /**
- * UUID Library
+ * Universally Unique Identifier (UUID) Helper Class
  *
- * @package  Spin
+ * Provides UUID generation and validation capabilities using the Ramsey UUID library.
+ * Supports multiple UUID versions (v3, v4, v5, v6, v7) with v7 as the default
+ * for time-based UUIDs. Includes validation methods for UUID format checking.
+ *
+ * @package  Spin\Helpers
+ * @author   Spin Framework Team
+ * @since    1.0.0
  */
 
 namespace Spin\Helpers;

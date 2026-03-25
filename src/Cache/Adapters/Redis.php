@@ -36,7 +36,9 @@ class Redis extends AbstractCacheAdapter
   protected RedisClient $redisClient;
 
   /**
-   * @param array $connectionDetails
+   * Constructor
+   *
+   * @param array $connectionDetails Connection options for Predis
    */
   public function __construct(array $connectionDetails = [])
   {
@@ -80,6 +82,9 @@ class Redis extends AbstractCacheAdapter
     return !$this->redisClient->isConnected();
   }
 
+  /**
+   * @inheritDoc
+   */
   public function get($key, mixed $default = null): mixed
   {
     $result = $this->redisClient->get($key);
@@ -94,14 +99,19 @@ class Redis extends AbstractCacheAdapter
 
   /**
    * Returns raw values from Redis without unserializing the data.
-   * If an object needs to be unserialized against its original class
-   * the client should handle it.
+   *
+   * @param string|int $key
+   * @param mixed $default
+   * @return mixed
    */
   public function getRaw($key, mixed $default = null): mixed
   {
     return $this->redisClient->get($key) ?? $default;
   }
 
+  /**
+   * @inheritDoc
+   */
   public function set(string $key, mixed $value, \DateInterval|int|null $ttl = null): bool
   {
     if (!\is_int($value)) {
@@ -118,16 +128,25 @@ class Redis extends AbstractCacheAdapter
     return (bool)$this->redisClient->set($key, $value, 'ex', $ttl);
   }
 
+  /**
+   * @inheritDoc
+   */
   public function delete($key): bool
   {
     return $this->redisClient->del($key) !== 0;
   }
 
+  /**
+   * @inheritDoc
+   */
   public function clear(): bool
   {
     return true;
   }
 
+  /**
+   * @inheritDoc
+   */
   public function getMultiple($keys, mixed $default = null): iterable
   {
     $values = array();
@@ -138,6 +157,9 @@ class Redis extends AbstractCacheAdapter
     return $values;
   }
 
+  /**
+   * @inheritDoc
+   */
   public function setMultiple($values, \DateInterval|int|null $ttl = null): bool
   {
     foreach ($values as $key=>$value) {
@@ -147,6 +169,9 @@ class Redis extends AbstractCacheAdapter
     return true;
   }
 
+  /**
+   * @inheritDoc
+   */
   public function deleteMultiple(iterable $keys): bool
   {
     foreach ($keys as $key) {
@@ -156,21 +181,33 @@ class Redis extends AbstractCacheAdapter
     return true;
   }
 
+  /**
+   * @inheritDoc
+   */
   public function has(string $key): bool
   {
     return $this->redisClient->exists($key) !== 0;
   }
 
+  /**
+   * @inheritDoc
+   */
   public function inc(string $key, int $amount = 1): bool|int
   {
     return $this->redisClient->incrby($key, $amount);
   }
 
+  /**
+   * @inheritDoc
+   */
   public function dec(string $key, int $amount = 1): bool|int
   {
     return $this->redisClient->decrby($key, $amount);
   }
 
+  /**
+   * @inheritDoc
+   */
   public function statistics(): array
   {
     return $this->redisClient->info();

@@ -15,7 +15,7 @@ use Spin\Database\PdoConnection;
 class Pgsql extends PdoConnection
 {
   /** @var string SSL Mode: [disable|allow|prefer|require|verify-ca|verify-full] */
-  protected $sslmode = 'prefer';
+  protected string $sslmode = 'prefer';
 
   /**
    * Constructor

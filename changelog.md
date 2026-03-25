@@ -2,6 +2,39 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.39
+- **Feature:** `.env` file auto-loading — `DotEnv::load()` reads `.env` from the project root at startup, populating environment variables before config macro expansion and `env()` calls; real process env vars always take precedence
+- **Fix:** `${env:VAR:default}` inline default syntax in config macros now works as documented; missing variables now resolve to the specified default instead of silently dropping to empty string
+
+## 0.0.38
+- **Fix:** Removed incorrect route-level middleware documentation from recipes and user guide; middleware applies at common/group level only
+- **Fix:** CORS-Handling, Authentication, and Rate-Limiting recipe docs updated with correct group-scoped middleware patterns
+- **Feature:** Controller short-name resolution — bare class names in route `handler` fields are resolved via `App\Controllers\{Name}` fallback
+- **Feature:** Middleware short-name resolution — bare class names in `before`/`after` arrays are resolved via `App\Middlewares\{Name}` fallback
+
+## 0.0.37
+- **Documentation:** Comprehensive developer documentation with Getting Started guides, Best Practices, Recipes, and Contributor Guide sections
+- **Documentation:** AI instructions for Claude Code, GitHub Copilot, and generic LLMs in dedicated instruction files
+- **Documentation:** Reorganized doc/ structure with navigation hub (doc/README.md) guiding users to appropriate sections
+- **Documentation:** Complete API reference documenting core framework classes, methods, and helper functions
+- **Documentation:** Updated CLAUDE.md and README.md with references to comprehensive documentation
+
+## 0.0.36
+- **Security:** Upgraded firebase/php-jwt from v6 to v7 (resolves PKSA-y2cr-5h3j-g3ys vulnerability)
+- **Bug Fix:** APCu cache adapter now properly handles DateInterval objects in set() method
+- **Bug Fix:** JWT test key length updated to meet firebase/php-jwt v7 stricter validation (32+ bytes for HS256)
+- **CI/CD:** Enhanced GitHub Actions pipeline with Redis, MySQL, and PostgreSQL sidecar services
+- **CI/CD:** Added memory overcommit configuration for reliable Redis startup in CI environments
+- **Testing:** Added database and cache adapter configurations to test suite (config-unittest.json)
+- **Testing:** Enabled autodiscovery of external services (Redis, MySQL, PostgreSQL) for conditional test execution
+- Code cleanup and refactoring
+
+## 0.0.35
+- Unittests updated to support PHP 8.4 and PHPUnit 12
+- Docblocks refactored in many places
+- Config automatically replaces ${env:VAR} environment macros on loading
+- Hook related things removed from codebase
+
 ## 0.0.34
 - Bugfix on PDO not correctly parsing default options
 - Add Redit and cache adapters unit tests with CI sidecar container
@@ -18,7 +51,7 @@ SPIN Framework Changelog
 - Fix MySQL PDO driver compatibility (Removal of overridden connect base method)
 
 ## 0.0.30
-- Remove deprecated error constant E_STRICT usage 
+- Remove deprecated error constant E_STRICT usage
 - Remove AbstractBaseDaos
 
 ## 0.0.29

@@ -15,5 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 require __DIR__.'/../vendor/autoload.php';
 
+# Set environment for tests
+putenv('ENVIRONMENT=unittest');
+
 # Create application
 $app = new \Spin\Application(\realpath(__DIR__));
