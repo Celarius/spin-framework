@@ -62,7 +62,16 @@ class Application extends AbstractBaseClass implements ApplicationInterface
   protected string $storagePath;
 
   /**
-   * Path to shared storage
+   * Path to shared storage.
+   *
+   * This is either the path defined in `config('storage.shared')` or the local
+   * storage path if not set. The default path is `{$basePath}/storage/shared/{$environment}/{$appCode}`
+   * where `$environment` and `$appCode` are extracted from the config file.
+   *
+   * This allows multiple SPIN apps running on the same server/host to share the same storage folder if needed.
+   *
+   * Note: If the shared path does not exist, this will become the same as storage path.
+   *
    * @var  mixed
    */
   protected mixed $sharedStoragePath;

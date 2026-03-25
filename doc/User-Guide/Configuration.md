@@ -307,6 +307,24 @@ The 1st connection in the `"connections"` array is the **default**, and does not
 }
 ```
 
+### Storage Configuration
+
+Controls the shared storage path used by `app()->getSharedStoragePath()`.
+
+```json
+{
+  "storage": {
+    "shared": "${env:SHARED_STORAGE_PATH}"
+  }
+}
+```
+
+| Key | Description |
+|-----|-------------|
+| `shared` | Base path for shared storage. The framework appends `/{environment}/{appCode}` to form the final path. Leave empty or omit to use local `{basePath}/storage` instead. |
+
+See [Storage Folders](Storage-folders.md) for full details.
+
 ### Factory Configuration
 
 ```json
