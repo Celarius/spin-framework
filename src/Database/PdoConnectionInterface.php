@@ -14,6 +14,8 @@
 
 namespace Spin\Database;
 
+use \Spin\Exceptions\DatabaseException;
+
 interface PdoConnectionInterface
 {
   # PDO Class Interface (must be commented out because of declaration errors)
@@ -267,7 +269,7 @@ interface PdoConnectionInterface
    *
    * @return  array                       Array with fetched rows
    *
-   * @throws  \Exception
+   * @throws  DatabaseException
    */
   public function rawQuery(string $sql, array $params = [], bool $autoTransactions = true): array;
 
@@ -280,7 +282,7 @@ interface PdoConnectionInterface
    *
    * @return  null|int                    `null` or number of rows affected
    *
-   * @throws  \Exception
+   * @throws  DatabaseException
    */
   public function rawExec(string $sql, array $params = [], bool $autoTransactions = true): ?int;
 }

@@ -4,6 +4,7 @@ namespace Spin\Tests\Database\Drivers\Pdo;
 
 use PHPUnit\Framework\TestCase;
 use Spin\Database\Drivers\Pdo\MySql;
+use Spin\Exceptions\DatabaseException;
 
 class MySqlTest extends TestCase
 {
@@ -294,6 +295,18 @@ class MySqlTest extends TestCase
      );
 
      $this->assertEquals(1, $affectedRows);
+  }
+
+  public function testRawQueryThrowsDatabaseException(): void
+  {
+    $this->expectException(DatabaseException::class);
+    $this->connection->rawQuery('SELECT * FROM nonexistent_table_xyz_abc', []);
+  }
+
+  public function testRawExecThrowsDatabaseException(): void
+  {
+    $this->expectException(DatabaseException::class);
+    $this->connection->rawExec('INSERT INTO nonexistent_table_xyz_abc (col) VALUES (:val)', [':val' => 'x']);
   }
 
 }

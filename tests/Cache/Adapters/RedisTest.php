@@ -5,6 +5,7 @@ namespace Spin\tests\Core;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use Spin\Cache\Adapters\Redis;
+use Spin\Exceptions\CacheException;
 
 class RedisTest extends TestCase
 {
@@ -44,7 +45,7 @@ class RedisTest extends TestCase
 
   public function testRedisConnectionOptionsRequired(): void
   {
-    $this->expectException(\RuntimeException::class);
+    $this->expectException(CacheException::class);
     $this->expectExceptionMessage('Empty Redis connection options');
     
     new Redis([]);

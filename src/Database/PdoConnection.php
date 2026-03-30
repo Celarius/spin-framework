@@ -15,6 +15,8 @@
 
 namespace Spin\Database;
 
+use \Spin\Exceptions\DatabaseException;
+
 class PdoConnection extends \PDO implements PdoConnectionInterface
 {
   /**
@@ -494,7 +496,7 @@ class PdoConnection extends \PDO implements PdoConnectionInterface
         $this->rollBack();
       }
 
-      throw $e;
+      throw new DatabaseException($e->getMessage(), (int)$e->getCode(), $e);
     }
 
     return $rows;
@@ -545,7 +547,7 @@ class PdoConnection extends \PDO implements PdoConnectionInterface
         $this->rollBack();
       }
 
-      throw $e;
+      throw new DatabaseException($e->getMessage(), (int)$e->getCode(), $e);
     }
 
     return $result;
