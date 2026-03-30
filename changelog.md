@@ -2,6 +2,11 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.40
+- **Feature:** Add domain exception classes: `CacheException`, `ConfigException`, `DatabaseException`, `MiddlewareException` — all extending `SpinException`
+- **Feature:** Wire `CacheException` into cache adapters (APCu, Redis), `ConfigException` into `Config`, `DatabaseException` into `PdoConnection` and `ConnectionManager`
+- **Fix:** `ConnectionManager` password-sanitization now throws `DatabaseException` without `$previous` on tainted traces, preventing credential leakage
+
 ## 0.0.39
 - **Feature:** `.env` file auto-loading — `DotEnv::load()` reads `.env` from the project root at startup, populating environment variables before config macro expansion and `env()` calls; real process env vars always take precedence
 - **Fix:** `${env:VAR:default}` inline default syntax in config macros now works as documented; missing variables now resolve to the specified default instead of silently dropping to empty string

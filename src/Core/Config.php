@@ -15,7 +15,7 @@
 namespace Spin\Core;
 
 use \Exception;
-use \Spin\Exceptions\SpinException;
+use \Spin\Exceptions\ConfigException;
 
 /**
  * Loads, merges, and persists environment-specific JSON configuration for the
@@ -44,7 +44,7 @@ class Config extends AbstractBaseClass implements ConfigInterface
    * @param   string $appPath             Path to the /app folder
    * @param   string $environment         Name of the environment
    *
-   * @throws  Exception
+   * @throws  ConfigException
    */
   public function __construct(string $appPath, string $environment)
   {
@@ -98,13 +98,13 @@ class Config extends AbstractBaseClass implements ConfigInterface
       try {
         $configArray = \json_decode(\file_get_contents($filename), true, 512, JSON_THROW_ON_ERROR);
       } catch (\JsonException $e) {
-        throw new SpinException(sprintf("Invalid JSON file %s, error was %s", $filename, $e->getMessage()));
+        throw new ConfigException(sprintf("Invalid JSON file %s, error was %s", $filename, $e->getMessage()), 0, $e);
       }
 
       if ($configArray) {
         $this->confValues = $this->replaceEnvMacros($configArray);
       } else {
-        throw new SpinException('Invalid JSON file "' . $filename . '"');
+        throw new ConfigException('Invalid JSON file "' . $filename . '"');
       }
     }
 
@@ -130,14 +130,14 @@ class Config extends AbstractBaseClass implements ConfigInterface
       try {
         $configArray = \json_decode(\file_get_contents($filename), true, 512, JSON_THROW_ON_ERROR);
       } catch (\JsonException $e) {
-        throw new SpinException(sprintf("Invalid JSON file %s, error was %s", $filename, $e->getMessage()));
+        throw new ConfigException(sprintf("Invalid JSON file %s, error was %s", $filename, $e->getMessage()), 0, $e);
       }
 
       if ($configArray) {
         # Merge the Config with existing config
         $this->confValues = $this->replaceEnvMacros(\array_replace_recursive($this->confValues, $configArray));
       } else {
-        throw new SpinException('Invalid JSON file "' . $filename . '"');
+        throw new ConfigException('Invalid JSON file "' . $filename . '"');
       }
     }
 
