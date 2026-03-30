@@ -5,6 +5,7 @@ namespace Spin\tests\Core;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use Spin\Cache\Adapters\Apcu;
+use Spin\Exceptions\CacheException;
 
 class ApcuTest extends TestCase
 {
@@ -51,7 +52,7 @@ class ApcuTest extends TestCase
       $this->markTestSkipped('Cannot test APCu unavailable scenario when APCu is available');
     }
     
-    $this->expectException(\RuntimeException::class);
+    $this->expectException(CacheException::class);
     $this->expectExceptionMessage('Cache driver APCu not available');
     
     new Apcu();

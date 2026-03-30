@@ -11,6 +11,7 @@
 namespace Spin\Cache\Adapters;
 
 use Spin\Cache\AbstractCacheAdapter;
+use \Spin\Exceptions\CacheException;
 
 class Apcu extends AbstractCacheAdapter
 {
@@ -21,7 +22,7 @@ class Apcu extends AbstractCacheAdapter
 
     # Check if APCu extension is loaded and available
     if (!\extension_loaded('apcu') || \ini_get('apc.enabled') !== '1') {
-      throw new \RuntimeException(sprintf('Cache driver %s not available', $this->getDriver()));
+      throw new CacheException(sprintf('Cache driver %s not available', $this->getDriver()));
     }
 
     # Set the version of the APCu library

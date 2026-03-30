@@ -27,6 +27,7 @@ namespace Spin\Cache\Adapters;
 
 use Spin\Cache\AbstractCacheAdapter;
 use Predis\Client as RedisClient;
+use \Spin\Exceptions\CacheException;
 
 class Redis extends AbstractCacheAdapter
 {
@@ -43,7 +44,7 @@ class Redis extends AbstractCacheAdapter
   public function __construct(array $connectionDetails = [])
   {
     if (($connectionDetails['options'] ?? null) === null) {
-      throw new \RuntimeException("Empty Redis connection options");
+      throw new CacheException("Empty Redis connection options");
     }
 
     # Set $driver and $connectionDetails
