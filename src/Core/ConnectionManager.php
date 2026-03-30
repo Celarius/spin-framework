@@ -27,6 +27,7 @@ use \Spin\Core\AbstractBaseClass;
 use \Spin\Core\ConnectionManagerInterface;
 use \Spin\Database\PdoConnection;
 use \Spin\Database\PdoConnectionInterface;
+use \Spin\Exceptions\DatabaseException;
 
 /**
  * Centralized factory/pool for database connections. Resolves connection
@@ -178,10 +179,11 @@ class ConnectionManager extends AbstractBaseClass implements ConnectionManagerIn
 
           # throw new exception only if trace is modified
           if($beforeTraceLength != \strlen($trace)) {
-            # new exception
-            throw new \Exception($e->getMessage(), $e->getCode());
+            # new exception without $previous — intentionally omitted to prevent
+            # password leakage via getPrevious()->getTraceAsString()
+            throw new DatabaseException($e->getMessage(), (int)$e->getCode());
           }
-          throw $e;
+          throw new DatabaseException($e->getMessage(), (int)$e->getCode(), $e);
         }
       }
     }
