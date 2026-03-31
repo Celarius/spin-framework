@@ -30,6 +30,22 @@ mkdir -p public
 mkdir -p storage/logs
 ```
 
+## Step 0: Set Your Application Identity
+
+Create `src/app/Config/version.json`:
+
+```json
+{
+    "application": {
+        "code": "task-api",
+        "name": "Task Management API",
+        "version": "1.0.0"
+    }
+}
+```
+
+The framework loads this file automatically at startup. `code` is used as the Monolog log channel name and storage path identifier. Access the values at runtime via `app()->getAppCode()`, `app()->getAppName()`, and `app()->getAppVersion()`.
+
 ## Step 1: Create Your First Controller
 
 Create `src/app/Controllers/TaskController.php`:
@@ -359,33 +375,38 @@ namespace App;
 
 ## Step 5: Create Configuration
 
-Create `src/app/Config/config.json`:
-
-```json
-{
-  "app": {
-    "name": "Task API",
-    "version": "1.0.0",
-    "timezone": "UTC"
-  },
-  "logging": {
-    "default": "monolog",
-    "level": "INFO"
-  }
-}
-```
-
 Create `src/app/Config/config-dev.json`:
 
 ```json
 {
-  "debug": true,
-  "logging": {
-    "level": "DEBUG",
-    "path": "storage/logs/app.log"
+  "application": {
+    "global": {
+      "maintenance": false,
+      "message": "We are in maintenance mode, back shortly",
+      "timezone": "UTC"
+    },
+    "secret": "${env:APPLICATION_SECRET}"
+  },
+  "logger": {
+    "level": "debug",
+    "driver": "file",
+    "drivers": {
+      "php": {
+        "line_format": "[%channel%] [%level_name%] %message% %context%\n",
+        "line_datetime": "Y-m-d H:i:s.v e"
+      },
+      "file": {
+        "file_path": "storage/log",
+        "file_format": "Y-m-d",
+        "line_format": "[%datetime%] [%channel%] [%level_name%] %message% %context%\n",
+        "line_datetime": "Y-m-d H:i:s.v e"
+      }
+    }
   }
 }
 ```
+
+> **`line_format` and line endings:** Append `\n` to `line_format` in the `file` driver to ensure each log entry ends with a newline on Linux, Docker, and Unix systems. On Windows this is not required but harmless.
 
 ## Step 6: Start the Development Server
 
