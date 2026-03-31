@@ -2,6 +2,32 @@
 
 SPIN Framework uses a JSON-based configuration system that's loaded at runtime and provides easy access through helper functions.
 
+## Application Identity (`version.json`)
+
+Every Spin application must have `src/app/Config/version.json`. The framework loads it automatically at startup — before any `config-{env}.json` — and exposes the values through the `app()` helper:
+
+```json
+{
+    "application": {
+        "code": "my-app",
+        "name": "My Application",
+        "version": "1.0.0"
+    }
+}
+```
+
+| Field | Purpose |
+|-------|---------|
+| `code` | Machine identifier — used as Monolog log channel name and shared-storage path suffix |
+| `name` | Human-readable application label |
+| `version` | Semver version string |
+
+```php
+app()->getAppCode();    // "my-app"
+app()->getAppName();    // "My Application"
+app()->getAppVersion(); // "1.0.0"
+```
+
 ## Configuration Structure
 
 SPIN applications use JSON configuration files organized by environment (e.g., `config-dev.json`, `config-prod.json`). The configuration is structured hierarchically and supports environment variables.
@@ -36,13 +62,13 @@ _Configuration files support `${env:<varName>}` macros for environment variables
     "driver": "php",
     "drivers": {
       "php": {
-        "line_format": "[%channel%] [%level_name%] %message% %context%",
+        "line_format": "[%channel%] [%level_name%] %message% %context%\n",
         "line_datetime": "Y-m-d H:i:s.v e"
       },
       "file": {
         "file_path": "storage/log",
         "file_format": "Y-m-d",
-        "line_format": "[%datetime%] [%channel%] [%level_name%] %message% %context%",
+        "line_format": "[%datetime%] [%channel%] [%level_name%] %message% %context%\n",
         "line_datetime": "Y-m-d H:i:s.v e"
       }
     }
@@ -239,19 +265,21 @@ Missing variables with no inline default resolve to an empty string.
     "driver": "php",        // Driver name
     "drivers": {
       "php": {
-        "line_format": "[%channel%] [%level_name%] %message% %context%",
+        "line_format": "[%channel%] [%level_name%] %message% %context%\n",
         "line_datetime": "Y-m-d H:i:s.v e"
       },
       "file": {
         "file_path": "storage/log",
         "file_format": "Y-m-d",
-        "line_format": "[%datetime%] [%channel%] [%level_name%] %message% %context%",
+        "line_format": "[%datetime%] [%channel%] [%level_name%] %message% %context%\n",
         "line_datetime": "Y-m-d H:i:s.v e"
       }
     }
   }
 }
 ```
+
+> **`line_format` and line endings:** The `\n` at the end of `line_format` ensures each log entry is terminated with a newline. On Linux, Docker, and Unix systems this is required for the file driver to produce readable log files. On Windows the newline is written automatically, but the `\n` is harmless.
 
 ### Cache Configuration
 

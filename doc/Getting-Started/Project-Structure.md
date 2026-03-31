@@ -45,6 +45,7 @@ my-app/
 ├── src/
 │   └── app/
 │       ├── Config/
+│       │   ├── version.json        Application identity (code, name, version)
 │       │   ├── config.json         Environment-independent config
 │       │   ├── config-dev.json     Development config
 │       │   ├── config-prod.json    Production config
@@ -89,18 +90,46 @@ my-app/
 
 Configuration is environment-based and uses JSON:
 
+### `version.json` (required)
+
+Sets your application's identity. The framework loads this automatically at startup before any other config file:
+
+```json
+{
+    "application": {
+        "code": "my-app",
+        "name": "My Application",
+        "version": "1.0.0"
+    }
+}
+```
+
+| Field | Purpose |
+|-------|---------|
+| `code` | Machine identifier — used as Monolog log channel name and shared-storage path suffix |
+| `name` | Human-readable application label |
+| `version` | Semver version string |
+
+Access at runtime:
+
+```php
+app()->getAppCode();    // "my-app"
+app()->getAppName();    // "My Application"
+app()->getAppVersion(); // "1.0.0"
+```
+
 ### `config.json` (shared)
 Global settings used across all environments:
 
 ```json
 {
-  "app": {
-    "name": "My App",
-    "timezone": "UTC",
-    "charset": "UTF-8"
-  },
-  "cache": {
-    "default": "file"
+  "application": {
+    "global": {
+      "maintenance": false,
+      "message": "We are in maintenance mode, back shortly",
+      "timezone": "UTC"
+    },
+    "secret": "${env:APPLICATION_SECRET}"
   }
 }
 ```
@@ -110,23 +139,47 @@ Development overrides and specific config:
 
 ```json
 {
-  "debug": true,
-  "logging": {
-    "level": "DEBUG"
+  "application": {
+    "global": {
+      "maintenance": false,
+      "message": "We are in maintenance mode, back shortly",
+      "timezone": "UTC"
+    },
+    "secret": "${env:APPLICATION_SECRET}"
   },
-  "database": {
-    "default": "mysql",
-    "connections": {
-      "mysql": {
-        "host": "localhost",
-        "database": "myapp_dev",
-        "username": "${env:DB_USER}",
-        "password": "${env:DB_PASS}"
+  "logger": {
+    "level": "debug",
+    "driver": "file",
+    "drivers": {
+      "file": {
+        "file_path": "storage/log",
+        "file_format": "Y-m-d",
+        "line_format": "[%datetime%] [%channel%] [%level_name%] %message% %context%\n",
+        "line_datetime": "Y-m-d H:i:s.v e"
+      }
+    }
+  },
+  "connections": {
+    "mysql": {
+      "type": "Pdo",
+      "driver": "mysql",
+      "schema": "${env:DB_DATABASE}",
+      "host": "${env:DB_HOST}",
+      "port": "${env:DB_PORT}",
+      "username": "${env:DB_USERNAME}",
+      "password": "${env:DB_PASSWORD}",
+      "charset": "UTF8",
+      "options": {
+        "ATTR_PERSISTENT": false,
+        "ATTR_ERRMODE": "ERRMODE_EXCEPTION",
+        "ATTR_AUTOCOMMIT": false
       }
     }
   }
 }
 ```
+
+> **Logger `line_format` and line endings:** On Linux, Docker, and Unix systems the file driver may not append a newline after each entry. Add `\n` at the end of `line_format` to ensure each log entry ends with a newline. On Windows this is not required but harmless.
 
 ### `config-prod.json`
 Production settings with hardened defaults.
