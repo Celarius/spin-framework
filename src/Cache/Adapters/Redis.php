@@ -89,13 +89,25 @@ class Redis extends AbstractCacheAdapter
   public function get($key, mixed $default = null): mixed
   {
     $result = $this->redisClient->get($key);
-    if ($result) {
-      if (\is_int($result)) {
-        return $result;
-      }
-      return unserialize($result);
+
+    # Missing key — Predis returns null for a non-existent key
+    if ($result === null) {
+      return $default;
     }
-    return $default;
+
+    # Raw integer — stored un-serialized by set() and by native inc()/dec()
+    $asInt = \filter_var($result, \FILTER_VALIDATE_INT);
+    if ($asInt !== false) {
+      return $asInt;
+    }
+
+    # Everything else is serialized; serialize(false) is a valid stored value
+    $value = @\unserialize($result);
+    if ($value === false && $result !== \serialize(false)) {
+      return $default;
+    }
+
+    return $value;
   }
 
   /**

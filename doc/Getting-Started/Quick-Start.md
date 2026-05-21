@@ -38,6 +38,30 @@ mkdir -p src/app/Config
 mkdir public
 ```
 
+## Set Your Application Identity
+
+Create `src/app/Config/version.json`:
+
+```json
+{
+    "application": {
+        "code": "my-first-app",
+        "name": "My First App",
+        "version": "0.1.0"
+    }
+}
+```
+
+The framework loads this file automatically at startup. Access the values at runtime:
+
+```php
+app()->getAppCode();    // "my-first-app"
+app()->getAppName();    // "My First App"
+app()->getAppVersion(); // "0.1.0"
+```
+
+> `code` is also used as the Monolog log channel name and storage path identifier.
+
 ## Create Your First Controller
 
 Create `src/app/Controllers/WelcomeController.php`:
