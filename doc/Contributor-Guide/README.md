@@ -190,7 +190,7 @@ See [Extension-Points.md](Extension-Points.md) for detailed examples.
 - Respond to review feedback
 - Push updates (don't force-push)
 - Wait for approval
-- Maintainer merges to develop, then master
+- Maintainer merges to develop, then main
 
 ## Resources
 

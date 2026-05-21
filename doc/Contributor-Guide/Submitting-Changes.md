@@ -162,7 +162,7 @@ Once approved:
 1. **Squash commits** if requested (multiple commits combined)
 2. **Merge to develop** via GitHub
 3. **Delete feature branch**
-4. **Maintainer merges develop → master** periodically
+4. **Maintainer merges develop → main** periodically
 
 ## Changelog Updates
 
@@ -398,15 +398,15 @@ Releases follow semantic versioning: `MAJOR.MINOR.PATCH`
 
 3. **Create release commit**
    ```bash
-   git checkout master
-   git pull origin master
+   git checkout main
+   git pull origin main
    git commit -am "release: version 0.0.37"
    ```
 
 4. **Tag release**
    ```bash
-   git tag -a v0.0.37 -m "Release version 0.0.37"
-   git push origin master --tags
+   git tag -a 0.0.37 -m "Release version 0.0.37"
+   git push origin main --tags
    ```
 
 5. **Create GitHub release**

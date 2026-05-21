@@ -124,7 +124,7 @@ Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `chore`
 7. **Request review** from maintainers
 8. **Address feedback** and update PR
 9. **Squash commits** before merge if requested
-10. **Merge to develop**, then maintainers merge to master
+10. **Merge to develop**, then maintainers merge to main
 
 ### Code Review Process
 
