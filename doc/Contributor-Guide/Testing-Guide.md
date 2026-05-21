@@ -568,8 +568,8 @@ public function testUserValidation(): void
 Tests run automatically via GitHub Actions:
 
 1. **On every push** to branches
-2. **On pull requests** to develop/master
-3. **Required before merge** to master (checks coverage, failures)
+2. **On pull requests** to develop/main
+3. **Required before merge** to main (checks coverage, failures)
 
 Verify locally before pushing:
 
