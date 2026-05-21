@@ -345,6 +345,43 @@ class RedisTest extends TestCase
   }
 
   /**
+   * Regression for #78 — every supported value type must survive a
+   * set()/get() round-trip with its type and value intact.
+   *
+   * @dataProvider roundTripValueProvider
+   * @throws InvalidArgumentException
+   */
+  public function testValueRoundTrip(string $label, mixed $value): void
+  {
+    $key = 'roundtrip_' . $label;
+
+    $this->assertTrue($this->cacheObj->set($key, $value));
+    $this->assertSame($value, $this->cacheObj->get($key), "Round-trip failed for: {$label}");
+  }
+
+  /**
+   * @return array<string,array{0:string,1:mixed}>
+   */
+  public static function roundTripValueProvider(): array
+  {
+    return [
+      'positive_int'  => ['positive_int', 12345],
+      'zero_int'      => ['zero_int', 0],
+      'negative_int'  => ['negative_int', -7],
+      'large_int'     => ['large_int', \time()],
+      'float'         => ['float', 3.14],
+      'bool_true'     => ['bool_true', true],
+      'bool_false'    => ['bool_false', false],
+      'empty_string'  => ['empty_string', ''],
+      'zero_string'   => ['zero_string', '0'],
+      'numeric_string'=> ['numeric_string', '12345'],
+      'string'        => ['string', 'hello'],
+      'null'          => ['null', null],
+      'array'         => ['array', ['a' => 1, 'b' => [2, 3]]],
+    ];
+  }
+
+  /**
    * Test that values persist across different instances
    *
    * @throws InvalidArgumentException
