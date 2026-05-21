@@ -3,6 +3,7 @@
 namespace Spin\tests\Core;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\SimpleCache\InvalidArgumentException;
 use Spin\Cache\Adapters\Apcu;
 use Spin\Exceptions\CacheException;
@@ -377,9 +378,8 @@ class ApcuTest extends TestCase
   /**
    * Regression for #78 — every supported value type must survive a
    * set()/get() round-trip with its type and value intact.
-   *
-   * @dataProvider roundTripValueProvider
    */
+  #[DataProvider('roundTripValueProvider')]
   public function testValueRoundTrip(string $label, mixed $value): void
   {
     $key = 'roundtrip_' . $label;
