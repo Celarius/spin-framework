@@ -192,7 +192,7 @@ SPIN controllers use specific method names to handle different HTTP requests:
 - `handlePATCH(array $args)` - Handles PATCH requests
 - `handleQUERY(array $args)` - Handles QUERY requests
 
-> **QUERY** is safe and idempotent like GET but carries a request body. Read it via `$this->body` / `decodeJsonBody()` (same as POST). See IETF `draft-ietf-httpbis-safe-method-w-body` and OpenAPI 3.2.
+> **QUERY** is safe and idempotent like GET but carries a request body. Read it via `getRequest()->getBody()` (same as POST). See IETF `draft-ietf-httpbis-safe-method-w-body` and OpenAPI 3.2.
 
 ### Controller Parameters
 

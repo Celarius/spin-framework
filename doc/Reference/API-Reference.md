@@ -66,7 +66,7 @@ Base controller class providing HTTP method handlers and convenient access to fr
 | `handleOPTIONS()` | `public function handleOPTIONS(array $args): ResponseInterface` | Handle OPTIONS requests |
 | `handleQUERY()` | `public function handleQUERY(array $args): ResponseInterface` | Handle QUERY requests (safe + idempotent like GET, with a request body) |
 
-> **QUERY** carries a request body — read it via `$this->body` / `decodeJsonBody()`. See IETF `draft-ietf-httpbis-safe-method-w-body` and OpenAPI 3.2.
+> **QUERY** carries a request body — read it via `getRequest()->getBody()`. See IETF `draft-ietf-httpbis-safe-method-w-body` and OpenAPI 3.2.
 
 **Usage Example:**
 

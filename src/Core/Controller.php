@@ -160,7 +160,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
 	 * Handle QUERY request
 	 *
 	 * QUERY is safe and idempotent like GET but carries a request body. Read the
-	 * body via $this->body / decodeJsonBody() (same as POST). See IETF
+	 * body via getRequest()->getBody() (same as POST). See IETF
 	 * draft-ietf-httpbis-safe-method-w-body and OpenAPI 3.2.
 	 *
 	 * @param      array  $args   Path variable arguments as name=value pairs

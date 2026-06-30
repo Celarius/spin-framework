@@ -203,7 +203,7 @@ class UserController extends Controller
 
 **Handler methods:** `handleGET()`, `handlePOST()`, `handlePUT()`, `handleDELETE()`, `handlePATCH()`, `handleHEAD()`, `handleOPTIONS()`, `handleQUERY()`
 
-> `handleQUERY()` handles the QUERY verb — safe + idempotent like GET but with a request body. Read it via `$this->body` / `decodeJsonBody()`.
+> `handleQUERY()` handles the QUERY verb — safe + idempotent like GET but with a request body. Read it via `getRequest()->getBody()`.
 
 **Conventions:**
 - `$args` contains URL parameters as array keys (e.g., `['id' => '123']`)
