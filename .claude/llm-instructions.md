@@ -97,7 +97,7 @@ Routes are **never** defined in PHP. Instead, use JSON files:
 - `groups`: organize routes by prefix with optional middleware
 - `routes`: root-level routes
 - URL parameters use `:paramName` syntax (e.g., `/:id`, `/:slug`)
-- `methods` array specifies HTTP verbs (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS)
+- `methods` array specifies HTTP verbs (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS, QUERY)
 
 See `doc/Routing.md` for full specification.
 
@@ -201,7 +201,9 @@ class UserController extends Controller
 }
 ```
 
-**Handler methods:** `handleGET()`, `handlePOST()`, `handlePUT()`, `handleDELETE()`, `handlePATCH()`, `handleHEAD()`, `handleOPTIONS()`
+**Handler methods:** `handleGET()`, `handlePOST()`, `handlePUT()`, `handleDELETE()`, `handlePATCH()`, `handleHEAD()`, `handleOPTIONS()`, `handleQUERY()`
+
+> `handleQUERY()` handles the QUERY verb — safe + idempotent like GET but with a request body. Read it via `getRequest()->getBody()`.
 
 **Conventions:**
 - `$args` contains URL parameters as array keys (e.g., `['id' => '123']`)

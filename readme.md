@@ -194,7 +194,7 @@ class AuthMiddleware extends Middleware
 
 ### 🛣️ JSON-Based Routing
 - **Route Groups** - Organize routes with shared middleware and prefixes
-- **HTTP Method Support** - Full support for GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
+- **HTTP Method Support** - Full support for GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, QUERY
 - **Dynamic Parameters** - Capture URL parameters with `{paramName}` syntax
 - **Middleware Integration** - Apply middleware at common, group, or route level
 

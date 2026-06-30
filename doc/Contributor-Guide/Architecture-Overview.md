@@ -100,7 +100,8 @@ abstract class Controller
     public function handlePOST(array $args): ResponseInterface
     public function handlePUT(array $args): ResponseInterface
     public function handleDELETE(array $args): ResponseInterface
-    // ... other HTTP methods
+    public function handleQUERY(array $args): ResponseInterface
+    // ... other HTTP methods (PATCH, HEAD, OPTIONS)
 }
 ```
 

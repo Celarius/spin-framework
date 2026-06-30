@@ -223,7 +223,7 @@ class UserController extends Controller
 ```
 
 **Key points:**
-- Each HTTP method gets a handler: `handleGET()`, `handlePOST()`, `handlePUT()`, `handleDELETE()`, `handlePATCH()`, `handleHEAD()`, `handleOPTIONS()`
+- Each HTTP method gets a handler: `handleGET()`, `handlePOST()`, `handlePUT()`, `handleDELETE()`, `handlePATCH()`, `handleHEAD()`, `handleOPTIONS()`, `handleQUERY()`
 - URL parameters are passed as `$args` array
 - Always return `ResponseInterface`
 - Use global helpers (`response()`, `responseJson()`) for response construction

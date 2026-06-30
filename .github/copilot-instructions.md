@@ -62,6 +62,7 @@ doc/                               # Feature documentation
   ```php
   public function handleGET(array $args): ResponseInterface { }
   public function handlePOST(array $args): ResponseInterface { }
+  public function handleQUERY(array $args): ResponseInterface { } // safe+idempotent like GET, with body
   private function validateInput(array $data): bool { }
   ```
 - **Variables** — camelCase
