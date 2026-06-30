@@ -3,7 +3,11 @@
 SPIN Framework Changelog
 
 ## 0.0.42
-- **Feature:** HTTP `QUERY` method support — controllers gain a first-class `handleQUERY()` handler and `QUERY` is in the default route method set. QUERY is safe + idempotent like GET but carries a request body (read via `$this->body` / `decodeJsonBody()`). See IETF `draft-ietf-httpbis-safe-method-w-body` and OpenAPI 3.2.
+- **Feature:** HTTP `QUERY` method support — controllers gain a first-class `handleQUERY()` handler and `QUERY` is in the default route method set. QUERY is safe + idempotent like GET but carries a request body (read via `getRequest()->getBody()`). See IETF `draft-ietf-httpbis-safe-method-w-body` and OpenAPI 3.2.
+
+## 0.0.41
+- **Fix:** Redis adapter `get()` returned `false` for integer values stored via `set()` — Predis always returns strings, so the `is_int()` fast-path never matched and the raw integer was passed to `unserialize()`. `get()` now detects raw integers via `filter_var()` and uses an explicit null check, so falsy stored values are no longer mistaken for cache misses (#78)
+- **Test:** Add `testValueRoundTrip` data-provider regression tests to the Redis and APCu adapter suites
 
 ## 0.0.40
 - **Feature:** Add domain exception classes: `CacheException`, `ConfigException`, `DatabaseException`, `MiddlewareException` — all extending `SpinException`
