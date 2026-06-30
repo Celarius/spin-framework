@@ -64,6 +64,9 @@ Base controller class providing HTTP method handlers and convenient access to fr
 | `handleDELETE()` | `public function handleDELETE(array $args): ResponseInterface` | Handle DELETE requests |
 | `handleHEAD()` | `public function handleHEAD(array $args): ResponseInterface` | Handle HEAD requests |
 | `handleOPTIONS()` | `public function handleOPTIONS(array $args): ResponseInterface` | Handle OPTIONS requests |
+| `handleQUERY()` | `public function handleQUERY(array $args): ResponseInterface` | Handle QUERY requests (safe + idempotent like GET, with a request body) |
+
+> **QUERY** carries a request body — read it via `$this->body` / `decodeJsonBody()`. See IETF `draft-ietf-httpbis-safe-method-w-body` and OpenAPI 3.2.
 
 **Usage Example:**
 

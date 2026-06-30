@@ -2,6 +2,9 @@
 # Changelog
 SPIN Framework Changelog
 
+## 0.0.42
+- **Feature:** HTTP `QUERY` method support — controllers gain a first-class `handleQUERY()` handler and `QUERY` is in the default route method set. QUERY is safe + idempotent like GET but carries a request body (read via `$this->body` / `decodeJsonBody()`). See IETF `draft-ietf-httpbis-safe-method-w-body` and OpenAPI 3.2.
+
 ## 0.0.40
 - **Feature:** Add domain exception classes: `CacheException`, `ConfigException`, `DatabaseException`, `MiddlewareException` — all extending `SpinException`
 - **Feature:** Wire `CacheException` into cache adapters (APCu, Redis), `ConfigException` into `Config`, `DatabaseException` into `PdoConnection` and `ConnectionManager`

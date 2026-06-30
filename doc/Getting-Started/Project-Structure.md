@@ -325,7 +325,7 @@ Never commit `.env` to version control. Add `.env` to `.gitignore`.
 | Config files | `config{-env}.json` | `config.json`, `config-dev.json` |
 | Route files | `routes{-env}.json` | `routes.json`, `routes-dev.json` |
 | Classes | `{Name}` (PascalCase) | `TaskService`, `SessionManager` |
-| Methods | `handle{METHOD}` | `handleGET`, `handlePOST` |
+| Methods | `handle{METHOD}` | `handleGET`, `handlePOST`, `handleQUERY` |
 | Namespaces | `App\{Area}` | `App\Controllers`, `App\Middlewares` |
 
 ## PSR-4 Autoloading

@@ -101,6 +101,17 @@ interface ControllerInterface
   public function handleOPTIONS(array $args);
 
   /**
+   * Handle QUERY request
+   *
+   * QUERY is safe and idempotent like GET but carries a request body.
+   *
+   * @param      array  $args   Path variable arguments as name=value pairs
+   *
+   * @return     bool   Value returned by $app->run()
+   */
+  public function handleQUERY(array $args);
+
+  /**
    * Handle custom request
    *
    * @param      array  $args   Path variable arguments as name=value pairs

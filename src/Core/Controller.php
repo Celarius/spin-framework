@@ -67,6 +67,7 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
 			case "DELETE" : return $this->handleDELETE($args);
 			case "HEAD"   : return $this->handleHEAD($args);
 			case "OPTIONS": return $this->handleOPTIONS($args);
+			case "QUERY"  : return $this->handleQUERY($args);
 			default       : return $this->handleCUSTOM($args);
 		}
 	}
@@ -151,6 +152,22 @@ abstract class Controller extends AbstractBaseClass implements ControllerInterfa
 	 * @return     Response   Value returned by $app->run()
 	 */
 	public function handleOPTIONS(array $args)
+	{
+		return \response('',405);
+	}
+
+	/**
+	 * Handle QUERY request
+	 *
+	 * QUERY is safe and idempotent like GET but carries a request body. Read the
+	 * body via $this->body / decodeJsonBody() (same as POST). See IETF
+	 * draft-ietf-httpbis-safe-method-w-body and OpenAPI 3.2.
+	 *
+	 * @param      array  $args   Path variable arguments as name=value pairs
+	 *
+	 * @return     Response   Value returned by $app->run()
+	 */
+	public function handleQUERY(array $args)
 	{
 		return \response('',405);
 	}
